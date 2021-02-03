@@ -1,0 +1,58 @@
+{
+	"name": "wikimedia/dodo",
+	"description": "DOm DOcument implementation",
+	"keywords": [
+		"DOM",
+		"domino",
+		"webidl"
+	],
+	"license": "MIT",
+	"homepage": "https://www.mediawiki.org/wiki/Dodo",
+	"authors": [
+		{
+			"name": "Jason Linehan"
+		}
+	],
+	"require": {
+		"php": ">=7.2.0"
+	},
+	"require-dev": {
+		"php-parallel-lint/php-console-color": "^0.3.0",
+		"php-parallel-lint/php-parallel-lint": "1.2.0",
+		"mediawiki/mediawiki-codesniffer": "34.0.0",
+		"mediawiki/mediawiki-phan-config": "0.10.6",
+		"mediawiki/minus-x": "1.1.0",
+		"ockcyp/covers-validator": "1.3.1",
+		"phpunit/phpunit": "^8.5",
+		"ext-json": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Wikimedia\\Dodo\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Wikimedia\\Dodo\\Tests\\": "tests/"
+		}
+	},
+	"scripts": {
+		"test": [
+			"echo Tests do not pass yet. Skipping."
+		],
+		"real-test": [
+			"parallel-lint . --exclude vendor",
+			"phpunit",
+			"@phan",
+			"covers-validator",
+			"phpcs -sp",
+			"minus-x check ."
+		],
+		"cover": "phpunit --coverage-html coverage",
+		"fix": [
+			"minus-x fix .",
+			"phpcbf"
+		],
+		"phan": "phan --allow-polyfill-parser"
+	}
+}

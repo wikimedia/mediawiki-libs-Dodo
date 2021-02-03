@@ -1,14 +1,34 @@
 # Dodo 
 
-Dodo is an effort to port [Domino.js](https://github.com/fgnass/domino) to PHP 7, in order to provide a more performant and spec-compliant DOM library than the DOMDocument PHP extension, which is built on [libxml2](www.xmlsoft.org).
+Dodo is a port of [Domino.js](https://github.com/fgnass/domino) to
+PHP, in order to provide a more performant and spec-compliant DOM
+library than the DOMDocument PHP classes (`xml` extension), which is
+built on [libxml2](www.xmlsoft.org).
+
+
+Report issues on [Phabricator](https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=Parsoid&title=Dodo:%20).
+
+## Install
+This package is [available on Packagist](https://packagist.org/packages/wikimedia/dodo):
+
+```bash
+$ composer require wikimedia/dodo
+```
 
 ## Usage
 
-A better set of examples and tests is coming. For an extremely basic usage, see [test/demo.php](test/demo.php).
+A better set of examples and tests is coming. For an extremely basic
+usage, see [test/demo.php](test/demo.php).
 
 Change directories to `test` and run:
 ```
 php demo.php
+```
+
+## Tests
+
+```bash
+$ composer test
 ```
 
 ## Status
@@ -21,6 +41,10 @@ This software is a work in progress. Prioritized *TODO*s:
 5. Integration with [zest.php](https://github.com/cscott/zest.php/tree/master)
 6. Performance benchmarks
 7. Cutting out things (even if they're in the spec) that are irrelevant to [Parsoid](https://www.mediawiki.org/wiki/Parsoid)
+8. "Dynamic" generation of HTML classes from a spec (htmlelts.js); see
+   (mediawiki/webidl)[https://github.com/wikimedia/mediawiki-libs-WebIDL]
+9. Write "spec" for PHP [WebIDL](https://heycam.github.io/webidl/) binding;
+   see [WebIDL.md](./WebIDL.md) for a start.
 
 ## Background
 
@@ -276,3 +300,10 @@ Things that use `HTMLCollection` (hence cannot be used):
   return the first Element with that id, in document order, and it is
   not very performant to compute the document order.
 
+## License and Credits
+
+The initial version of this code was written by Jason Linehan and is
+(c) Copyright 2019 Wikimedia Foundation.
+
+This code is distributed under the MIT license; see LICENSE for more
+info.
