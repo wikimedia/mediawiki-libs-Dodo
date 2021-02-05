@@ -1,8 +1,6 @@
 <?php
 
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.NamingConventions.PrefixedGlobalFunctions.wfPrefix
-// phpcs:disable MediaWiki.NamingConventions.ValidGlobalName.allowedPrefix
 
 // Run with: 'php ./dodo.test.php'
 
