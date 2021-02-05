@@ -43,8 +43,7 @@ function _fragment_from_arguments($document, $args)
  * That being the case, perhaps DODO should choose
  * not to implement them.
  */
-abstract class ChildNode extends Node
-{
+abstract class ChildNode extends Node {
         public function __construct()
         {
                 parent::__construct();
@@ -337,8 +336,7 @@ abstract class ChildNode extends Node
  * have children, such as those derived from the abstract CharacterData
  * class.
  */
-abstract class ChildNodeLeaf extends ChildNode
-{
+abstract class ChildNodeLeaf extends ChildNode {
         public function __construct()
         {
                 parent::__construct();

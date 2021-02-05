@@ -7,8 +7,7 @@ namespace Dodo;
 
 require_once('CharacterData.php');
 
-class Comment extends CharacterData
-{
+class Comment extends CharacterData {
         public $_nodeType = COMMENT_NODE;
         public $_nodeName = '#comment';
 

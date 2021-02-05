@@ -5,8 +5,7 @@
  ******************************************************************************/
 namespace Dodo;
 
-class DocumentFragment extends Node
-{
+class DocumentFragment extends Node {
         public $_nodeType = DOCUMENT_FRAGMENT_NODE;
         public $_nodeName = '#document-fragment';
         public $_nodeValue = NULL;

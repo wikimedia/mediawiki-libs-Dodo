@@ -7,8 +7,7 @@ namespace Dodo;
 
 require_once('ChildNode.php'); /* also defines ChildNodeLeaf */
 
-class DocumentType extends ChildNodeLeaf
-{
+class DocumentType extends ChildNodeLeaf {
         protected const _nodeType = DOCUMENT_TYPE_NODE;
 
         public function __construct(Document $doc, string $name, string $publicId='', string $systemId='')

@@ -29,8 +29,7 @@ require_once('Document.php');
  * Each Document must have its own instance of
  * a DOMImplementation object
  */
-class DOMImplementation
-{
+class DOMImplementation {
         public
         function __construct(/* TODO: What is this? A Window? */$contextObject)
         {

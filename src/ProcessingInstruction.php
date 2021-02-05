@@ -7,8 +7,7 @@ namespace Dodo;
 
 require_once('CharacterData.php');
 
-class ProcessingInstruction extends CharacterData
-{
+class ProcessingInstruction extends CharacterData {
         protected const _nodeType = PROCESSING_INSTRUCTION_NODE;
 
         public function __construct(Document $doc, string $target, $data)

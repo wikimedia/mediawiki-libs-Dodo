@@ -7,8 +7,7 @@ namespace Dodo;
 
 require_once('CharacterData.php');
 
-class Text extends CharacterData
-{
+class Text extends CharacterData {
         public $_nodeType = TEXT_NODE;
         public $_nodeName = '#text';
 

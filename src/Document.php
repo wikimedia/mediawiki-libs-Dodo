@@ -37,8 +37,7 @@ require_once('utilities.php');
  * integer representation of an Element, so we can operate
  * on integers instead of Elements.
  */
-class MultiId
-{
+class MultiId {
         public $table = array();
         public $length = 0;
         /*
@@ -178,8 +177,7 @@ class MultiId
  * quirks mode if its mode is "quirks", and limited-quirks mode if its mode
  * is "limited-quirks".
  */
-class Document extends Node
-{
+class Document extends Node {
         /**********************************************************************
          * Properties that are for internal use by this library
          **********************************************************************/

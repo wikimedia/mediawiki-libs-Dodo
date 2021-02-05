@@ -100,8 +100,7 @@ const ERROR_NAME_TO_MESSAGE = array(
 	'OperationError' => 'The operation failed for an operation-specific reason.'
 );
 
-class DOMException extends \Exception
-{
+class DOMException extends \Exception {
 	/*
 	 * [WEB-IDL-1] This is the actual constructor prototype.
          * I think the invocation is ridiculous, so we wrap it

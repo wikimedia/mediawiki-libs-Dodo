@@ -26,8 +26,7 @@ require_once("interfaces/browser/History.php");
 require_once("interfaces/browser/Location.php");
 require_once("interfaces/browser/NavigatorID.php");
 
-class Window extends EventTarget
-{
+class Window extends EventTarget {
         public $console = NULL;
         public $history = NULL;
         public $navigator = NULL;

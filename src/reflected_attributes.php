@@ -59,8 +59,7 @@ function reflected_attribute($owner, $spec)
         }
 }
 
-class IDLReflectedAttributeBoolean
-{
+class IDLReflectedAttributeBoolean {
         protected $_elem = NULL;
         protected $_name = NULL;
 
@@ -95,8 +94,7 @@ class IDLReflectedAttributeBoolean
  * attribute must be returned instead, converted to a USVString. On setting,
  * the content attribute must be set to the specified new value.
  */
-class IDLReflectedAttributeURL
-{
+class IDLReflectedAttributeURL {
         protected $_elem = NULL;
         protected $_name = NULL;
 
@@ -128,8 +126,7 @@ class IDLReflectedAttributeURL
         }
 }
 
-class IDLReflectedAttributeCORS
-{
+class IDLReflectedAttributeCORS {
         protected $_elem = NULL;
         protected $_name = NULL;
 
@@ -161,8 +158,7 @@ class IDLReflectedAttributeCORS
         }
 }
 
-class IDLReflectedAttributeString
-{
+class IDLReflectedAttributeString {
         protected $_elem = NULL;
         protected $_name = NULL;
         protected $_treat_null_as_empty = true;
@@ -224,8 +220,7 @@ class IDLReflectedAttributeString
  *  'type' => array(array('value'=>'ltr', 'alias'=>'a'), 'auto'),
  */
 /* TODO: WE do not implement nullable enumerated attributes yet */
-class IDLReflectedAttributeEnumerated
-{
+class IDLReflectedAttributeEnumerated {
         protected $_valid = array();
         protected $_missing_value_default = NULL;
         protected $_invalid_value_default = NULL;
@@ -359,8 +354,7 @@ class IDLReflectedAttributeEnumerated
  *   }
  * });
  */
-class IDLReflectedAttributeNumeric
-{
+class IDLReflectedAttributeNumeric {
         public $_elem;
         public $_name;
         public $_subtype;

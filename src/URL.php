@@ -76,8 +76,7 @@ function remove_dot_segments($path)
         return $output;
 }
 
-class URL
-{
+class URL {
         const pattern = '/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/';
         const userinfoPattern = '/^([^@:]*)(:([^@]*))?@/';
         const portPattern = '/:\d+$/';

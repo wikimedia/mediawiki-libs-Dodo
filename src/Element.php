@@ -46,8 +46,7 @@ require_once('NamedNodeMap.php');
  */
 $UC_Cache = array();
 
-class Element extends NonDocumentTypeChildNode
-{
+class Element extends NonDocumentTypeChildNode {
 	/* Required by Node */
         public $_nodeType = ELEMENT_NODE;
 

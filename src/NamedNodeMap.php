@@ -34,8 +34,7 @@ namespace Dodo;
 
 require_once('utilities.php');
 
-class NamedNodeMap extends \ArrayObject
-{
+class NamedNodeMap extends \ArrayObject {
         private $__qname_to_attr = array(); /* qname => Attr */
         private $__lname_to_attr = array(); /* ns|lname => Attr */
         private $__lname_to_index = array(); /* ns|lname => N */

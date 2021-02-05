@@ -119,8 +119,7 @@ require_once('Node.php');
  * most recent DOM-LS at the time of this
  * writing (05/03/2019), it extends Node.
  */
-class Attr extends Node 
-{
+class Attr extends Node {
         protected const _nodeType = ATTRIBUTE_NODE;
 
         protected $_namespaceURI = NULL;   /* readonly (NULL or non-empty) */

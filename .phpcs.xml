@@ -64,8 +64,6 @@
 		<exclude name="MediaWiki.Usage.DoubleNotOperator.DoubleNotOperator" />
 		<exclude name="MediaWiki.Usage.ForbiddenFunctions" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceAfterControlStructure.Incorrect" />
-		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeClassBrace.BraceNotOnSameLine" />
-		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeClassBrace.NoSpaceBeforeBrace" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceyParenthesis" />
 	</rule>

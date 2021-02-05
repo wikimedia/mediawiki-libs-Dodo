@@ -7,8 +7,7 @@ namespace Dodo;
 
 require_once("NonDocumentTypeChildNode.php");
 
-abstract class CharacterData extends NonDocumentTypeChildNodeLeaf
-{
+abstract class CharacterData extends NonDocumentTypeChildNodeLeaf {
         public function __construct()
         {
                 parent::__construct();

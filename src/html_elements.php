@@ -35,8 +35,7 @@ function build_attributes($owner, $spec_array)
         return $ret;
 }
 
-class HTMLImgElement extends Element
-{
+class HTMLImgElement extends Element {
         private $_prop;
         private $_attr;
 

@@ -14,8 +14,7 @@ require_once("NodeList.php");
 require_once('utilities.php');
 require_once("whatwg.php");
 
-abstract class Node
-{
+abstract class Node {
         /*
          * NOTE: We do not include all of the constant node type enums
          * see: https://dom.spec.whatwg.org/#node.

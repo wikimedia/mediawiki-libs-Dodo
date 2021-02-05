@@ -11,8 +11,7 @@ require_once("ChildNode.php");
  * PORT NOTE: This, per spec, operates less like an inherited
  * class and more like a mixin. It's used by Element and CharacterData.
  */
-abstract class NonDocumentTypeChildNode extends ChildNode
-{
+abstract class NonDocumentTypeChildNode extends ChildNode {
         public function __construct()
         {
                 parent::__construct();
@@ -57,8 +56,7 @@ abstract class NonDocumentTypeChildNode extends ChildNode
  * have children, such as those derived from the abstract CharacterData
  * class.
  */
-abstract class NonDocumentTypeChildNodeLeaf extends NonDocumentTypeChildNode
-{
+abstract class NonDocumentTypeChildNodeLeaf extends NonDocumentTypeChildNode {
         public function __construct()
         {
                 parent::__construct();
