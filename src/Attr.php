@@ -297,5 +297,3 @@ class Attr extends Node
                 && $this->_value === $node->_value);
         }
 }
-
-?>

@@ -132,5 +132,3 @@ function ascii_to_uppercase(string $s): string
       		return strtoupper($char);
       	}, $s);
 }
-
-?>

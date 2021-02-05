@@ -26,6 +26,3 @@ require_once('CharacterData.php');
 require_once('Comment.php');
 require_once('Text.php');
 require_once('ProcessingInstruction.php');
-
-
-?>

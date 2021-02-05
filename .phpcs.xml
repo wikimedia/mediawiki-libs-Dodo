@@ -15,7 +15,6 @@
 		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
 		<exclude name="PSR2.Classes.PropertyDeclaration.Underscore" />
 		<exclude name="PSR2.ControlStructures.ElseIfDeclaration.NotAllowed" />
-		<exclude name="PSR2.Files.EndFileNewline.TooMany" />
 		<exclude name="PSR2.Methods.MethodDeclaration.FinalAfterVisibility" />
 		<exclude name="PSR2.Methods.MethodDeclaration.Underscore" />
 		<exclude name="PSR2.Namespaces.NamespaceDeclaration.BlankLineAfter" />
@@ -32,7 +31,6 @@
 		<exclude name="Squiz.WhiteSpace.ScopeClosingBrace.Indent" />
 		<exclude name="Squiz.WhiteSpace.ScopeKeywordSpacing.Incorrect" />
 		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine" />
-		<exclude name="Zend.Files.ClosingTag.NotAllowed" />
 		<exclude name="MediaWiki.AlternativeSyntax.UnicodeEscape.DigitsNotNormalized" />
 		<exclude name="MediaWiki.Classes.UnsortedUseStatements.UnsortedUse" />
 		<exclude name="MediaWiki.Classes.UnusedUseStatement.UnusedUse" />
@@ -65,7 +63,6 @@
 		<exclude name="MediaWiki.WhiteSpace.SpaceAfterClosure.NoWhitespaceAfterClosure" />
 		<exclude name="MediaWiki.Usage.DoubleNotOperator.DoubleNotOperator" />
 		<exclude name="MediaWiki.Usage.ForbiddenFunctions" />
-		<exclude name="MediaWiki.WhiteSpace.MultipleEmptyLines.MultipleEmptyLines" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceAfterControlStructure.Incorrect" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeClassBrace.BraceNotOnSameLine" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeClassBrace.NoSpaceBeforeBrace" />

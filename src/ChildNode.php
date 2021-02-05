@@ -380,5 +380,3 @@ abstract class ChildNodeLeaf extends ChildNode
                 return $this->_childNodes;
         }
 }
-
-?>

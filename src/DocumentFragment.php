@@ -83,5 +83,3 @@ class DocumentFragment extends Node
                 return $this->__serialize();
         }
 }
-
-?>

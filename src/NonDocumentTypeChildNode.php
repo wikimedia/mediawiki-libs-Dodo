@@ -100,5 +100,3 @@ abstract class NonDocumentTypeChildNodeLeaf extends NonDocumentTypeChildNode
                 return $this->_childNodes;
         }
 }
-
-?>

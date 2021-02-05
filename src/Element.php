@@ -27,7 +27,6 @@ require_once('NonDocumentTypeChildNode.php');
 require_once('Attr.php');
 require_once('NamedNodeMap.php');
 
-
 /*
  * Qualified Names, Local Names, and Namespace Prefixes
  *
@@ -46,7 +45,6 @@ require_once('NamedNodeMap.php');
  * turning subsequent calls into O(1) table lookups.
  */
 $UC_Cache = array();
-
 
 class Element extends NonDocumentTypeChildNode
 {
@@ -639,4 +637,3 @@ class Element extends NonDocumentTypeChildNode
                 return NULL;
         }
 }
-

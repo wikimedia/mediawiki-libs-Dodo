@@ -1094,5 +1094,3 @@ function validate_and_extract(?string $ns, string $qname, string &$prefix, strin
                 \Dodo\error("NamespaceError");
         }
 }
-
-?>

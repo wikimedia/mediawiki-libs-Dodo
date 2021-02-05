@@ -846,7 +846,6 @@ abstract class Node
                 return ($ns ?? NULL) === $this->lookupNamespaceURI(NULL);
         }
 
-
 	/**********************************************************************
 	 * UTILITY METHODS AND DODO EXTENSIONS
 	 *********************************************************************/
@@ -1184,7 +1183,6 @@ abstract class Node
                 }
         }
 
-
         /*
          * Convert the children of a node to an HTML string.
          * This is used by the innerHTML getter
@@ -1200,5 +1198,3 @@ abstract class Node
                 return $s;
         }
 }
-
-?>

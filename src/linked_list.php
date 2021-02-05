@@ -113,5 +113,3 @@ function ll_replace($a, $b)
 
         \Dodo\assert(ll_is_valid($a) && ($b==NULL || ll_is_valid($b)));
 }
-
-?>

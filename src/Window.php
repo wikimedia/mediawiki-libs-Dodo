@@ -26,7 +26,6 @@ require_once("interfaces/browser/History.php");
 require_once("interfaces/browser/Location.php");
 require_once("interfaces/browser/NavigatorID.php");
 
-
 class Window extends EventTarget
 {
         public $console = NULL;
@@ -84,7 +83,6 @@ class Window extends EventTarget
                 with($this) eval($code);
                 */
         }
-
 
         /*
          * The onload event handler.

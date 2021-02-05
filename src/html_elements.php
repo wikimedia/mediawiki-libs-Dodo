@@ -117,5 +117,3 @@ class HTMLImgElement extends Element
                 //}
         //}
 //}
-
-?>

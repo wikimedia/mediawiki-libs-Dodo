@@ -18,5 +18,3 @@ class NodeList extends \ArrayObject
                 return $this[$i] ?? NULL;
         }
 }
-
-?>

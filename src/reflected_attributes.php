@@ -18,7 +18,6 @@
  ******************************************************************************/
 namespace Dodo;
 
-
 /*
  * USAGE:
  * For each specialized attribute on an Element, build a reflected
@@ -483,6 +482,3 @@ class IDLReflectedAttributeNumeric
                 return $this->_elem->setAttribute($this->_name, strval($v));
         }
 }
-
-
-?>

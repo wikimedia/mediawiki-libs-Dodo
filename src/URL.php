@@ -76,7 +76,6 @@ function remove_dot_segments($path)
         return $output;
 }
 
-
 class URL
 {
         const pattern = '/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/';
@@ -254,7 +253,6 @@ class URL
         }
 }
 
-
 /* TODO TODO TODO */
 
 //abstract class URLUtils
@@ -286,7 +284,6 @@ class URL
                         //$url = new URL($out);
                         //if ($url->isAbsolute()) {
                                 //$val = $val
-
 
                 //}
         //}
@@ -521,5 +518,3 @@ class URL
   //},
   //*/
 //});
-
-?>

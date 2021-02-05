@@ -26,7 +26,6 @@ function prof_print()
     //echo "<b>{$prof_names[$size-1]}</b><br>";
 }
 
-
 $dom = new DOMDocument('1.0','UTF-8');
 
 $html = $dom->createElement("html");

@@ -36,5 +36,3 @@ echo $doc->__serialize() . "\n\n";
 
 /* Print the width, the value should be an integer */
 echo "IMG width: " . $img->width . "\n";
-
-?>

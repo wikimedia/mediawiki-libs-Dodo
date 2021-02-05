@@ -55,7 +55,6 @@ class Text extends CharacterData
                 return new Text($this->_ownerDocument, $this->_data);
         }
 
-
         /* Per spec */
         public function textContent($value = NULL)
         {
@@ -98,5 +97,3 @@ class Text extends CharacterData
                 return $result;
         }
 }
-
-?>

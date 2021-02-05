@@ -64,5 +64,3 @@ echo prof_print();
 
 /* Print the tree */
 echo $dom->__serialize(); 
-
-?>

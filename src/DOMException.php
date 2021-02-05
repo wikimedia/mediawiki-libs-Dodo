@@ -122,5 +122,3 @@ class DOMException extends \Exception
 		return __CLASS__ . ': [' . $this->name . '] ' . $this->usr_msg;
 	}
 }
-
-?>

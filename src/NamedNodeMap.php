@@ -257,5 +257,3 @@ class NamedNodeMap extends \ArrayObject
                 return $attr;
         }
 }
-
-?>

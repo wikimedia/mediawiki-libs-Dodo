@@ -70,7 +70,6 @@ abstract class CharacterData extends NonDocumentTypeChildNodeLeaf
                 return $this->replaceData($offset, 0, $data);
         }
 
-
         // void deleteData(unsigned long offset, unsigned long count);
         // The deleteData(offset, count) method must run these steps:
         //
@@ -87,7 +86,6 @@ abstract class CharacterData extends NonDocumentTypeChildNodeLeaf
         {
                 return $this->replaceData($offset, $count, '');
         }
-
 
         // void replaceData(unsigned long offset, unsigned long count,
         //          DOMString data);
@@ -123,5 +121,3 @@ abstract class CharacterData extends NonDocumentTypeChildNodeLeaf
                 strlen($this->_data);
         }
 }
-
-?>

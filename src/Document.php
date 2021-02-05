@@ -143,9 +143,6 @@ class MultiId
         }
 }
 
-
-
-
 /**
  * The Document class. Note that there is another class called
  * HTMLDocument with an extended interface, only for Documents
@@ -305,7 +302,6 @@ class Document extends Node
         public $_implementation;
         public $_readyState;
         public $__mutation_handler = NULL;
-
 
         public function __construct(string $type="xml", ?string $url=NULL)
         {
@@ -887,4 +883,3 @@ class Document extends Node
                 }
         }
 }
-
