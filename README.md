@@ -1,10 +1,15 @@
-# Dodo 
+[![Latest Stable Version]](https://packagist.org/packages/wikimedia/dodo) [![License]](https://packagist.org/packages/wikimedia/dodo)
+
+Dodo
+=====================
 
 Dodo is a port of [Domino.js](https://github.com/fgnass/domino) to
 PHP, in order to provide a more performant and spec-compliant DOM
 library than the DOMDocument PHP classes (`xml` extension), which is
 built on [libxml2](www.xmlsoft.org).
 
+Additional documentation about the library can be found on
+[MediaWiki.org](https://www.mediawiki.org/wiki/Dodo).
 
 Report issues on [Phabricator](https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=Parsoid&title=Dodo:%20).
 
