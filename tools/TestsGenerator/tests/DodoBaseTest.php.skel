@@ -1,0 +1,204 @@
+<?php
+
+namespace Wikimedia\Dodo\Tests;
+
+use PHPUnit\Framework\TestCase;
+use RemexHtml\DOM\DOMBuilder;
+use Wikimedia\Dodo\Document;
+
+/**
+ * Class DodoBaseTest
+ *
+ * @package Wikimedia\Dodo\Tests
+ */
+abstract class DodoBaseTest extends TestCase {
+
+	/**
+	 * @var null|Document
+	 */
+	protected $doc;
+
+	/**
+	 * @var string
+	 */
+	protected $type_error;
+
+	/**
+	 * @param $name
+	 *
+	 * @return mixed
+	 */
+	public function __get( $name ) {
+		if ( $name == 'title' ) {
+			return $this->getTitle();
+		}
+	}
+
+	/**
+	 * @return mixed
+	 *
+	 */
+	protected function getTitle() {
+		return $this->doc->_documentElement->firstChild()->nodeValue();
+	}
+
+	/**
+	 * @param $closure
+	 * @param $type
+	 */
+	protected function test( $closure, $type ) {
+
+	}
+
+	/**
+	 * @param mixed ...$args
+	 */
+	protected function assertThrowsDom( ...$args ) {
+
+	}
+
+	/**
+	 *
+	 */
+	protected function assertThrowsJs() {
+
+	}
+
+	/**
+	 *
+	 */
+	protected function setUp() : void {
+		$this->doc = new Document( 'html' );
+		$html = $this->doc->createElement( 'html' );
+		$title = $this->doc->createElement( 'title' );
+		$title->appendChild( $this->doc->createTextNode( 'NIST DOM HTML Test - Anchorasd fadsfadsf' ) );
+		$html->appendChild( $title );
+		$body = $this->doc->createElement( 'body' );
+
+		$html->appendChild( $body );
+		$this->doc->appendChild( $html );
+	}
+
+	/**
+	 *
+	 */
+	protected function tearDown() : void {
+		$this->doc = null;
+	}
+
+	/**
+	 * @param ?string $docRef
+	 * @param ?string $plug1
+	 * @param ?string $plug2
+	 *
+	 * @return Document
+	 */
+	protected function load( ?string $docRef = null, ?string $name = null, ?string $href = null ) : Document {
+		if ( $href ) {
+			$path_ = '';
+		}
+
+		return $this->doc;
+	}
+
+	/**
+	 * Temporary stub
+	 *
+	 * @param string $element
+	 *
+	 * @return string
+	 */
+	protected function getElementsByTagName( string $element ) {
+		return '';
+	}
+
+	/**
+	 * TODO implement this
+	 *
+	 * @param mixed ...$args
+	 */
+	protected function testBefore( $child, $nodeName, $innerHTML ) {
+
+	}
+
+	/**
+	 * TODO implement this
+	 *
+	 * @param mixed ...$args
+	 */
+	protected function testAfter( $child, $nodeName, $innerHTML ) {
+
+	}
+
+	/**
+	 * TODO implement this
+	 *
+	 * @param mixed ...$args
+	 */
+	protected function testConstructor( ...$args ) {
+
+	}
+
+	/**
+	 * TODO implement this
+	 *
+	 * @param mixed ...$args
+	 */
+	protected function testReplaceWith( $child, $nodeName, $innerHTML ) {
+
+	}
+
+	/**
+	 * TODO implement this
+	 *
+	 * @param mixed ...$args
+	 */
+	protected function asyncTest( ...$args ) {
+
+	}
+
+	/**
+	 * TODO implement this
+	 *
+	 * @see xhrResponseTypeDocumentTest.php
+	 */
+	protected function xmlHttpRequest() {
+		return new class {
+			public function open() {
+
+			}
+		};
+	}
+
+	/**
+	 * TODO implement this
+	 */
+	protected function attrIs(){
+
+	}
+
+	/**
+	 *
+	 */
+	public function hasFeature(){
+
+	}
+
+	/**
+	 *
+	 */
+	public function assertSize(){
+
+	}
+
+	/**
+	 *
+	 */
+	public function assertEqualsAutoCase($context, $descr, $expected, $actual){
+
+	}
+
+	public function assertEqualsCollectionAutoCase($context, $descr, $expected, $actual){
+
+	}
+}

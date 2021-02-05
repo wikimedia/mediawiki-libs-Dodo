@@ -65,5 +65,11 @@
 			<property name="strict" value="false" />
 		</properties>
 	</rule>
-
+<!--	<rule ref="Generic.WhiteSpace.ScopeIndent">-->
+<!--		<properties>-->
+<!--			<property name="ignoreIndentationTokens" type="array" value="T_COMMENT,T_DOC_COMMENT_OPEN_TAG" />-->
+<!--			<property name="tabIndent" value="true" />-->
+<!--			<property name="indent" type="int" value="4" />-->
+<!--		</properties>-->
+<!--	</rule>-->
 </ruleset>
