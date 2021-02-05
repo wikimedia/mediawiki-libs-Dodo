@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable Squiz.Classes.SelfMemberReference.NotUsed
 /******************************************************************************
  * URL
  *

@@ -38,14 +38,14 @@
 	},
 	"scripts": {
 		"test": [
-			"echo Tests do not pass yet. Skipping."
+			"phpcs -sp",
+			"echo Most tests do not pass yet. Skipping."
 		],
 		"real-test": [
 			"parallel-lint . --exclude vendor",
 			"phpunit",
 			"@phan",
 			"covers-validator",
-			"phpcs -sp",
 			"minus-x check ."
 		],
 		"cover": "phpunit --coverage-html coverage",
