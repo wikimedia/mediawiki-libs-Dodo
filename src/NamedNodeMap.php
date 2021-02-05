@@ -1,4 +1,23 @@
 <?php
+
+declare( strict_types = 1 );
+// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
+// phpcs:disable MediaWiki.Commenting.FunctionComment.SpacingAfter
+// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
+// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
+// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
+// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
+// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
+// phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
+// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
+// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
+// phpcs:disable Squiz.PHP.NonExecutableCode.Unreachable
+
+namespace Wikimedia\Dodo;
+
 /******************************************************************************
  * NamedNodeMap.php
  * ----------------
@@ -29,230 +48,217 @@
  *      properly implemented, which made it much easier to read and write
  *      the attribute methods on the Element class.
  *
- ******************************************************************************/
-namespace Dodo;
-
-require_once('utilities.php');
-
+ */
 class NamedNodeMap extends \ArrayObject {
-        private $__qname_to_attr = array(); /* qname => Attr */
-        private $__lname_to_attr = array(); /* ns|lname => Attr */
-        private $__lname_to_index = array(); /* ns|lname => N */
-        /* NOW IMPLEMENTED AS $this[], the default */
-        //public $index_to_attr = array(); [> N => Attr <]
+	private $__qname_to_attr = []; /* qname => Attr */
+	private $__lname_to_attr = []; /* ns|lname => Attr */
+	private $__lname_to_index = []; /* ns|lname => N */
+	/* NOW IMPLEMENTED AS $this[], the default */
+	//public $index_to_attr = array(); [> N => Attr <]
 
-        /* DOM-LS associated element, defined in spec but not given property. */
-        public $_element= NULL;
+	/* DOM-LS associated element, defined in spec but not given property. */
+	public $_element = null;
 
-        public function __construct(?Element $element=NULL)
-        {
-                $this->_element = $element;
-        }
+	public function __construct( ?Element $element = null ) {
+		$this->_element = $element;
+	}
 
-        /**********************************************************************
-         * Dodo INTERNAL BOOK-KEEPING
-         **********************************************************************/
-        private function __append(Attr $a)
-        {
-                $qname = $a->name();
+	/**********************************************************************
+	 * Dodo INTERNAL BOOK-KEEPING
+	 */
+	private function __append( Attr $a ) {
+		$qname = $a->name();
 
-                /* NO COLLISION */
-                if (!isset($this->__qname_to_attr[$qname])) {
-                        $this->__qname_to_attr[$qname] = $a;
-                /* COLLISION */
-                } else {
-                        if (is_array($this->__qname_to_attr[$qname])) {
-                                $this->__qname_to_attr[$qname][] = $a;
-                        } else {
-                                $this->__qname_to_attr[$qname] = array(
-                                        $this->__qname_to_attr[$qname],
-                                        $a
-                                );
-                        }
-                }
+		/* NO COLLISION */
+		if ( !isset( $this->__qname_to_attr[$qname] ) ) {
+			$this->__qname_to_attr[$qname] = $a;
+			/* COLLISION */
+		} else {
+			if ( is_array( $this->__qname_to_attr[$qname] ) ) {
+				$this->__qname_to_attr[$qname][] = $a;
+			} else {
+				$this->__qname_to_attr[$qname] = [
+					$this->__qname_to_attr[$qname],
+					$a
+				];
+			}
+		}
 
-                $key = $a->namespaceURI() . '|' . $a->localName();
+		$key = $a->namespaceURI() . '|' . $a->localName();
 
-                $this->__lname_to_attr[$key] = $a;
-                $this->__lname_to_index[$key] = count($this);
-                $this[] = $a;
-        }
+		$this->__lname_to_attr[$key] = $a;
+		$this->__lname_to_index[$key] = count( $this );
+		$this[] = $a;
+	}
 
-        private function __replace(Attr $a)
-        {
-                $qname = $a->name();
+	private function __replace( Attr $a ) {
+		$qname = $a->name();
 
-                /* NO COLLISION */
-                if (!isset($this->__qname_to_attr[$qname])) {
-                        $this->__qname_to_attr[$qname] = $a;
-                /* COLLISION */
-                } else {
-                        if (is_array($this->__qname_to_attr[$qname])) {
-                                $this->__qname_to_attr[$qname][] = $a;
-                        } else {
-                                $this->__qname_to_attr[$qname] = array(
-                                        $this->__qname_to_attr[$qname],
-                                        $a
-                                );
-                        }
-                }
+		/* NO COLLISION */
+		if ( !isset( $this->__qname_to_attr[$qname] ) ) {
+			$this->__qname_to_attr[$qname] = $a;
+			/* COLLISION */
+		} else {
+			if ( is_array( $this->__qname_to_attr[$qname] ) ) {
+				$this->__qname_to_attr[$qname][] = $a;
+			} else {
+				$this->__qname_to_attr[$qname] = [
+					$this->__qname_to_attr[$qname],
+					$a
+				];
+			}
+		}
 
-                $key = $a->namespaceURI() . '|' . $a->localName();
+		$key = $a->namespaceURI() . '|' . $a->localName();
 
-                $this->__lname_to_attr[$key] = $a;
-                $this[$this->__lname_to_index[$key]] = $a;
-        }
+		$this->__lname_to_attr[$key] = $a;
+		$this[$this->__lname_to_index[$key]] = $a;
+	}
 
-        private function __remove(Attr $a)
-        {
-                $qname = $a->name();
-                $key = $a->namespaceURI() . '|' . $a->localName();
+	private function __remove( Attr $a ) {
+		$qname = $a->name();
+		$key = $a->namespaceURI() . '|' . $a->localName();
 
-                unset($this->__lname_to_attr[$key]);
-                $i = $this->__lname_to_index[$key];
-                unset($this->__lname_to_index[$key]);
+		unset( $this->__lname_to_attr[$key] );
+		$i = $this->__lname_to_index[$key];
+		unset( $this->__lname_to_index[$key] );
 
-                array_splice($this, $i, 1);
+		// XXX PORT FIX ME: array_splice doesn't work on ArrayObject
+		// so either put back $index_to_array or else reimplement the
+		// splice operation in terms of primitives.
+		throw new \Exception( "fixme" );
+		$bogus = (array)$this;
+		array_splice( $bogus /*was: $this*/, $i, 1 );
 
-                if (isset($this->__qname_to_attr[$qname])) {
-                        if (is_array($this->__qname_to_attr[$qname])) {
-                                $i = array_search($a, $this->__qname_to_attr[$qname]);
-                                if ($i !== false) {
-                                        array_splice($this->__qname_to_attr[$qname], $i, 1);
-                                }
-                        } else {
-                                unset($this->__qname_to_attr[$qname]);
-                        }
-                }
-        }
+		if ( isset( $this->__qname_to_attr[$qname] ) ) {
+			if ( is_array( $this->__qname_to_attr[$qname] ) ) {
+				$i = array_search( $a, $this->__qname_to_attr[$qname] );
+				if ( $i !== false ) {
+					array_splice( $this->__qname_to_attr[$qname], $i, 1 );
+				}
+			} else {
+				unset( $this->__qname_to_attr[$qname] );
+			}
+		}
+	}
 
-        /**********************************************************************
-         * DOM-LS Methods
-         **********************************************************************/
+	/*
+	 * DOM-LS Methods
+	 */
 
-        public function length(): int
-        {
-                return count($this);
-        }
+	public function length(): int {
+		return count( $this );
+	}
 
-        public function item(int $index): ?Attr
-        {
-                return $this[$index] ?? NULL;
-        }
+	public function item( int $index ): ?Attr {
+		return $this[$index] ?? null;
+	}
 
-        public function hasNamedItem(string $qname): bool
-        {
-                /*
-                 * Per HTML spec, we normalize qname before lookup,
-                 * even though XML itself is case-sensitive.
-                 */
-                if (!ctype_lower($qname) && $this->_element->isHTMLElement()) {
-                        $qname = \Dodo\to_ascii_lower_case($qname);
-                }
+	public function hasNamedItem( string $qname ): bool {
+		/*
+		 * Per HTML spec, we normalize qname before lookup,
+		 * even though XML itself is case-sensitive.
+		 */
+		if ( !ctype_lower( $qname ) && $this->_element->isHTMLElement() ) {
+			$qname = Util::ascii_to_lowercase( $qname );
+		}
 
-                return isset($this->__qname_to_attr[$qname]);
-        }
+		return isset( $this->__qname_to_attr[$qname] );
+	}
 
-        public function hasNamedItemNS(?string $ns, string $lname): bool
-        {
-                $ns = $ns ?? "";
-                return isset($this->__lname_to_attr["$ns|$lname"]);
-        }
+	public function hasNamedItemNS( ?string $ns, string $lname ): bool {
+		$ns = $ns ?? "";
+		return isset( $this->__lname_to_attr["$ns|$lname"] );
+	}
 
-        public function getNamedItem(string $qname): ?Attr
-        {
-                /*
-                 * Per HTML spec, we normalize qname before lookup,
-                 * even though XML itself is case-sensitive.
-                 */
-                if (!ctype_lower($qname) && $this->_element->isHTMLElement()) {
-                        $qname = \Dodo\to_ascii_lower_case($qname);
-                }
+	public function getNamedItem( string $qname ): ?Attr {
+		/*
+		 * Per HTML spec, we normalize qname before lookup,
+		 * even though XML itself is case-sensitive.
+		 */
+		if ( !ctype_lower( $qname ) && $this->_element->isHTMLElement() ) {
+			$qname = Util::ascii_to_lowercase( $qname );
+		}
 
-                if (!isset($this->__qname_to_attr[$qname])) {
-                        return NULL;
-                }
+		if ( !isset( $this->__qname_to_attr[$qname] ) ) {
+			return null;
+		}
 
-                if (is_array($this->__qname_to_attr[$qname])) {
-                        return $this->__qname_to_attr[$qname][0];
-                } else {
-                        return $this->__qname_to_attr[$qname];
-                }
-        }
+		if ( is_array( $this->__qname_to_attr[$qname] ) ) {
+			return $this->__qname_to_attr[$qname][0];
+		} else {
+			return $this->__qname_to_attr[$qname];
+		}
+	}
 
-        public function getNamedItemNS(?string $ns, string $lname): ?Attr
-        {
-                $ns = $ns ?? "";
-                return $this->__lname_to_attr["$ns|$lname"] ?? NULL;
-        }
+	public function getNamedItemNS( ?string $ns, string $lname ): ?Attr {
+		$ns = $ns ?? "";
+		return $this->__lname_to_attr["$ns|$lname"] ?? null;
+	}
 
-        public function setNamedItem(Attr $attr): ?Attr
-        {
-                $owner = $attr->ownerElement();
+	public function setNamedItem( Attr $attr ): ?Attr {
+		$owner = $attr->ownerElement();
 
-                if ($owner !== NULL && $owner !== $this->_element) {
-                        \Dodo\error("InUseAttributeError");
-                }
+		if ( $owner !== null && $owner !== $this->_element ) {
+			Util::error( "InUseAttributeError" );
+		}
 
-                $oldAttr = $this->getNamedItem($attr->name());
+		$oldAttr = $this->getNamedItem( $attr->name() );
 
-                if ($oldAttr == $attr) {
-                        return $attr;
-                }
+		if ( $oldAttr == $attr ) {
+			return $attr;
+		}
 
-                if ($oldAttr !== NULL) {
-                        $this->__replace($attr);
-                } else {
-                        $this->__append($attr);
-                }
+		if ( $oldAttr !== null ) {
+			$this->__replace( $attr );
+		} else {
+			$this->__append( $attr );
+		}
 
-                return $oldAttr;
-        }
+		return $oldAttr;
+	}
 
-        public function setNamedItemNS(Attr $attr): ?Attr
-        {
-                $owner = $attr->ownerElement();
+	public function setNamedItemNS( Attr $attr ): ?Attr {
+		$owner = $attr->ownerElement();
 
-                if ($owner !== NULL && $owner !== $this->_element) {
-                        \Dodo\error("InUseAttributeError");
-                }
+		if ( $owner !== null && $owner !== $this->_element ) {
+			Util::error( "InUseAttributeError" );
+		}
 
-                $oldAttr = $this->getNamedItemNS($attr->namespaceURI(), $attr->localName());
+		$oldAttr = $this->getNamedItemNS( $attr->namespaceURI(), $attr->localName() );
 
-                if ($oldAttr == $attr) {
-                        return $attr;
-                }
+		if ( $oldAttr == $attr ) {
+			return $attr;
+		}
 
-                if ($oldAttr !== NULL) {
-                        $this->__replace($attr);
-                } else {
-                        $this->__append($attr);
-                }
+		if ( $oldAttr !== null ) {
+			$this->__replace( $attr );
+		} else {
+			$this->__append( $attr );
+		}
 
-                return $oldAttr;
-        }
+		return $oldAttr;
+	}
 
-        /* NOTE: qname may be lowercase or normalized in various ways */
-        public function removeNamedItem(string $qname): ?Attr
-        {
-                $attr = $this->getNamedItem($qname);
-                if ($attr !== NULL) {
-                        $this->__remove($attr);
-                } else {
-                        \Dodo\error("NotFoundError");
-                }
-                return $attr;
-        }
+	/* NOTE: qname may be lowercase or normalized in various ways */
+	public function removeNamedItem( string $qname ): ?Attr {
+		$attr = $this->getNamedItem( $qname );
+		if ( $attr !== null ) {
+			$this->__remove( $attr );
+		} else {
+			Util::error( "NotFoundError" );
+		}
+		return $attr;
+	}
 
-        /* NOTE: qname may be lowercase or normalized in various ways */
-        public function removeNamedItemNS(?string $ns, string $lname): ?Attr
-        {
-                $attr = $this->getNamedItemNS($ns, $lname);
-                if ($attr !== NULL) {
-                        $this->__remove($attr);
-                } else {
-                        \Dodo\error("NotFoundError");
-                }
-                return $attr;
-        }
+	/* NOTE: qname may be lowercase or normalized in various ways */
+	public function removeNamedItemNS( ?string $ns, string $lname ): ?Attr {
+		$attr = $this->getNamedItemNS( $ns, $lname );
+		if ( $attr !== null ) {
+			$this->__remove( $attr );
+		} else {
+			Util::error( "NotFoundError" );
+		}
+		return $attr;
+	}
 }

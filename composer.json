@@ -38,14 +38,11 @@
 	},
 	"scripts": {
 		"test": [
-			"phpcs -sp",
-			"echo Most tests do not pass yet. Skipping."
-		],
-		"real-test": [
 			"parallel-lint . --exclude vendor",
-			"phpunit",
+			"phpunit tests/DodoTest.php",
 			"@phan",
-			"covers-validator",
+			"echo covers-validator",
+			"phpcs -sp",
 			"minus-x check ."
 		],
 		"cover": "phpunit --coverage-html coverage",

@@ -1,4 +1,25 @@
 <?php
+
+declare( strict_types = 1 );
+// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
+// phpcs:disable MediaWiki.Commenting.FunctionComment.SpacingAfter
+// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
+// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
+// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
+// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
+// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
+// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
+// phpcs:disable MediaWiki.NamingConventions.ValidGlobalName.allowedPrefix
+// phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
+// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
+// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
+
+namespace Wikimedia\Dodo;
+
 /******************************************************************************
  * Attr.php
  * --------
@@ -22,14 +43,14 @@
  *              'namespaceURI', 'localName', and 'prefix' remained on
  *              the Attr class (and Element class), and did not re-appear
  *              on the Node class..
- ******************************************************************************/
+ */
 /******************************************************************************
  * Qualified Names, Local Names, and Namespace Prefixes
  *
  * An Element or Attribute's qualified name is its local name if its
  * namespace prefix is null, and its namespace prefix, followed by ":",
  * followed by its local name, otherwise.
- ******************************************************************************/
+ */
 /******************************************************************************
  * NOTES (taken from Domino.js)
  *
@@ -107,192 +128,186 @@
  * See
  * http://www.whatwg.org/specs/web-apps/current-work/multipage/urls.html#reflect
  * for rules on how attributes are reflected.
- ******************************************************************************/
-namespace Dodo;
-require_once('Node.php');
+ */
 
-/* 
+/*
  * SPEC NOTE
  * Attr has gone back and forth between
- * extending Node and being its own 
+ * extending Node and being its own
  * class in recent specs. As of the
  * most recent DOM-LS at the time of this
  * writing (05/03/2019), it extends Node.
  */
 class Attr extends Node {
-        protected const _nodeType = ATTRIBUTE_NODE;
+	protected $_namespaceURI = null;   /* readonly (NULL or non-empty) */
+	protected $_prefix = null;         /* readonly (NULL or non-empty) */
+	protected $_localName = null;      /* readonly, (non-empty) */
+	protected $_name;                  /* readonly, (non-empty) */
+	protected $_value = "";            /* (string) */
+	protected $_ownerElement = null;   /* readonly (NULL or Element) */
+	protected $_specified = true; /* readonly const true */
 
-        protected $_namespaceURI = NULL;   /* readonly (NULL or non-empty) */
-        protected $_prefix = NULL;         /* readonly (NULL or non-empty) */
-        protected $_localName = NULL;      /* readonly, (non-empty) */
-        protected $_name;                  /* readonly, (non-empty) */
-        protected $_value = "";            /* (string) */
-        protected $_ownerElement = NULL;   /* readonly (NULL or Element) */
-        protected const _specified = true; /* readonly const true */
+	public function __construct(
+		?Element $ownerElement,
+		string $localName,
+		?string $prefix = null,
+		?string $namespaceURI = null,
+		string $value = ""
+	) {
+		$this->_nodeType = Node::ATTRIBUTE_NODE;
+		if ( $localName !== '' ) {
+			/* DOM-LS: Non-empty string */
+			$this->_localName = $localName;
+		} else {
+			throw new \Exception( "Attr local name must be non-empty" );
+		}
 
-        public function __construct(
-                ?Element $ownerElement,
-                string $localName,
-                ?string $prefix=NULL,
-                ?string $namespaceURI=NULL,
-                string $value=""
-        ) {
-                if ($localName !== '') {
-                        /* DOM-LS: Non-empty string */
-                        $this->_localName = $localName;
-                } else {
-                        throw Exception("Attr local name must be non-empty");
-                }
-
-		if ($namespaceURI !== '') {
-                        /* DOM-LS: NULL or non-empty string */
+		if ( $namespaceURI !== '' ) {
+			/* DOM-LS: NULL or non-empty string */
 			$this->_namespaceURI = $namespaceURI;
 		}
 
-		if ($prefix !== '') {
-                        /* DOM-LS: NULL or non-empty string */
+		if ( $prefix !== '' ) {
+			/* DOM-LS: NULL or non-empty string */
 			$this->_prefix = $prefix;
 		}
 
-                if ($this->_prefix === NULL) {
-                        /* 
-                         * DOM-LS: qualified name:
-                         *      localName if prefix is NULL 
-                         */
-                        $this->_name = $this->_localName;
-                } else {
-                        /* 
-                         * DOM-LS: qualified name:
-                         *      namespace prefix, followed by ":", 
-                         *      followed by local name, otherwise.
-                         */
-                        $this->_name = "$this->_prefix:$this->_localName";
-                }
+		if ( $this->_prefix === null ) {
+			/*
+			 * DOM-LS: qualified name:
+			 *      localName if prefix is NULL
+			 */
+			$this->_name = $this->_localName;
+		} else {
+			/*
+			 * DOM-LS: qualified name:
+			 *      namespace prefix, followed by ":",
+			 *      followed by local name, otherwise.
+			 */
+			$this->_name = "$this->_prefix:$this->_localName";
+		}
 
-                /* DOM-LS: NULL or Element */
-                $this->_ownerElement = $ownerElement;
+		/* DOM-LS: NULL or Element */
+		$this->_ownerElement = $ownerElement;
 
-                /* DOM-LS: String */
-                $this->_value = $value; 
-        }
+		/* DOM-LS: String */
+		$this->_value = $value;
+	}
 
-        /**********************************************************************
-         * ACCESSORS
-         **********************************************************************/
-        public function namespaceURI(): ?string
-        {
-                return $this->_namespaceURI;
-        }
-        public function specified(): boolean
-        {
-                return $this->_specified;
-        }
-        public function ownerElement(): ?Element
-        {
-                return $this->_ownerElement;
-        }
-        public function prefix(): ?string
-        {
-                return $this->_prefix;
-        }
-        public function localName(): string
-        {
-                return $this->_localName;
-        }
-        public function name(): string
-        {
-                return $this->_name;
-        }
-        public function value(?string $value = NULL)
-        {
-                if ($value === NULL) {
-                        /* GET */
-                        return $this->_value;
-                }
+	/**********************************************************************
+	 * ACCESSORS
+	 */
+	public function namespaceURI(): ?string {
+		return $this->_namespaceURI;
+	}
 
-                /*
-                 * NOTE
-                 * You can unset an attribute by calling Attr::value("");
-                 */
-                $old = $this->_value;
-                $new = $value;
+	public function specified(): bool {
+		return $this->_specified;
+	}
 
-                if ($new === $old) {
-                        return;
-                }
+	public function ownerElement(): ?Element {
+		return $this->_ownerElement;
+	}
 
-                $this->_value = $new;
+	public function prefix(): ?string {
+		return $this->_prefix;
+	}
 
-                if ($this->_ownerElement
-                && (isset($this->_ownerElement->__onchange_attr[$this->_localName]))) {
-                        /*
-                         * Elements must take special action if the
-                         * value of certain attributes are updated.
-                         * This allows the Attr to inform the Element
-                         * it has been updated, so the Element can
-                         * take the appropriate steps.
-                         *
-                         * For example, updating the 'id' attribute
-                         * will cause a rooted Element to delete its
-                         * old id from and add its new id to its
-                         * ownerDocument's node id cache.
-                         *
-                         * WARNING: This is only fired when we modify
-                         * the attribute using .value(). This is not
-                         * fired when we call Element::removeAttribute,
-                         * but that's okay for 'id' and 'class'.
-                         */
-                        $this->ownerElement->__onchange_attr[$this->localName](
-                                $this->ownerElement,
-                                $old,
-                                $new
-                        );
-                }
+	public function localName(): string {
+		return $this->_localName;
+	}
 
-                if ($this->_ownerElement->__is_rooted()) {
-                        /*
-                         * Documents must also sometimes take special action
-                         * and be aware of mutations occurring in their tree.
-                         * These methods are for that.
-                         *
-                         * WARNING: This is only fired when we modify
-                         * the attribute using .value(). This is not
-                         * fired when we call Element::removeAttribute,
-                         * but that's okay for 'id' and 'class'.
-                         *
-                         * TODO: These two mutation handling things
-                         * should be combined.
-                         *
-                         * TODO: Is this trying to implement spec,
-                         * or are we just doing this for our own use?
-                         */
-                        $this->_ownerElement->ownerDocument()->__mutate_attr($this, $old);
-                }
-        }
+	public function name(): string {
+		return $this->_name;
+	}
 
-        /* Delegated from Node */ 
-        public function textContent(?string $value = NULL)
-        {
-                return $this->value($value);
-        }
+	public function value( ?string $value = null ) {
+		if ( $value === null ) {
+			/* GET */
+			return $this->_value;
+		}
 
-        /* Delegated from Node */
-        public function _subclass_cloneNodeShallow(): ?Node
-        {
-                return new Attr(
-                        NULL,
-                        $this->_localName,
-                        $this->_prefix,
-                        $this->_namespaceURI,
-                        $this->_value
-                );
-        }
+		/*
+		 * NOTE
+		 * You can unset an attribute by calling Attr::value("");
+		 */
+		$old = $this->_value;
+		$new = $value;
 
-        /* Delegated from Node */
-        public function _subclass_isEqualNode(Node $node): bool
-        {
-                return ($this->_namespaceURI === $node->_namespaceURI
-                && $this->_localName === $node->_localName
-                && $this->_value === $node->_value);
-        }
+		if ( $new === $old ) {
+			return;
+		}
+
+		$this->_value = $new;
+
+		if ( $this->_ownerElement
+			 && ( isset( $this->_ownerElement->__onchange_attr[$this->_localName] ) ) ) {
+			/*
+			 * Elements must take special action if the
+			 * value of certain attributes are updated.
+			 * This allows the Attr to inform the Element
+			 * it has been updated, so the Element can
+			 * take the appropriate steps.
+			 *
+			 * For example, updating the 'id' attribute
+			 * will cause a rooted Element to delete its
+			 * old id from and add its new id to its
+			 * ownerDocument's node id cache.
+			 *
+			 * WARNING: This is only fired when we modify
+			 * the attribute using .value(). This is not
+			 * fired when we call Element::removeAttribute,
+			 * but that's okay for 'id' and 'class'.
+			 */
+			$this->_ownerElement->__onchange_attr[$this->_localName](
+				$this->_ownerElement,
+				$old,
+				$new
+			);
+		}
+
+		if ( $this->_ownerElement->__is_rooted() ) {
+			/*
+			 * Documents must also sometimes take special action
+			 * and be aware of mutations occurring in their tree.
+			 * These methods are for that.
+			 *
+			 * WARNING: This is only fired when we modify
+			 * the attribute using .value(). This is not
+			 * fired when we call Element::removeAttribute,
+			 * but that's okay for 'id' and 'class'.
+			 *
+			 * TODO: These two mutation handling things
+			 * should be combined.
+			 *
+			 * TODO: Is this trying to implement spec,
+			 * or are we just doing this for our own use?
+			 */
+			$this->_ownerElement->ownerDocument()->__mutate_attr( $this, $old );
+		}
+	}
+
+	/* Delegated from Node */
+	public function textContent( ?string $value = null ) {
+		return $this->value( $value );
+	}
+
+	/* Delegated from Node */
+	public function _subclass_cloneNodeShallow(): ?Node {
+		return new Attr(
+			null,
+			$this->_localName,
+			$this->_prefix,
+			$this->_namespaceURI,
+			$this->_value
+		);
+	}
+
+	/* Delegated from Node */
+	public function _subclass_isEqualNode( Node $node ): bool {
+		'@phan-var Attr $node'; /** @var Attr $node */
+		return ( $this->_namespaceURI === $node->_namespaceURI
+				 && $this->_localName === $node->_localName
+				 && $this->_value === $node->_value );
+	}
 }
