@@ -1066,12 +1066,12 @@ class WhatWG {
 	 *
 	 * @param ?string $ns
 	 * @param string $qname
-	 * @param string &$prefix reference (will be NULL or contain prefix string)
+	 * @param ?string &$prefix reference (will be NULL or contain prefix string)
 	 * @param string &$lname reference (will be qname or contain lname string)
 	 * @return void
 	 * @throws DOMException("NamespaceError")
 	 */
-	static function validate_and_extract( ?string $ns, string $qname, string &$prefix, string &$lname ): void {
+	static function validate_and_extract( ?string $ns, string $qname, ?string &$prefix, string &$lname ): void {
 		/*
 		 * See https://github.com/whatwg/dom/issues/671
 		 * and https://github.com/whatwg/dom/issues/319

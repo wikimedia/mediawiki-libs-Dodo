@@ -41,7 +41,7 @@ namespace Wikimedia\Dodo;
 class DOMImplementation {
 	private $_contextObject;
 
-	public function __construct( /* TODO: What is this? A Window? */$contextObject ) {
+	public function __construct( /* TODO: What is this? A Window? */$contextObject = null ) {
 		$this->_contextObject = $contextObject;
 	}
 
