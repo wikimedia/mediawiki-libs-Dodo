@@ -15,7 +15,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanUnextractableAnnotationSuffix
 // phpcs:disable Generic.Files.LineLength.TooLong
 // phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate

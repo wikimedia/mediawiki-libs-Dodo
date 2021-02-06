@@ -6,7 +6,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanTypeMismatchArgumentReal
 // @phan-file-suppress PhanUndeclaredClassMethod
 // @phan-file-suppress PhanUndeclaredVariable
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic

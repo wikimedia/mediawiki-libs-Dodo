@@ -2,7 +2,6 @@
 
 declare( strict_types = 1 );
 // phpcs:disable Generic.Files.LineLength.TooLong
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
