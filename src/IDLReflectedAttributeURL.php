@@ -1,10 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
 
@@ -17,32 +13,38 @@ namespace Wikimedia\Dodo;
  * the resulting URL string. If parsing fails, then the value of the content
  * attribute must be returned instead, converted to a USVString. On setting,
  * the content attribute must be set to the specified new value.
+ *
+ * Parent constructor in ReflectedAttribute is fine, no need to override
+ * ReflectedAttribute exposes two protected values, $element and $attributeName
  */
-class IDLReflectedAttributeURL {
-	protected $_elem = null;
-	protected $_name = null;
+class IDLReflectedAttributeURL extends ReflectedAttribute {
 
-	public function __construct( Element $elem, $spec ) {
-		$this->_elem = $elem;
-		$this->_name = $spec['name'];
-	}
-
+	/**
+	 * @return mixed
+	 */
 	public function get() {
-		$v = $this->_elem->getAttribute( $this->_name );
+		$v = $this->element->getAttribute( $this->attributeName );
 
 		if ( $v === null ) {
 			return '';
 		}
 
-		if ( $this->_elem ) {
-			$url = new URL( $this->_elem->__node_document()->URL() );
+		// FIXME $this->element should always be truthy?
+		if ( $this->element ) {
+			$url = new URL( $this->element->__node_document()->URL() );
 			return $url->resolve( $v );
 		} else {
 			return $v;
 		}
 	}
 
+	/**
+	 * TODO why do some setters return?
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	public function set( $value ) {
-		return $this->_elem->setAttribute( $this->_name, $value );
+		return $this->element->setAttribute( $this->attributeName, $value );
 	}
 }

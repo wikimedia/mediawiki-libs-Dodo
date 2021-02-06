@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanUndeclaredClassMethod
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
@@ -12,6 +11,9 @@ declare( strict_types = 1 );
 namespace Wikimedia\Dodo;
 
 class HTMLImgElement extends Element {
+
+	/** @var ReflectedAttribute[] */
+	private $attribs = [];
 
 	const REFERRER = [
 		'type' => [
@@ -28,7 +30,14 @@ class HTMLImgElement extends Element {
 		'missing' => ''
 	];
 
-	static function build_attributes( $owner, $spec_array ) {
+	/**
+	 * TODO make this non-static, only caller is __construct
+	 *
+	 * @param HTMLImgElement $owner
+	 * @param array $spec_array
+	 * @return ReflectedAttribute[]
+	 */
+	private static function buildAttributes( $owner, $spec_array ) {
 		$ret = [];
 
 		foreach ( $spec_array as $name => $spec ) {
@@ -38,18 +47,18 @@ class HTMLImgElement extends Element {
 			if ( !isset( $spec['name'] ) ) {
 				$spec['name'] = $name;
 			}
-			$ret[$name] = ReflectedAttributes::reflected_attribute( $owner, $spec );
+			$ret[$name] = ReflectedAttributes::getReflectedAttribute( $owner, $spec );
 		}
 
 		return $ret;
 	}
 
 	private $_prop;
-	private $_attr;
 
 	public function __construct( $doc, $lname, $prefix ) {
 		parent::__construct( $doc, $lname, $prefix );
-		$this->_attr = self::build_attributes( $this, [
+
+		$this->attribs = self::buildAttributes( $this, [
 			'alt' => 'string',
 			'src' => 'URL',
 			'srcset' => 'string',
@@ -71,14 +80,14 @@ class HTMLImgElement extends Element {
 	}
 
 	public function __get( $name ) {
-		if ( isset( $this->_attr[$name] ) ) {
-			return $this->_attr[$name]->get();
+		if ( isset( $this->attribs[$name] ) ) {
+			return $this->attribs[$name]->get();
 		}
 	}
 
 	public function __set( $name, $value ) {
-		if ( isset( $this->_attr[$name] ) ) {
-			$this->_attr[$name]->set( $value );
+		if ( isset( $this->attribs[$name] ) ) {
+			$this->attribs[$name]->set( $value );
 		}
 	}
 }

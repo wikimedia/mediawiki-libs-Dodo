@@ -17,29 +17,42 @@ namespace Wikimedia\Dodo;
  * is not in a defined state (e.g. the attribute is missing and there is
  * no missing value default). On setting, the content attribute must be
  * set to the specified new value.
+ *
+ * ReflectedAttribute exposes two protected values, $element and $attributeName
  */
-class IDLReflectedAttributeString {
-	protected $_elem = null;
-	protected $_name = null;
-	protected $_treat_null_as_empty = true;
+class IDLReflectedAttributeString extends ReflectedAttribute {
+	/** @var bool */
+	private $treatNullAsEmpty = true;
 
+	/**
+	 * @param Element $elem
+	 * @param array $spec
+	 */
 	public function __construct( Element $elem, $spec ) {
-		$this->_elem = $elem;
-		$this->_name = $spec['name'];
+		parent::__construct( $elem, $spec );
 
 		if ( isset( $spec['is_nullable'] ) ) {
-			$this->_treat_null_as_empty = $spec['is_nullable'];
+			$this->treatNullAsEmpty = $spec['is_nullable'];
 		}
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function get() {
-		return $this->_elem->getAttribute( $this->_name ) ?? '';
+		return $this->element->getAttribute( $this->attributeName ) ?? '';
 	}
 
+	/**
+	 * TODO why do some setters return?
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	public function set( $value ) {
-		if ( $value === null && $this->_treat_null_as_empty ) {
+		if ( $value === null && $this->treatNullAsEmpty ) {
 			$value = '';
 		}
-		return $this->_elem->setAttribute( $this->_name, $value );
+		return $this->element->setAttribute( $this->attributeName, $value );
 	}
 }

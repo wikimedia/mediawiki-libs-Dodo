@@ -1,10 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanUndeclaredClassMethod
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable Squiz.Scope.MethodScope.Missing
 
 namespace Wikimedia\Dodo;
 
@@ -40,11 +36,18 @@ namespace Wikimedia\Dodo;
  * Element::$__attr_<attrname>.
  */
 class ReflectedAttributes {
-	static function reflected_attribute( $owner, $spec ) {
+	/**
+	 * TODO move this into HTMLImgElement, the only place it is used
+	 *
+	 * @param HTMLImgElement $owner
+	 * @param array $spec
+	 * @return ReflectedAttribute one of the different subclasses
+	 */
+	public static function getReflectedAttribute( $owner, $spec ) {
 		if ( is_array( $spec['type'] ) ) {
 			return new IDLReflectedAttributeEnumerated( $owner, $spec );
-		} else {
-			switch ( $spec['type'] ) {
+		}
+		switch ( $spec['type'] ) {
 			case 'CORS':
 				return new IDLReflectedAttributeCORS( $owner, $spec );
 			case 'URL':
@@ -57,11 +60,12 @@ class ReflectedAttributes {
 			case 'limited unsigned long with fallback':
 				return new IDLReflectedAttributeNumeric( $owner, $spec );
 			case 'function':
+				// FIXME IDLReflectedAttributeFunction does not exist
+				// @phan-suppress-next-line PhanTypeMismatchReturn, PhanUndeclaredClassMethod
 				return new IDLReflectedAttributeFunction( $owner, $spec );
 			case 'string':
 			default:
 				return new IDLReflectedAttributeString( $owner, $spec );
-			}
 		}
 	}
 }

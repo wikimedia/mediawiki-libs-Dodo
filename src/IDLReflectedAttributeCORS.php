@@ -1,23 +1,20 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
 
-class IDLReflectedAttributeCORS {
-	protected $_elem = null;
-	protected $_name = null;
+/**
+ * Parent constructor in ReflectedAttribute is fine, no need to override
+ * ReflectedAttribute exposes two protected values, $element and $attributeName
+ */
+class IDLReflectedAttributeCORS extends ReflectedAttribute {
 
-	public function __construct( Element $elem, $spec ) {
-		$this->_elem = $elem;
-		$this->_name = $spec['name'];
-	}
-
+	/**
+	 * @return string|null
+	 */
 	public function get() {
-		$v = $this->_elem->getAttribute( $this->_name );
+		$v = $this->element->getAttribute( $this->attributeName );
 		if ( $v === null ) {
 			return null;
 		}
@@ -27,11 +24,14 @@ class IDLReflectedAttributeCORS {
 		return 'anonymous';
 	}
 
+	/**
+	 * @param mixed $value
+	 */
 	public function set( $value = null ) {
 		if ( $value === null ) {
-			$this->_elem->removeAttribute( $this->_name );
+			$this->element->removeAttribute( $this->attributeName );
 		} else {
-			$this->_elem->setAttribute( $this->_name, $value );
+			$this->element->setAttribute( $this->attributeName, $value );
 		}
 	}
 }

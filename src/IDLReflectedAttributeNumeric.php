@@ -2,13 +2,9 @@
 
 declare( strict_types = 1 );
 // @phan-file-suppress PhanPluginDuplicateExpressionAssignmentOperation
-// @phan-file-suppress PhanPluginDuplicateExpressionAssignmentOperation
 // @phan-file-suppress PhanSuspiciousValueComparison
-// @phan-file-suppress PhanTypeInvalidBitwiseBinaryOperator
-// @phan-file-suppress PhanTypeInvalidLeftOperandOfBitwiseOp
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 
@@ -42,9 +38,13 @@ namespace Wikimedia\Dodo;
  *   }
  * });
  */
-class IDLReflectedAttributeNumeric {
-	public $_elem;
-	public $_name;
+
+/**
+ * ReflectedAttribute exposes two protected values, $element and $attributeName
+ *
+ * TODO clean this up a lot more
+ */
+class IDLReflectedAttributeNumeric extends ReflectedAttribute {
 	public $_subtype;
 
 	public $_default;
@@ -53,9 +53,13 @@ class IDLReflectedAttributeNumeric {
 	public $_min = null;
 	public $_setmin = null;
 
+	/**
+	 * @param Element $elem
+	 * @param array $spec
+	 */
 	public function __construct( Element $elem, $spec ) {
-		$this->_elem = $elem;
-		$this->_name = $spec['name'];
+		parent::__construct( $elem, $spec );
+
 		$this->_type = $spec['type'] ?? 'number';
 		$this->_subtype = $spec['subtype'] ?? 'integer';
 		$this->_setmin = $spec['setmin'] ?? null;
@@ -98,35 +102,45 @@ class IDLReflectedAttributeNumeric {
 		}
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function get() {
 		/* TODO: This was the fast path _getattr() */
-		$v = $this->_elem->getAttribute( $this->_name );
+		$v = $this->element->getAttribute( $this->attributeName );
 
 		$n = ( $this->_subtype === 'float' ) ? floatval( $v ) : intval( $v, 10 );
 
 		if ( $v === null
 			 || !is_finite( $n )
 			 || ( $this->_min !== null && $n < $this->_min )
-			 || ( $this->_max !== null && $n > $this->_max ) ) {
+			 || ( $this->_max !== null && $n > $this->_max )
+		) {
 			return $this->_default_cb( $this );
 		}
 
 		switch ( $this->_type ) {
-		case 'unsigned long':
-		case 'long':
-		case 'limited unsigned long with fallback':
-			if ( !preg_match( '/^[ \t\n\f\r]*[-+]?[0-9]/', $v ) ) {
-				return $this->_default( $this );
-			}
-			break;
-		default:
-			$n = $n | 0;
-			break;
+			case 'unsigned long':
+			case 'long':
+			case 'limited unsigned long with fallback':
+				if ( !preg_match( '/^[ \t\n\f\r]*[-+]?[0-9]/', $v ) ) {
+					return $this->_default( $this );
+				}
+				break;
+			default:
+				$n = $n | 0;
+				break;
 		}
 
 		return $n;
 	}
 
+	/**
+	 * TODO why do some setters return?
+	 *
+	 * @param mixed $v
+	 * @return mixed
+	 */
 	public function set( $v ) {
 		if ( !$this->_subtype === 'float' ) {
 			$v = floor( $v );
@@ -137,27 +151,27 @@ class IDLReflectedAttributeNumeric {
 		}
 
 		switch ( $this->_type ) {
-		case 'unsigned_long':
-			if ( $v < 0 || $v > 0x7FFFFFFF ) {
-				$v = $this->_default( $this );
-			} else {
-				$v = $v | 0;
-			}
-			break;
-		case 'limited unsigned long with fallback':
-			if ( $v < 1 || $v > 0x7FFFFFFF ) {
-				$v = $this->_default( $this );
-			} else {
-				$v = $v | 0;
-			}
-		case 'long':
-			if ( $v < -0x80000000 || $v > 0x7FFFFFFF ) {
-				$v = $this->_default( $this );
-			} else {
-				$v = $v | 0;
-			}
+			case 'unsigned_long':
+				if ( $v < 0 || $v > 0x7FFFFFFF ) {
+					$v = $this->_default( $this );
+				} else {
+					$v = $v | 0;
+				}
+				break;
+			case 'limited unsigned long with fallback':
+				if ( $v < 1 || $v > 0x7FFFFFFF ) {
+					$v = $this->_default( $this );
+				} else {
+					$v = $v | 0;
+				}
+			case 'long':
+				if ( $v < -0x80000000 || $v > 0x7FFFFFFF ) {
+					$v = $this->_default( $this );
+				} else {
+					$v = $v | 0;
+				}
 		}
 
-		return $this->_elem->setAttribute( $this->_name, strval( $v ) );
+		return $this->element->setAttribute( $this->attributeName, strval( $v ) );
 	}
 }
