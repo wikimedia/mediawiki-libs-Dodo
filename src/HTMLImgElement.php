@@ -15,6 +15,8 @@ class HTMLImgElement extends Element {
 	/** @var ReflectedAttribute[] */
 	private $attribs = [];
 
+	private $_prop;
+
 	const REFERRER = [
 		'type' => [
 			"",
@@ -30,35 +32,10 @@ class HTMLImgElement extends Element {
 		'missing' => ''
 	];
 
-	/**
-	 * TODO make this non-static, only caller is __construct
-	 *
-	 * @param HTMLImgElement $owner
-	 * @param array $spec_array
-	 * @return ReflectedAttribute[]
-	 */
-	private static function buildAttributes( $owner, $spec_array ) {
-		$ret = [];
-
-		foreach ( $spec_array as $name => $spec ) {
-			if ( !is_array( $spec ) ) {
-				$spec = [ 'type' => $spec, 'name' => $name ];
-			}
-			if ( !isset( $spec['name'] ) ) {
-				$spec['name'] = $name;
-			}
-			$ret[$name] = ReflectedAttributes::getReflectedAttribute( $owner, $spec );
-		}
-
-		return $ret;
-	}
-
-	private $_prop;
-
 	public function __construct( $doc, $lname, $prefix ) {
 		parent::__construct( $doc, $lname, $prefix );
 
-		$this->attribs = self::buildAttributes( $this, [
+		$specArray = [
 			'alt' => 'string',
 			'src' => 'URL',
 			'srcset' => 'string',
@@ -76,7 +53,8 @@ class HTMLImgElement extends Element {
 			'vspace' => [ 'type' => 'unsigned long', 'default' => 0 ],
 			'longDesc' => 'URL',
 			'border' => [ 'type' => 'string', 'is_nullable' => true ]
-		] );
+		];
+		$this->attribs = ReflectedAttribute::buildAttributes( $this, $specArray );
 	}
 
 	public function __get( $name ) {
