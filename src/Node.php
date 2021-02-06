@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanParamTooMany
 // @phan-file-suppress PhanTypeMismatchArgument
 // @phan-file-suppress PhanTypeMismatchDeclaredParamNullable
-// @phan-file-suppress PhanTypeMismatchDeclaredReturn
 // @phan-file-suppress PhanTypeMismatchDeclaredReturnNullable
 // @phan-file-suppress PhanTypeMismatchReturnNullable
 // @phan-file-suppress PhanUndeclaredMethod
@@ -72,64 +71,68 @@ abstract class Node {
 
 	/*
 	 * SET WHEN SOMETHING APPENDS NODE
+	 *
+	 * @var Node|null should be considered read-only
 	 */
-	public $_ownerDocument; /* readonly Document or NULL */
-	public $_parentNode;    /* readonly Node or NULL */
-	/*
+	public $_ownerDocument;
+
+	/**
+	 * @see $_ownerDocument
+	 *
+	 * @var Node|null should be considered read-only
+	 */
+	public $_parentNode;
+
+	/**
 	 * DEVIATION FROM SPEC
 	 * PURPOSE: SIBLING TRAVERSAL OPTIMIZATION
 	 *
-	 * If a Node has no siblings,
-	 * i.e. it is the 'only child'
-	 * of $_parentNode, then the
-	 * properties $_nextSibling
-	 * and $_previousSibling are
-	 * set equal to $this.
+	 * If a Node has no siblings, i.e. it is the 'only child' of $_parentNode, then the
+	 * properties $_nextSibling and $_previousSibling are set equal to $this.
 	 *
-	 * This is an optimization for
-	 * traversing siblings, but in
-	 * DOM-LS, these properties
-	 * should be NULL in this
-	 * scenario.
+	 * This is an optimization for traversing siblings, but in DOM-LS, these properties
+	 * should be null in this scenario.
 	 *
-	 * The relevant accessors are
-	 * spec-compliant, returning
-	 * NULL in this situation.
+	 * The relevant accessors are spec-compliant, returning null in this situation.
+	 *
+	 * @var Node|null should be considered read-only
 	 */
-	public $_nextSibling;     /* readonly Node or NULL */
-	public $_previousSibling; /* readonly Node or NULL */
+	public $_nextSibling;
 
-	/*
-	 * SET WHEN NODE APPENDS SOMETHING
+	/**
+	 * @see $_nextSibling
+	 * @var Node|null should be considered read-only
 	 */
-	public $_firstChild;      /* readonly Node or NULL */
+	public $_previousSibling;
+
+	/**
+	 * SET WHEN NODE APPENDS SOMETHING
+	 *
+	 * @var Node|null should be considered read-only
+	 */
+	public $_firstChild;
+
 	/*
 	 * DEVIATION FROM SPEC
 	 * PURPOSE: APPEND OPTIMIZATION
 	 *
-	 * The $_childNodes property
-	 * holds an array-like object
-	 * (a NodeList) referencing
-	 * each of a Node's children
-	 * as a live representation of
-	 * the DOM.
+	 * The $_childNodes property holds an array-like object (a NodeList) referencing
+	 * each of a Node's children as a live representation of the DOM.
 	 *
-	 * This 'liveness' is somewhat
-	 * unperformant, and the
-	 * upkeep of this object has
-	 * a significant impact on
-	 * append performance.
+	 * This 'liveness' is somewhat unperformant, and the upkeep of this object has
+	 * a significant impact on append performance.
 	 *
-	 * So, this implementation
-	 * chooses to defer its
-	 * construction until a value
-	 * is requested by calling
-	 * Node::childNodes().
+	 * So, this implementation chooses to defer its construction until a value
+	 * is requested by calling Node::childNodes().
 	 *
-	 * Until that time, it will
-	 * have the value NULL.
+	 * Until that time, it will have the value null.
+	 *
+	 * TODO this should have {at}var with the next line, but that breaks phan
+	 * because even though NodeList extends ArrayObject, it can't be used in array_splice?
+	 *
+	 * NodeList|null should be considered read-only
 	 */
-	public $_childNodes;      /* readonly NodeList or NULL */
+	public $_childNodes;
 
 	/**********************************************************************
 	 * Properties that are for internal use by this library
@@ -137,57 +140,33 @@ abstract class Node {
 
 	/*
 	 * DEVELOPERS NOTE:
-	 * An index is assigned on
-	 * ADOPTION. It uniquely
-	 * identifies the Node
+	 * An index is assigned on ADOPTION. It uniquely identifies the Node
 	 * within its owner Document.
 	 *
-	 * This index makes it
-	 * simple to represent a
-	 * Node as an integer.
+	 * This index makes it simple to represent a Node as an integer.
 	 *
-	 * It exists for a single
-	 * optimization. If two
-	 * Elements have the same
-	 * id, they will be stored
-	 * in an array under their
-	 * $document_index. This
-	 * means we don't have to
-	 * search the array for a
-	 * matching Node, we can
+	 * It exists for a single optimization. If two Elements have the same id,
+	 * they will be stored in an array under their $document_index. This
+	 * means we don't have to search the array for a matching Node, we can
 	 * look it up in O(1). Yep.
 	 *
-	 * FIXME
-	 * It is public because it
-	 * gets used by the whatwg
-	 * algorithms page.
+	 * FIXME It is public because it gets used by the whatwg algorithms page.
 	 */
 	public $__document_index;
 
 	/*
 	 * DEVELOPERS NOTE:
-	 * An index is assigned on
-	 * INSERTION. It uniquely
-	 * identifies the Node among
+	 * An index is assigned on INSERTION. It uniquely identifies the Node among
 	 * its siblings.
 	 *
-	 * It is used to help compute
-	 * document position and to
-	 * mark where insertion should
+	 * It is used to help compute document position and to mark where insertion should
 	 * occur.
 	 *
-	 * Its existence is, frankly,
-	 * mostly for convenience due
-	 * to the fact that the most
-	 * common representation of
-	 * child nodes is a linked list
-	 * that doesn't have numeric
+	 * Its existence is, frankly, mostly for convenience due to the fact that the most
+	 * common representation of child nodes is a linked list that doesn't have numeric
 	 * indices otherwise.
 	 *
-	 * FIXME
-	 * It is public because it
-	 * gets used by the whatwg
-	 * algorithms page.
+	 * FIXME It is public because it gets used by the whatwg algorithms page.
 	 */
 	public $__sibling_index;
 
@@ -231,45 +210,46 @@ abstract class Node {
 		return null;
 	}
 
+	/** @return int */
 	final public function nodeType(): int {
 		return $this->_nodeType;
 	}
 
+	/** @return string */
 	final public function nodeName(): ?string {
 		return $this->_nodeName;
 	}
 
-	/*
-	 * Nodes might not have an ownerDocument.
-	 * Perhaps they have not been inserted
-	 * into a DOM, or are themselves a
-	 * Document. In those cases, the value of
-	 * ownerDocument will be NULL.
+	/**
+	 * Nodes might not have an ownerDocument. Perhaps they have not been inserted
+	 * into a DOM, or are themselves a Document. In those cases, the value of
+	 * ownerDocument will be null.
+	 *
+	 * @return ?Document
 	 */
 	final public function ownerDocument(): ?Document {
 		return $this->_ownerDocument;
 	}
 
-	/*
-	 * Nodes might not have a parentNode.
-	 * Perhaps they have not been inserted
-	 * into a DOM, or are a Document node,
-	 * which is the root of a DOM tree and
-	 * thus has no parent. In those cases,
-	 * the value of parentNode is NULL.
+	/**
+	 * Nodes might not have a parentNode. Perhaps they have not been inserted
+	 * into a DOM, or are a Document node, which is the root of a DOM tree and
+	 * thus has no parent. In those cases, the value of parentNode is null.
+	 *
+	 * @return ?Node
 	 */
 	final public function parentNode(): ?Node {
 		return $this->_parentNode;
 	}
 
-	/*
-	 * This value is the same as parentNode,
-	 * except it puts an extra condition --
+	/**
+	 * This value is the same as parentNode, except it puts an extra condition,
 	 * that the parentNode must be an Element.
 	 *
-	 * Accordingly, it requires no additional
-	 * backing property, and can exist only
+	 * Accordingly, it requires no additional backing property, and can exist only
 	 * as an accessor.
+	 *
+	 * @return ?Element
 	 */
 	final public function parentElement(): ?Element {
 		if ( $this->_parentNode === null ) {
@@ -281,17 +261,16 @@ abstract class Node {
 		return null;
 	}
 
+	/** @return ?Node */
 	final public function previousSibling(): ?Node {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
 		if ( $this->_parentNode->_firstChild === $this ) {
 			/*
-			 * TODO: Why not check
-			 * $this->_nextSibling === $this
+			 * TODO: Why not check $this->_nextSibling === $this
 			 *
-			 * Is it because firstChild will be
-			 * set to NULL if we should be using
+			 * Is it because firstChild will be set to null if we should be using
 			 * NodeList???
 			 */
 			return null;
@@ -299,17 +278,16 @@ abstract class Node {
 		return $this->_previousSibling;
 	}
 
+	/** @return ?Node */
 	final public function nextSibling(): ?Node {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
 		if ( $this->_nextSibling === $this->_parentNode->_firstChild ) {
 			/*
-			 * TODO: Why not check
-			 * $this->_nextSibling === $this
+			 * TODO: Why not check $this->_nextSibling === $this
 			 *
-			 * Is it because firstChild will be
-			 * set to NULL if we should be using
+			 * Is it because firstChild will be set to null if we should be using
 			 * NodeList???
 			 */
 			return null;
@@ -317,25 +295,22 @@ abstract class Node {
 		return $this->_nextSibling;
 	}
 
-	/*
-	 * When, in other place of the code,
-	 * you observe folks testing for
-	 * $this->_childNodes, it is to see
-	 * whether we should use the NodeList
+	/**
+	 * When, in other place of the code, you observe folks testing for
+	 * $this->_childNodes, it is to see whether we should use the NodeList
 	 * or the linked list traversal methods.
 	 *
 	 * FIXME:
-	 * Wait, doesn't this need to be live?
-	 * I mean, don't we need to re-compute
-	 * this thing when things are appended
-	 * or removed...? Or is it not live?
+	 * Wait, doesn't this need to be live? I mean, don't we need to re-compute
+	 * this thing when things are appended or removed...? Or is it not live?
+	 *
+	 * @return ?NodeList
 	 */
 	public function childNodes(): ?NodeList {
 		if ( $this->_childNodes === null ) {
 
 			/*
-			 * If childNodes has never been
-			 * created, we've now created it.
+			 * If childNodes has never been created, we've now created it.
 			 */
 			$this->_childNodes = new NodeList();
 
@@ -345,132 +320,98 @@ abstract class Node {
 
 			/*
 			 * TODO: Must we?
-			 * Setting this to NULL is a
-			 * signal that we are not to
-			 * use the Linked List, but
-			 * it is stupid and I think we
-			 * don't actually need it.
+			 * Setting this to null is a signal that we are not to use the Linked List, but
+			 * it is stupid and I think we don't actually need it.
 			 */
 			$this->_firstChild = null;
 		}
 		return $this->_childNodes;
 	}
 
-	/*
+	/**
 	 * CAUTION
-	 * Directly accessing _firstChild
-	 * alone is *not* a shortcut for this
-	 * method. Depending on whether we are
-	 * in NodeList or LinkedList mode, one
-	 * or the other or both may be NULL.
+	 * Directly accessing _firstChild alone is *not* a shortcut for this
+	 * method. Depending on whether we are in NodeList or LinkedList mode, one
+	 * or the other or both may be null.
 	 *
-	 * I'm trying to factor it out, but
-	 * it will take some time.
+	 * I'm trying to factor it out, but it will take some time.
+	 *
+	 * @return ?Node
 	 */
 	public function firstChild(): ?Node {
 		if ( $this->_childNodes === null ) {
 			/*
-			 * If we are using the Linked List
-			 * representation, then just return
-			 * the backing property (may still
-			 * be NULL).
+			 * If we are using the Linked List representation, then just return
+			 * the backing property (may still be null).
 			 */
 			return $this->_firstChild;
 		}
 		if ( isset( $this->_childNodes[0] ) ) {
 			/*
-			 * If we are using the NodeList
-			 * representation, and the
-			 * NodeList is not empty, then
-			 * return the first item in the
+			 * If we are using the NodeList representation, and the
+			 * NodeList is not empty, then return the first item in the
 			 * NodeList.
 			 */
 			return $this->_childNodes[0];
 		}
-		/*
-		 * Otherwise, the NodeList is
-		 * empty, so return NULL.
-		 */
+		/* Otherwise, the NodeList is empty, so return null. */
 		return null;
 	}
 
-	/*
+	/**
 	 * FIXME
 	 * HEY HEY HEY!! THIS IS NOT PART OF THE NORMAL SPEC,
 	 * BUT IS USED HEAVILY IN OUR TARGET RUN.
 	 * IT SHOULD BE NAMED DIFFERENTLY, MAYBE.
+	 *
+	 * @return ?Node
 	 */
 	public function lastChild(): ?Node {
 		if ( $this->_childNodes === null ) {
-			/*
-			 * If we are using the Linked List
-			 * representation.
-			 */
+			/* If we are using the Linked List representation. */
 			if ( $this->_firstChild !== null ) {
-				/*
-				 * If we have a firstChild,
-				 * its previousSibling is
-				 * the last child.
-				 */
+				/* If we have a firstChild, its previousSibling is the last child. */
 				return $this->_firstChild->previousSibling();
 			} else {
-				/*
-				 * Otherwise there are
-				 * no children, and so
-				 * last child is NULL.
-				 */
+				/* Otherwise there are no children, and so last child is null. */
 				return null;
 			}
 		} else {
-			/*
-			 * If we are using the NodeList
-			 * representation.
-			 */
+			/* If we are using the NodeList representation. */
 			if ( isset( $this->_childNodes[0] ) ) {
 				/*
-				 * If there is at least
-				 * one element in the
-				 * NodeList, return the
-				 * last element in the
-				 * NodeList.
+				 * If there is at least one element in the NodeList, return the
+				 * last element in the NodeList.
 				 */
 				return end( $this->_childNodes );
 			} else {
-				/*
-				 * Otherwise, there are
-				 * no children, and so
-				 * last child is NULL.
-				 */
+				/* Otherwise, there are no children, and so last child is null. */
 				return null;
 			}
 		}
 	}
 
-	/*
+	/**
 	 * CAUTION
-	 * Testing _firstChild or _childNodes
-	 * alone is *not* a shortcut for this
-	 * method. Depending on whether we are
-	 * in NodeList or LinkedList mode, one
-	 * or the other or both may be NULL.
+	 * Testing _firstChild or _childNodes alone is *not* a shortcut for this
+	 * method. Depending on whether we are in NodeList or LinkedList mode, one
+	 * or the other or both may be null.
 	 *
-	 * I'm trying to factor it out, but
-	 * it will take some time.
+	 * I'm trying to factor it out, but it will take some time.
+	 *
+	 * @return bool
 	 */
 	public function hasChildNodes(): bool {
 		if ( $this->_childNodes === null ) {
 			/*
-			 * If we are using the Linked List
-			 * representation, then the NULL-ity
+			 * If we are using the Linked List representation, then the NULL-ity
 			 * of firstChild is diagnostic.
 			 */
 			return $this->_firstChild !== null;
 		} else {
 			/*
-			 * If we are using the NodeList
-			 * representation, then the
-			 * non-emptiness of childNodes
-			 * is diagnostic.
+			 * If we are using the NodeList representation, then the
+			 * non-emptiness of childNodes is diagnostic.
 			 */
 			return !empty( $this->_childNodes );
 		}
@@ -514,8 +455,8 @@ abstract class Node {
 	 * all of the non-replacing insertion mutations.
 	 *
 	 * @param Node $node To be inserted
-	 * @param Node $refNode Child of this node before which to insert $node
-	 * @return Newly inserted Node or empty DocumentFragment
+	 * @param ?Node $refNode Child of this node before which to insert $node
+	 * @return ?Node Newly inserted Node or empty DocumentFragment
 	 * @throws DOMException "HierarchyRequestError" or "NotFoundError"
 	 */
 	public function insertBefore( Node $node, ?Node $refNode ): ?Node {
@@ -560,20 +501,31 @@ abstract class Node {
 		return $node;
 	}
 
+	/**
+	 * @param Node $node
+	 * @return ?Node
+	 */
 	public function appendChild( Node $node ): ?Node {
 		return $this->insertBefore( $node, null );
 	}
 
-	/*
-	 * Does not check for insertion validity.
-	 * This out-performs PHP DOMDocument by
+	/**
+	 * Does not check for insertion validity. This out-performs PHP DOMDocument by
 	 * over 2x.
+	 *
+	 * @param Node $node
+	 * @return Node
 	 */
 	final public function __unsafe_appendChild( Node $node ): Node {
 		WhatWG::insert_before_or_replace( $node, $this, null, false );
 		return $node;
 	}
 
+	/**
+	 * @param Node $new
+	 * @param ?Node $old
+	 * @return ?Node
+	 */
 	public function replaceChild( Node $new, ?Node $old ): ?Node {
 		/*
 		 * [1]
@@ -623,6 +575,10 @@ abstract class Node {
 		return $old;
 	}
 
+	/**
+	 * @param ChildNode $node
+	 * @return ?Node
+	 */
 	public function removeChild( ChildNode $node ): ?Node {
 		if ( $this === $node->_parentNode ) {
 			/* Defined on ChildNode class */
@@ -698,6 +654,10 @@ abstract class Node {
 	 * COMPARISONS AND PREDICATES
 	 */
 
+	/**
+	 * @param Node $that
+	 * @return int
+	 */
 	final public function compareDocumentPosition( Node $that ): int {
 		/*
 		 * CAUTION
@@ -706,22 +666,26 @@ abstract class Node {
 		return WhatWG::compare_document_position( $that, $this );
 	}
 
+	/**
+	 * @param ?Node $node
+	 * @return bool
+	 */
 	final public function contains( ?Node $node ): bool {
 		if ( $node === null ) {
 			return false;
 		}
 		if ( $this === $node ) {
-			/*
-			 * As per the DOM-LS,
-			 * containment is
-			 * inclusive.
-			 */
+			/* As per the DOM-LS, containment is inclusive. */
 			return true;
 		}
 
 		return ( $this->compareDocumentPosition( $node ) & Util::DOCUMENT_POSITION_CONTAINED_BY ) !== 0;
 	}
 
+	/**
+	 * @param Node $node
+	 * @return bool
+	 */
 	final public function isSameNode( Node $node ): bool {
 		return $this === $node;
 	}
@@ -835,8 +799,8 @@ abstract class Node {
 	/**
 	 * Return DOMString containing namespace URI for a given prefix
 	 *
-	 * @param string $prefix
-	 * @return string or NULL
+	 * @param ?string $prefix
+	 * @return ?string
 	 *
 	 * NOTE
 	 * Inverse of Node::lookupPrefix
@@ -848,7 +812,7 @@ abstract class Node {
 	/**
 	 * Determine whether this is the default namespace
 	 *
-	 * @param string $ns
+	 * @param ?string $ns
 	 * @return bool
 	 */
 	public function isDefaultNamespace( ?string $ns ): bool {
@@ -943,18 +907,16 @@ abstract class Node {
 	 * node or a document element. it's horrible.
 	 *
 	 * And where is __document_index being set?
-	 *
 	 */
 
-	/*
-	 * Set the ownerDocument reference
-	 * on a subtree rooted at $this.
+	/**
+	 * Set the ownerDocument reference on a subtree rooted at $this.
 	 *
-	 * When a Node becomes part of a
-	 * Document, even if it is not yet
-	 * inserted.
+	 * When a Node becomes part of a Document, even if it is not yet inserted.
 	 *
 	 * Called by Document::adoptNode()
+	 *
+	 * @param Document $doc
 	 */
 	public function __set_owner( Document $doc ) {
 		$this->_ownerDocument = $doc;
@@ -973,7 +935,7 @@ abstract class Node {
 	/**
 	 * Determine whether this Node is rooted (belongs to a tree)
 	 *
-	 * return: bool
+	 * @return bool
 	 *
 	 * NOTE
 	 * A Node is rooted if it belongs to a tree, in which case it will
@@ -1188,9 +1150,11 @@ abstract class Node {
 		}
 	}
 
-	/*
+	/**
 	 * Convert the children of a node to an HTML string.
 	 * This is used by the innerHTML getter
+	 *
+	 * @return string
 	 */
 	public function _node_serialize(): string {
 		$s = "";
