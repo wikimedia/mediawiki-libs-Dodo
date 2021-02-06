@@ -10,8 +10,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore

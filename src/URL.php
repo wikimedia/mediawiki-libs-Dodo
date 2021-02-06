@@ -13,8 +13,6 @@ declare( strict_types = 1 );
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
 // phpcs:disable MediaWiki.Commenting.FunctionComment.SpacingAfter
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
