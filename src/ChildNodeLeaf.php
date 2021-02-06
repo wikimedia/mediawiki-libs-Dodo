@@ -18,9 +18,6 @@ namespace Wikimedia\Dodo;
  * class.
  */
 abstract class ChildNodeLeaf extends ChildNode {
-	public function __construct() {
-		parent::__construct();
-	}
 
 	final public function hasChildNodes(): bool {
 		return false;

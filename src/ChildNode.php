@@ -49,10 +49,6 @@ abstract class ChildNode extends Node {
 		return $fragment;
 	}
 
-	public function __construct() {
-		parent::__construct();
-	}
-
 	/**
 	 * Insert any number of Nodes or
 	 * DOMStrings after $this.

@@ -19,10 +19,6 @@ namespace Wikimedia\Dodo;
 abstract class CharacterData extends NonDocumentTypeChildNodeLeaf {
 	protected $_data;
 
-	public function __construct() {
-		parent::__construct();
-	}
-
 	// DOMString substringData(unsigned long offset,
 	//               unsigned long count);
 	// The substringData(offset, count) method must run these steps:

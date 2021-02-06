@@ -13,9 +13,6 @@ namespace Wikimedia\Dodo;
  * class and more like a mixin. It's used by Element and CharacterData.
  */
 abstract class NonDocumentTypeChildNode extends ChildNode {
-	public function __construct() {
-		parent::__construct();
-	}
 
 	public function nextElementSibling(): ?Element {
 		if ( $this->_parentNode === null ) {
