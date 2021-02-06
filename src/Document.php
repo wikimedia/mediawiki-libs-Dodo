@@ -10,12 +10,10 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
@@ -73,49 +71,41 @@ class Document extends Node {
 	 */
 	/*
 	 * DEVELOPERS NOTE
-	 * Certain APIs are only defined
-	 * when the Document contains HTML
-	 * (rather than XML). Rather than
-	 * implement a separate HTMLDocument
-	 * class, we simply store the type
-	 * of Document in a variable.
+	 * Certain APIs are only defined when the Document contains HTML
+	 * (rather than XML). Rather than implement a separate HTMLDocument
+	 * class, we simply store the type of Document in a variable.
 	 *
-	 * Outside callers will use the
-	 * isHTMLDocument() method, which
+	 * Outside callers will use the isHTMLDocument() method, which
 	 * makes use of this value.
 	 */
 	protected $__type;
 
 	/*
 	 * DEVELOPERS NOTE:
-	 * Used to assign the document
-	 * index to Nodes on ADOPTION.
+	 * Used to assign the document index to Nodes on ADOPTION.
 	 */
 	protected $__document_index_next = 2;
 
 	/*
 	 * DEVELOPERS NOTE:
-	 * Document's aren't going to
-	 * adopt themselves, so we set
-	 * this to a default of 1.
+	 * Document's aren't going to adopt themselves, so we set this to a default of 1.
 	 */
 	// XXX PORT FIXME this overrides a property of Node!
 	//protected $__document_index = 1;
 
-	/*
-	 * Element nodes having an 'id'
-	 * attribute are stored in this
-	 * table, indexed by their 'id'
-	 * value.
+	/**
+	 * Element nodes having an 'id' attribute are stored in this
+	 * table, indexed by their 'id' value.
 	 *
-	 * This is how getElementById
-	 * performs its fast lookup.
+	 * This is how getElementById performs its fast lookup.
 	 *
 	 * The table must be mutated on:
 	 *      - Element insertion
 	 *      - Element removal
 	 *      - mutation of 'id' attribute
 	 *        on an inserted Element.
+	 *
+	 * @var array
 	 */
 	private $__id_to_element = [];
 
@@ -145,33 +135,25 @@ class Document extends Node {
 	/*
 	 * ANNOYING LIVE REFERENCES
 	 *
-	 * The below are slightly annoying
-	 * because we must keep them updated
-	 * whenever there is mutation to the
-	 * children of the Document.
+	 * The below are slightly annoying because we must keep them updated
+	 * whenever there is mutation to the children of the Document.
 	 */
 
 	/*
-	 * Reference to the first
-	 * DocumentType child, in
-	 * document order. NULL if
-	 * no such child exists.
+	 * Reference to the first DocumentType child, in document order.
+	 * Null if no such child exists.
 	 */
 	public $_doctype = null;
 
 	/*
-	 * Reference to the first
-	 * Element child, in
-	 * document order. NULL if
-	 * no such child exists.
+	 * Reference to the first Element child, in document order.
+	 * Null if no such child exists.
 	 */
 	public $_documentElement = null;
 
-	/*
-	 * Called when a child is
-	 * inserted or removed from
-	 * the document. Keeps the
-	 * above references live.
+	/**
+	 * Called when a child is inserted or removed from the document.
+	 * Keeps the above references live.
 	 */
 	private function __rereference_doctype_and_documentElement(): void {
 		$this->_doctype = null;
@@ -191,6 +173,10 @@ class Document extends Node {
 	public $_readyState;
 	public $__mutation_handler = null;
 
+	/**
+	 * @param string $type
+	 * @param ?string $url
+	 */
 	public function __construct( string $type = "xml", ?string $url = null ) {
 		parent::__construct();
 
@@ -232,18 +218,22 @@ class Document extends Node {
 	 * Accessors for read-only properties defined in Document
 	 */
 
+	/** @return string */
 	public function characterSet(): string {
 		return $this->_characterSet;
 	}
 
+	/** @return string */
 	public function charset(): string {
 		return $this->_characterSet; /* historical alias */
 	}
 
+	/** @return string */
 	public function inputEncoding(): string {
 		return $this->_characterSet; /* historical alias */
 	}
 
+	/** @return DOMImplementation */
 	public function implementation(): DOMImplementation {
 		return $this->_implementation;
 	}
@@ -252,26 +242,34 @@ class Document extends Node {
 		return $this->_URL;
 	}
 
+	/** @return string */
 	public function URL() : string {
-		return $this->_URL; /* Alias for HTMLDocuments */
+		return $this->_URL; /** Alias for HTMLDocuments */
 	}
 
+	/** @return string */
 	public function compatMode() {
 		return $this->_compatMode === "quirks" ? "BackCompat" : "CSS1Compat";
 	}
 
+	/** @return ?string */
 	public function contentType(): ?string {
 		return $this->_contentType;
 	}
 
+	/** @return ?DocumentType */
 	public function doctype(): ?DocumentType {
 		return $this->_doctype;
 	}
 
+	/** @return ?Element */
 	public function documentElement(): ?Element {
 		return $this->_documentElement;
 	}
 
+	/**
+	 * @param ?string $value
+	 */
 	public function textContent( ?string $value = null ) {
 		/* HTML-LS: no-op */
 	}
@@ -311,6 +309,11 @@ class Document extends Node {
 		return new Attr( null, $localName, null, null, '' );
 	}
 
+	/**
+	 * @param ?string $ns
+	 * @param string $qname
+	 * @return Attr
+	 */
 	public function createAttributeNS( ?string $ns, string $qname ) {
 		if ( $ns === '' ) {
 			$ns = null; /* spec */
@@ -394,39 +397,28 @@ class Document extends Node {
 	 */
 
 	/**
-	 * Adopt the subtree rooted at Node
-	 * into this Document.
+	 * Adopt the subtree rooted at Node into this Document.
 	 *
-	 * This means setting ownerDocument
-	 * of each node in the subtree to
-	 * point to $this.
+	 * This means setting ownerDocument of each node in the subtree to point to $this.
 	 *
-	 * No insertion is performed, but
-	 * if Node is inserted into another
-	 * Document, it will be removed.
+	 * No insertion is performed, but if Node is inserted into another Document,
+	 * it will be removed.
+	 *
+	 * @param Node $node
+	 * @return Node
 	 */
 	public function adoptNode( Node $node ): Node {
 		if ( $node->_nodeType === Node::DOCUMENT_NODE ) {
-			/*
-			 * A Document cannot adopt
-			 * another Document. Throw
-			 * a "NotSupported" exception.
-			 */
+			// A Document cannot adopt another Document. Throw a "NotSupported" exception.
 			Util::error( "NotSupported" );
 		}
 		if ( $node->_nodeType === Node::ATTRIBUTE_NODE ) {
-			/*
-			 * Attributes do not have
-			 * an ownerDocument, so
-			 * do nothing.
-			 */
+			// Attributes do not have an ownerDocument, so do nothing.
 			return $node;
 		}
 		if ( $node->parentNode() ) {
 			/*
-			 * If the Node is currently
-			 * inserted in some Document,
-			 * remove it.
+			 * If the Node is currently inserted in some Document, remove it.
 			 *
 			 * TODO:
 			 * Why is this not using $node->__is_rooted()?
@@ -437,15 +429,10 @@ class Document extends Node {
 		}
 		if ( $node->_ownerDocument !== $this ) {
 			/*
-			 * If the Node is not
-			 * currently connected
-			 * to this Document,
-			 * then recursively set
-			 * the ownerDocument.
+			 * If the Node is not currently connected to this Document,
+			 * then recursively set the ownerDocument.
 			 *
-			 * (The recursion skips
-			 * the above checks because
-			 * they don't make sense.)
+			 * (The recursion skips the above checks because they don't make sense.)
 			 */
 			$node->__set_owner( $this );
 		}
@@ -455,30 +442,29 @@ class Document extends Node {
 	}
 
 	/**
-	 * Clone and then adopt either
-	 * $node or, if $deep === true,
-	 * the entire subtree rooted at
-	 * $node, into the Document.
+	 * Clone and then adopt either $node or, if $deep === true, the entire subtree
+	 * rooted at $node, into the Document.
 	 *
-	 * By default, only $node will
-	 * be cloned.
+	 * By default, only $node will be cloned.
+	 *
+	 * @param Node $node
+	 * @param bool $deep
+	 * @return Node
 	 */
 	public function importNode( Node $node, bool $deep = false ): Node {
 		return $this->adoptNode( $node->cloneNode( $deep ) );
 	}
 
 	/**
-	 * The following three methods
-	 * are a simple extension of
-	 * the Node methods, with an
-	 * added call to update the
-	 * doctype and documentElement
-	 * references that are specific
+	 * The following three methods are a simple extension of the Node methods, with an
+	 * added call to update the doctype and documentElement references that are specific
 	 * to the Document interface.
 	 *
-	 * NOTE
-	 * appendChild is not extended,
-	 * because it calls insertBefore.
+	 * @note appendChild is not extended, because it calls insertBefore.
+	 *
+	 * @param Node $node
+	 * @param ?Node $refChild
+	 * @return Node
 	 */
 	public function insertBefore( Node $node, ?Node $refChild ): Node {
 		$ret = parent::insertBefore( $node, $refChild );
@@ -486,12 +472,21 @@ class Document extends Node {
 		return $ret;
 	}
 
+	/**
+	 * @param Node $node
+	 * @param ?Node $child
+	 * @return Node
+	 */
 	public function replaceChild( Node $node, ?Node $child ): Node {
 		$ret = parent::replaceChild( $node, $child );
 		$this->__rereference_doctype_and_documentElement();
 		return $ret;
 	}
 
+	/**
+	 * @param ChildNode $child
+	 * @return ?Node
+	 */
 	public function removeChild( ChildNode $child ): ?Node {
 		$ret = parent::removeChild( $child );
 		$this->__rereference_doctype_and_documentElement();
@@ -547,7 +542,7 @@ class Document extends Node {
 	 * NonElementParentNode mixin.
 	 *
 	 * @param string $id
-	 * @return Element if one exists, else NULL
+	 * @return Element if one exists, else null
 	 */
 	public function getElementById( $id ) {
 		$n = $this->__id_to_element[$id];
@@ -563,7 +558,11 @@ class Document extends Node {
 
 	/*********** Utility methods extending normal DOM behavior */
 
-	/* TODO Where does this fit in */
+	/**
+	 * TODO Where does this fit in?
+	 *
+	 * @return bool
+	 */
 	public function isHTMLDocument(): bool {
 		if ( $this->__type === 'html' ) {
 			$elt = $this->documentElement();
@@ -617,6 +616,10 @@ class Document extends Node {
 	 * See, we are adding, and removing, but never using...?
 	 */
 
+	/**
+	 * @param string $id
+	 * @param Element $elt
+	 */
 	public function __add_to_id_table( string $id, Element $elt ): void {
 		if ( !isset( $this->__id_to_element[$id] ) ) {
 			$this->__id_to_element[$id] = $elt;
@@ -630,6 +633,10 @@ class Document extends Node {
 		}
 	}
 
+	/**
+	 * @param string $id
+	 * @param Element $elt
+	 */
 	public function __remove_from_id_table( string $id, Element $elt ): void {
 		if ( isset( $this->__id_to_element[$id] ) ) {
 			if ( $this->__id_to_element[$id] instanceof MultiId ) {
