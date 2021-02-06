@@ -1,18 +1,14 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
-// phpcs:disable MediaWiki.Commenting.FunctionComment.SpacingAfter
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 // phpcs:disable Squiz.PHP.NonExecutableCode.Unreachable
 
 namespace Wikimedia\Dodo;
+
+use ArrayObject;
+use Exception;
 
 /******************************************************************************
  * NamedNodeMap.php
@@ -45,22 +41,51 @@ namespace Wikimedia\Dodo;
  *      the attribute methods on the Element class.
  *
  */
-class NamedNodeMap extends \ArrayObject {
-	private $__qname_to_attr = []; /* qname => Attr */
-	private $__lname_to_attr = []; /* ns|lname => Attr */
-	private $__lname_to_index = []; /* ns|lname => N */
-	/* NOW IMPLEMENTED AS $this[], the default */
-	//public $index_to_attr = array(); [> N => Attr <]
+class NamedNodeMap extends ArrayObject {
+	/**
+	 * qname => Attr
+	 *
+	 * @var array entries are either Attr objects, or arrays of Attr objects on collisions
+	 */
+	private $__qname_to_attr = [];
 
-	/* DOM-LS associated element, defined in spec but not given property. */
+	/**
+	 * ns|lname => Attr
+	 *
+	 * @var Attr[]
+	 */
+	private $__lname_to_attr = [];
+
+	/**
+	 * ns|lname => index number
+	 *
+	 * @var int[]
+	 */
+	private $__lname_to_index = [];
+
+	/* NOW IMPLEMENTED AS $this[], the default */
+	// public $index_to_attr = array(); [> N => Attr <]
+
+	/**
+	 * DOM-LS associated element, defined in spec but not given property.
+	 *
+	 * @var ?Element
+	 */
 	public $_element = null;
 
+	/**
+	 * @param ?Element $element
+	 */
 	public function __construct( ?Element $element = null ) {
 		$this->_element = $element;
 	}
 
 	/**********************************************************************
 	 * Dodo INTERNAL BOOK-KEEPING
+	 */
+
+	/**
+	 * @param Attr $a
 	 */
 	private function __append( Attr $a ) {
 		$qname = $a->name();
@@ -87,6 +112,9 @@ class NamedNodeMap extends \ArrayObject {
 		$this[] = $a;
 	}
 
+	/**
+	 * @param Attr $a
+	 */
 	private function __replace( Attr $a ) {
 		$qname = $a->name();
 
@@ -111,6 +139,9 @@ class NamedNodeMap extends \ArrayObject {
 		$this[$this->__lname_to_index[$key]] = $a;
 	}
 
+	/**
+	 * @param Attr $a
+	 */
 	private function __remove( Attr $a ) {
 		$qname = $a->name();
 		$key = $a->namespaceURI() . '|' . $a->localName();
@@ -122,7 +153,7 @@ class NamedNodeMap extends \ArrayObject {
 		// XXX PORT FIX ME: array_splice doesn't work on ArrayObject
 		// so either put back $index_to_array or else reimplement the
 		// splice operation in terms of primitives.
-		throw new \Exception( "fixme" );
+		throw new Exception( "fixme" );
 		$bogus = (array)$this;
 		array_splice( $bogus /*was: $this*/, $i, 1 );
 
@@ -142,14 +173,25 @@ class NamedNodeMap extends \ArrayObject {
 	 * DOM-LS Methods
 	 */
 
+	/**
+	 * @return int
+	 */
 	public function length(): int {
 		return count( $this );
 	}
 
+	/**
+	 * @param int $index
+	 * @return ?Attr
+	 */
 	public function item( int $index ): ?Attr {
 		return $this[$index] ?? null;
 	}
 
+	/**
+	 * @param string $qname
+	 * @return bool
+	 */
 	public function hasNamedItem( string $qname ): bool {
 		/*
 		 * Per HTML spec, we normalize qname before lookup,
@@ -162,11 +204,20 @@ class NamedNodeMap extends \ArrayObject {
 		return isset( $this->__qname_to_attr[$qname] );
 	}
 
+	/**
+	 * @param ?string $ns
+	 * @param string $lname
+	 * @return bool
+	 */
 	public function hasNamedItemNS( ?string $ns, string $lname ): bool {
 		$ns = $ns ?? "";
 		return isset( $this->__lname_to_attr["$ns|$lname"] );
 	}
 
+	/**
+	 * @param string $qname
+	 * @return ?Attr
+	 */
 	public function getNamedItem( string $qname ): ?Attr {
 		/*
 		 * Per HTML spec, we normalize qname before lookup,
@@ -187,11 +238,20 @@ class NamedNodeMap extends \ArrayObject {
 		}
 	}
 
+	/**
+	 * @param ?string $ns
+	 * @param string $lname
+	 * @return ?Attr
+	 */
 	public function getNamedItemNS( ?string $ns, string $lname ): ?Attr {
 		$ns = $ns ?? "";
 		return $this->__lname_to_attr["$ns|$lname"] ?? null;
 	}
 
+	/**
+	 * @param Attr $attr
+	 * @return ?Attr
+	 */
 	public function setNamedItem( Attr $attr ): ?Attr {
 		$owner = $attr->ownerElement();
 
@@ -214,6 +274,10 @@ class NamedNodeMap extends \ArrayObject {
 		return $oldAttr;
 	}
 
+	/**
+	 * @param Attr $attr
+	 * @return ?Attr
+	 */
 	public function setNamedItemNS( Attr $attr ): ?Attr {
 		$owner = $attr->ownerElement();
 
@@ -236,7 +300,12 @@ class NamedNodeMap extends \ArrayObject {
 		return $oldAttr;
 	}
 
-	/* NOTE: qname may be lowercase or normalized in various ways */
+	/**
+	 * Note: qname may be lowercase or normalized in various ways
+	 *
+	 * @param string $qname
+	 * @return ?Attr
+	 */
 	public function removeNamedItem( string $qname ): ?Attr {
 		$attr = $this->getNamedItem( $qname );
 		if ( $attr !== null ) {
@@ -247,7 +316,13 @@ class NamedNodeMap extends \ArrayObject {
 		return $attr;
 	}
 
-	/* NOTE: qname may be lowercase or normalized in various ways */
+	/**
+	 * Note: lname may be lowercase or normalized in various ways
+	 *
+	 * @param ?string $ns
+	 * @param string $lname
+	 * @return ?Attr
+	 */
 	public function removeNamedItemNS( ?string $ns, string $lname ): ?Attr {
 		$attr = $this->getNamedItemNS( $ns, $lname );
 		if ( $attr !== null ) {
