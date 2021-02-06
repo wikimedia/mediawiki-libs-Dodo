@@ -16,7 +16,6 @@ declare( strict_types = 1 );
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 // phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
-// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
 
