@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
@@ -13,7 +12,6 @@ declare( strict_types = 1 );
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 // phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 

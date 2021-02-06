@@ -1,14 +1,12 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 // phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
