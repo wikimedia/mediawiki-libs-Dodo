@@ -1,9 +1,7 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable Squiz.Scope.MethodScope.Missing
 
 namespace Wikimedia\Dodo;
 
@@ -20,19 +18,16 @@ namespace Wikimedia\Dodo;
 class LinkedList {
 	/**
 	 * Determine if the object we want to treat as a (circular) linked list
-	 * has the necessary data elements and that the elements aren't NULL.
+	 * has the necessary data elements and that the elements aren't null.
 	 *
 	 * @param Node $a "circular ll node"
-	 * @return true if all assertions pass
 	 */
-	static function ll_is_valid( $a ) {
+	private static function assertLLIsValid( $a ) {
 		Util::assert( $a !== null, "list is falsy" );
 		Util::assert( $a->_previousSibling !== null, "previous is falsy" );
 		Util::assert( $a->_nextSibling !== null, "next is falsy" );
 
 		/* TODO: Check that list is actually circular? */
-
-		return true;
 	}
 
 	/**
@@ -46,8 +41,9 @@ class LinkedList {
 	 * Given what this is actually doing (if you draw it out), this could
 	 * probably be renamed to 'link', where we are linking $a to $b.
 	 */
-	static function ll_insert_before( $a, $b ) {
-		Util::assert( self::ll_is_valid( $a ) && self::ll_is_valid( $b ) );
+	public static function ll_insert_before( $a, $b ) {
+		self::assertLLIsValid( $a );
+		self::assertLLIsValid( $b );
 
 		$a_first = $a;
 		$a_last  = $a->_previousSibling;
@@ -59,7 +55,8 @@ class LinkedList {
 		$b_last->_nextSibling      = $a_first;
 		$b_first->_previousSibling = $a_last;
 
-		Util::assert( self::ll_is_valid( $a ) && self::ll_is_valid( $b ) );
+		self::assertLLIsValid( $a );
+		self::assertLLIsValid( $b );
 	}
 
 	/**
@@ -72,8 +69,8 @@ class LinkedList {
 	 * Again, given what this is doing, could probably re-name
 	 * to 'unlink'.
 	 */
-	static function ll_remove( $a ) {
-		Util::assert( self::ll_is_valid( $a ) );
+	public static function ll_remove( $a ) {
+		self::assertLLIsValid( $a );
 
 		$prev = $a->_previousSibling;
 
@@ -86,30 +83,30 @@ class LinkedList {
 		$next->_previousSibling = $prev;
 		$a->_previousSibling = $a->_nextSibling = $a;
 
-		Util::assert( self::ll_is_valid( $a ) );
+		self::assertLLIsValid( $a );
 	}
 
 	/**
 	 * Replace a single node $a with a list $b (which could be null)
 	 *
 	 * @param Node $a "circular ll node"
-	 * @param ?Node $b "circular ll node" (or NULL)
+	 * @param ?Node $b "circular ll node" (or null)
 	 * @return void
 	 *
 	 * NOTE
 	 * I don't like this method. It's confusing.
 	 */
-	static function ll_replace( $a, $b ) {
-		Util::assert( self::ll_is_valid( $a ) && ( $b == null || self::ll_is_valid( $b ) ) );
-
+	public static function ll_replace( $a, $b ) {
+		self::assertLLIsValid( $a );
 		if ( $b !== null ) {
-			self::ll_is_valid( $b );
-		}
-		if ( $b !== null ) {
+			self::assertLLIsValid( $b );
 			self::ll_insert_before( $b, $a );
 		}
 		self::ll_remove( $a );
 
-		Util::assert( self::ll_is_valid( $a ) && ( $b == null || self::ll_is_valid( $b ) ) );
+		self::assertLLIsValid( $a );
+		if ( $b !== null ) {
+			self::assertLLIsValid( $b );
+		}
 	}
 }
