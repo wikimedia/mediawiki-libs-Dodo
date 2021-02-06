@@ -1,16 +1,7 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.Files.LineLength.TooLong
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
-// phpcs:disable MediaWiki.Commenting.FunctionComment.SpacingAfter
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
 
@@ -35,30 +26,35 @@ namespace Wikimedia\Dodo;
  * on integers instead of Elements.
  */
 class MultiId {
+	/** @var Node[] */
 	public $table = [];
+
+	/** @var int */
 	public $length = 0;
-	/*
-	 * The first element,
-	 * in document order.
-	 * NULL indicates the
-	 * cache is not set
-	 * and the first
-	 * element must be
-	 * re-computed.
+
+	/**
+	 * The first element, in document order.
+	 *
+	 * null indicates the cache is not set and the first element must be re-computed.
+	 *
+	 * @var Node|null
 	 */
 	public $first = null;
 
+	/**
+	 * @param Node $node
+	 */
 	public function __construct( Node $node ) {
 		$this->table[$node->__document_index] = $node;
 		$this->length = 1;
 		$this->first = null;
 	}
 
-	/*
-	 * Add a Node to array
-	 * in O(1) time by using
-	 * Node::$__document_index
+	/**
+	 * Add a Node to array in O(1) time by using Node::$__document_index
 	 * as the array index.
+	 *
+	 * @param Node $node
 	 */
 	public function add( Node $node ) {
 		if ( !isset( $this->table[$node->__document_index] ) ) {
@@ -68,12 +64,11 @@ class MultiId {
 		}
 	}
 
-	/*
-	 * Remove a Node from
-	 * the array in O(1)
-	 * time by using
-	 * Node::$__document_index
+	/**
+	 * Remove a Node from the array in O(1) time by using Node::$__document_index
 	 * to perform the lookup.
+	 *
+	 * @param Node $node
 	 */
 	public function del( Node $node ) {
 		if ( $this->table[$node->__document_index] ) {
@@ -83,46 +78,38 @@ class MultiId {
 		}
 	}
 
-	/*
-	 * Retreive that Node
-	 * from the array which
-	 * appears first in
-	 * document order in
+	/**
+	 * Retreive that Node from the array which appears first in document order in
 	 * the associated document.
 	 *
-	 * Cache the value for
-	 * repeated lookups.
+	 * Cache the value for repeated lookups.
 	 *
-	 * The cache is invalidated
-	 * each time the array
-	 * is modified. The list
-	 * is modified when a Node
-	 * is inserted or removed
-	 * from a Document, or when
-	 * the 'id' attribute value
-	 * of a Node is changed.
+	 * The cache is invalidated each time the array is modified. The list
+	 * is modified when a Node is inserted or removed from a Document, or when
+	 * the 'id' attribute value of a Node is changed.
+	 *
+	 * @return Node|null null if there are no nodes
 	 */
 	public function get_first() {
-		if ( $this->first === null ) {
-			/*
-			 * No item has been cached.
-			 * Well, let's find it then.
-			 */
-			foreach ( $this->table as $document_index => $node ) {
-				if ( $this->first === null || $this->first->compareDocumentPosition( $node ) & Util::DOCUMENT_POSITION_PRECEDING ) {
-					$this->first = $node;
-				}
-				/* TODO: What about the old NULLity stuff?? */
-				//if ($this->first === NULL || $this->first->compareDocumentPosition($node) & DOCUMENT_POSITION_PRECEDING) {
-				//$this->first = $node;
-				//}
+		if ( $this->first !== null ) {
+			return $this->first;
+		}
+
+		// No item has been cached. Well, let's find it then.
+		foreach ( $this->table as $document_index => $node ) {
+			if ( $this->first === null ||
+				$this->first->compareDocumentPosition( $node ) & Util::DOCUMENT_POSITION_PRECEDING
+			) {
+				$this->first = $node;
 			}
 		}
 		return $this->first;
 	}
 
-	/*
+	/**
 	 * If there is only one node left, return it. Otherwise return "this".
+	 *
+	 * @return Node|MultiId
 	 */
 	public function downgrade() {
 		if ( $this->length === 1 ) {
