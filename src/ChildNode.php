@@ -7,7 +7,6 @@ declare( strict_types = 1 );
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 // phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 // phpcs:disable Squiz.Scope.MethodScope.Missing
 
