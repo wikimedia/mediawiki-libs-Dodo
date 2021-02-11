@@ -2,7 +2,6 @@
 
 declare( strict_types = 1 );
 // @phan-file-suppress PhanParamSignatureMismatch
-// @phan-file-suppress PhanTypeMismatchArgument
 // @phan-file-suppress PhanTypeMismatchReturnNullable
 // @phan-file-suppress PhanUndeclaredConstant
 // @phan-file-suppress PhanUndeclaredFunction
@@ -543,7 +542,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 * @inheritDoc
 	 */
 	public function getElementById( string $id ) {
-		$n = $this->__id_to_element[$id];
+		$n = $this->__id_to_element[$id] ?? null;
 		if ( $n === null ) {
 			return null;
 		}

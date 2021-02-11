@@ -41,7 +41,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 
 	private $_contextObject;
 
-	public function __construct( /* TODO: What is this? A Window? */$contextObject = null ) {
+	public function __construct( $contextObject = null ) {
 		$this->_contextObject = $contextObject;
 	}
 
@@ -77,15 +77,47 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 		return true;
 	}
 
-	/*
-	public function createDocumentType( string $qualifiedName, string $publicId, string $systemId ) {
-		  if (!xmlnames\isValidQName($qualifiedName)) {
-		  utils\InvalidCharacterError();
-		  }
+	public function createDocumentType( $qualifiedName, $publicId, $systemId ) {
+		if ( !$this->isValidQName( $qualifiedName ) ) {
+			Util::error( 'Invalid qualified name.', 'InvalidCharacterError' );
+		}
 
-		  return new DocumentType($this->contextObject, $qualifiedName, $publicId, $systemId);
+		$contextObject = $this->_contextObject ?? new Document( $qualifiedName );
+
+		return new DocumentType( $contextObject,
+			$qualifiedName,
+			$publicId,
+			$systemId );
+		/* TEMPORARY STUB */
 	}
-	*/
+
+	/**
+	 * @param string $qualifiedName
+	 * @return bool
+	 */
+	private function isValidQName( string $qualifiedName ) : bool {
+		// $qualifiedName = $this->checkEncoding($qualifiedName);
+
+		return preg_match(
+			'/^([a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*:)?[a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*$/i',
+			$qualifiedName
+		);
+	}
+
+	/**
+	 * TODO implement this
+	 *
+	 * @param string $str
+	 *
+	 * @return mixed
+	 */
+	private function checkEncoding( $str ) {
+		/**
+		 *
+		 */
+
+		return $str;
+	}
 
 	/** @inheritDoc */
 	public function createDocument( ?string $namespace, string $qualifiedName, $doctype = null ) {

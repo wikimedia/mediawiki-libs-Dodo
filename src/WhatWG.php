@@ -8,7 +8,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanPossiblyUndeclaredVariable
 // @phan-file-suppress PhanSuspiciousValueComparison
 // @phan-file-suppress PhanTypeMismatchArgumentNullableInternal
-// @phan-file-suppress PhanUndeclaredFunction
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
 // @phan-file-suppress PhanUndeclaredVariable
@@ -182,12 +181,12 @@ class WhatWG {
 			break;
 		case Node::DOCUMENT_NODE:
 			if ( $node->_documentElement ) {
-				return locate_namespace( $node->_documentElement, $prefix );
+				return self::locate_namespace( $node->_documentElement, $prefix );
 			}
 			break;
 		case Node::ATTRIBUTE_NODE:
 			if ( $node->_ownerElement ) {
-				return locate_namespace( $node->_ownerElement, $prefix );
+				return self::locate_namespace( $node->_ownerElement, $prefix );
 			}
 			break;
 		default:
@@ -195,7 +194,7 @@ class WhatWG {
 			if ( $parent === null ) {
 				return null;
 			} else {
-				return locate_namespace( $parent, $ns );
+				return self::locate_namespace( $parent, $ns );
 			}
 		}
 
@@ -233,12 +232,12 @@ class WhatWG {
 			break;
 		case Node::DOCUMENT_NODE:
 			if ( $node->_documentElement ) {
-				return locate_prefix( $node->_documentElement, $ns );
+				return self::locate_prefix( $node->_documentElement, $ns );
 			}
 			break;
 		case  Node::ATTRIBUTE_NODE:
 			if ( $node->_ownerElement ) {
-				return locate_prefix( $node->_ownerElement, $ns );
+				return self::locate_prefix( $node->_ownerElement, $ns );
 			}
 			break;
 		default:
@@ -246,7 +245,7 @@ class WhatWG {
 			if ( $parent === null ) {
 				return null;
 			} else {
-				return locate_prefix( $parent, $ns );
+				return self::locate_prefix( $parent, $ns );
 			}
 		}
 
@@ -1121,16 +1120,16 @@ class WhatWG {
 	 * @param ?string $ns
 	 * @param string $qname
 	 * @param ?string &$prefix reference (will be NULL or contain prefix string)
-	 * @param string &$lname reference (will be qname or contain lname string)
+	 * @param ?string &$lname reference (will be qname or contain lname string)
 	 * @return void
 	 * @throws DOMException("NamespaceError")
 	 */
-	static function validate_and_extract( ?string $ns, string $qname, ?string &$prefix, string &$lname ): void {
+	static function validate_and_extract( ?string $ns, string $qname, ?string &$prefix, ?string &$lname ): void {
 		/*
 		 * See https://github.com/whatwg/dom/issues/671
 		 * and https://github.com/whatwg/dom/issues/319
 		 */
-		if ( !is_valid_xml_qname( $qname ) ) {
+		if ( !self::is_valid_xml_qname( $qname ) ) {
 			Util::error( "InvalidCharacterError" );
 		}
 

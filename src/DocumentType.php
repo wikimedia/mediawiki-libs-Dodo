@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
@@ -25,13 +24,12 @@ class DocumentType extends Node implements \Wikimedia\IDLeDOM\DocumentType {
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\DocumentType;
 
-	protected const _nodeType = Node::DOCUMENT_TYPE_NODE;
-
 	public function __construct( Document $doc, string $name, string $publicId = '', string $systemId = '' ) {
 		parent::__construct();
 
 		$this->_ownerDocument = $doc;
 		$this->_name = $name;
+		$this->_nodeType = Node::DOCUMENT_TYPE_NODE;
 		$this->_nodeName = $name; // spec; let Node::nodeName handle
 		$this->_nodeValue = null; // spec; let Node::nodeValue handle
 		$this->_publicId = $publicId;
