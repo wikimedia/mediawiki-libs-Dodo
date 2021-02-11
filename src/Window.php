@@ -104,12 +104,14 @@ class Window extends EventTarget {
 	 * them interoperate with document.body.
 	 */
 	public function onload( $handler = null ) {
+		/*
 		if ( $handler == null ) {
-			/* From the EventTarget parent class */
+			// From the EventTarget parent class
 			return $this->_getEventHandler( "load" );
 		} else {
 			return $this->_setEventHandler( "load", $handler );
 		}
+		*/
 	}
 
 	/* TODO: This is a completely broken implementation */

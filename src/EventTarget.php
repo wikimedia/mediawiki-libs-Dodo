@@ -9,13 +9,9 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
-class EventTarget {
-	/* XXX IMPLEMENT ME XXX */
-	function _getEventHandler( $name ) {
-		throw new \Error( "unimplemented" );
-	}
+class EventTarget implements \Wikimedia\IDLeDOM\EventTarget {
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\EventTarget;
+	use UnimplementedTrait;
 
-	function _setEventHandler( $name, $handler ) {
-		throw new \Error( "unimplemented" );
-	}
 }
