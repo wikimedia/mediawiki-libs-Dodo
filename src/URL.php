@@ -6,7 +6,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanTypeSuspiciousStringExpression
 // @phan-file-suppress PhanUndeclaredProperty
 // @phan-file-suppress PhanUndeclaredVariable
-// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
@@ -15,7 +14,6 @@ declare( strict_types = 1 );
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 // phpcs:disable Squiz.Scope.MethodScope.Missing
 
@@ -28,9 +26,15 @@ namespace Wikimedia\Dodo;
  * but it could, and probably should.
  */
 class URL {
-	// Return a percentEncoded version of s.
-	// S should be a single-character string
-	// XXX: needs to do utf-8 encoding?
+
+	/**
+	 * Return a percentEncoded version of s.
+	 * S should be a single-character string
+	 * XXX: needs to do utf-8 encoding?
+	 *
+	 * @param string $s
+	 * @return string
+	 */
 	static function percent_encode( string $s ) {
 		return rawurlencode( $s ); /* Yes? */
 		//var c = s.charCodeAt(0);
@@ -38,6 +42,11 @@ class URL {
 		//else throw Error("can't percent-encode codepoints > 255 yet");
 	}
 
+	/**
+	 * @param URL $basepath
+	 * @param URL $refpath
+	 * @return string|URL
+	 */
 	static function merge( URL $basepath, URL $refpath ) {
 		if ( $base->host !== null && !$base->path ) {
 			return "/$refPath";
@@ -51,6 +60,10 @@ class URL {
 		}
 	}
 
+	/**
+	 * @param string|null $path
+	 * @return string|null only null if $path was null, otherwise a string
+	 */
 	static function remove_dot_segments( $path ) {
 		if ( !$path ) {
 			return $path; // For "" or NULL
@@ -94,19 +107,34 @@ class URL {
 		return $output;
 	}
 
-	const pattern = '/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/';
-	const userinfoPattern = '/^([^@:]*)(:([^@]*))?@/';
-	const portPattern = '/:\d+$/';
-	const authorityPattern = '/^[^:\/?#]+:\/\//';
-	const hierarchyPattern = '/^[^:\/?#]+:\//';
+	private const URL_PATTERN = '/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/';
+	private const USERINFO_PATTERN = '/^([^@:]*)(:([^@]*))?@/';
+	private const PORT_PATTERN = '/:\d+$/';
+	private const AUTHORITY_PATTERN = '/^[^:\/?#]+:\/\//';
+	private const HIERARCHY_PATTERN = '/^[^:\/?#]+:\//';
 
+	/** @var string|null */
 	public $scheme = null;
+
+	/** @var string|null */
 	public $host = null; /* contains the hostname followed by ':' and port if specified */
+
+	/** @var string|null */
 	public $port = null;
+
+	/** @var string|null */
 	public $username = null;
+
+	/** @var string|null */
 	public $password = null;
+
+	/** @var string|null */
 	public $path = null;
+
+	/** @var string|null */
 	public $query = null;
+
+	/** @var string|null */
 	public $fragment = null;
 
 	/* TODO: Others from the spec (not covered) */
@@ -116,6 +144,12 @@ class URL {
 	public $searchParams = null; /* URLSearchParams allowing access to GET args */
 	public $hash = null; /* Containing '#' followed by the fragment identifier */
 
+	/** @var string */
+	private $url = '';
+
+	/**
+	 * @param string $url
+	 */
 	public function __construct( string $url = '' ) {
 		/*
 		 * BEWARE: Can't use trim() since it defines whitespace
@@ -128,20 +162,20 @@ class URL {
 		/* See http://tools.ietf.org/html/rfc3986#appendix-B */
 		/* and https://url.spec.whatwg.org/#parsing */
 		$match = [];
-		if ( preg_match( self::pattern, $this->url, $match ) ) {
+		if ( preg_match( self::URL_PATTERN, $this->url, $match ) ) {
 			if ( isset( $match[2] ) && $match[2] !== '' ) {
 				$this->scheme = $match[2];
 			}
 			if ( isset( $match[4] ) && $match[4] !== '' ) {
 				// parse username/password
 				$userinfo = [];
-				if ( preg_match( self::userinfoPattern, $match[4], $userinfo ) ) {
+				if ( preg_match( self::USERINFO_PATTERN, $match[4], $userinfo ) ) {
 					$this->username = $userinfo[1];
 					$this->password = $userinfo[3];
 
 					$match[4] = substr( $match[4], strlen( $userinfo[0] ) );
 				}
-				if ( preg_match( self::portPattern, $match[4] ) ) {
+				if ( preg_match( self::PORT_PATTERN, $match[4] ) ) {
 					$pos = strrpos( $match[4], ':' );
 					$this->host = substr( $match[4], 0, $pos );
 					$this->port = substr( $match[4], $pos + 1 );
@@ -161,19 +195,26 @@ class URL {
 		}
 	}
 
-	// XXX: not sure if this is the precise definition of absolute
+	/**
+	 * XXX: not sure if this is the precise definition of absolute
+	 *
+	 * @return bool
+	 */
 	public function isAbsolute() {
 		return (bool)$this->scheme;
 	}
 
+	/** @return bool */
 	public function isAuthorityBased() {
-		return (bool)preg_match( self::authorityPattern, $this->url );
+		return (bool)preg_match( self::AUTHORITY_PATTERN, $this->url );
 	}
 
+	/** @return bool */
 	public function isHierarchical() {
-		return (bool)preg_match( self::hierarchyPattern, $this->url );
+		return (bool)preg_match( self::HIERARCHY_PATTERN, $this->url );
 	}
 
+	/** @return string */
 	public function toString() {
 		$s = "";
 
@@ -212,55 +253,65 @@ class URL {
 		return $s;
 	}
 
-	/* See: http://tools.ietf.org/html/rfc3986#section-5.2 */
-	/* and https://url.spec.whatwg.org/#constructors */
+	/**
+	 * @see http://tools.ietf.org/html/rfc3986#section-5.2
+	 * @see https://url.spec.whatwg.org/#constructors
+	 *
+	 * @param string $relative
+	 * @return string
+	 */
 	public function resolve( $relative ) {
-		$base = $this;            // The base url we're resolving against
-		$r = new URL( $relative );  // The relative reference url to resolve
-		$t = new URL();           // The absolute target url we will return
+		// The base url we're resolving against
+		$base = $this;
 
-		if ( $r->scheme !== null ) {
-			$t->scheme = $r->scheme;
-			$t->username = $r->username;
-			$t->password = $r->password;
-			$t->host = $r->host;
-			$t->port = $r->port;
-			$t->path = self::remove_dot_segments( $r->path );
-			$t->query = $r->query;
+		// The relative reference url to resolve
+		$relativeURL = new URL( $relative );
+
+		// The absolute target url we will return
+		$targetURL = new URL();
+
+		if ( $relativeURL->scheme !== null ) {
+			$targetURL->scheme = $relativeURL->scheme;
+			$targetURL->username = $relativeURL->username;
+			$targetURL->password = $relativeURL->password;
+			$targetURL->host = $relativeURL->host;
+			$targetURL->port = $relativeURL->port;
+			$targetURL->path = self::remove_dot_segments( $relativeURL->path );
+			$targetURL->query = $relativeURL->query;
 		} else {
-			$t->scheme = $base->scheme;
+			$targetURL->scheme = $base->scheme;
 
-			if ( $r->host !== null ) {
-				$t->username = $r->username;
-				$t->password = $r->password;
-				$t->host = $r->host;
-				$t->port = $r->port;
-				$t->path = self::remove_dot_segments( $r->path );
-				$t->query = $r->query;
+			if ( $relativeURL->host !== null ) {
+				$targetURL->username = $relativeURL->username;
+				$targetURL->password = $relativeURL->password;
+				$targetURL->host = $relativeURL->host;
+				$targetURL->port = $relativeURL->port;
+				$targetURL->path = self::remove_dot_segments( $relativeURL->path );
+				$targetURL->query = $relativeURL->query;
 			} else {
-				$t->username = $base->username;
-				$t->password = $base->password;
-				$t->host = $base->host;
-				$t->port = $base->port;
+				$targetURL->username = $base->username;
+				$targetURL->password = $base->password;
+				$targetURL->host = $base->host;
+				$targetURL->port = $base->port;
 
-				if ( !$r->path ) {
+				if ( !$relativeURL->path ) {
 					/* non-NULL and non-empty */
-					$t->path = $base->path;
-					$t->query = $r->query ?? $base->query;
+					$targetURL->path = $base->path;
+					$targetURL->query = $relativeURL->query ?? $base->query;
 				} else {
-					if ( $r->path[0] === '/' ) {
-						$t->path = self::remove_dot_segments( $r->path );
+					if ( $relativeURL->path[0] === '/' ) {
+						$targetURL->path = self::remove_dot_segments( $relativeURL->path );
 					} else {
-						$t->path = self::merge( $base->path, $r->path );
-						$t->path = self::remove_dot_segments( $t->path );
+						$targetURL->path = self::merge( $base->path, $relativeURL->path );
+						$targetURL->path = self::remove_dot_segments( $targetURL->path );
 					}
-					$t->query = $r->query;
+					$targetURL->query = $relativeURL->query;
 				}
 			}
 		}
-		$t->fragment = $r->fragment;
+		$targetURL->fragment = $relativeURL->fragment;
 
-		return $t->toString();
+		return $targetURL->toString();
 	}
 }
 
