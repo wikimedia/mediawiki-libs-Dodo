@@ -3,7 +3,6 @@
 declare( strict_types = 1 );
 // @phan-file-suppress PhanPluginDuplicateExpressionAssignmentOperation
 // @phan-file-suppress PhanSuspiciousValueComparison
-// @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
@@ -116,7 +115,7 @@ class IDLReflectedAttributeNumeric extends ReflectedAttribute {
 			 || ( $this->_min !== null && $n < $this->_min )
 			 || ( $this->_max !== null && $n > $this->_max )
 		) {
-			return $this->_default_cb( $this );
+			return ( $this->_default )( $this );
 		}
 
 		switch ( $this->_type ) {
@@ -124,7 +123,7 @@ class IDLReflectedAttributeNumeric extends ReflectedAttribute {
 			case 'long':
 			case 'limited unsigned long with fallback':
 				if ( !preg_match( '/^[ \t\n\f\r]*[-+]?[0-9]/', $v ) ) {
-					return $this->_default( $this );
+					return ( $this->_default )( $this );
 				}
 				break;
 			default:
@@ -153,20 +152,20 @@ class IDLReflectedAttributeNumeric extends ReflectedAttribute {
 		switch ( $this->_type ) {
 			case 'unsigned_long':
 				if ( $v < 0 || $v > 0x7FFFFFFF ) {
-					$v = $this->_default( $this );
+					$v = ( $this->_default )( $this );
 				} else {
 					$v = $v | 0;
 				}
 				break;
 			case 'limited unsigned long with fallback':
 				if ( $v < 1 || $v > 0x7FFFFFFF ) {
-					$v = $this->_default( $this );
+					$v = ( $this->_default )( $this );
 				} else {
 					$v = $v | 0;
 				}
 			case 'long':
 				if ( $v < -0x80000000 || $v > 0x7FFFFFFF ) {
-					$v = $this->_default( $this );
+					$v = ( $this->_default )( $this );
 				} else {
 					$v = $v | 0;
 				}

@@ -1,18 +1,13 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
-// phpcs:disable MediaWiki.Commenting.FunctionComment.SpacingAfter
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 // phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
+
+use Exception;
 
 /******************************************************************************
  * Attr.php
@@ -133,14 +128,52 @@ namespace Wikimedia\Dodo;
  * writing (05/03/2019), it extends Node.
  */
 class Attr extends Node {
-	protected $_namespaceURI = null;   /* readonly (NULL or non-empty) */
-	protected $_prefix = null;         /* readonly (NULL or non-empty) */
-	protected $_localName = null;      /* readonly, (non-empty) */
-	protected $_name;                  /* readonly, (non-empty) */
-	protected $_value = "";            /* (string) */
-	protected $_ownerElement = null;   /* readonly (NULL or Element) */
+	/**
+	 * @var string|null
+	 * Should be considered readonly, if a string its non-empty
+	 */
+	protected $_namespaceURI = null;
+
+	/**
+	 * @var string|null
+	 * Should be considered readonly, if a string its non-empty
+	 */
+	protected $_prefix = null;
+
+	/**
+	 * @var string
+	 * Should be considered readonly, always non-empty
+	 */
+	protected $_localName = '';
+
+	/**
+	 * @var string
+	 * Should be considered readonly, always non-empty
+	 */
+	protected $_name = '';
+
+	/** @var string */
+	protected $_value = '';
+
+	/**
+	 * @var Element|null
+	 * Should be considered readonly
+	 */
+	protected $_ownerElement = null;
+
+	/**
+	 * @var bool
+	 * Should be considered readonly, always true - TODO make a constant
+	 */
 	protected $_specified = true; /* readonly const true */
 
+	/**
+	 * @param ?Element $ownerElement
+	 * @param string $localName
+	 * @param ?string $prefix
+	 * @param ?string $namespaceURI
+	 * @param string $value
+	 */
 	public function __construct(
 		?Element $ownerElement,
 		string $localName,
@@ -153,7 +186,7 @@ class Attr extends Node {
 			/* DOM-LS: Non-empty string */
 			$this->_localName = $localName;
 		} else {
-			throw new \Exception( "Attr local name must be non-empty" );
+			throw new Exception( "Attr local name must be non-empty" );
 		}
 
 		if ( $namespaceURI !== '' ) {
@@ -162,59 +195,64 @@ class Attr extends Node {
 		}
 
 		if ( $prefix !== '' ) {
-			/* DOM-LS: NULL or non-empty string */
+			/* DOM-LS: null or non-empty string */
 			$this->_prefix = $prefix;
-		}
 
-		if ( $this->_prefix === null ) {
-			/*
-			 * DOM-LS: qualified name:
-			 *      localName if prefix is NULL
-			 */
-			$this->_name = $this->_localName;
-		} else {
-			/*
-			 * DOM-LS: qualified name:
+			/* DOM-LS: qualified name:
 			 *      namespace prefix, followed by ":",
-			 *      followed by local name, otherwise.
+			 *      followed by local name, if prefix is not null.
 			 */
-			$this->_name = "$this->_prefix:$this->_localName";
+			$this->_name = "$prefix:$localName";
+		} else {
+			/* DOM-LS: qualified name: localName if prefix is null */
+			$this->_name = $localName;
 		}
 
-		/* DOM-LS: NULL or Element */
+		/* DOM-LS: null or Element */
 		$this->_ownerElement = $ownerElement;
 
-		/* DOM-LS: String */
+		/* DOM-LS: string */
 		$this->_value = $value;
 	}
 
 	/**********************************************************************
 	 * ACCESSORS
 	 */
+
+	/** @return ?string */
 	public function namespaceURI(): ?string {
 		return $this->_namespaceURI;
 	}
 
+	/** @return bool */
 	public function specified(): bool {
 		return $this->_specified;
 	}
 
+	/** @return ?Element */
 	public function ownerElement(): ?Element {
 		return $this->_ownerElement;
 	}
 
+	/** @return ?string */
 	public function prefix(): ?string {
 		return $this->_prefix;
 	}
 
+	/** @return string */
 	public function localName(): string {
 		return $this->_localName;
 	}
 
+	/** @return string */
 	public function name(): string {
 		return $this->_name;
 	}
 
+	/**
+	 * @param ?string $value
+	 * @return string|void
+	 */
 	public function value( ?string $value = null ) {
 		if ( $value === null ) {
 			/* GET */
@@ -225,17 +263,17 @@ class Attr extends Node {
 		 * NOTE
 		 * You can unset an attribute by calling Attr::value("");
 		 */
-		$old = $this->_value;
-		$new = $value;
 
-		if ( $new === $old ) {
+		if ( $this->_value === $value ) {
 			return;
 		}
 
-		$this->_value = $new;
+		$old = $this->_value;
+		$this->_value = $value;
 
 		if ( $this->_ownerElement
-			 && ( isset( $this->_ownerElement->__onchange_attr[$this->_localName] ) ) ) {
+			 && ( isset( $this->_ownerElement->__onchange_attr[$this->_localName] ) )
+		) {
 			/*
 			 * Elements must take special action if the
 			 * value of certain attributes are updated.
@@ -256,7 +294,7 @@ class Attr extends Node {
 			$this->_ownerElement->__onchange_attr[$this->_localName](
 				$this->_ownerElement,
 				$old,
-				$new
+				$value
 			);
 		}
 
@@ -281,12 +319,21 @@ class Attr extends Node {
 		}
 	}
 
-	/* Delegated from Node */
+	/**
+	 * Delegated from Node
+	 *
+	 * @param ?string $value
+	 * @return string|void
+	 */
 	public function textContent( ?string $value = null ) {
 		return $this->value( $value );
 	}
 
-	/* Delegated from Node */
+	/**
+	 * Delegated from Node
+	 *
+	 * @return ?Node always Attr
+	 */
 	public function _subclass_cloneNodeShallow(): ?Node {
 		return new Attr(
 			null,
@@ -297,11 +344,19 @@ class Attr extends Node {
 		);
 	}
 
-	/* Delegated from Node */
+	/**
+	 * Delegated from Node
+	 *
+	 * @param Node $node
+	 * @return bool
+	 */
 	public function _subclass_isEqualNode( Node $node ): bool {
-		'@phan-var Attr $node'; /** @var Attr $node */
-		return ( $this->_namespaceURI === $node->_namespaceURI
-				 && $this->_localName === $node->_localName
-				 && $this->_value === $node->_value );
+		'@phan-var Attr $node';
+		/** @var Attr $node */
+		return (
+			$this->_namespaceURI === $node->_namespaceURI
+			&& $this->_localName === $node->_localName
+			&& $this->_value === $node->_value
+		);
 	}
 }
