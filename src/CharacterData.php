@@ -16,7 +16,12 @@ namespace Wikimedia\Dodo;
  * CharacterData.php
  * -----------------
  */
-abstract class CharacterData extends NonDocumentTypeChildNodeLeaf {
+abstract class CharacterData extends ChildNode {
+	/** ChildNodeLeaf trait for classes that can never have children */
+	use ChildNodeLeaf;
+
+	use NonDocumentTypeChildNode;
+
 	protected $_data;
 
 	// DOMString substringData(unsigned long offset,

@@ -14,7 +14,10 @@ namespace Wikimedia\Dodo;
  * DocumentType.php
  * ----------------
  */
-class DocumentType extends ChildNodeLeaf {
+class DocumentType extends ChildNode {
+	/** ChildNodeLeaf trait for classes that can never have children */
+	use ChildNodeLeaf;
+
 	protected const _nodeType = Node::DOCUMENT_TYPE_NODE;
 
 	public function __construct( Document $doc, string $name, string $publicId = '', string $systemId = '' ) {

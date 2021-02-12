@@ -67,7 +67,9 @@ namespace Wikimedia\Dodo;
  */
 $UC_Cache = [];
 
-class Element extends NonDocumentTypeChildNode {
+class Element extends ChildNode {
+	use NonDocumentTypeChildNode;
+
 	/* Required by Node */
 	public $_nodeType = Node::ELEMENT_NODE;
 

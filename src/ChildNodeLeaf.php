@@ -1,56 +1,78 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
+
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 
 namespace Wikimedia\Dodo;
 
-/*
+/**
  * We have to use this because PHP is single-inheritance, so DocumentType
  * can't inherit from ChildNode and Leaf at once.
  *
- * We could use traits...................nah
+ * This trait selectively overrides methods inherited from Node,
+ * for Node subclasses that can never have children, such as those
+ * derived from the abstract CharacterData class.
  *
- * This class selectively overrides Node, providing an alternative
- * (more performant) base class for Node subclasses that can never
- * have children, such as those derived from the abstract CharacterData
- * class.
+ * @property NodeList|null $_childNodes
  */
-abstract class ChildNodeLeaf extends ChildNode {
+trait ChildNodeLeaf {
 
-	final public function hasChildNodes(): bool {
+	/** @return bool */
+	public function hasChildNodes(): bool {
 		return false;
 	}
 
-	final public function firstChild(): ?Node {
+	/** @return ?Node always null */
+	public function firstChild(): ?Node {
 		return null;
 	}
 
-	final public function lastChild(): ?Node {
+	/** @return ?Node always null */
+	public function lastChild(): ?Node {
 		return null;
 	}
 
-	final public function insertBefore( Node $node, ?Node $refChild ):?Node {
+	/**
+	 * @param Node $node
+	 * @param ?Node $refChild
+	 * @return ?Node always null
+	 */
+	public function insertBefore( Node $node, ?Node $refChild ) : ?Node {
 		Util::error( "NotFoundError" );
 		return null;
 	}
 
-	final public function replaceChild( Node $node, ?Node $refChild ):?Node {
+	/**
+	 * @param Node $node
+	 * @param ?Node $refChild
+	 * @return ?Node always null
+	 */
+	public function replaceChild( Node $node, ?Node $refChild ) : ?Node {
 		Util::error( "HierarchyRequestError" );
 		return null;
 	}
 
-	final public function removeChild( ChildNode $node ):?Node {
+	/**
+	 * @param ChildNode $node
+	 * @return ?Node always null
+	 */
+	public function removeChild( ChildNode $node ) : ?Node {
 		Util::error( "NotFoundError" );
 		return null;
 	}
 
-	final public function __remove_children() {
+	/**
+	 * Needed to override method in Node class, does nothing
+	 */
+	public function __remove_children() {
 		/* no-op */
 	}
 
-	final public function childNodes(): ?NodeList {
+	/**
+	 * @return ?NodeList always a NodeList
+	 */
+	public function childNodes(): ?NodeList {
 		if ( $this->_childNodes === null ) {
 			$this->_childNodes = new NodeList();
 		}
