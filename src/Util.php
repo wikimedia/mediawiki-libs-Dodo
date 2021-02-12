@@ -73,7 +73,7 @@ class Util {
 	/* whatever you need it to be */
 	const DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC = 32;
 
-	/*
+	/**
 	 * Original:
 	 * throw new Error("Assertion failed: " + (msg || "") + "\n" new Error().stack);
 	 *
@@ -81,6 +81,10 @@ class Util {
 	 * Exception::getTraceAsString()
 	 *
 	 * TODO: Make this a true PHP assert?
+	 *
+	 * @param bool $condition
+	 * @param ?string $message
+	 * @throws \Exception
 	 */
 	static function assert( bool $condition, ?string $message = "" ) {
 		if ( !$condition ) {
@@ -115,11 +119,14 @@ class Util {
 	 * TEXT FORMATTING
 	 */
 
-	/*
+	/**
 	 * TODO: Why? I don't know. strtolower()/strtoupper() don't do the right thing
 	 * for non-ASCII characters, and mb_strtolower()/mb_strtoupper() are up
 	 * to 30x slower. But these are only called on things that should accept
 	 * only ASCII values to begin with (e.g. attribute names in HTML). So -- why?
+	 *
+	 * @param string $s
+	 * @return string
 	 */
 	static function ascii_to_lowercase( string $s ): string {
 		return preg_replace_callback( '/[A-Z]+/', function ( $char ) {
@@ -127,6 +134,10 @@ class Util {
 		}, $s );
 	}
 
+	/**
+	 * @param string $s
+	 * @return string
+	 */
 	static function ascii_to_uppercase( string $s ): string {
 		return preg_replace_callback( '/[a-z]+/', function ( $char ) {
 			return strtoupper( $char );

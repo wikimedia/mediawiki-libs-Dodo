@@ -5,8 +5,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanCoalescingNeverUndefined
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
@@ -22,21 +20,28 @@ class Text extends CharacterData {
 	public $_nodeType = Node::TEXT_NODE;
 	public $_nodeName = '#text';
 
+	/**
+	 * @param Document $doc
+	 * @param mixed $data
+	 */
 	public function __construct( Document $doc, $data ) {
 		parent::__construct();
 		$this->_ownerDocument = $doc;
 		$this->_data = $data;
 	}
 
-	/* Overrides Node::nodeValue */
+	/**
+	 * Overrides Node::nodeValue
+	 *
+	 * @param ?string $value
+	 * @return mixed
+	 */
 	public function nodeValue( ?string $value = null ) {
 		/* GET */
 		if ( $value === null ) {
 			return $this->_data;
 			/* SET */
 		} else {
-			$value = ( $value === null ) ? '' : strval( $value );
-
 			if ( $value === $this->_data ) {
 				return;
 			}
@@ -53,23 +58,43 @@ class Text extends CharacterData {
 		}
 	}
 
+	/**
+	 * @param Node $node
+	 * @return bool
+	 */
 	public function _subclass_isEqualNode( Node $node ): bool {
 		return ( $this->_data === $node->_data );
 	}
 
+	/**
+	 * @return ?Node always Text
+	 */
 	public function _subclass_cloneNodeShallow(): ?Node {
 		return new Text( $this->_ownerDocument, $this->_data );
 	}
 
-	/* Per spec */
+	/**
+	 * Per spec
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	public function textContent( $value = null ) {
 		return $this->nodeValue( $value );
 	}
 
+	/**
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	public function data( $value = null ) {
 		return $this->nodeValue( $value );
 	}
 
+	/**
+	 * @param int $offset
+	 * @return Text
+	 */
 	public function splitText( $offset ) {
 		if ( $offset > strlen( $this->_data ) || $offset < 0 ) {
 			Util::error( "IndexSizeError" );
@@ -87,6 +112,9 @@ class Text extends CharacterData {
 		return $newnode;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function wholeText() {
 		$result = $this->textContent();
 

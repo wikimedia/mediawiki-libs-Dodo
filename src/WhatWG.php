@@ -49,7 +49,12 @@ class WhatWG {
 	 * TREE PREDICATES AND MUTATION
 	 */
 
-	/* https://dom.spec.whatwg.org/#dom-node-comparedocumentposition */
+	/**
+	 * @see https://dom.spec.whatwg.org/#dom-node-comparedocumentposition
+	 * @param Node $node1
+	 * @param Node $node2
+	 * @return int
+	 */
 	static function compare_document_position( Node $node1, Node $node2 ): int {
 		/* #1-#2 */
 		if ( $node1 === $node2 ) {
@@ -142,7 +147,14 @@ class WhatWG {
 	 *
 	 * Anyway, they operate only on Elements.
 	 */
-	/* https://dom.spec.whatwg.org/#locate-a-namespace */
+
+	/**
+	 * @see https://dom.spec.whatwg.org/#locate-a-namespace
+	 *
+	 * @param Node $node
+	 * @param ?string $prefix
+	 * @return ?string
+	 */
 	static function locate_namespace( Node $node, ?string $prefix ): ?string {
 		if ( $prefix === '' ) {
 			$prefix = null;
@@ -190,7 +202,13 @@ class WhatWG {
 		return null;
 	}
 
-	/* https://dom.spec.whatwg.org/#locate-a-namespace-prefix */
+	/**
+	 * @see https://dom.spec.whatwg.org/#locate-a-namespace-prefix
+	 *
+	 * @param Node $node
+	 * @param ?string $ns
+	 * @return ?string
+	 */
 	static function locate_prefix( Node $node, ?string $ns ): ?string {
 		if ( $ns === "" || $ns === null ) {
 			return null;
@@ -235,6 +253,12 @@ class WhatWG {
 		return null;
 	}
 
+	/**
+	 * @param Node $node
+	 * @param Node $parent
+	 * @param ?Node $before
+	 * @param bool $replace
+	 */
 	static function insert_before_or_replace( Node $node, Node $parent, ?Node $before, bool $replace ): void {
 		/*
 		 * TODO: FACTOR: $before is intended to always be non-NULL
@@ -367,11 +391,15 @@ class WhatWG {
 		}
 	}
 
-	/*
-	  TODO: Look at the way these were implemented in the original;
-	  there are some speedups esp in the way that you implement
-	  things like "node has a doctype child that is not child
-	*/
+	/**
+	 * TODO: Look at the way these were implemented in the original;
+	 * there are some speedups esp in the way that you implement
+	 * things like "node has a doctype child that is not child
+	 *
+	 * @param Node $node
+	 * @param Node $parent
+	 * @param ?Node $child
+	 */
 	static function ensure_insert_valid( Node $node, Node $parent, ?Node $child ): void {
 		/*
 		 * DOM-LS: #1: If parent is not a Document, DocumentFragment,
@@ -553,6 +581,11 @@ class WhatWG {
 		}
 	}
 
+	/**
+	 * @param Node $node
+	 * @param Node $parent
+	 * @param Node $child
+	 */
 	static function ensure_replace_valid( Node $node, Node $parent, Node $child ): void {
 		/*
 		 * DOM-LS: #1: If parent is not a Document, DocumentFragment,
@@ -756,6 +789,10 @@ class WhatWG {
 		*/
 	];
 
+	/**
+	 * @param string $s
+	 * @return string
+	 */
 	static function _helper_escape( $s ) {
 		return str_replace(
 			/* PORT: PHP7: \u{00a0} */
@@ -769,6 +806,10 @@ class WhatWG {
 		);
 	}
 
+	/**
+	 * @param string $s
+	 * @return string
+	 */
 	static function _helper_escapeAttr( $s ) {
 		return str_replace(
 			[ "&", "\"", "\u{00A0}" ],
@@ -779,6 +820,10 @@ class WhatWG {
 		/* TODO: Is there still a fast path in PHP? (see NodeUtils.js) */
 	}
 
+	/**
+	 * @param Attr $a
+	 * @return string
+	 */
 	static function _helper_attrname( Attr $a ) {
 		$ns = $a->namespaceURI();
 
@@ -803,6 +848,11 @@ class WhatWG {
 		return $a->name();
 	}
 
+	/**
+	 * @param Node $child
+	 * @param Node $parent
+	 * @return string
+	 */
 	static function serialize_node( Node $child, Node $parent ) {
 		$s = "";
 
@@ -991,6 +1041,10 @@ class WhatWG {
 	const pattern_surrogate_name = '/^[' . self::surrogate_start . ']' . '[:' . self::surrogate_char . ']*$/';
 	const pattern_surrogate_qname = '/^([' . self::surrogate_start . '][' . self::surrogate_char . ']*|[' . self::surrogate_start . '][' . self::surrogate_char . ']*:[' . self::surrogate_start . '][' . self::surrogate_char . ']*)$/';
 
+	/**
+	 * @param string $s
+	 * @return bool
+	 */
 	static function is_valid_xml_name( $s ) {
 		if ( preg_match( self::pattern_ascii_name, $s ) ) {
 			return true; // Plain ASCII
@@ -1022,6 +1076,10 @@ class WhatWG {
 		return ( $ret0 && $ret1 ) && ( ( 2 * count( $matches_pairs ) ) === count( $matches_chars ) );
 	}
 
+	/**
+	 * @param string $s
+	 * @return bool
+	 */
 	static function is_valid_xml_qname( $s ) {
 		if ( preg_match( self::pattern_ascii_qname, $s ) ) {
 			return true; // Plain ASCII

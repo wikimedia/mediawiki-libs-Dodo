@@ -44,6 +44,9 @@ class Window extends EventTarget {
 	public $history = null;
 	public $navigator = null;
 
+	/**
+	 * @param Document|null $doc
+	 */
 	public function __construct( Document $doc = null ) {
 		if ( $doc == null ) {
 			$impl = new DOMImplementation( null );
