@@ -1,6 +1,8 @@
 <?php
 
 declare( strict_types = 1 );
+// @phan-file-suppress PhanTypeMismatchArgumentNullable
+// @phan-file-suppress PhanUndeclaredMethod
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 // phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
@@ -9,7 +11,7 @@ namespace Wikimedia\Dodo;
 
 use Exception;
 
-/******************************************************************************
+/**
  * Attr.php
  * --------
  * The Attr class represents a single attribute node.
@@ -33,14 +35,14 @@ use Exception;
  *              the Attr class (and Element class), and did not re-appear
  *              on the Node class..
  */
-/******************************************************************************
+/*
  * Qualified Names, Local Names, and Namespace Prefixes
  *
  * An Element or Attribute's qualified name is its local name if its
  * namespace prefix is null, and its namespace prefix, followed by ":",
  * followed by its local name, otherwise.
  */
-/******************************************************************************
+/*
  * NOTES (taken from Domino.js)
  *
  * Attributes in the DOM are tricky:
@@ -125,9 +127,16 @@ use Exception;
  * extending Node and being its own
  * class in recent specs. As of the
  * most recent DOM-LS at the time of this
- * writing (05/03/2019), it extends Node.
+ * writing (2021-02-11), it extends Node.
  */
-class Attr extends Node {
+class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\Attr;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\Attr;
+
 	/**
 	 * @var string|null
 	 * Should be considered readonly, if a string its non-empty
@@ -215,50 +224,47 @@ class Attr extends Node {
 		$this->_value = $value;
 	}
 
-	/**********************************************************************
+	/*
 	 * ACCESSORS
 	 */
 
-	/** @return ?string */
-	public function namespaceURI(): ?string {
+	/** @inheritDoc */
+	public function getNamespaceURI(): ?string {
 		return $this->_namespaceURI;
 	}
 
-	/** @return bool */
-	public function specified(): bool {
+	/** @inheritDoc */
+	public function getSpecified(): bool {
 		return $this->_specified;
 	}
 
-	/** @return ?Element */
-	public function ownerElement(): ?Element {
+	/** @inheritDoc */
+	public function getOwnerElement(): ?Element {
 		return $this->_ownerElement;
 	}
 
-	/** @return ?string */
-	public function prefix(): ?string {
+	/** @inheritDoc */
+	public function getPrefix(): ?string {
 		return $this->_prefix;
 	}
 
-	/** @return string */
-	public function localName(): string {
+	/** @inheritDoc */
+	public function getLocalName(): string {
 		return $this->_localName;
 	}
 
-	/** @return string */
-	public function name(): string {
+	/** @inheritDoc */
+	public function getName(): string {
 		return $this->_name;
 	}
 
-	/**
-	 * @param ?string $value
-	 * @return string|void
-	 */
-	public function value( ?string $value = null ) {
-		if ( $value === null ) {
-			/* GET */
-			return $this->_value;
-		}
+	/** @inheritDoc */
+	public function getValue() : string {
+		return $this->_value;
+	}
 
+	/** @inheritDoc */
+	public function setValue( string $value = null ) : void {
 		/*
 		 * NOTE
 		 * You can unset an attribute by calling Attr::value("");
@@ -320,13 +326,19 @@ class Attr extends Node {
 	}
 
 	/**
-	 * Delegated from Node
-	 *
-	 * @param ?string $value
-	 * @return string|void
+	 * @inheritDoc
 	 */
-	public function textContent( ?string $value = null ) {
+	public function getTextContent() : ?string {
+		// https://dom.spec.whatwg.org/#dom-node-textcontent
 		return $this->value( $value );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setTextContent( ?string $val ) : void {
+		// https://dom.spec.whatwg.org/#dom-node-textcontent
+		$this->setValue( $val );
 	}
 
 	/**

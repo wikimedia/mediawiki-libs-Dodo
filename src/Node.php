@@ -2,15 +2,12 @@
 
 declare( strict_types = 1 );
 // @phan-file-suppress PhanCoalescingNeverUndefined
-// @phan-file-suppress PhanParamTooMany
+// @phan-file-suppress PhanParamSignatureMismatch
 // @phan-file-suppress PhanTypeMismatchArgument
-// @phan-file-suppress PhanTypeMismatchDeclaredParamNullable
-// @phan-file-suppress PhanTypeMismatchDeclaredReturnNullable
-// @phan-file-suppress PhanTypeMismatchReturnNullable
+// @phan-file-suppress PhanTypeMismatchReturn
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
 // @phan-file-suppress PhanUndeclaredTypeThrowsType
-// @phan-file-suppress PhanUndeclaredVariable
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
@@ -25,28 +22,23 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
-/******************************************************************************
+use Wikimedia\IDLeDOM\Node as INode;
+
+/**
  * Node.php
  * --------
  * Defines a "Node", the primary datatype of the W3C Document Object Model.
  *
  * Conforms to W3C Document Object Model (DOM) Level 1 Recommendation
  * (see: https://www.w3.org/TR/2000/WD-DOM-Level-1-20000929)
- *
  */
-abstract class Node {
-	const ELEMENT_NODE = Util::ELEMENT_NODE;
-	const ATTRIBUTE_NODE = Util::ATTRIBUTE_NODE;
-	const TEXT_NODE = Util::TEXT_NODE;
-	const CDATA_SECTION_NODE = Util::CDATA_SECTION_NODE;
-	const ENTITY_REFERENCE_NODE = Util::ENTITY_REFERENCE_NODE;
-	const ENTITY_NODE = Util::ENTITY_NODE;
-	const PROCESSING_INSTRUCTION_NODE = Util::PROCESSING_INSTRUCTION_NODE;
-	const COMMENT_NODE = Util::COMMENT_NODE;
-	const DOCUMENT_NODE = Util::DOCUMENT_NODE;
-	const DOCUMENT_TYPE_NODE = Util::DOCUMENT_TYPE_NODE;
-	const DOCUMENT_FRAGMENT_NODE = Util::DOCUMENT_FRAGMENT_NODE;
-	const NOTATION_NODE = Util::NOTATION_NODE;
+abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\Node;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\Node;
 
 	/**********************************************************************
 	 * Abstract methods that must be defined in subclasses
@@ -197,11 +189,14 @@ abstract class Node {
 	 * accessors should be seen as "defaults,"
 	 * which in some cases are extended.
 	 */
-	public function nodeValue( ?string $value = null ) {
+
+	/** @inheritDoc */
+	public function getNodeValue() : ?string {
 		return $this->_nodeValue;
 	}
 
-	public function textContent( ?string $value = null ) {
+	/** @inheritDoc */
+	public function getTextContent() : ?string {
 		/*
 		 * This is spec. Relevent classes
 		 * should override. For more, see
@@ -210,13 +205,18 @@ abstract class Node {
 		return null;
 	}
 
-	/** @return int */
-	final public function nodeType(): int {
+	/** @inheritDoc */
+	public function setTextContent( ?string $val ) : void {
+		/* Any other node: Do nothing */
+	}
+
+	/** @inheritDoc */
+	final public function getNodeType(): int {
 		return $this->_nodeType;
 	}
 
-	/** @return string */
-	final public function nodeName(): ?string {
+	/** @inheritDoc */
+	final public function getNodeName(): string {
 		return $this->_nodeName;
 	}
 
@@ -225,9 +225,9 @@ abstract class Node {
 	 * into a DOM, or are themselves a Document. In those cases, the value of
 	 * ownerDocument will be null.
 	 *
-	 * @return ?Document
+	 * @inheritDoc
 	 */
-	final public function ownerDocument(): ?Document {
+	final public function getOwnerDocument() {
 		return $this->_ownerDocument;
 	}
 
@@ -236,9 +236,9 @@ abstract class Node {
 	 * into a DOM, or are a Document node, which is the root of a DOM tree and
 	 * thus has no parent. In those cases, the value of parentNode is null.
 	 *
-	 * @return ?Node
+	 * @inheritDoc
 	 */
-	final public function parentNode(): ?Node {
+	final public function getParentNode() {
 		return $this->_parentNode;
 	}
 
@@ -249,9 +249,9 @@ abstract class Node {
 	 * Accordingly, it requires no additional backing property, and can exist only
 	 * as an accessor.
 	 *
-	 * @return ?Element
+	 * @inheritDoc
 	 */
-	final public function parentElement(): ?Element {
+	final public function getParentElement() {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
@@ -261,8 +261,8 @@ abstract class Node {
 		return null;
 	}
 
-	/** @return ?Node */
-	final public function previousSibling(): ?Node {
+	/** @inheritDoc */
+	final public function getPreviousSibling() {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
@@ -278,8 +278,8 @@ abstract class Node {
 		return $this->_previousSibling;
 	}
 
-	/** @return ?Node */
-	final public function nextSibling(): ?Node {
+	/** @inheritDoc */
+	final public function getNextSibling() {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
@@ -304,9 +304,9 @@ abstract class Node {
 	 * Wait, doesn't this need to be live? I mean, don't we need to re-compute
 	 * this thing when things are appended or removed...? Or is it not live?
 	 *
-	 * @return ?NodeList
+	 * @inheritDoc
 	 */
-	public function childNodes(): ?NodeList {
+	public function getChildNodes() {
 		if ( $this->_childNodes === null ) {
 
 			/*
@@ -314,7 +314,7 @@ abstract class Node {
 			 */
 			$this->_childNodes = new NodeList();
 
-			for ( $c = $this->firstChild(); $c !== null; $c = $c->nextSibling() ) {
+			for ( $c = $this->getFirstChild(); $c !== null; $c = $c->getNextSibling() ) {
 				$this->_childNodes[] = $c;
 			}
 
@@ -336,9 +336,9 @@ abstract class Node {
 	 *
 	 * I'm trying to factor it out, but it will take some time.
 	 *
-	 * @return ?Node
+	 * @inheritDoc
 	 */
-	public function firstChild(): ?Node {
+	public function getFirstChild() {
 		if ( $this->_childNodes === null ) {
 			/*
 			 * If we are using the Linked List representation, then just return
@@ -359,14 +359,9 @@ abstract class Node {
 	}
 
 	/**
-	 * FIXME
-	 * HEY HEY HEY!! THIS IS NOT PART OF THE NORMAL SPEC,
-	 * BUT IS USED HEAVILY IN OUR TARGET RUN.
-	 * IT SHOULD BE NAMED DIFFERENTLY, MAYBE.
-	 *
-	 * @return ?Node
+	 * @inheritDoc
 	 */
-	public function lastChild(): ?Node {
+	public function getLastChild() {
 		if ( $this->_childNodes === null ) {
 			/* If we are using the Linked List representation. */
 			if ( $this->_firstChild !== null ) {
@@ -399,7 +394,7 @@ abstract class Node {
 	 *
 	 * I'm trying to factor it out, but it will take some time.
 	 *
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function hasChildNodes(): bool {
 		if ( $this->_childNodes === null ) {
@@ -454,12 +449,12 @@ abstract class Node {
 	 * this is a real workhorse, used to implement
 	 * all of the non-replacing insertion mutations.
 	 *
-	 * @param Node $node To be inserted
-	 * @param ?Node $refNode Child of this node before which to insert $node
-	 * @return ?Node Newly inserted Node or empty DocumentFragment
+	 * @param INode $node To be inserted
+	 * @param ?INode $refNode Child of this node before which to insert $node
+	 * @return INode Newly inserted Node or empty DocumentFragment
 	 * @throws DOMException "HierarchyRequestError" or "NotFoundError"
 	 */
-	public function insertBefore( Node $node, ?Node $refNode ): ?Node {
+	public function insertBefore( $node, $refNode ) {
 		/*
 		 * [1]
 		 * Ensure pre-insertion validity.
@@ -476,7 +471,7 @@ abstract class Node {
 		 * $node. This may well be NULL.
 		 */
 		if ( $refNode === $node ) {
-			$refNode = $node->nextSibling();
+			$refNode = $node->getNextSibling();
 		}
 
 		/*
@@ -501,11 +496,8 @@ abstract class Node {
 		return $node;
 	}
 
-	/**
-	 * @param Node $node
-	 * @return ?Node
-	 */
-	public function appendChild( Node $node ): ?Node {
+	/** @inheritDoc */
+	public function appendChild( $node ) {
 		return $this->insertBefore( $node, null );
 	}
 
@@ -521,12 +513,8 @@ abstract class Node {
 		return $node;
 	}
 
-	/**
-	 * @param Node $new
-	 * @param ?Node $old
-	 * @return ?Node
-	 */
-	public function replaceChild( Node $new, ?Node $old ): ?Node {
+	/** @inheritDoc */
+	public function replaceChild( $new, $old ) {
 		/*
 		 * [1]
 		 * Ensure pre-replacement validity.
@@ -575,11 +563,8 @@ abstract class Node {
 		return $old;
 	}
 
-	/**
-	 * @param ChildNode $node
-	 * @return ?Node
-	 */
-	public function removeChild( ChildNode $node ): ?Node {
+	/** @inheritDoc */
+	public function removeChild( $node ) {
 		if ( $this === $node->_parentNode ) {
 			/* Defined on ChildNode class */
 			$node->remove();
@@ -604,10 +589,11 @@ abstract class Node {
 	 * nodes in the sub-tree are empty,
 	 * and there are no adjacent text nodes.
 	 *
-	 * See: https://dom.spec.whatwg.org/#dom-node-normalize
+	 * @see https://dom.spec.whatwg.org/#dom-node-normalize
+	 * @inheritDoc
 	 */
-	final public function normalize() {
-		for ( $n = $this->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+	final public function normalize() : void {
+		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			/*
 			 * [0]
 			 * Proceed to traverse the
@@ -654,11 +640,8 @@ abstract class Node {
 	 * COMPARISONS AND PREDICATES
 	 */
 
-	/**
-	 * @param Node $that
-	 * @return int
-	 */
-	final public function compareDocumentPosition( Node $that ): int {
+	/** @inheritDoc */
+	final public function compareDocumentPosition( $that ): int {
 		/*
 		 * CAUTION
 		 * The order of these args matters
@@ -666,11 +649,8 @@ abstract class Node {
 		return WhatWG::compare_document_position( $that, $this );
 	}
 
-	/**
-	 * @param ?Node $node
-	 * @return bool
-	 */
-	final public function contains( ?Node $node ): bool {
+	/** @inheritDoc */
+	final public function contains( $node ): bool {
 		if ( $node === null ) {
 			return false;
 		}
@@ -683,10 +663,9 @@ abstract class Node {
 	}
 
 	/**
-	 * @param Node $node
-	 * @return bool
+	 * @inheritDoc
 	 */
-	final public function isSameNode( Node $node ): bool {
+	final public function isSameNode( $node ): bool {
 		return $this === $node;
 	}
 
@@ -707,10 +686,9 @@ abstract class Node {
 	 *
 	 * Yes, we realize it's a bit weird.
 	 *
-	 * @param Node|null $node will be compared to $this
-	 * @return bool
+	 * @inheritDoc
 	 */
-	public function isEqualNode( ?Node $node = null ): bool {
+	public function isEqualNode( $node ): bool {
 		if ( $node === null ) {
 			/* We're not equal to NULL */
 			return false;
@@ -727,9 +705,9 @@ abstract class Node {
 
 		/* Call this method on the children of both nodes */
 		for (
-			$a = $this->firstChild(), $b = $node->firstChild();
+			$a = $this->getFirstChild(), $b = $node->getFirstChild();
 			$a !== null && $b !== null;
-			$a = $a->nextSibling(), $b = $b->nextSibling()
+			$a = $a->getNextSibling(), $b = $b->getNextSibling()
 		) {
 			if ( !$a->isEqualNode( $b ) ) {
 				return false;
@@ -762,7 +740,7 @@ abstract class Node {
 	 * @param bool $deep if true, clone entire subtree
 	 * @return ?Node (clone of $this)
 	 */
-	public function cloneNode( bool $deep = false ): ?Node {
+	public function cloneNode( bool $deep = false ) {
 		/* Make a shallow clone using the delegated method */
 		$clone = $this->_subclass_cloneNodeShallow();
 
@@ -772,7 +750,7 @@ abstract class Node {
 		}
 
 		/* Otherwise, recurse on the children */
-		for ( $n = $this->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			/* APPEND DIRECTLY; NO CHECKINSERTVALID */
 			WhatWG::insert_before_or_replace( $clone, $n->cloneNode( true ), null, false );
 		}
@@ -789,8 +767,7 @@ abstract class Node {
 	 * Think this function looks weird? It's actually spec:
 	 * https://dom.spec.whatwg.org/#locate-a-namespace
 	 *
-	 * @param string $ns
-	 * @return string or NULL
+	 * @inheritDoc
 	 */
 	public function lookupPrefix( ?string $ns ): ?string {
 		return WhatWG::locate_prefix( $this, $ns );
@@ -799,11 +776,10 @@ abstract class Node {
 	/**
 	 * Return DOMString containing namespace URI for a given prefix
 	 *
-	 * @param ?string $prefix
-	 * @return ?string
-	 *
 	 * NOTE
 	 * Inverse of Node::lookupPrefix
+	 *
+	 * @inheritDoc
 	 */
 	public function lookupNamespaceURI( ?string $prefix ): ?string {
 		return WhatWG::locate_namespace( $this, $prefix );
@@ -812,8 +788,7 @@ abstract class Node {
 	/**
 	 * Determine whether this is the default namespace
 	 *
-	 * @param ?string $ns
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function isDefaultNamespace( ?string $ns ): bool {
 		return ( $ns ?? null ) === $this->lookupNamespaceURI( null );
@@ -927,7 +902,7 @@ abstract class Node {
 			$this->tagName = null;
 		}
 
-		for ( $n = $this->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			$n->__set_owner( $n, $owner );
 		}
 	}
@@ -1005,7 +980,7 @@ abstract class Node {
 			 * What if we somehow had a list of indices in
 			 * documentorder that would give us the subtree.
 			 */
-			for ( $n = $this->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+			for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 				$n->__root();
 			}
 		}
@@ -1035,7 +1010,7 @@ abstract class Node {
 		 * Then does that make the behavior in root() a bug?
 		 * Go over with Scott.
 		 */
-		for ( $n = $this->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			$n->__uproot();
 		}
 	}
@@ -1092,7 +1067,7 @@ abstract class Node {
 			return 0; /* ??? TODO: throw or make an error ??? */
 		}
 
-		if ( $this === $this->_parentNode->firstChild() ) {
+		if ( $this === $this->_parentNode->getFirstChild() ) {
 			return 0;
 		}
 
@@ -1132,7 +1107,7 @@ abstract class Node {
 		}
 
 		/* Go through all the children and remove me as their parent */
-		for ( $n = $this->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			if ( $root !== null ) {
 				/* If we're rooted, mutate */
 				$root->__mutate_remove( $n );
@@ -1159,7 +1134,7 @@ abstract class Node {
 	public function _node_serialize(): string {
 		$s = "";
 
-		for ( $n = $this->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			$s .= WhatWG::serialize_node( $n, $this );
 		}
 

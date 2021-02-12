@@ -1,13 +1,12 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.Files.LineLength.TooLong
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
+// @phan-file-suppress PhanTypeMismatchArgument
+// @phan-file-suppress PhanUndeclaredMethod
+// @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 // phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
-// phpcs:disable Squiz.Scope.MethodScope.Missing
 
 namespace Wikimedia\Dodo;
 
@@ -28,13 +27,16 @@ namespace Wikimedia\Dodo;
  * The additional methods defined by this class
  * are practical conveniences, but are not really
  * required to get full DOM functionality.
- *
- * TODO
- * That being the case, perhaps DODO should choose
- * not to implement them.
  */
-abstract class ChildNode extends Node {
-	static function _fragment_from_arguments( $document, array $args ) {
+trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
+	use \Wikimedia\IDLeDOM\Stub\ChildNode;
+
+	/**
+	 * @param Document $document
+	 * @param array $args
+	 * @return DocumentFragment
+	 */
+	private static function _fragment_from_arguments( $document, array $args ) {
 		$fragment = $document->createDocumentFragment();
 
 		foreach ( $args as $item ) {
@@ -61,8 +63,10 @@ abstract class ChildNode extends Node {
 	 * are very very similar and
 	 * could probably be factored
 	 * nicely..
+	 *
+	 * @inheritDoc
 	 */
-	public function after( ...$args /* DOMStrings and/or Nodes */ ) {
+	public function after( ...$args /* DOMStrings and/or Nodes */ ) : void {
 		$parentNode = $this->_parentNode;
 		$nextSibling = $this->nextSibling();
 
@@ -104,8 +108,10 @@ abstract class ChildNode extends Node {
 	 * NOTE
 	 * DOMStrings are inserted as
 	 * equivalent Text nodes.
+	 *
+	 * @inheritDoc
 	 */
-	public function before( ...$args /* DOMStrings and/or Nodes */ ) {
+	public function before( ...$args /* DOMStrings and/or Nodes */ ) : void {
 		$parentNode = $this->_parentNode;
 		$prevSibling = $this->previousSibling();
 
@@ -143,8 +149,9 @@ abstract class ChildNode extends Node {
 
 	/*
 	 * Remove $this from its parent.
+	 * @inheritDoc
 	 */
-	public function remove() {
+	public function remove() : void {
 		if ( $this->_parentNode === null ) {
 			/*
 			 * If $this has no parent,
@@ -155,7 +162,6 @@ abstract class ChildNode extends Node {
 		}
 
 		$doc = $this->__node_document();
-		// @phan-suppress-next-line PhanRedundantCondition phan is probably right to complain here: "all nodes have a node document"
 		if ( $doc ) {
 			/*
 			 * Un-associate $this
@@ -200,8 +206,9 @@ abstract class ChildNode extends Node {
 
 	/**
 	 * Replace this node with the nodes or strings provided as arguments.
+	 * @inheritDoc
 	 */
-	public function replaceWith( ...$args /* Nodes or DOMStrings */ ) {
+	public function replaceWith( ...$args /* Nodes or DOMStrings */ ) : void {
 		$parentNode = $this->parentNode();
 		$nextSibling = $this->nextSibling();
 

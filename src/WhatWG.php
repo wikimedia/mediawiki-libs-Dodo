@@ -167,14 +167,14 @@ class WhatWG {
 		case Node::DOCUMENT_FRAGMENT_NODE:
 			break;
 		case Node::ELEMENT_NODE:
-			if ( $node->namespaceURI() !== null && $node->prefix() === $prefix ) {
-				return $node->namespaceURI();
+			if ( $node->getNamespaceURI() !== null && $node->prefix() === $prefix ) {
+				return $node->getNamespaceURI();
 			}
 			foreach ( $node->attributes as $a ) {
-				if ( $a->namespaceURI() === Util::NAMESPACE_XMLNS ) {
-					if ( ( $a->prefix() === 'xmlns' && $a->localName() === $prefix )
-						 || ( $prefix === null && $a->prefix() === null && $a->localName() === 'xmlns' ) ) {
-						$val = $a->value();
+				if ( $a->getNamespaceURI() === Util::NAMESPACE_XMLNS ) {
+					if ( ( $a->prefix() === 'xmlns' && $a->getLocalName() === $prefix )
+						 || ( $prefix === null && $a->prefix() === null && $a->getLocalName() === 'xmlns' ) ) {
+						$val = $a->getValue();
 						return ( $val === "" ) ? null : $val;
 					}
 				}
@@ -221,13 +221,13 @@ class WhatWG {
 		case Node::DOCUMENT_TYPE_NODE:
 			break;
 		case Node::ELEMENT_NODE:
-			if ( $node->namespaceURI() !== null && $node->namespaceURI() === $ns ) {
+			if ( $node->getNamespaceURI() !== null && $node->getNamespaceURI() === $ns ) {
 				return $node->prefix();
 			}
 
 			foreach ( $node->attributes as $a ) {
-				if ( $a->prefix() === "xmlns" && $a->value() === $ns ) {
-					return $a->localName();
+				if ( $a->prefix() === "xmlns" && $a->getValue() === $ns ) {
+					return $a->getLocalName();
 				}
 			}
 			break;
@@ -291,7 +291,7 @@ class WhatWG {
 			}
 		}
 
-		$ref_node = $before ?? $parent->firstChild();
+		$ref_node = $before ?? $parent->getFirstChild();
 
 		/************ IF REPLACING, REMOVE OLD CHILD */
 
@@ -321,7 +321,7 @@ class WhatWG {
 		$insert = [];
 
 		if ( $node instanceof DocumentFragment ) {
-			for ( $n = $node->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+			for ( $n = $node->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 				$insert[] = $n; /* TODO: Needs to clone? */
 				$n->_parentNode = $parent;
 			}
@@ -426,7 +426,7 @@ class WhatWG {
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
 			 */
-			for ( $n = $parent; $n !== null; $n = $n->parentNode() ) {
+			for ( $n = $parent; $n !== null; $n = $n->getParentNode() ) {
 				if ( $n === $node ) {
 					Util::error( "HierarchyRequestError" );
 				}
@@ -487,7 +487,7 @@ class WhatWG {
 			$count_text = 0;
 			$count_element = 0;
 
-			for ( $n = $node->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+			for ( $n = $node->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 				if ( $n->_nodeType === Node::TEXT_NODE ) {
 					$count_text++;
 				}
@@ -513,14 +513,14 @@ class WhatWG {
 				 * DocumentType is following child.
 				 */
 				if ( $child !== null ) {
-					for ( $n = $child->nextSibling(); $n !== null; $n = $n->nextSibling() ) {
+					for ( $n = $child->getNextSibling(); $n !== null; $n = $n->getNextSibling() ) {
 						if ( $n->_nodeType === Node::DOCUMENT_TYPE_NODE ) {
 							Util::error( "HierarchyRequestError" );
 						}
 					}
 				}
 				/* DOM-LS #6a-2c: parent has an Element child */
-				for ( $n = $parent->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+				for ( $n = $parent->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 					if ( $n->_nodeType === Node::ELEMENT_NODE ) {
 						Util::error( "HierarchyRequestError" );
 					}
@@ -534,14 +534,14 @@ class WhatWG {
 			}
 			/* DOM-LS #6b-2: child not NULL and DocumentType is following child. */
 			if ( $child !== null ) {
-				for ( $n = $child->nextSibling(); $n !== null; $n = $n->nextSibling() ) {
+				for ( $n = $child->getNextSibling(); $n !== null; $n = $n->getNextSibling() ) {
 					if ( $n->_nodeType === Node::DOCUMENT_TYPE_NODE ) {
 						Util::error( "HierarchyRequestError" );
 					}
 				}
 			}
 			/* DOM-LS #6b-3: parent has an Element child */
-			for ( $n = $parent->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+			for ( $n = $parent->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 				if ( $n->_nodeType === Node::ELEMENT_NODE ) {
 					Util::error( "HierarchyRequestError" );
 				}
@@ -549,7 +549,7 @@ class WhatWG {
 			break;
 		case Node::DOCUMENT_TYPE_NODE:
 			/* DOM-LS #6c-1: parent has a DocumentType child */
-			for ( $n = $parent->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+			for ( $n = $parent->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 				if ( $n->_nodeType === Node::DOCUMENT_TYPE_NODE ) {
 					Util::error( "HierarchyRequestError" );
 				}
@@ -570,7 +570,7 @@ class WhatWG {
 			 * an Element child.
 			 */
 			if ( $child === null ) {
-				for ( $n = $parent->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+				for ( $n = $parent->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 					if ( $n->_nodeType === Node::ELEMENT_NODE ) {
 						Util::error( "HierarchyRequestError" );
 					}
@@ -673,7 +673,7 @@ class WhatWG {
 			$count_text = 0;
 			$count_element = 0;
 
-			for ( $n = $node->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+			for ( $n = $node->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 				if ( $n->_nodeType === Node::TEXT_NODE ) {
 					$count_text++;
 				}
@@ -687,13 +687,13 @@ class WhatWG {
 			/* #6a-2: If node has one Element child and either: */
 			if ( $count_element === 1 ) {
 				/* #6a-2a: parent has an Element child that is not child */
-				for ( $n = $parent->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+				for ( $n = $parent->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 					if ( $n->_nodeType === Node::ELEMENT_NODE && $n !== $child ) {
 						Util::error( "HierarchyRequestError" );
 					}
 				}
 				/* #6a-2b: a DocumentType is following child. */
-				for ( $n = $child->nextSibling(); $n !== null; $n = $n->nextSibling() ) {
+				for ( $n = $child->getNextSibling(); $n !== null; $n = $n->getNextSibling() ) {
 					if ( $n->_nodeType === Node::DOCUMENT_TYPE_NODE ) {
 						Util::error( "HierarchyRequestError" );
 					}
@@ -702,13 +702,13 @@ class WhatWG {
 			break;
 		case Node::ELEMENT_NODE:
 			/* #6b-1: parent has an Element child that is not child */
-			for ( $n = $parent->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+			for ( $n = $parent->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 				if ( $n->_nodeType === Node::ELEMENT_NODE && $n !== $child ) {
 					Util::error( "HierarchyRequestError" );
 				}
 			}
 			/* #6b-2: DocumentType is following child. */
-			for ( $n = $child->nextSibling(); $n !== null; $n = $n->nextSibling() ) {
+			for ( $n = $child->getNextSibling(); $n !== null; $n = $n->getNextSibling() ) {
 				if ( $n->nodeType === Node::DOCUMENT_TYPE_NODE ) {
 					Util::error( "HierarchyRequestError" );
 				}
@@ -716,7 +716,7 @@ class WhatWG {
 			break;
 		case Node::DOCUMENT_TYPE_NODE:
 			/* #6c-1: parent has a DocumentType child */
-			for ( $n = $parent->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+			for ( $n = $parent->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 				if ( $n->_nodeType === Node::DOCUMENT_TYPE_NODE ) {
 					Util::error( "HierarchyRequestError" );
 				}
@@ -825,23 +825,23 @@ class WhatWG {
 	 * @return string
 	 */
 	static function _helper_attrname( Attr $a ) {
-		$ns = $a->namespaceURI();
+		$ns = $a->getNamespaceURI();
 
 		if ( !$ns ) {
-			return $a->localName();
+			return $a->getLocalName();
 		}
 
 		if ( $ns === Util::NAMESPACE_XML ) {
-			return 'xml:' . $a->localName();
+			return 'xml:' . $a->getLocalName();
 		}
 		if ( $ns === Util::NAMESPACE_XLINK ) {
-			return 'xlink:' . $a->localName();
+			return 'xlink:' . $a->getLocalName();
 		}
 		if ( $ns === Util::NAMESPACE_XMLNS ) {
-			if ( $a->localName() === 'xmlns' ) {
+			if ( $a->getLocalName() === 'xmlns' ) {
 				return 'xmlns';
 			} else {
-				return 'xmlns:' . $a->localName();
+				return 'xmlns:' . $a->getLocalName();
 			}
 		}
 
@@ -858,13 +858,13 @@ class WhatWG {
 
 		switch ( $child->_nodeType ) {
 		case Node::ELEMENT_NODE:
-			$ns = $child->namespaceURI();
+			$ns = $child->getNamespaceURI();
 			$html = ( $ns === Util::NAMESPACE_HTML );
 
 			if ( $html || $ns === Util::NAMESPACE_SVG || $ns === Util::NAMESPACE_MATHML ) {
-				$tagname = $child->localName();
+				$tagname = $child->getLocalName();
 			} else {
-				$tagname = $child->tagName();
+				$tagname = $child->getTagName();
 			}
 
 			$s .= '<' . $tagname;
@@ -876,8 +876,8 @@ class WhatWG {
 				 * PORT: TODO: Need to ensure this value is NULL
 				 * rather than undefined?
 				 */
-				if ( $a->value() !== null ) {
-					$s .= '="' . self::_helper_escapeAttr( $a->value() ) . '"';
+				if ( $a->getValue() !== null ) {
+					$s .= '="' . self::_helper_escapeAttr( $a->getValue() ) . '"';
 				}
 			}
 
@@ -897,25 +897,25 @@ class WhatWG {
 
 		case Node::TEXT_NODE:
 		case Node::CDATA_SECTION_NODE:
-			if ( $parent->_nodeType === Node::ELEMENT_NODE && $parent->namespaceURI() === Util::NAMESPACE_HTML ) {
-				$parenttag = $parent->tagName();
+			if ( $parent->_nodeType === Node::ELEMENT_NODE && $parent->getNamespaceURI() === Util::NAMESPACE_HTML ) {
+				$parenttag = $parent->getTagName();
 			} else {
 				$parenttag = '';
 			}
 
 			if ( isset( self::$hasRawContent[$parenttag] ) || ( $parenttag === 'NOSCRIPT' && $parent->ownerDocument()->_scripting_enabled ) ) {
-				$s .= $child->data();
+				$s .= $child->getData();
 			} else {
-				$s .= self::_helper_escape( $child->data() );
+				$s .= self::_helper_escape( $child->getData() );
 			}
 			break;
 
 		case Node::COMMENT_NODE:
-			$s .= '<!--' . $child->data() . '-->';
+			$s .= '<!--' . $child->getData() . '-->';
 			break;
 
 		case Node::PROCESSING_INSTRUCTION_NODE:
-			$s .= '<?' . $child->target() . ' ' . $child->data() . '?>';
+			$s .= '<?' . $child->target() . ' ' . $child->getData() . '?>';
 			break;
 
 		case Node::DOCUMENT_TYPE_NODE:

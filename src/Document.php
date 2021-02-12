@@ -1,20 +1,16 @@
 <?php
 
 declare( strict_types = 1 );
+// @phan-file-suppress PhanParamSignatureMismatch
 // @phan-file-suppress PhanTypeMismatchArgument
-// @phan-file-suppress PhanTypeMismatchArgumentReal
 // @phan-file-suppress PhanTypeMismatchReturnNullable
-// @phan-file-suppress PhanTypeMismatchReturnProbablyReal
 // @phan-file-suppress PhanUndeclaredConstant
 // @phan-file-suppress PhanUndeclaredFunction
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
@@ -65,7 +61,20 @@ namespace Wikimedia\Dodo;
  * quirks mode if its mode is "quirks", and limited-quirks mode if its mode
  * is "limited-quirks".
  */
-class Document extends Node {
+class Document extends Node implements \Wikimedia\IDLeDOM\Document {
+	// DOM mixins
+	use DocumentOrShadowRoot;
+	use NonElementParentNode;
+	use ParentNode;
+	use XPathEvaluatorBase;
+
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\Document;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\Document;
+
 	/**********************************************************************
 	 * Properties that are for internal use by this library
 	 */
@@ -159,7 +168,7 @@ class Document extends Node {
 		$this->_doctype = null;
 		$this->_documentElement = null;
 
-		for ( $n = $this->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			if ( $n->_nodeType === Node::DOCUMENT_TYPE_NODE ) {
 				$this->_doctype = $n;
 			} elseif ( $n->_nodeType === Node::ELEMENT_NODE ) {
@@ -172,6 +181,9 @@ class Document extends Node {
 	public $_implementation;
 	public $_readyState;
 	public $__mutation_handler = null;
+
+	// USED EXCLUSIVELY IN htmlelts.js to make <TEMPLATE>
+	private $_templateDocCache;
 
 	/**
 	 * @param string $type
@@ -219,87 +231,83 @@ class Document extends Node {
 	 */
 
 	/** @return string */
-	public function characterSet(): string {
+	public function getCharacterSet(): string {
 		return $this->_characterSet;
 	}
 
 	/** @return string */
-	public function charset(): string {
+	public function getCharset(): string {
 		return $this->_characterSet; /* historical alias */
 	}
 
 	/** @return string */
-	public function inputEncoding(): string {
+	public function getInputEncoding(): string {
 		return $this->_characterSet; /* historical alias */
 	}
 
 	/** @return DOMImplementation */
-	public function implementation(): DOMImplementation {
+	public function getImplementation(): DOMImplementation {
 		return $this->_implementation;
 	}
 
-	public function documentURI() {
+	public function getDocumentURI() : string {
 		return $this->_URL;
 	}
 
 	/** @return string */
-	public function URL() : string {
+	public function getURL() : string {
 		return $this->_URL; /** Alias for HTMLDocuments */
 	}
 
-	/** @return string */
-	public function compatMode() {
+	/** @inheritDoc */
+	public function getCompatMode() : string {
 		return $this->_compatMode === "quirks" ? "BackCompat" : "CSS1Compat";
 	}
 
-	/** @return ?string */
-	public function contentType(): ?string {
+	/** @inheritDoc */
+	public function getContentType(): string {
 		return $this->_contentType;
 	}
 
-	/** @return ?DocumentType */
-	public function doctype(): ?DocumentType {
+	/** @inheritDoc */
+	public function getDoctype() {
 		return $this->_doctype;
 	}
 
-	/** @return ?Element */
-	public function documentElement(): ?Element {
+	/** @inheritDoc */
+	public function getDocumentElement() {
 		return $this->_documentElement;
 	}
 
-	/**
-	 * @param ?string $value
-	 */
-	public function textContent( ?string $value = null ) {
-		/* HTML-LS: no-op */
-	}
-
-	/*********************************************************************
+	/*
 	 * NODE CREATION
 	 */
-	public function createTextNode( $data ) {
-		return new Text( $this, strval( $data ) );
+
+	/** @inheritDoc */
+	public function createTextNode( string $data ) {
+		return new Text( $this, $data );
 	}
 
-	public function createComment( $data ) {
+	/** @inheritDoc */
+	public function createComment( string $data ) {
 		return new Comment( $this, $data );
 	}
 
+	/** @inheritDoc */
 	public function createDocumentFragment() {
 		return new DocumentFragment( $this );
 	}
 
-	public function createProcessingInstruction( $target, $data ) {
-		/* TODO PORT: Wait, is this a bug? Should it be !== -1, or === -1 ? */
+	/** @inheritDoc */
+	public function createProcessingInstruction( string $target, string $data ) {
 		if ( !WhatWG::is_valid_xml_name( $target ) || strpos( $data, '?' . '>' ) !== false ) {
 			Util::error( 'InvalidCharacterError' );
 		}
 		return new ProcessingInstruction( $this, $target, $data );
 	}
 
-	public function createAttribute( $localName ) {
-		$localName = strval( $localName );
-
+	/** @inheritDoc */
+	public function createAttribute( string $localName ) {
 		if ( !WhatWG::is_valid_xml_name( $localName ) ) {
 			Util::error( 'InvalidCharacterError' );
 		}
@@ -309,11 +317,7 @@ class Document extends Node {
 		return new Attr( null, $localName, null, null, '' );
 	}
 
-	/**
-	 * @param ?string $ns
-	 * @param string $qname
-	 * @return Attr
-	 */
+	/** @inheritDoc */
 	public function createAttributeNS( ?string $ns, string $qname ) {
 		if ( $ns === '' ) {
 			$ns = null; /* spec */
@@ -327,7 +331,8 @@ class Document extends Node {
 		return new Attr( null, $lname, $prefix, $ns, '' );
 	}
 
-	public function createElement( $lname ) {
+	/** @inheritDoc */
+	public function createElement( string $lname, $options = null ) {
 		$lname = strval( $lname );
 
 		if ( !WhatWG::is_valid_xml_name( $lname ) ) {
@@ -358,7 +363,8 @@ class Document extends Node {
 		//}
 	}
 
-	public function createElementNS( $ns, $qname ): ?Element {
+	/** @inheritDoc */
+	public function createElementNS( ?string $ns, string $qname, $options = null ) {
 		/* Convert parameter types according to WebIDL */
 		if ( $ns === null || $ns === "" ) {
 			$ns = null;
@@ -404,10 +410,9 @@ class Document extends Node {
 	 * No insertion is performed, but if Node is inserted into another Document,
 	 * it will be removed.
 	 *
-	 * @param Node $node
-	 * @return Node
+	 * @inheritDoc
 	 */
-	public function adoptNode( Node $node ): Node {
+	public function adoptNode( $node ) {
 		if ( $node->_nodeType === Node::DOCUMENT_NODE ) {
 			// A Document cannot adopt another Document. Throw a "NotSupported" exception.
 			Util::error( "NotSupported" );
@@ -416,7 +421,7 @@ class Document extends Node {
 			// Attributes do not have an ownerDocument, so do nothing.
 			return $node;
 		}
-		if ( $node->parentNode() ) {
+		if ( $node->getParentNode() ) {
 			/*
 			 * If the Node is currently inserted in some Document, remove it.
 			 *
@@ -447,47 +452,42 @@ class Document extends Node {
 	 *
 	 * By default, only $node will be cloned.
 	 *
-	 * @param Node $node
-	 * @param bool $deep
-	 * @return Node
+	 * @inheritDoc
 	 */
-	public function importNode( Node $node, bool $deep = false ): Node {
+	public function importNode( $node, bool $deep = false ) {
 		return $this->adoptNode( $node->cloneNode( $deep ) );
 	}
 
-	/**
+	/*
 	 * The following three methods are a simple extension of the Node methods, with an
 	 * added call to update the doctype and documentElement references that are specific
 	 * to the Document interface.
 	 *
-	 * @note appendChild is not extended, because it calls insertBefore.
-	 *
-	 * @param Node $node
-	 * @param ?Node $refChild
-	 * @return Node
+	 * Note: appendChild is not extended, because it calls insertBefore.
 	 */
-	public function insertBefore( Node $node, ?Node $refChild ): Node {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function insertBefore( $node, $refChild ) {
 		$ret = parent::insertBefore( $node, $refChild );
 		$this->__rereference_doctype_and_documentElement();
 		return $ret;
 	}
 
 	/**
-	 * @param Node $node
-	 * @param ?Node $child
-	 * @return Node
+	 * @inheritDoc
 	 */
-	public function replaceChild( Node $node, ?Node $child ): Node {
+	public function replaceChild( $node, $child ) {
 		$ret = parent::replaceChild( $node, $child );
 		$this->__rereference_doctype_and_documentElement();
 		return $ret;
 	}
 
 	/**
-	 * @param ChildNode $child
-	 * @return ?Node
+	 * @inheritDoc
 	 */
-	public function removeChild( ChildNode $child ): ?Node {
+	public function removeChild( $child ) {
 		$ret = parent::removeChild( $child );
 		$this->__rereference_doctype_and_documentElement();
 		return $ret;
@@ -506,10 +506,9 @@ class Document extends Node {
 	 *    document.
 	 * 3. We also need to call _updateDocTypeElement()
 	 *
-	 * @param bool $deep if true, clone entire subtree
-	 * @return ?Node Clone of $this.
+	 * @inheritDoc
 	 */
-	public function cloneNode( bool $deep = false ): ?Node {
+	public function cloneNode( bool $deep = false ) {
 		/* Make a shallow clone  */
 		$clone = parent::cloneNode( false );
 
@@ -520,7 +519,7 @@ class Document extends Node {
 		}
 
 		/* Clone children too */
-		for ( $n = $this->firstChild(); $n !== null; $n = $n->nextSibling() ) {
+		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			$clone->appendChild( $clone->importNode( $n, true ) );
 		}
 
@@ -528,7 +527,7 @@ class Document extends Node {
 		return $clone;
 	}
 
-	/*********************************************************************
+	/*
 	 * Query methods
 	 */
 
@@ -541,10 +540,9 @@ class Document extends Node {
 	 * In the spec, this is actually the sole method of the
 	 * NonElementParentNode mixin.
 	 *
-	 * @param string $id
-	 * @return Element if one exists, else null
+	 * @inheritDoc
 	 */
-	public function getElementById( $id ) {
+	public function getElementById( string $id ) {
 		$n = $this->__id_to_element[$id];
 		if ( $n === null ) {
 			return null;
@@ -556,14 +554,16 @@ class Document extends Node {
 		return $n;
 	}
 
-	/*********** Utility methods extending normal DOM behavior */
+	/*
+	 * Utility methods extending normal DOM behavior
+	 */
 
 	/**
 	 * TODO Where does this fit in?
 	 *
 	 * @return bool
 	 */
-	public function isHTMLDocument(): bool {
+	public function _isHTMLDocument(): bool {
 		if ( $this->__type === 'html' ) {
 			$elt = $this->documentElement();
 			if ( $elt !== null && $elt->isHTMLElement() ) {
@@ -653,7 +653,7 @@ class Document extends Node {
 		}
 	}
 
-	/*********************************************************************
+	/*
 	 * MUTATION STUFF
 	 * TODO: The mutationHandler checking
 	 *
@@ -670,6 +670,7 @@ class Document extends Node {
 	 * These mutations have nothing to do with MutationEvents or
 	 * MutationObserver, which is confusing.
 	 */
+
 	/*
 	 * Implementation-specific function.  Called when a text, comment,
 	 * or pi value changes.
@@ -679,7 +680,7 @@ class Document extends Node {
 			$this->__mutation_handler( [
 				"type" => MUTATE_VALUE,
 				"target" => $node,
-				"data" => $node->data()
+				"data" => $node->getData()
 			] );
 		}
 	}

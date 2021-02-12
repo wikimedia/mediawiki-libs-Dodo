@@ -1,22 +1,34 @@
 <?php
 
 declare( strict_types = 1 );
+// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
-
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 
 /******************************************************************************
  * NodeList.php
  * ------------
  */
 /* Played fairly straight. Used for Node::childNodes when in "array mode". */
-class NodeList extends \ArrayObject {
-	public function __construct( $input = null ) {
-		parent::__construct( $input );
+class NodeList implements \Wikimedia\IDLeDOM\NodeList {
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\NodeList;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\NodeList;
+
+	/**
+	 * @var array<Node> Backing storage for the NodeList
+	 */
+	private $_list = [];
+
+	/** Create a new empty NodeList */
+	public function __construct() {
 	}
 
-	public function item( $i ) {
-		return $this[$i] ?? null;
+	/** @inheritDoc */
+	public function item( int $i ): ?Node {
+		return $this->_list[$i] ?? null;
 	}
 }

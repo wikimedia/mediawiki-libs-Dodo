@@ -16,11 +16,17 @@ namespace Wikimedia\Dodo;
  * CharacterData.php
  * -----------------
  */
-abstract class CharacterData extends ChildNode {
-	/** ChildNodeLeaf trait for classes that can never have children */
-	use ChildNodeLeaf;
-
+abstract class CharacterData extends Node implements \Wikimedia\IDLeDOM\CharacterData {
+	// DOM mixins
+	use ChildNode;
 	use NonDocumentTypeChildNode;
+	use Leaf;
+
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\CharacterData;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\CharacterData;
 
 	protected $_data;
 
@@ -45,7 +51,7 @@ abstract class CharacterData extends ChildNode {
 	 * In Domino.js, checking was done to ensure $offset and $count
 	 * were integers and not-undefined. Here we just use type hints.
 	 */
-	public function substringData( int $offset, int $count ) {
+	public function substringData( int $offset, int $count ) : string {
 		if ( $offset > strlen( $this->_data ) || $offset < 0 || $count < 0 ) {
 			Util::error( "IndexSizeError" );
 		}
@@ -59,7 +65,7 @@ abstract class CharacterData extends ChildNode {
 	/* PORT NOTES: Again, for the number of arguments, we can just
 	 * use the function prototype to check.
 	 */
-	public function appendData( $data ) {
+	public function appendData( string $data ) : void {
 		$this->_data .= strval( $data );
 	}
 
@@ -73,8 +79,8 @@ abstract class CharacterData extends ChildNode {
 	//     Insert data into the context object's data after
 	//     offset UTF-16 code units.
 	//
-	public function insertData( int $offset, $data ) {
-		return $this->replaceData( $offset, 0, $data );
+	public function insertData( int $offset, string $data ) : void {
+		$this->replaceData( $offset, 0, $data );
 	}
 
 	// void deleteData(unsigned long offset, unsigned long count);
@@ -89,8 +95,8 @@ abstract class CharacterData extends ChildNode {
 	//
 	//     Starting from offset UTF-16 code units remove count
 	//     UTF-16 code units from the context object's data.
-	public function deleteData( int $offset, int $count ) {
-		return $this->replaceData( $offset, $count, '' );
+	public function deleteData( int $offset, int $count ) : void {
+		$this->replaceData( $offset, $count, '' );
 	}
 
 	// void replaceData(unsigned long offset, unsigned long count,
@@ -101,7 +107,7 @@ abstract class CharacterData extends ChildNode {
 	// count as arguments followed by the insertData() method
 	// with offset and data as arguments and re-throw any
 	// exceptions these methods might have thrown.
-	public function replaceData( int $offset, int $count, $data ) {
+	public function replaceData( int $offset, int $count, string $data ) : void {
 		$curtext = $this->_data;
 		$len = strlen( $curtext );
 
@@ -121,7 +127,7 @@ abstract class CharacterData extends ChildNode {
 		$this->_data = $prefix . $data . $suffix;
 	}
 
-	public function length(): int {
+	public function getLength(): int {
 		return strlen( $this->_data );
 	}
 }

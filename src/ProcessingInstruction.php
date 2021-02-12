@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 // phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
@@ -12,7 +11,14 @@ namespace Wikimedia\Dodo;
  * ProcessingInstruction.php
  * -------------------------
  */
-class ProcessingInstruction extends CharacterData {
+class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\ProcessingInstruction {
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\ProcessingInstruction;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\ProcessingInstruction;
+
 	protected const _nodeType = Node::PROCESSING_INSTRUCTION_NODE;
 
 	/**
@@ -54,12 +60,14 @@ class ProcessingInstruction extends CharacterData {
 		return $this->nodeValue( $value );
 	}
 
-	/**
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	public function data( $value = null ) {
-		return $this->nodeValue( $value );
+	/** @inheritDoc */
+	public function getData() : string {
+		return $this->getNodeValue() ?? '';
+	}
+
+	/** @inheritDoc */
+	public function setData( string $val ) : void {
+		$this->setNodeValue( $val );
 	}
 
 	/**

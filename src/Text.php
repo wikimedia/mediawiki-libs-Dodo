@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanCoalescingNeverNull
 // @phan-file-suppress PhanCoalescingNeverUndefined
 // @phan-file-suppress PhanUndeclaredMethod
-// @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
@@ -16,7 +15,17 @@ namespace Wikimedia\Dodo;
  * Text.php
  * --------
  */
-class Text extends CharacterData {
+class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
+	// DOM mixins
+	use Slottable;
+
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\Text;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\Text;
+
 	public $_nodeType = Node::TEXT_NODE;
 	public $_nodeName = '#text';
 
@@ -33,28 +42,26 @@ class Text extends CharacterData {
 	/**
 	 * Overrides Node::nodeValue
 	 *
-	 * @param ?string $value
-	 * @return mixed
+	 * @inheritDoc
 	 */
-	public function nodeValue( ?string $value = null ) {
-		/* GET */
-		if ( $value === null ) {
+	public function getNodeValue() : ?string {
 			return $this->_data;
-			/* SET */
-		} else {
-			if ( $value === $this->_data ) {
-				return;
-			}
+	}
 
-			$this->_data = $value;
+	/** @inheritDoc */
+	public function setNodeValue( ?string $value ) : void {
+		if ( $value === $this->_data ) {
+			return;
+		}
 
-			if ( $this->__is_rooted() ) {
-				$this->_ownerDocument->__mutate_value( $this );
-			}
+		$this->_data = $value;
 
-			if ( $this->_parentNode && $this->_parentNode->_textchangehook ?? null ) {
-				$this->_parentNode->_textchangehook( $this );
-			}
+		if ( $this->__is_rooted() ) {
+			$this->_ownerDocument->__mutate_value( $this );
+		}
+
+		if ( $this->_parentNode && $this->_parentNode->_textchangehook ?? null ) {
+			$this->_parentNode->_textchangehook( $this );
 		}
 	}
 
@@ -83,12 +90,14 @@ class Text extends CharacterData {
 		return $this->nodeValue( $value );
 	}
 
-	/**
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	public function data( $value = null ) {
-		return $this->nodeValue( $value );
+	/** @inheritDoc */
+	public function getData() : string {
+		return $this->getNodeValue() ?? '';
+	}
+
+	/** @inheritDoc */
+	public function setData( string $val ) : void {
+		$this->setNodeValue( $val );
 	}
 
 	/**

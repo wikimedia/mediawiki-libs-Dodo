@@ -34,7 +34,11 @@ namespace Wikimedia\Dodo;
  * Each Document must have its own instance of
  * a DOMImplementation object
  */
-class DOMImplementation {
+class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\DOMImplementation;
+	use UnimplementedTrait;
+
 	private $_contextObject;
 
 	public function __construct( /* TODO: What is this? A Window? */$contextObject = null ) {
@@ -73,18 +77,18 @@ class DOMImplementation {
 		return true;
 	}
 
-	public function createDocumentType( $qualifiedName, $publicId, $systemId ) {
-		/*
+	/*
+	public function createDocumentType( string $qualifiedName, string $publicId, string $systemId ) {
 		  if (!xmlnames\isValidQName($qualifiedName)) {
 		  utils\InvalidCharacterError();
 		  }
 
 		  return new DocumentType($this->contextObject, $qualifiedName, $publicId, $systemId);
-		*/
-		/* TEMPORARY STUB */
 	}
+	*/
 
-	public function createDocument( $namespace, $qualifiedName, $doctype ) {
+	/** @inheritDoc */
+	public function createDocument( ?string $namespace, string $qualifiedName, $doctype = null ) {
 		/*
 		 * Note that the current DOMCore spec makes it impossible
 		 * to create an HTML document with this function, even if
@@ -120,7 +124,7 @@ class DOMImplementation {
 		return $d;
 	}
 
-	public function createHTMLDocument( string $titleText = null ) {
+	public function createHTMLDocument( ?string $titleText = null ) {
 		$d = new Document( 'html', null );
 
 		$d->appendChild( new DocumentType( $d, "html" ) );

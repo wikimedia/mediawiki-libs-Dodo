@@ -31,7 +31,7 @@ class IDLReflectedAttributeURL extends ReflectedAttribute {
 
 		// FIXME $this->element should always be truthy?
 		if ( $this->element ) {
-			$url = new URL( $this->element->__node_document()->URL() );
+			$url = new URL( $this->element->__node_document()->getURL() );
 			return $url->resolve( $v );
 		} else {
 			return $v;

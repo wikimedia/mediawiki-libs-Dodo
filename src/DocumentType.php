@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
@@ -14,9 +13,17 @@ namespace Wikimedia\Dodo;
  * DocumentType.php
  * ----------------
  */
-class DocumentType extends ChildNode {
-	/** ChildNodeLeaf trait for classes that can never have children */
-	use ChildNodeLeaf;
+class DocumentType extends Node implements \Wikimedia\IDLeDOM\DocumentType {
+	// DOM mixins
+	use ChildNode;
+	use Leaf;
+
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\DocumentType;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\DocumentType;
 
 	protected const _nodeType = Node::DOCUMENT_TYPE_NODE;
 

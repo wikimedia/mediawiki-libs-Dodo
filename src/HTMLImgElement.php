@@ -10,7 +10,7 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
-class HTMLImgElement extends Element {
+class HTMLImgElement extends HTMLElement {
 
 	/** @var ReflectedAttribute[] */
 	private $attribs = [];
@@ -57,13 +57,13 @@ class HTMLImgElement extends Element {
 		$this->attribs = ReflectedAttribute::buildAttributes( $this, $specArray );
 	}
 
-	public function __get( $name ) {
+	public function __get( string $name ) {
 		if ( isset( $this->attribs[$name] ) ) {
 			return $this->attribs[$name]->get();
 		}
 	}
 
-	public function __set( $name, $value ) {
+	public function __set( string $name, $value ) : void {
 		if ( isset( $this->attribs[$name] ) ) {
 			$this->attribs[$name]->set( $value );
 		}

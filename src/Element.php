@@ -1,15 +1,12 @@
 <?php
 
 declare( strict_types = 1 );
+// @phan-file-suppress PhanParamSignatureMismatch
 // @phan-file-suppress PhanParamTooFew
 // @phan-file-suppress PhanTypeMismatchArgument
 // @phan-file-suppress PhanTypeMismatchArgumentReal
-// @phan-file-suppress PhanTypeMismatchDeclaredParamNullable
-// @phan-file-suppress PhanTypeMismatchDeclaredReturnNullable
-// @phan-file-suppress PhanTypeMismatchReturnNullable
 // @phan-file-suppress PhanUndeclaredClassMethod
 // @phan-file-suppress PhanUndeclaredMethod
-// @phan-file-suppress PhanUndeclaredProperty
 // @phan-file-suppress PhanUndeclaredVariable
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
@@ -67,8 +64,19 @@ namespace Wikimedia\Dodo;
  */
 $UC_Cache = [];
 
-class Element extends ChildNode {
+class Element extends Node implements \Wikimedia\IDLeDOM\Element {
+	// DOM mixins
+	use ChildNode;
 	use NonDocumentTypeChildNode;
+	use ParentNode;
+	use Slottable;
+
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\Element;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\Element;
 
 	/* Required by Node */
 	public $_nodeType = Node::ELEMENT_NODE;
@@ -185,21 +193,21 @@ class Element extends ChildNode {
 	 */
 
 	/* TODO: Also in Attr... are they part of Node ? */
-	public function prefix(): ?string {
+	public function getPrefix(): ?string {
 		return $this->_prefix;
 	}
 
 	/* TODO: Also in Attr... are they part of Node ? */
-	public function localName(): string {
+	public function getLocalName(): string {
 		return $this->_localName;
 	}
 
 	/* TODO: Also in Attr... are they part of Node ? */
-	public function namespaceURI(): ?string {
+	public function getNamespaceURI(): ?string {
 		return $this->_namespaceURI;
 	}
 
-	public function tagName(): string {
+	public function getTagName(): string {
 		return $this->_nodeName;
 	}
 
@@ -288,7 +296,7 @@ class Element extends ChildNode {
 			if ( !$node->hasAttributeNS( $a->namespaceURI(), $a->localName() ) ) {
 				return false;
 			}
-			if ( $node->getAttributeNS( $a->namespaceURI(), $a->localName() ) !== $a->value() ) {
+			if ( $node->getAttributeNS( $a->namespaceURI(), $a->localName() ) !== $a->getValue() ) {
 				return false;
 			}
 		}
@@ -307,15 +315,12 @@ class Element extends ChildNode {
 	 */
 	public function getAttribute( string $qname ): ?string {
 		$attr = $this->attributes->getNamedItem( $qname );
-		return $attr ? $attr->value() : null;
+		return $attr ? $attr->getValue() : null;
 	}
 
 	/**
 	 * Set the value of first attribute with a particular qualifiedName
 	 *
-	 * param string $qname
-	 * param $value
-	 * return void
 	 * spec DOM-LS
 	 *
 	 * NOTES
@@ -323,8 +328,10 @@ class Element extends ChildNode {
 	 * whatever is passed.
 	 *
 	 * TODO: DRY with this and setAttributeNS?
+	 *
+	 * @inheritDoc
 	 */
-	public function setAttribute( string $qname, $value ) {
+	public function setAttribute( string $qname, string $value ) : void {
 		if ( !WhatWG::is_valid_xml_name( $qname ) ) {
 			Util::error( "InvalidCharacterError" );
 		}
@@ -337,7 +344,7 @@ class Element extends ChildNode {
 		if ( $attr === null ) {
 			$attr = new Attr( $this, $qname, null, null );
 		}
-		$attr->value( $value ); /* Triggers __onchange_attr */
+		$attr->setValue( $value ); /* Triggers __onchange_attr */
 		$this->attributes->setNamedItem( $attr );
 	}
 
@@ -346,11 +353,9 @@ class Element extends ChildNode {
 	 *
 	 * spec DOM-LS
 	 *
-	 * @param string $qname
-	 * @return Attr or NULL the removed attribute node
 	 */
-	public function removeAttribute( string $qname ): ?Attr {
-		return $this->attributes->removeNamedItem( $qname );
+	public function removeAttribute( string $qname ): void {
+		$this->attributes->removeNamedItem( $qname );
 	}
 
 	/**
@@ -411,7 +416,7 @@ class Element extends ChildNode {
 	 */
 	public function getAttributeNS( ?string $ns, string $lname ): ?string {
 		$attr = $this->attributes->getNamedItemNS( $ns, $lname );
-		return $attr ? $attr->value() : null;
+		return $attr ? $attr->getValue() : null;
 	}
 
 	/**
@@ -423,12 +428,9 @@ class Element extends ChildNode {
 	 * Per spec, $value is not a string, but the string value of
 	 * whatever is passed.
 	 *
-	 * @param string $ns
-	 * @param string $qname
-	 * @param mixed $value
-	 * @return void
+	 * @inheritDoc
 	 */
-	public function setAttributeNS( ?string $ns, string $qname, $value ) {
+	public function setAttributeNS( ?string $ns, string $qname, string $value ) : void {
 		$lname = null;
 		$prefix = null;
 
@@ -438,7 +440,7 @@ class Element extends ChildNode {
 		if ( $attr === null ) {
 			$attr = new Attr( $this, $lname, $prefix, $ns );
 		}
-		$attr->value( $value );
+		$attr->setValue( $value );
 		$this->attributes->setNamedItemNS( $attr );
 	}
 
@@ -447,12 +449,10 @@ class Element extends ChildNode {
 	 *
 	 * spec DOM-LS
 	 *
-	 * @param string $ns namespace
-	 * @param string $lname localName
-	 * @return Attr or NULL the removed attribute node
+	 * @inheritDoc
 	 */
-	public function removeAttributeNS( ?string $ns, string $lname ) {
-		return $this->attributes->removeNamedItemNS( $ns, $lname );
+	public function removeAttributeNS( ?string $ns, string $lname ) : void {
+		$this->attributes->removeNamedItemNS( $ns, $lname );
 	}
 
 	/**
@@ -486,10 +486,9 @@ class Element extends ChildNode {
 	/**
 	 * Add an Attr node to an Element node
 	 *
-	 * @param Attr $attr
-	 * @return ?Attr
+	 * @inheritDoc
 	 */
-	public function setAttributeNode( Attr $attr ): ?Attr {
+	public function setAttributeNode( $attr ) {
 		return $this->attributes->setNamedItem( $attr );
 	}
 
@@ -498,12 +497,12 @@ class Element extends ChildNode {
 	 *
 	 * spec DOM-LS
 	 *
-	 * @param Attr $attr attribute node to remove
-	 * @return Attr or NULL the removed attribute node
+	 * @inheritDoc
 	 */
-	public function removeAttributeNode( Attr $attr ) {
+	public function removeAttributeNode( $attr ) {
 		/* TODO: This is not a public function */
-		return $this->attributes->_remove( $attr );
+		$this->attributes->_remove( $attr );
+		return $attr;
 	}
 
 	/**********************************************************************

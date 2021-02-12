@@ -3,7 +3,9 @@
 declare( strict_types = 1 );
 // @phan-file-suppress PhanParamTooFew
 // @phan-file-suppress PhanParamTooMany
+// @phan-file-suppress PhanTypeMismatchArgument
 // @phan-file-suppress PhanTypeMismatchArgumentReal
+// @phan-file-suppress PhanTypeMissingReturn
 // @phan-file-suppress PhanUndeclaredClassMethod
 // @phan-file-suppress PhanUndeclaredVariable
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
@@ -19,7 +21,18 @@ namespace Wikimedia\Dodo;
  * DocumentFragment.php
  * --------------------
  */
-class DocumentFragment extends Node {
+class DocumentFragment extends Node implements \Wikimedia\IDLeDOM\DocumentFragment {
+	// DOM mixins
+	use NonElementParentNode;
+	use ParentNode;
+
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\DocumentFragment;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\DocumentFragment;
+
 	public $_nodeType = Node::DOCUMENT_FRAGMENT_NODE;
 	public $_nodeName = '#document-fragment';
 	public $_nodeValue = null;

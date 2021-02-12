@@ -1,57 +1,48 @@
 <?php
 
 declare( strict_types = 1 );
+// phpcs doesn't like @copyDoc, apparently:
+// phpcs:disable MediaWiki.Commenting.FunctionAnnotations.UnrecognizedAnnotation
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
 
 namespace Wikimedia\Dodo;
 
-/******************************************************************************
- * NonDocumentTypeChildNode.php
- * ----------------------------
- */
 /**
- * PORT NOTE: This, per spec, operates less like an inherited
- * class and more like a mixin. It's used by Element and CharacterData.
+ * NonDocumentTypeChildNode
  *
- * Intended to be used by classes that extend ChildNode
- *
- * @property Node|null $_parentNode
- * @property int $_nodeType
+ * This is a mixin used by Element and CharacterData.
  */
-trait NonDocumentTypeChildNode {
+trait NonDocumentTypeChildNode /* implements \Wikimedia\IDLeDOM\NonDocumentTypeChildNode */ {
+	use \Wikimedia\IDLeDOM\Stub\NonDocumentTypeChildNode;
 
 	/**
-	 * Needed for phan to stop complaining
-	 * @return ?Node
+	 * @copyDoc \Wikimedia\IDLeDOM\NonDocumentTypeChildNode::getNextElementSibling()
 	 */
-	abstract public function nextSibling();
-
-	/**
-	 * Needed for phan to stop complaining
-	 * @return ?Node
-	 */
-	abstract public function previousSibling();
-
-	/** @return ?Element */
-	public function nextElementSibling(): ?Element {
+	public function getNextElementSibling() {
+		'@phan-var Node $this'; // @var Node $this
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
 
-		for ( $n = $this->nextSibling(); $n !== null; $n = $n->nextSibling() ) {
-			if ( $n->_nodeType === Node::ELEMENT_NODE ) {
+		for ( $n = $this->getNextSibling(); $n !== null; $n = $n->getNextSibling() ) {
+			if ( $n->getNodeType() === Node::ELEMENT_NODE ) {
 				return $n;
 			}
 		}
 		return null;
 	}
 
-	/** @return ?Element */
-	public function previousElementSibling(): ?Element {
+	/**
+	 * @copyDoc \Wikimedia\IDLeDOM\NonDocumentTypeChildNode::getPreviousElementSibling()
+	 */
+	public function getPreviousElementSibling() {
+		'@phan-var Node $this'; // @var Node $this
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
-		for ( $n = $this->previousSibling(); $n !== null; $n = $n->previousSibling() ) {
-			if ( $n->_nodeType === Node::ELEMENT_NODE ) {
+		for ( $n = $this->getPreviousSibling(); $n !== null; $n = $n->getPreviousSibling() ) {
+			if ( $n->getNodeType() === Node::ELEMENT_NODE ) {
 				return $n;
 			}
 		}
