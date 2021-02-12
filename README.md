@@ -312,3 +312,7 @@ The initial version of this code was written by Jason Linehan and is
 
 This code is distributed under the MIT license; see LICENSE for more
 info.
+
+---
+[Latest Stable Version]: https://poser.pugx.org/wikimedia/dodo/v/stable.svg
+[License]: https://poser.pugx.org/wikimedia/dodo/license.svg
