@@ -52,7 +52,6 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	/*
 	 * SET IN SUBCLASS CONSTRUCTOR
 	 */
-	public $_nodeName;     /* readonly DOMString */
 	public $_nodeValue;    /* readonly DOMString or NULL */
 
 	/*
@@ -191,6 +190,13 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 */
 	abstract public function getNodeType(): int;
 
+	/**
+	 * Return the `nodeName` for this node.
+	 * @see https://dom.spec.whatwg.org/#dom-node-nodename
+	 * @return string
+	 */
+	abstract public function getNodeName(): string;
+
 	/** @inheritDoc */
 	public function getNodeValue() : ?string {
 		return $this->_nodeValue;
@@ -209,11 +215,6 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	/** @inheritDoc */
 	public function setTextContent( ?string $val ) : void {
 		/* Any other node: Do nothing */
-	}
-
-	/** @inheritDoc */
-	final public function getNodeName(): string {
-		return $this->_nodeName;
 	}
 
 	/**

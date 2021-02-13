@@ -31,7 +31,6 @@ class DocumentFragment extends Node implements \Wikimedia\IDLeDOM\DocumentFragme
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\DocumentFragment;
 
-	public $_nodeName = '#document-fragment';
 	public $_nodeValue = null;
 
 	public function __construct( Document $doc ) {
@@ -45,6 +44,13 @@ class DocumentFragment extends Node implements \Wikimedia\IDLeDOM\DocumentFragme
 	 */
 	final public function getNodeType() : int {
 		return Node::DOCUMENT_FRAGMENT_NODE;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeName() : string {
+		return "#document-fragment";
 	}
 
 	/* TODO: Same as Element's. Factor? */

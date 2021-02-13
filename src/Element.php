@@ -65,9 +65,14 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 
 	/* Provided by Node
 	   public $_nodeValue = NULL;
-	   public $_nodeName = NULL; // HTML-uppercased qualified name
 	   public $_ownerDocument = NULL;
 	*/
+
+	// XXX figure out how to save storage by only storing this for
+	// HTMLUnknownElement etc; for specific HTML*Element subclasses
+	// we should be able to get this from the object type.
+	/** @var string */
+	public $_nodeName; // HTML-uppercased qualified name
 
 	/* Required by Element */
 	public $_namespaceURI = null;
@@ -192,6 +197,13 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		return Node::ELEMENT_NODE;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeName() : string {
+		return $this->_nodeName;
+	}
+
 	/* TODO: Also in Attr... are they part of Node ? */
 	public function getPrefix(): ?string {
 		return $this->_prefix;
@@ -208,7 +220,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	}
 
 	public function getTagName(): string {
-		return $this->_nodeName;
+		return $this->getNodeName();
 	}
 
 	public function id( ?string $v = null ) {

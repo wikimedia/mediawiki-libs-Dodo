@@ -25,7 +25,6 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	public function __construct( Document $doc, string $target, $data ) {
 		parent::__construct();
 		$this->_ownerDocument = $doc;
-		$this->_nodeName = $target; // spec
 		$this->_target = $target;
 		$this->_data = $data;
 	}
@@ -35,6 +34,13 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	 */
 	final public function getNodeType() : int {
 		return Node::PROCESSING_INSTRUCTION_NODE;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeName() : string {
+		return $this->_target;
 	}
 
 	/**

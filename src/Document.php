@@ -123,7 +123,6 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/*
 	 * Part of Node parent class
 	 */
-	public $_nodeName = '#document';
 	public $_ownerDocument = null;
 	public $_nodeValue = null;
 
@@ -232,6 +231,13 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 */
 	public function getNodeType() : int {
 		return Node::DOCUMENT_NODE;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeName() : string {
+		return "#document";
 	}
 
 	/** @return string */

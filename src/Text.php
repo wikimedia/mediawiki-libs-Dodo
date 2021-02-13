@@ -24,8 +24,6 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\Text;
 
-	public $_nodeName = '#text';
-
 	/**
 	 * @param Document $doc
 	 * @param mixed $data
@@ -50,6 +48,13 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	 */
 	public function getNodeValue() : ?string {
 			return $this->_data;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getNodeName() : string {
+		return "#text";
 	}
 
 	/** @inheritDoc */

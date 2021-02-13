@@ -18,4 +18,11 @@ class CDATASection extends Text implements \Wikimedia\IDLeDOM\CDATASection {
 	final public function getNodeType() : int {
 		return Node::CDATA_SECTION_NODE;
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getNodeName() : string {
+		return "#cdata-section";
+	}
 }

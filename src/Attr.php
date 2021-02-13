@@ -236,6 +236,13 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeName() : string {
+		return $this->_name;
+	}
+
+	/**
 	 * @copyDoc \Wikimedia\IDLeDOM\Attr::getNamespaceURI()
 	 */
 	public function getNamespaceURI(): ?string {
