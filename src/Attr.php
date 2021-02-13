@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanTypeMismatchArgumentNullable
 // @phan-file-suppress PhanUndeclaredMethod
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
+// phpcs:disable MediaWiki.Commenting.FunctionAnnotations.UnrecognizedAnnotation
 
 namespace Wikimedia\Dodo;
 
@@ -226,17 +229,21 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	 * ACCESSORS
 	 */
 
-	/** @inheritDoc */
+	/**
+	 * @copyDoc \Wikimedia\IDLeDOM\Attr::getNamespaceURI()
+	 */
 	public function getNamespaceURI(): ?string {
 		return $this->_namespaceURI;
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @copyDoc \Wikimedia\IDLeDOM\Attr::getNamespaceURI()
+	 * @inheritDoc
+	 */
 	public function getSpecified(): bool {
 		return $this->_specified;
 	}
 
-	/** @inheritDoc */
 	public function getOwnerElement(): ?Element {
 		return $this->_ownerElement;
 	}

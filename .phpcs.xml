@@ -12,6 +12,12 @@
 	<exclude-pattern>doc/html</exclude-pattern>
 	<exclude-pattern>.phan/stubs</exclude-pattern>
 
+	<rule ref="MediaWiki.Commenting.FunctionAnnotations">
+		<properties>
+			<property name="extraTags[]" value="@copyDoc" />
+		</properties>
+	</rule>
+
 	<!-- No globals allowed! -->
 	<rule ref="MediaWiki.NamingConventions.ValidGlobalName">
 		<properties>
