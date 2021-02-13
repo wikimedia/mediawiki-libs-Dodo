@@ -8,6 +8,10 @@ PHP, in order to provide a more performant and spec-compliant DOM
 library than the DOMDocument PHP classes (`xml` extension), which is
 built on [libxml2](www.xmlsoft.org).
 
+Dodo uses a PHP binding for WebIDL defined by
+[IDLeDOM](https://packagist.org/packages/wikimedia/idle-dom).
+Details of the WebIDL binding can be found in the IDLeDOM documentation.
+
 Additional documentation about the library can be found on
 [MediaWiki.org](https://www.mediawiki.org/wiki/Dodo).
 
@@ -47,9 +51,10 @@ This software is a work in progress. Prioritized *TODO*s:
 6. Performance benchmarks
 7. Cutting out things (even if they're in the spec) that are irrelevant to [Parsoid](https://www.mediawiki.org/wiki/Parsoid)
 8. "Dynamic" generation of HTML classes from a spec (htmlelts.js); see
-   (mediawiki/webidl)[https://github.com/wikimedia/mediawiki-libs-WebIDL]
-9. Write "spec" for PHP [WebIDL](https://heycam.github.io/webidl/) binding;
-   see [WebIDL.md](./WebIDL.md) for a start.
+   (mediawiki/webidl)[https://github.com/wikimedia/mediawiki-libs-WebIDL] and
+   (mediawiki/idle-dom)[https://github.com/wikimedia/mediawiki-libs-IDLeDOM];
+   this just needs to be extended to handle the WebIDL intefaces defined in
+   the HTML spec and some special features like attribute reflection.
 
 ## Background
 
@@ -58,6 +63,9 @@ This software is a work in progress. Prioritized *TODO*s:
 > The PHP DOM extension is a wrapper around libxml2 with a thin layer of DOM-compatibility on top ("To some extent libxml2 provides support for the following additional specifications but doesn't claim to implement them completely [...] Document Object Model (DOM) Level 2 Core [...] but it doesn't implement the API itself, gdome2 does this on top of libxml2").
 
 > This is not really remotely close to a modern standards-compliant HTML5 DOM implementation and is barely maintained, much less kept in sync with the WHATWG's pace of change.
+
+The Dodo library implements PHP interfaces generated directly from the
+WebIDL sources included in the WHATWG DOM specification by `IDLeDOM`.
 
 ## Developer Notes
 
