@@ -28,22 +28,37 @@ class DocumentType extends Node implements \Wikimedia\IDLeDOM\DocumentType {
 
 		$this->_ownerDocument = $doc;
 		$this->_name = $name;
-		$this->_nodeType = Node::DOCUMENT_TYPE_NODE;
 		$this->_nodeName = $name; // spec; let Node::nodeName handle
 		$this->_nodeValue = null; // spec; let Node::nodeValue handle
 		$this->_publicId = $publicId;
 		$this->_systemId = $systemId;
 	}
 
-	public function name() {
+	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeType() : int {
+		return Node::DOCUMENT_TYPE_NODE;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getName(): string {
 		return $this->_name;
 	}
 
-	public function publicId() {
+	/**
+	 * @inheritDoc
+	 */
+	public function getPublicId(): string {
 		return $this->_publicId;
 	}
 
-	public function systemId() {
+	/**
+	 * @inheritDoc
+	 */
+	public function getSystemId(): string {
 		return $this->_systemId;
 	}
 

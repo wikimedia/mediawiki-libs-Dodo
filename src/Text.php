@@ -24,7 +24,6 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\Text;
 
-	public $_nodeType = Node::TEXT_NODE;
 	public $_nodeName = '#text';
 
 	/**
@@ -35,6 +34,13 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 		parent::__construct();
 		$this->_ownerDocument = $doc;
 		$this->_data = $data;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getNodeType() : int {
+		return Node::TEXT_NODE;
 	}
 
 	/**
@@ -126,7 +132,7 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 		$result = $this->textContent();
 
 		for ( $n = $this->nextSibling(); $n !== null; $n = $n->nextSibling() ) {
-			if ( $n->_nodeType !== Node::TEXT_NODE ) {
+			if ( $n->getNodeType() !== Node::TEXT_NODE ) {
 				break;
 			}
 			$result .= $n->textContent();

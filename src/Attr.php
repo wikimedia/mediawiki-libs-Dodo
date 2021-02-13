@@ -191,7 +191,6 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 		?string $namespaceURI = null,
 		string $value = ""
 	) {
-		$this->_nodeType = Node::ATTRIBUTE_NODE;
 		if ( $localName !== '' ) {
 			/* DOM-LS: Non-empty string */
 			$this->_localName = $localName;
@@ -228,6 +227,13 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	/*
 	 * ACCESSORS
 	 */
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeType() : int {
+		return Node::ATTRIBUTE_NODE;
+	}
 
 	/**
 	 * @copyDoc \Wikimedia\IDLeDOM\Attr::getNamespaceURI()

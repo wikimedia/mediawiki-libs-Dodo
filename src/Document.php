@@ -123,7 +123,6 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/*
 	 * Part of Node parent class
 	 */
-	public $_nodeType = self::DOCUMENT_NODE;
 	public $_nodeName = '#document';
 	public $_ownerDocument = null;
 	public $_nodeValue = null;
@@ -167,9 +166,9 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		$this->_documentElement = null;
 
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-			if ( $n->_nodeType === Node::DOCUMENT_TYPE_NODE ) {
+			if ( $n->getNodeType() === Node::DOCUMENT_TYPE_NODE ) {
 				$this->_doctype = $n;
-			} elseif ( $n->_nodeType === Node::ELEMENT_NODE ) {
+			} elseif ( $n->getNodeType() === Node::ELEMENT_NODE ) {
 				$this->_documentElement = $n;
 			}
 		}
@@ -227,6 +226,13 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/*
 	 * Accessors for read-only properties defined in Document
 	 */
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getNodeType() : int {
+		return Node::DOCUMENT_NODE;
+	}
 
 	/** @return string */
 	public function getCharacterSet(): string {
@@ -411,11 +417,11 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 * @inheritDoc
 	 */
 	public function adoptNode( $node ) {
-		if ( $node->_nodeType === Node::DOCUMENT_NODE ) {
+		if ( $node->getNodeType() === Node::DOCUMENT_NODE ) {
 			// A Document cannot adopt another Document. Throw a "NotSupported" exception.
 			Util::error( "NotSupported" );
 		}
-		if ( $node->_nodeType === Node::ATTRIBUTE_NODE ) {
+		if ( $node->getNodeType() === Node::ATTRIBUTE_NODE ) {
 			// Attributes do not have an ownerDocument, so do nothing.
 			return $node;
 		}

@@ -63,9 +63,6 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\Element;
 
-	/* Required by Node */
-	public $_nodeType = Node::ELEMENT_NODE;
-
 	/* Provided by Node
 	   public $_nodeValue = NULL;
 	   public $_nodeName = NULL; // HTML-uppercased qualified name
@@ -187,6 +184,13 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	/**********************************************************************
 	 * ACCESSORS
 	 */
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeType() : int {
+		return Node::ELEMENT_NODE;
+	}
 
 	/* TODO: Also in Attr... are they part of Node ? */
 	public function getPrefix(): ?string {

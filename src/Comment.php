@@ -17,13 +17,19 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\Comment;
 
-	public $_nodeType = Node::COMMENT_NODE;
 	public $_nodeName = '#comment';
 
 	public function __construct( Document $doc, $data ) {
 		parent::__construct();
 		$this->_ownerDocument = $doc;
 		$this->_data = $data;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeType() : int {
+		return Node::COMMENT_NODE;
 	}
 
 	public function _subclass_cloneNodeShallow(): ?Node {

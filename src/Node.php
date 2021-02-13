@@ -52,7 +52,6 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	/*
 	 * SET IN SUBCLASS CONSTRUCTOR
 	 */
-	public $_nodeType;     /* readonly unsigned short */
 	public $_nodeName;     /* readonly DOMString */
 	public $_nodeValue;    /* readonly DOMString or NULL */
 
@@ -185,6 +184,13 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * which in some cases are extended.
 	 */
 
+	/**
+	 * Return the node type enumeration for this node.
+	 * @see https://dom.spec.whatwg.org/#dom-node-nodetype
+	 * @return int
+	 */
+	abstract public function getNodeType(): int;
+
 	/** @inheritDoc */
 	public function getNodeValue() : ?string {
 		return $this->_nodeValue;
@@ -203,11 +209,6 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	/** @inheritDoc */
 	public function setTextContent( ?string $val ) : void {
 		/* Any other node: Do nothing */
-	}
-
-	/** @inheritDoc */
-	final public function getNodeType(): int {
-		return $this->_nodeType;
 	}
 
 	/** @inheritDoc */
@@ -250,7 +251,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
-		if ( $this->_parentNode->_nodeType === self::ELEMENT_NODE ) {
+		if ( $this->_parentNode->getNodeType() === self::ELEMENT_NODE ) {
 			return $this->_parentNode;
 		}
 		return null;
@@ -597,7 +598,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			 */
 			$n->normalize();
 
-			if ( $n->_nodeType === self::TEXT_NODE ) {
+			if ( $n->getNodeType() === self::TEXT_NODE ) {
 				if ( $n->_nodeValue === '' ) {
 					/*
 					 * [1]
@@ -608,7 +609,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 					$this->removeChild( $n );
 				} else {
 					$p = $n->previousSibling();
-					if ( $p && $p->_nodeType === self::TEXT_NODE ) {
+					if ( $p && $p->getNodeType() === self::TEXT_NODE ) {
 						/*
 						 * [2]
 						 * If you are a text node,
@@ -688,7 +689,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			/* We're not equal to NULL */
 			return false;
 		}
-		if ( $node->_nodeType !== $this->_nodeType ) {
+		if ( $node->getNodeType() !== $this->getNodeType() ) {
 			/* If we're not the same nodeType, we can stop */
 			return false;
 		}
@@ -943,7 +944,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	public function __root(): void {
 		$doc = $this->ownerDocument();
 
-		if ( $this->_nodeType === self::ELEMENT_NODE ) {
+		if ( $this->getNodeType() === self::ELEMENT_NODE ) {
 			/* getElementById table */
 			$id = $this->getAttribute( 'id' );
 			if ( $id !== null ) {
@@ -992,7 +993,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		$doc = $this->ownerDocument();
 
 		/* Manage id to element mapping */
-		if ( $this->_nodeType === self::ELEMENT_NODE ) {
+		if ( $this->getNodeType() === self::ELEMENT_NODE ) {
 			$id = $this->getAttribute( 'id' );
 			if ( $id !== null ) {
 				$doc->__remove_from_id_table( $id, $this );
