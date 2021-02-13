@@ -3,19 +3,6 @@
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
 		<exclude name="MediaWiki.Commenting.MissingCovers.MissingCovers" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
-
-		<!--
-			Not MediaWiki code, the need for the standard prefix does not apply
-			If and when the rule allows configuring a different prefix, should be
-			revisited.
-		-->
-		<exclude name="MediaWiki.NamingConventions.PrefixedGlobalFunctions.wfPrefix" />
-
-		<!--
-			TODO decide on a prefix to use for this library and enforce it. Disabling
-			until then since by default it enforces $wg as the prefix.
-		-->
-		<exclude name="MediaWiki.NamingConventions.ValidGlobalName.allowedPrefix" />
 	</rule>
 	<file>.</file>
 	<arg name="encoding" value="UTF-8"/>
@@ -24,4 +11,16 @@
 	<exclude-pattern>vendor</exclude-pattern>
 	<exclude-pattern>doc/html</exclude-pattern>
 	<exclude-pattern>.phan/stubs</exclude-pattern>
+
+	<!-- No globals allowed! -->
+	<rule ref="MediaWiki.NamingConventions.ValidGlobalName">
+		<properties>
+			<property name="allowedPrefixes[]" value="" />
+		</properties>
+	</rule>
+	<rule ref="MediaWiki.NamingConventions.PrefixedGlobalFunctions">
+		<properties>
+			<property name="allowedPrefixes[]" value="" />
+		</properties>
+	</rule>
 </ruleset>

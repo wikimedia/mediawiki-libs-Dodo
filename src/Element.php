@@ -53,17 +53,6 @@ namespace Wikimedia\Dodo;
  * followed by its local name, otherwise.
  */
 
-/*
- * OPTIMIZATION: When we create a DOM tree, we will likely create many
- * elements with the same tag name / qualified name, and thus need to
- * repeatedly convert those strings to ASCII uppercase to form the
- * HTML-uppercased qualified name.
- *
- * This table caches the results of that ASCII uppercase conversion,
- * turning subsequent calls into O(1) table lookups.
- */
-$UC_Cache = [];
-
 class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	// DOM mixins
 	use ChildNode;
@@ -98,6 +87,19 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	/* Watch these attributes */
 	public $__onchange_attr = [];
 
+	/*
+	* OPTIMIZATION: When we create a DOM tree, we will likely create many
+	* elements with the same tag name / qualified name, and thus need to
+	* repeatedly convert those strings to ASCII uppercase to form the
+	* HTML-uppercased qualified name.
+	*
+	* This table caches the results of that ASCII uppercase conversion,
+	* turning subsequent calls into O(1) table lookups.
+	*
+	* @var array<string,string>
+	*/
+	private static $UC_Cache = [];
+
 	/**
 	 * Element constructor
 	 *
@@ -108,8 +110,6 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	 * @return void
 	 */
 	public function __construct( Document $doc, string $lname, ?string $ns, ?string $prefix = null ) {
-		global $UC_Cache; /* See declaration, above */
-
 		parent::__construct();
 
 		$this->__onchange_attr = [
@@ -161,11 +161,11 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		 * qualified name."
 		 */
 		if ( $this->isHTMLElement() ) {
-			if ( !isset( $UC_Cache[$qname] ) ) {
+			if ( !isset( self::$UC_Cache[$qname] ) ) {
 				$uc_qname = Util::ascii_to_uppercase( $qname );
-				$UC_Cache[$qname] = $uc_qname;
+				self::$UC_Cache[$qname] = $uc_qname;
 			} else {
-				$uc_qname = $UC_Cache[$qname];
+				$uc_qname = self::$UC_Cache[$qname];
 			}
 		} else {
 			/* If not an HTML element, don't uppercase. */
