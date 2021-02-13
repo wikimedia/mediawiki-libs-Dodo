@@ -3,9 +3,7 @@
 declare( strict_types = 1 );
 // @phan-file-suppress PhanTypeMismatchArgumentNullable
 // @phan-file-suppress PhanUndeclaredMethod
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
-// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 
 namespace Wikimedia\Dodo;
 

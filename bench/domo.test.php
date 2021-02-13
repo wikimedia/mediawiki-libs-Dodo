@@ -1,5 +1,6 @@
 <?php
 
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.NotCamelCaps
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.NamingConventions.PrefixedGlobalFunctions
 

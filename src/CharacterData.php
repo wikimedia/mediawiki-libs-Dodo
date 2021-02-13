@@ -8,7 +8,6 @@ declare( strict_types = 1 );
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationProtected
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
 

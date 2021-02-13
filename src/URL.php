@@ -6,24 +6,20 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanTypeSuspiciousStringExpression
 // @phan-file-suppress PhanUndeclaredProperty
 // @phan-file-suppress PhanUndeclaredVariable
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
-// phpcs:disable MediaWiki.Commenting.FunctionComment.SpacingAfter
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.NotCamelCaps
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 // phpcs:disable Squiz.Scope.MethodScope.Missing
 
 namespace Wikimedia\Dodo;
 
-/******************************************************************************
+/**
  * URL
  *
  * TODO: This is currently NOT implementing https://url.spec.whatwg.org/#api,
  * but it could, and probably should.
+ *
+ * TODO: Should probably lean heavily on existing PHP URL-parsing functions?
  */
 class URL {
 

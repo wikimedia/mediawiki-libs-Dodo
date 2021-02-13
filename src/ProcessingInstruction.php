@@ -1,9 +1,7 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 
 namespace Wikimedia\Dodo;
 
@@ -19,8 +17,6 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\ProcessingInstruction;
 
-	protected const _nodeType = Node::PROCESSING_INSTRUCTION_NODE;
-
 	/**
 	 * @param Document $doc
 	 * @param string $target
@@ -30,6 +26,7 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 		parent::__construct();
 		$this->_ownerDocument = $doc;
 		$this->_nodeName = $target; // spec
+		$this->_nodeType = Node::PROCESSING_INSTRUCTION_NODE;
 		$this->_target = $target;
 		$this->_data = $data;
 	}

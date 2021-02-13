@@ -1,11 +1,8 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
-// phpcs:disable Squiz.Scope.MethodScope.Missing
 
 namespace Wikimedia\Dodo;
 
@@ -86,7 +83,7 @@ class Util {
 	 * @param ?string $message
 	 * @throws \Exception
 	 */
-	static function assert( bool $condition, ?string $message = "" ) {
+	public static function assert( bool $condition, ?string $message = "" ) {
 		if ( !$condition ) {
 			throw new \Exception( "Assert failed: $message" );
 		}
@@ -111,7 +108,7 @@ class Util {
 	 *
 	 * For more information, see interfaces/DOMException.php
 	 */
-	static function error( string $name, ?string $message = null ) {
+	public static function error( string $name, ?string $message = null ) {
 		throw new DOMException( $message, $name );
 	}
 
@@ -128,7 +125,7 @@ class Util {
 	 * @param string $s
 	 * @return string
 	 */
-	static function ascii_to_lowercase( string $s ): string {
+	public static function ascii_to_lowercase( string $s ): string {
 		return preg_replace_callback( '/[A-Z]+/', function ( $char ) {
 			return strtolower( $char );
 		}, $s );
@@ -138,7 +135,7 @@ class Util {
 	 * @param string $s
 	 * @return string
 	 */
-	static function ascii_to_uppercase( string $s ): string {
+	public static function ascii_to_uppercase( string $s ): string {
 		return preg_replace_callback( '/[a-z]+/', function ( $char ) {
 			return strtoupper( $char );
 		}, $s );

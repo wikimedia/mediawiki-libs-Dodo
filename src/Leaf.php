@@ -1,11 +1,12 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs doesn't like @copyDoc, apparently:
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.MethodDoubleUnderscore
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.NotCamelCaps
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable MediaWiki.Commenting.FunctionAnnotations.UnrecognizedAnnotation
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 
 namespace Wikimedia\Dodo;
 

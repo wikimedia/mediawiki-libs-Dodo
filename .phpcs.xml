@@ -23,4 +23,35 @@
 			<property name="allowedPrefixes[]" value="" />
 		</properties>
 	</rule>
+
+	<!--
+		In our implementation code, we use a convention of
+		prefixing with an underscore any non-WebIDL defined
+		properties/methods/etc.  That makes it clear to a
+		reader when we are departing from the spec, and ensures
+		that future revisions of the DOM spec don't introduce
+		method names that conflict with our implementation.
+		These implementation members may need to be public
+		to allow their use in other classes, but they should
+		all be @internal!
+		Only apply these exceptions to src/ code; our tools
+		and other code shouldn't need to use underscore prefixes.
+	-->
+	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+		<exclude-pattern>src</exclude-pattern>
+	</rule>
+	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+		<exclude-pattern>src</exclude-pattern>
+	</rule>
+	<rule ref="MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName">
+		<exclude-pattern>src</exclude-pattern>
+	</rule>
+	<!-- re-add a version of LowerCamelFunctionsName which is
+	     tolerant of leading underscores -->
+	<rule ref="Generic.NamingConventions.CamelCapsFunctionName">
+		<properties>
+			<property name="strict" value="false" />
+		</properties>
+	</rule>
+
 </ruleset>

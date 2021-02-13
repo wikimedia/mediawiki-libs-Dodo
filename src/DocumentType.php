@@ -1,10 +1,9 @@
 <?php
 
 declare( strict_types = 1 );
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
 

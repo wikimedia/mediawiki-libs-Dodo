@@ -13,15 +13,8 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanUndeclaredVariable
 // @phan-file-suppress PhanUnextractableAnnotationSuffix
 // phpcs:disable Generic.Files.LineLength.TooLong
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
-// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
-// phpcs:disable Squiz.Scope.MethodScope.Missing
 
 namespace Wikimedia\Dodo;
 
@@ -54,7 +47,7 @@ class WhatWG {
 	 * @param Node $node2
 	 * @return int
 	 */
-	static function compare_document_position( Node $node1, Node $node2 ): int {
+	public static function compare_document_position( Node $node1, Node $node2 ): int {
 		/* #1-#2 */
 		if ( $node1 === $node2 ) {
 			return 0;
@@ -154,7 +147,7 @@ class WhatWG {
 	 * @param ?string $prefix
 	 * @return ?string
 	 */
-	static function locate_namespace( Node $node, ?string $prefix ): ?string {
+	public static function locate_namespace( Node $node, ?string $prefix ): ?string {
 		if ( $prefix === '' ) {
 			$prefix = null;
 		}
@@ -208,7 +201,7 @@ class WhatWG {
 	 * @param ?string $ns
 	 * @return ?string
 	 */
-	static function locate_prefix( Node $node, ?string $ns ): ?string {
+	public static function locate_prefix( Node $node, ?string $ns ): ?string {
 		if ( $ns === "" || $ns === null ) {
 			return null;
 		}
@@ -258,7 +251,7 @@ class WhatWG {
 	 * @param ?Node $before
 	 * @param bool $replace
 	 */
-	static function insert_before_or_replace( Node $node, Node $parent, ?Node $before, bool $replace ): void {
+	public static function insert_before_or_replace( Node $node, Node $parent, ?Node $before, bool $replace ): void {
 		/*
 		 * TODO: FACTOR: $before is intended to always be non-NULL
 		 * if $replace is true, but I think that could fail unless
@@ -399,7 +392,7 @@ class WhatWG {
 	 * @param Node $parent
 	 * @param ?Node $child
 	 */
-	static function ensure_insert_valid( Node $node, Node $parent, ?Node $child ): void {
+	public static function ensure_insert_valid( Node $node, Node $parent, ?Node $child ): void {
 		/*
 		 * DOM-LS: #1: If parent is not a Document, DocumentFragment,
 		 * or Element node, throw a HierarchyRequestError.
@@ -585,7 +578,7 @@ class WhatWG {
 	 * @param Node $parent
 	 * @param Node $child
 	 */
-	static function ensure_replace_valid( Node $node, Node $parent, Node $child ): void {
+	public static function ensure_replace_valid( Node $node, Node $parent, Node $child ): void {
 		/*
 		 * DOM-LS: #1: If parent is not a Document, DocumentFragment,
 		 * or Element node, throw a HierarchyRequestError.
@@ -748,6 +741,8 @@ class WhatWG {
 	 *      See https://github.com/fgnass/domino/pull/142 for more information.
 	 */
 	/* http://www.whatwg.org/specs/web-apps/current-work/multipage/the-end.html#serializing-html-fragments */
+
+	/** @var array<string,bool> */
 	private static $hasRawContent = [
 		"STYLE" => true,
 		"SCRIPT" => true,
@@ -758,6 +753,7 @@ class WhatWG {
 		"PLAINTEXT" => true
 	];
 
+	/** @var array<string,bool> */
 	private static $emptyElements = [
 		"area" => true,
 		"base" => true,
@@ -779,6 +775,7 @@ class WhatWG {
 		"wbr" => true
 	];
 
+	/** @var array<string,bool> */
 	private static $extraNewLine = [
 		/* Removed in https://github.com/whatwg/html/issues/944 */
 		/*
@@ -792,7 +789,7 @@ class WhatWG {
 	 * @param string $s
 	 * @return string
 	 */
-	static function _helper_escape( $s ) {
+	public static function _helper_escape( $s ) {
 		return str_replace(
 			/* PORT: PHP7: \u{00a0} */
 			/*
@@ -809,7 +806,7 @@ class WhatWG {
 	 * @param string $s
 	 * @return string
 	 */
-	static function _helper_escapeAttr( $s ) {
+	public static function _helper_escapeAttr( $s ) {
 		return str_replace(
 			[ "&", "\"", "\u{00A0}" ],
 			[ "&amp;", "&quot;", "&nbsp;" ],
@@ -823,7 +820,7 @@ class WhatWG {
 	 * @param Attr $a
 	 * @return string
 	 */
-	static function _helper_attrname( Attr $a ) {
+	public static function _helper_attrname( Attr $a ) {
 		$ns = $a->getNamespaceURI();
 
 		if ( !$ns ) {
@@ -852,7 +849,7 @@ class WhatWG {
 	 * @param Node $parent
 	 * @return string
 	 */
-	static function serialize_node( Node $child, Node $parent ) {
+	public static function serialize_node( Node $child, Node $parent ) {
 		$s = "";
 
 		switch ( $child->_nodeType ) {
@@ -1005,18 +1002,18 @@ class WhatWG {
 	 * Interestingly, in the regex patterns in the next section, it seems that
 	 * we do indeed use '*' in Domino, so why was '+' being preferred here?
 	 */
-	const pattern_ascii_name = '/^[_:A-Za-z][-.:\w]*$/';
-	const pattern_ascii_qname = '/^([_A-Za-z][-.\w]*|[_A-Za-z][-.\w]*:[_A-Za-z][-.\w]*)$/';
+	private const pattern_ascii_name = '/^[_:A-Za-z][-.:\w]*$/';
+	private const pattern_ascii_qname = '/^([_A-Za-z][-.\w]*|[_A-Za-z][-.\w]*:[_A-Za-z][-.\w]*)$/';
 
 	/*
 	 * If the regular expressions above fail, try more complex ones that work
 	 * for any identifiers using codepoints from the Unicode BMP
 	 */
-	const start = '_A-Za-z\\x{00C0}-\\x{00D6}\\x{00D8}-\\x{00F6}\\x{00F8}-\\x{02ff}\\x{0370}-\\x{037D}\\x{037F}-\\x{1FFF}\\x{200C}-\\x{200D}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}';
-	const char = '-._A-Za-z0-9\\x{00B7}\\x{00C0}-\\x{00D6}\\x{00D8}-\\x{00F6}\\x{00F8}-\\x{02ff}\\x{0300}-\\x{037D}\\x{037F}-\\x{1FFF}\\x{200C}\\x{200D}\\x{203f}\\x{2040}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}';
+	private const start = '_A-Za-z\\x{00C0}-\\x{00D6}\\x{00D8}-\\x{00F6}\\x{00F8}-\\x{02ff}\\x{0370}-\\x{037D}\\x{037F}-\\x{1FFF}\\x{200C}-\\x{200D}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}';
+	private const char = '-._A-Za-z0-9\\x{00B7}\\x{00C0}-\\x{00D6}\\x{00D8}-\\x{00F6}\\x{00F8}-\\x{02ff}\\x{0300}-\\x{037D}\\x{037F}-\\x{1FFF}\\x{200C}\\x{200D}\\x{203f}\\x{2040}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}';
 
-	const pattern_name = '/^[' . self::start . ']' . '[:' . self::char . ']*$/';
-	const pattern_qname = '/^([' . self::start . '][' . self::char . ']*|[' . self::start . '][' . self::char . ']*:[' . self::start . '][' . self::char . ']*)$/';
+	private const pattern_name = '/^[' . self::start . ']' . '[:' . self::char . ']*$/';
+	private const pattern_qname = '/^([' . self::start . '][' . self::char . ']*|[' . self::start . '][' . self::char . ']*:[' . self::start . '][' . self::char . ']*)$/';
 
 	/*
 	 * XML says that these characters are also legal:
@@ -1028,23 +1025,23 @@ class WhatWG {
 	 * are not allowed, it means that the high surrogate can only go up to
 	 * \uDB7f instead of \uDBFF.
 	 */
-	const surrogates = '\\x{D800}-\\x{DB7F}\\x{DC00}-\\x{DFFF}';
+	private const surrogates = '\\x{D800}-\\x{DB7F}\\x{DC00}-\\x{DFFF}';
 
-	const pattern_has_surrogates = '/[' . self::surrogates . ']/';
-	const pattern_surrogate_chars = '/[' . self::surrogates . ']/';
-	const pattern_surrogate_pairs = '/[\\x{D800}-\\x{DB7F}][\\x{DC00}-\\x{DFFF}]/';
+	private const pattern_has_surrogates = '/[' . self::surrogates . ']/';
+	private const pattern_surrogate_chars = '/[' . self::surrogates . ']/';
+	private const pattern_surrogate_pairs = '/[\\x{D800}-\\x{DB7F}][\\x{DC00}-\\x{DFFF}]/';
 
-	const surrogate_start = self::start . self::surrogates;
-	const surrogate_char = self::char . self::surrogates;
+	private const surrogate_start = self::start . self::surrogates;
+	private const surrogate_char = self::char . self::surrogates;
 
-	const pattern_surrogate_name = '/^[' . self::surrogate_start . ']' . '[:' . self::surrogate_char . ']*$/';
-	const pattern_surrogate_qname = '/^([' . self::surrogate_start . '][' . self::surrogate_char . ']*|[' . self::surrogate_start . '][' . self::surrogate_char . ']*:[' . self::surrogate_start . '][' . self::surrogate_char . ']*)$/';
+	private const pattern_surrogate_name = '/^[' . self::surrogate_start . ']' . '[:' . self::surrogate_char . ']*$/';
+	private const pattern_surrogate_qname = '/^([' . self::surrogate_start . '][' . self::surrogate_char . ']*|[' . self::surrogate_start . '][' . self::surrogate_char . ']*:[' . self::surrogate_start . '][' . self::surrogate_char . ']*)$/';
 
 	/**
 	 * @param string $s
 	 * @return bool
 	 */
-	static function is_valid_xml_name( $s ) {
+	public static function is_valid_xml_name( $s ) {
 		if ( preg_match( self::pattern_ascii_name, $s ) ) {
 			return true; // Plain ASCII
 		}
@@ -1079,7 +1076,7 @@ class WhatWG {
 	 * @param string $s
 	 * @return bool
 	 */
-	static function is_valid_xml_qname( $s ) {
+	public static function is_valid_xml_qname( $s ) {
 		if ( preg_match( self::pattern_ascii_qname, $s ) ) {
 			return true; // Plain ASCII
 		}
@@ -1124,7 +1121,7 @@ class WhatWG {
 	 * @return void
 	 * @throws DOMException("NamespaceError")
 	 */
-	static function validate_and_extract( ?string $ns, string $qname, ?string &$prefix, ?string &$lname ): void {
+	public static function validate_and_extract( ?string $ns, string $qname, ?string &$prefix, ?string &$lname ): void {
 		/*
 		 * See https://github.com/whatwg/dom/issues/671
 		 * and https://github.com/whatwg/dom/issues/319

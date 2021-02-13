@@ -8,12 +8,10 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanTypeMissingReturn
 // @phan-file-suppress PhanUndeclaredClassMethod
 // @phan-file-suppress PhanUndeclaredVariable
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
-// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
 
