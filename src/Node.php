@@ -946,7 +946,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * crept in here over time.
 	 */
 	public function __root(): void {
-		$doc = $this->ownerDocument();
+		$doc = $this->getOwnerDocument();
 
 		if ( $this->getNodeType() === self::ELEMENT_NODE ) {
 			/* getElementById table */
@@ -994,7 +994,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * is called.
 	 */
 	public function __uproot(): void {
-		$doc = $this->ownerDocument();
+		$doc = $this->getOwnerDocument();
 
 		/* Manage id to element mapping */
 		if ( $this->getNodeType() === self::ELEMENT_NODE ) {

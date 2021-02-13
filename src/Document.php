@@ -439,7 +439,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 			 * Is this diagnostic for rooted-ness? Why
 			 * doesn't __is_rooted() just do this?
 			 */
-			$node->parentNode()->removeChild( $node );
+			$node->getParentNode()->removeChild( $node );
 		}
 		if ( $node->_ownerDocument !== $this ) {
 			/*
@@ -574,7 +574,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 */
 	public function _isHTMLDocument(): bool {
 		if ( $this->__type === 'html' ) {
-			$elt = $this->documentElement();
+			$elt = $this->getDocumentElement();
 			if ( $elt !== null && $elt->isHTMLElement() ) {
 				return true;
 			}
@@ -703,7 +703,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		if ( $this->__mutation_handler ) {
 			$this->__mutation_handler( [
 				"type" => MUTATE_ATTR,
-				"target" => $attr->ownerElement(),
+				"target" => $attr->getOwnerElement(),
 				"attr" => $attr
 			] );
 		}
@@ -714,7 +714,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		if ( $this->__mutation_handler ) {
 			$this->__mutation_handler( [
 				"type" => MUTATE_REMOVE_ATTR,
-				"target" => $attr->ownerElement(),
+				"target" => $attr->getOwnerElement(),
 				"attr" => $attr
 			] );
 		}
@@ -731,7 +731,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		if ( $this->__mutation_handler ) {
 			$this->__mutation_handler( [
 				"type" => MUTATE_REMOVE,
-				"target" => $node->parentNode(),
+				"target" => $node->getParentNode(),
 				"node" => $node
 			] );
 		}
@@ -749,7 +749,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		if ( $this->__mutation_handler ) {
 			$this->__mutation_handler( [
 				"type" => MUTATE_INSERT,
-				"target" => $node->parentNode(),
+				"target" => $node->getParentNode(),
 				"node" => $node
 			] );
 		}

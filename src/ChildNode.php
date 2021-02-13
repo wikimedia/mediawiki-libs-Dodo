@@ -67,7 +67,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 */
 	public function after( ...$args /* DOMStrings and/or Nodes */ ) : void {
 		$parentNode = $this->_parentNode;
-		$nextSibling = $this->nextSibling();
+		$nextSibling = $this->getNextSibling();
 
 		if ( $parentNode === null ) {
 			/*
@@ -82,7 +82,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 
 		// Find "viable next sibling"; that is, next one not in $args
 		while ( $nextSibling !== null && in_array( $nextSibling, $args, true ) ) {
-			$nextSibling = $nextSibling->nextSibling();
+			$nextSibling = $nextSibling->getNextSibling();
 		}
 		// ok, parent and sibling are saved away since this node could itself
 		// appear in $args and we're about to move $args to a document fragment.
@@ -137,7 +137,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 */
 		$frag = self::_fragment_from_arguments( $this->__node_document(), $args );
 
-		$nextSibling = $prevSibling ? $prevSibling->nextSibling() : $parentNode->firstChild();
+		$nextSibling = $prevSibling ? $prevSibling->getNextSibling() : $parentNode->firstChild();
 
 		/*
 		 * Insert the DocumentFragment
@@ -197,7 +197,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		if ( $parent->_childNodes !== null ) {
 			array_splice( $parent->_childNodes, $this->__sibling_index(), 1 );
 		} elseif ( $parent->_firstChild === $this ) {
-			$parent->_firstChild = $this->nextSibling();
+			$parent->_firstChild = $this->getNextSibling();
 		}
 
 		LinkedList::ll_remove( $this );
@@ -208,10 +208,10 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 * @inheritDoc
 	 */
 	public function replaceWith( ...$args /* Nodes or DOMStrings */ ) : void {
-		$parentNode = $this->parentNode();
-		$nextSibling = $this->nextSibling();
+		$parentNode = $this->getParentNode();
+		$nextSibling = $this->getNextSibling();
 
-		if ( $this->parentNode() === null ) {
+		if ( $this->getParentNode() === null ) {
 			return;
 		}
 
@@ -220,7 +220,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * not in $arguments
 		 */
 		while ( $nextSibling !== null && in_array( $nextSibling, $args, true ) ) {
-			$nextSibling = $nextSibling->nextSibling();
+			$nextSibling = $nextSibling->getNextSibling();
 		}
 
 		/*

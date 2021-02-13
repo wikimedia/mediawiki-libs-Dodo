@@ -258,23 +258,24 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		 * error checking in some other way. In case we try
 		 * to clone an invalid node that the parser inserted.
 		 */
-		if ( $this->namespaceURI() !== Util::NAMESPACE_HTML
-			 || $this->prefix()
-			 || !$this->ownerDocument()->isHTMLDocument() ) {
-			if ( $this->prefix() === null ) {
-				$name = $this->localName();
+		if ( $this->getNamespaceURI() !== Util::NAMESPACE_HTML
+			 || $this->getPrefix()
+			 || !$this->getOwnerDocument()->isHTMLDocument() ) {
+			if ( $this->getPrefix() === null ) {
+				$name = $this->getLocalName();
 			} else {
-				$name = $this->prefix() . ':' . $this->localName();
+				$name = $this->getPrefix() . ':' . $this->getLocalName();
 			}
-			$clone = $this->ownerDocument()->createElementNS(
-				$this->namespaceURI(),
+			$clone = $this->getOwnerDocument()->createElementNS(
+				$this->getNamespaceURI(),
 				$name
 			);
 		} else {
-			$clone = $this->ownerDocument()->createElement(
-				$this->localName()
+			$clone = $this->getOwnerDocument()->createElement(
+				$this->getLocalName()
 			);
 		}
+		'@phan-var Element $clone'; // @var Element $clone
 
 		foreach ( $this->attributes as $a ) {
 			$clone->setAttributeNodeNS( $a->cloneNode() );
@@ -284,9 +285,9 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	}
 
 	public function _subclass_isEqualNode( Node $node ): bool {
-		if ( $this->localName() !== $node->localName()
-			 || $this->namespaceURI() !== $node->namespaceURI()
-			 || $this->prefix() !== $node->prefix()
+		if ( $this->getLocalName() !== $node->getLocalName()
+			 || $this->getNamespaceURI() !== $node->getNamespaceURI()
+			 || $this->getPrefix() !== $node->getPrefix()
 			 || count( $this->attributes ) !== count( $node->attributes ) ) {
 			return false;
 		}
@@ -296,10 +297,10 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		 * and ignoring attribute prefixes.
 		 */
 		foreach ( $this->attributes as $a ) {
-			if ( !$node->hasAttributeNS( $a->namespaceURI(), $a->localName() ) ) {
+			if ( !$node->hasAttributeNS( $a->getNamespaceURI(), $a->getLocalName() ) ) {
 				return false;
 			}
-			if ( $node->getAttributeNS( $a->namespaceURI(), $a->localName() ) !== $a->getValue() ) {
+			if ( $node->getAttributeNS( $a->getNamespaceURI(), $a->getLocalName() ) !== $a->getValue() ) {
 				return false;
 			}
 		}
@@ -568,7 +569,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		$ret = [];
 
 		foreach ( $this->attributes as $a ) {
-			$ret[] = $a->name();
+			$ret[] = $a->getName();
 		}
 
 		return $ret;
@@ -618,7 +619,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	 */
 	public function nextElement( $root ) {
 		if ( !$root ) {
-			$root = $this->ownerDocument()->documentElement();
+			$root = $this->getOwnerDocument()->getDocumentElement();
 		}
 		$next = $this->firstElementChild();
 		if ( !$next ) {
@@ -626,7 +627,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 			if ( $this === $root ) {
 				return null;
 			}
-			$next = $this->nextElementSibling();
+			$next = $this->getNextElementSibling();
 		}
 		if ( $next ) {
 			return $next;
@@ -639,8 +640,12 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		 * element, or if we reach the documentElement, then
 		 * the traversal ends.
 		 */
-		for ( $parent = $this->parentElement(); $parent && $parent !== $root; $parent = $parent->parentElement() ) {
-			$next = $parent->nextElementSibling();
+		for (
+			$parent = $this->getParentElement();
+			$parent && $parent !== $root;
+			$parent = $parent->getParentElement()
+		) {
+			$next = $parent->getNextElementSibling();
 			if ( $next ) {
 				return $next;
 			}

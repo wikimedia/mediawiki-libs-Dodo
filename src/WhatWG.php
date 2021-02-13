@@ -60,12 +60,12 @@ class WhatWG {
 		/* #4 */
 		if ( $node1->getNodeType() === Node::ATTRIBUTE_NODE ) {
 			$attr1 = $node1;
-			$node1 = $attr1->ownerElement();
+			$node1 = $attr1->getOwnerElement();
 		}
 		/* #5 */
 		if ( $node2->getNodeType() === Node::ATTRIBUTE_NODE ) {
 			$attr2 = $node2;
-			$node2 = $attr2->ownerElement();
+			$node2 = $attr2->getOwnerElement();
 
 			if ( $attr1 !== null && $node1 !== null && $node2 === $node1 ) {
 				foreach ( $node2->attributes as $a ) {
@@ -90,10 +90,10 @@ class WhatWG {
 		/* #7 */
 		$node1_ancestors = [];
 		$node2_ancestors = [];
-		for ( $n = $node1->parentNode(); $n !== null; $n = $n->parentNode() ) {
+		for ( $n = $node1->getParentNode(); $n !== null; $n = $n->getParentNode() ) {
 			$node1_ancestors[] = $n;
 		}
-		for ( $n = $node2->parentNode(); $n !== null; $n = $n->parentNode() ) {
+		for ( $n = $node2->getParentNode(); $n !== null; $n = $n->getParentNode() ) {
 			$node2_ancestors[] = $n;
 		}
 
@@ -183,10 +183,11 @@ class WhatWG {
 			}
 			break;
 		default:
-			$parent = $node->parentElement();
+			$parent = $node->getParentElement();
 			if ( $parent === null ) {
 				return null;
 			} else {
+				'@phan-var Element $parent'; // @var Element $parent
 				return self::locate_namespace( $parent, $ns );
 			}
 		}
@@ -234,10 +235,11 @@ class WhatWG {
 			}
 			break;
 		default:
-			$parent = $node->parentElement();
+			$parent = $node->getParentElement();
 			if ( $parent === null ) {
 				return null;
 			} else {
+				'@phan-var Element $parent'; // @var Element $parent
 				return self::locate_prefix( $parent, $ns );
 			}
 		}
@@ -604,7 +606,7 @@ class WhatWG {
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
 			 */
-			for ( $n = $parent; $n !== null; $n = $n->parentNode() ) {
+			for ( $n = $parent; $n !== null; $n = $n->getParentNode() ) {
 				if ( $n === $node ) {
 					Util::error( "HierarchyRequestError" );
 				}
@@ -841,7 +843,7 @@ class WhatWG {
 			}
 		}
 
-		return $a->name();
+		return $a->getName();
 	}
 
 	/**
@@ -899,7 +901,7 @@ class WhatWG {
 				$parenttag = '';
 			}
 
-			if ( isset( self::$hasRawContent[$parenttag] ) || ( $parenttag === 'NOSCRIPT' && $parent->ownerDocument()->_scripting_enabled ) ) {
+			if ( isset( self::$hasRawContent[$parenttag] ) || ( $parenttag === 'NOSCRIPT' && $parent->getOwnerDocument()->_scripting_enabled ) ) {
 				$s .= $child->getData();
 			} else {
 				$s .= self::_helper_escape( $child->getData() );
@@ -911,11 +913,11 @@ class WhatWG {
 			break;
 
 		case Node::PROCESSING_INSTRUCTION_NODE:
-			$s .= '<?' . $child->target() . ' ' . $child->getData() . '?>';
+			$s .= '<?' . $child->getTarget() . ' ' . $child->getData() . '?>';
 			break;
 
 		case Node::DOCUMENT_TYPE_NODE:
-			$s .= '<!DOCTYPE ' . $child->name();
+			$s .= '<!DOCTYPE ' . $child->getName();
 
             // phpcs:ignore Generic.CodeAnalysis.UnconditionalIfStatement.Found
 			if ( false ) {
