@@ -50,11 +50,6 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 */
 
 	/*
-	 * SET IN SUBCLASS CONSTRUCTOR
-	 */
-	public $_nodeValue;    /* readonly DOMString or NULL */
-
-	/*
 	 * SET WHEN SOMETHING APPENDS NODE
 	 *
 	 * @var Node|null should be considered read-only
@@ -197,19 +192,27 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 */
 	abstract public function getNodeName(): string;
 
-	/** @inheritDoc */
+	/**
+	 * Return the `value` for this node.
+	 * @see https://dom.spec.whatwg.org/#dom-node-nodevalue
+	 * @return ?string
+	 */
 	public function getNodeValue() : ?string {
-		return $this->_nodeValue;
+		return null; // Override in subclasses
 	}
 
 	/** @inheritDoc */
+	public function setNodeValue( ?string $val ) : void {
+		/* Any other node: Do nothing */
+	}
+
+	/**
+	 * Return the `textContent` for this node.
+	 * @see https://dom.spec.whatwg.org/#dom-node-textcontent
+	 * @return ?string
+	 */
 	public function getTextContent() : ?string {
-		/*
-		 * This is spec. Relevent classes
-		 * should override. For more, see
-		 * https://dom.spec.whatwg.org/#dom-node-textcontent
-		 */
-		return null;
+		return null; // Override in subclasses
 	}
 
 	/** @inheritDoc */
@@ -600,7 +603,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			$n->normalize();
 
 			if ( $n->getNodeType() === self::TEXT_NODE ) {
-				if ( $n->_nodeValue === '' ) {
+				if ( $n->getNodeValue() === '' ) {
 					/*
 					 * [1]
 					 * If you are a text node,
@@ -625,7 +628,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 						 * previous non-empty text
 						 * node.
 						 */
-						$p->appendData( $n->_nodeValue );
+						$p->appendData( $n->getNodeValue() );
 						$this->removeChild( $n );
 					}
 				}

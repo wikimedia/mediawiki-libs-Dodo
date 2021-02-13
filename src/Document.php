@@ -124,7 +124,6 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 * Part of Node parent class
 	 */
 	public $_ownerDocument = null;
-	public $_nodeValue = null;
 
 	/*
 	 * Part of Document class

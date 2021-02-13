@@ -1,11 +1,7 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanCoalescingNeverNull
-// @phan-file-suppress PhanCoalescingNeverUndefined
-// @phan-file-suppress PhanUndeclaredMethod
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 
 namespace Wikimedia\Dodo;
 
@@ -26,9 +22,9 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 
 	/**
 	 * @param Document $doc
-	 * @param mixed $data
+	 * @param string $data
 	 */
-	public function __construct( Document $doc, $data ) {
+	public function __construct( Document $doc, string $data ) {
 		parent::__construct();
 		$this->_ownerDocument = $doc;
 		$this->_data = $data;
@@ -42,36 +38,10 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	}
 
 	/**
-	 * Overrides Node::nodeValue
-	 *
-	 * @inheritDoc
-	 */
-	public function getNodeValue() : ?string {
-			return $this->_data;
-	}
-
-	/**
 	 * @inheritDoc
 	 */
 	public function getNodeName() : string {
 		return "#text";
-	}
-
-	/** @inheritDoc */
-	public function setNodeValue( ?string $value ) : void {
-		if ( $value === $this->_data ) {
-			return;
-		}
-
-		$this->_data = $value;
-
-		if ( $this->__is_rooted() ) {
-			$this->_ownerDocument->__mutate_value( $this );
-		}
-
-		if ( $this->_parentNode && $this->_parentNode->_textchangehook ?? null ) {
-			$this->_parentNode->_textchangehook( $this );
-		}
 	}
 
 	/**
@@ -90,26 +60,6 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	}
 
 	/**
-	 * Per spec
-	 *
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	public function textContent( $value = null ) {
-		return $this->nodeValue( $value );
-	}
-
-	/** @inheritDoc */
-	public function getData() : string {
-		return $this->getNodeValue() ?? '';
-	}
-
-	/** @inheritDoc */
-	public function setData( string $val ) : void {
-		$this->setNodeValue( $val );
-	}
-
-	/**
 	 * @param int $offset
 	 * @return Text
 	 */
@@ -120,12 +70,12 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 
 		$newdata = substr( $this->_data, $offset );
 		$newnode = $this->_ownerDocument->createTextNode( $newdata );
-		$this->nodeValue( substr( $this->_data, 0, $offset ) );
+		$this->setNodeValue( substr( $this->_data, 0, $offset ) );
 
-		$parent = $this->parentNode();
+		$parent = $this->getParentNode();
 
 		if ( $parent !== null ) {
-			$parent->insertBefore( $newnode, $this->nextSibling() );
+			$parent->insertBefore( $newnode, $this->getNextSibling() );
 		}
 		return $newnode;
 	}
@@ -134,14 +84,14 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	 * @return string
 	 */
 	public function wholeText() {
-		$result = $this->textContent();
+		$result = [ $this->getTextContent() ?? '' ];
 
-		for ( $n = $this->nextSibling(); $n !== null; $n = $n->nextSibling() ) {
+		for ( $n = $this->getNextSibling(); $n !== null; $n = $n->getNextSibling() ) {
 			if ( $n->getNodeType() !== Node::TEXT_NODE ) {
 				break;
 			}
-			$result .= $n->textContent();
+			$result[] = $n->getTextContent() ?? '';
 		}
-		return $result;
+		return implode( '', $result );
 	}
 }

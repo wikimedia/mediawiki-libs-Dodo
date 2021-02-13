@@ -1,8 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanTypeMismatchArgumentNullable
-// @phan-file-suppress PhanUndeclaredMethod
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
@@ -243,6 +241,20 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeValue() : ?string {
+		return $this->_value;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function setNodeValue( ?string $value ) : void {
+		$this->setValue( $value ?? '' );
+	}
+
+	/**
 	 * @copyDoc \Wikimedia\IDLeDOM\Attr::getNamespaceURI()
 	 */
 	public function getNamespaceURI(): ?string {
@@ -339,7 +351,9 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 			 * TODO: Is this trying to implement spec,
 			 * or are we just doing this for our own use?
 			 */
-			$this->_ownerElement->ownerDocument()->__mutate_attr( $this, $old );
+			$doc = $this->_ownerElement->getOwnerDocument();
+			'@phan-var Document $doc'; // @var Document $doc
+			$doc->__mutate_attr( $this, $old );
 		}
 	}
 
@@ -347,16 +361,14 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	 * @inheritDoc
 	 */
 	public function getTextContent() : ?string {
-		// https://dom.spec.whatwg.org/#dom-node-textcontent
-		return $this->value( $value );
+		return $this->getValue();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function setTextContent( ?string $val ) : void {
-		// https://dom.spec.whatwg.org/#dom-node-textcontent
-		$this->setValue( $val );
+		$this->setValue( $val ?? '' );
 	}
 
 	/**

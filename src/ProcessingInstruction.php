@@ -20,9 +20,9 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	/**
 	 * @param Document $doc
 	 * @param string $target
-	 * @param mixed $data
+	 * @param string $data
 	 */
-	public function __construct( Document $doc, string $target, $data ) {
+	public function __construct( Document $doc, string $target, string $data ) {
 		parent::__construct();
 		$this->_ownerDocument = $doc;
 		$this->_target = $target;
@@ -41,42 +41,6 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	 */
 	final public function getNodeName() : string {
 		return $this->_target;
-	}
-
-	/**
-	 * Overrides Node::nodeValue
-	 * $value = '' will unset
-	 *
-	 * @param mixed $value
-	 * @return mixed|void
-	 */
-	public function nodeValue( $value = null ) {
-		if ( $value === null ) {
-			return $this->_data;
-		} else {
-			$this->_data = strval( $value );
-			if ( $this->__is_rooted ) {
-				$this->_ownerDocument->__mutate_value( $this );
-			}
-		}
-	}
-
-	/**
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	public function textContent( $value = null ) {
-		return $this->nodeValue( $value );
-	}
-
-	/** @inheritDoc */
-	public function getData() : string {
-		return $this->getNodeValue() ?? '';
-	}
-
-	/** @inheritDoc */
-	public function setData( string $val ) : void {
-		$this->setNodeValue( $val );
 	}
 
 	/**

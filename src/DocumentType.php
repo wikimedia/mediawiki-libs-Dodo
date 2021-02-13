@@ -28,7 +28,6 @@ class DocumentType extends Node implements \Wikimedia\IDLeDOM\DocumentType {
 
 		$this->_ownerDocument = $doc;
 		$this->_name = $name;
-		$this->_nodeValue = null; // spec; let Node::nodeValue handle
 		$this->_publicId = $publicId;
 		$this->_systemId = $systemId;
 	}
@@ -80,9 +79,5 @@ class DocumentType extends Node implements \Wikimedia\IDLeDOM\DocumentType {
 			$this->_publicId === $node->_publicId &&
 			$this->_systemId === $node->_systemId
 		);
-	}
-
-	public function textContent( ?string $value = null ) {
-		return null;
 	}
 }

@@ -64,7 +64,6 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	use \Wikimedia\IDLeDOM\Helper\Element;
 
 	/* Provided by Node
-	   public $_nodeValue = NULL;
 	   public $_ownerDocument = NULL;
 	*/
 
@@ -231,28 +230,20 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		}
 	}
 
-	/**
-	 * Get or set the text content of an Element.
-	 *
-	 * Spec: DOM-LS
-	 * Implements: abstract public Node::textContent
-	 *
-	 * @param string|null $value
-	 * @return ?string
-	 */
-	public function textContent( ?string $value = null ) {
-		/* GET */
-		if ( $value === null ) {
-			$text = [];
-			Algorithm::descendant_text_content( $this, $text );
-			return implode( "", $text );
-			/* SET */
-		} else {
-			$this->__remove_children();
-			if ( $value !== "" ) {
-				/* Equivalent to Node:: appendChild without checks! */
-				WhatWG::insert_before_or_replace( $node, $this->_ownerDocument->createTextNode( $value ), null );
-			}
+	/** @inheritDoc */
+	public function getTextContent() : ?string {
+		$text = [];
+		Algorithm::descendant_text_content( $this, $text );
+		return implode( "", $text );
+	}
+
+	/** @inheritDoc */
+	public function setTextContent( ?string $value ) : void {
+		$value = $value ?? '';
+		$this->__remove_children();
+		if ( $value !== "" ) {
+			/* Equivalent to Node:: appendChild without checks! */
+			WhatWG::insert_before_or_replace( $node, $this->_ownerDocument->createTextNode( $value ), null );
 		}
 	}
 

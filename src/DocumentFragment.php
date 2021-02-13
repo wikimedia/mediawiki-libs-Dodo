@@ -31,8 +31,6 @@ class DocumentFragment extends Node implements \Wikimedia\IDLeDOM\DocumentFragme
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\DocumentFragment;
 
-	public $_nodeValue = null;
-
 	public function __construct( Document $doc ) {
 		parent::__construct( $doc );
 
@@ -53,20 +51,20 @@ class DocumentFragment extends Node implements \Wikimedia\IDLeDOM\DocumentFragme
 		return "#document-fragment";
 	}
 
-	/* TODO: Same as Element's. Factor? */
-	public function textContent( ?string $value = null ) {
-		/* GET */
-		if ( $value === null ) {
-			$text = [];
-			Algorithm::descendant_text_content( $this, $text );
-			return implode( "", $text );
-			/* SET */
-		} else {
-			$this->__remove_children();
-			if ( $value !== "" ) {
-				/* Equivalent to Node:: appendChild without checks! */
-				WhatWG::insert_before_or_replace( $node, $this->_ownerDocument->createTextNode( $value ), null );
-			}
+	/** @inheritDoc */
+	public function getTextContent() : ?string {
+		$text = [];
+		Algorithm::descendant_text_content( $this, $text );
+		return implode( "", $text );
+	}
+
+	/** @inheritDoc */
+	public function setTextContent( ?string $value ) : void {
+		$value = $value ?? '';
+		$this->__remove_children();
+		if ( $value !== "" ) {
+			/* Equivalent to Node:: appendChild without checks! */
+			WhatWG::insert_before_or_replace( $node, $this->_ownerDocument->createTextNode( $value ), null );
 		}
 	}
 

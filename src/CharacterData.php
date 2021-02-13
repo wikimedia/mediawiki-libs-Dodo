@@ -27,7 +27,36 @@ abstract class CharacterData extends Node implements \Wikimedia\IDLeDOM\Characte
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\CharacterData;
 
+	/** @var string */
 	protected $_data;
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function getNodeValue() : ?string {
+		return $this->getData();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function setNodeValue( ?string $value ) : void {
+		$this->setData( $value ?? '' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function getTextContent() : ?string {
+		return $this->getData();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	final public function setTextContent( ?string $value ) : void {
+		$this->setData( $value ?? '' );
+	}
 
 	// DOMString substringData(unsigned long offset,
 	//               unsigned long count);
@@ -110,14 +139,18 @@ abstract class CharacterData extends Node implements \Wikimedia\IDLeDOM\Characte
 		$curtext = $this->_data;
 		$len = strlen( $curtext );
 
-		$data = strval( $data );
-
 		if ( $offset > $len || $offset < 0 ) {
 			Util::error( "IndexSizeError" );
 		}
 
 		if ( $offset + $count > $len ) {
 			$count = $len - $offset;
+		}
+
+		// Fast path
+		if ( $offset === 0 && $count === $len ) {
+			$this->_data = $data;
+			return;
 		}
 
 		$prefix = substr( $curtext, 0, $offset );
@@ -129,4 +162,15 @@ abstract class CharacterData extends Node implements \Wikimedia\IDLeDOM\Characte
 	public function getLength(): int {
 		return strlen( $this->_data );
 	}
+
+	/** @inheritDoc */
+	public function getData() : string {
+		return $this->_data;
+	}
+
+	/** @inheritDoc */
+	public function setData( string $value ) : void {
+		$this->replaceData( 0, $this->getLength(), $value );
+	}
+
 }
