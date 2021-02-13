@@ -659,7 +659,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			return true;
 		}
 
-		return ( $this->compareDocumentPosition( $node ) & Util::DOCUMENT_POSITION_CONTAINED_BY ) !== 0;
+		return ( $this->compareDocumentPosition( $node ) & self::DOCUMENT_POSITION_CONTAINED_BY ) !== 0;
 	}
 
 	/**

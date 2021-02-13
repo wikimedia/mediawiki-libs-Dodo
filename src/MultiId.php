@@ -98,7 +98,7 @@ class MultiId {
 		// No item has been cached. Well, let's find it then.
 		foreach ( $this->table as $document_index => $node ) {
 			if ( $this->first === null ||
-				$this->first->compareDocumentPosition( $node ) & Util::DOCUMENT_POSITION_PRECEDING
+				$this->first->compareDocumentPosition( $node ) & Node::DOCUMENT_POSITION_PRECEDING
 			) {
 				$this->first = $node;
 			}

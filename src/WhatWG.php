@@ -70,10 +70,10 @@ class WhatWG {
 			if ( $attr1 !== null && $node1 !== null && $node2 === $node1 ) {
 				foreach ( $node2->attributes as $a ) {
 					if ( $a === $attr1 ) {
-						return Util::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Util::DOCUMENT_POSITION_PRECEDING;
+						return Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_PRECEDING;
 					}
 					if ( $a === $attr2 ) {
-						return Util::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Util::DOCUMENT_POSITION_FOLLOWING;
+						return Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_FOLLOWING;
 					}
 				}
 			}
@@ -84,7 +84,7 @@ class WhatWG {
 			/* UHH, in the spec this is supposed to add DOCUMENT_POSITION_PRECEDING or DOCUMENT_POSITION_FOLLOWING
 			 * in some consistent way, usually based on pointer comparison, which we can't do here. Hmm. Domino
 			 * just straight up omits it. This is stupid, the spec shouldn't ask this. */
-			return ( Util::DOCUMENT_POSITION_DISCONNECTED + Util::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC );
+			return ( Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC );
 		}
 
 		/* #7 */
@@ -98,16 +98,16 @@ class WhatWG {
 		}
 
 		if ( in_array( $node1, $node2_ancestors ) && $attr1 === null ) {
-			return Util::DOCUMENT_POSITION_CONTAINS + Util::DOCUMENT_POSITION_PRECEDING;
+			return Node::DOCUMENT_POSITION_CONTAINS + Node::DOCUMENT_POSITION_PRECEDING;
 		} elseif ( $node1 === $node2 && $attr2 !== null ) {
-			return Util::DOCUMENT_POSITION_CONTAINS + Util::DOCUMENT_POSITION_PRECEDING;
+			return Node::DOCUMENT_POSITION_CONTAINS + Node::DOCUMENT_POSITION_PRECEDING;
 		}
 
 		/* #8 */
 		if ( in_array( $node2, $node1_ancestors ) && $attr2 === null ) {
-			return Util::DOCUMENT_POSITION_CONTAINED_BY + Util::DOCUMENT_POSITION_FOLLOWING;
+			return Node::DOCUMENT_POSITION_CONTAINED_BY + Node::DOCUMENT_POSITION_FOLLOWING;
 		} elseif ( $node1 === $node2 && $attr1 !== null ) {
-			return Util::DOCUMENT_POSITION_CONTAINED_BY + Util::DOCUMENT_POSITION_FOLLOWING;
+			return Node::DOCUMENT_POSITION_CONTAINED_BY + Node::DOCUMENT_POSITION_FOLLOWING;
 		}
 
 		/* #9 */
@@ -118,13 +118,13 @@ class WhatWG {
 		for ( $i = 1; $i < $len; $i++ ) {
 			if ( $node1_ancestors[$i] !== $node2_ancestors[$i] ) {
 				if ( $node1_ancestors[$i]->__sibling_index() < $node2_ancestors[$i]->__sibling_index() ) {
-					return Util::DOCUMENT_POSITION_PRECEDING;
+					return Node::DOCUMENT_POSITION_PRECEDING;
 				}
 			}
 		}
 
 		# 10
-		return Util::DOCUMENT_POSITION_FOLLOWING;
+		return Node::DOCUMENT_POSITION_FOLLOWING;
 	}
 
 	/*
