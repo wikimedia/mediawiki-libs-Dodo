@@ -226,6 +226,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 */
 
 	/**
+	 * @copydoc Node::getNodeType()
 	 * @inheritDoc
 	 */
 	public function getNodeType() : int {
@@ -233,13 +234,17 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/**
+	 * @copydoc Node::getNodeName()
 	 * @inheritDoc
 	 */
 	final public function getNodeName() : string {
 		return "#document";
 	}
 
-	/** @return string */
+	/**
+	 * @copydoc Wikimedia\IDLeDOM\Document::getCharacterSet()
+	 * @inheritDoc
+	 */
 	public function getCharacterSet(): string {
 		return $this->_characterSet;
 	}
@@ -259,6 +264,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		return $this->_implementation;
 	}
 
+	/** @inheritDoc */
 	public function getDocumentURI() : string {
 		return $this->_URL;
 	}

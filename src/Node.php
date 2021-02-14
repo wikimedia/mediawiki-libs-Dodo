@@ -39,10 +39,17 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * Abstract methods that must be defined in subclasses
 	 */
 
-	/* Delegated subclass method called by Node::isEqualNode() */
+	/**
+	 * Delegated subclass method called by Node::isEqualNode()
+	 * @param Node $node
+	 * @return bool
+	 */
 	abstract protected function _subclass_isEqualNode( Node $node ): bool;
 
-	/* Delegated subclass method called by Node::cloneNode() */
+	/**
+	 * Delegated subclass method called by Node::cloneNode()
+	 * @return ?Node
+	 */
 	abstract protected function _subclass_cloneNodeShallow(): ?Node;
 
 	/**********************************************************************

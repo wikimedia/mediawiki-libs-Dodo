@@ -2,9 +2,6 @@
 
 declare( strict_types = 1 );
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionAnnotations.UnrecognizedAnnotation
 
 namespace Wikimedia\Dodo;
 
@@ -227,6 +224,7 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	 */
 
 	/**
+	 * @copydoc Node::getNodeType()
 	 * @inheritDoc
 	 */
 	final public function getNodeType() : int {
@@ -234,41 +232,34 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	}
 
 	/**
+	 * @copydoc Node::getNodeName()
 	 * @inheritDoc
 	 */
 	final public function getNodeName() : string {
 		return $this->_name;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	final public function getNodeValue() : ?string {
 		return $this->_value;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	final public function setNodeValue( ?string $value ) : void {
 		$this->setValue( $value ?? '' );
 	}
 
-	/**
-	 * @copyDoc \Wikimedia\IDLeDOM\Attr::getNamespaceURI()
-	 */
+	/** @inheritDoc */
 	public function getNamespaceURI(): ?string {
 		return $this->_namespaceURI;
 	}
 
-	/**
-	 * @copyDoc \Wikimedia\IDLeDOM\Attr::getNamespaceURI()
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getSpecified(): bool {
 		return $this->_specified;
 	}
 
+	/** @inheritDoc */
 	public function getOwnerElement(): ?Element {
 		return $this->_ownerElement;
 	}
@@ -376,7 +367,7 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	 *
 	 * @return ?Node always Attr
 	 */
-	public function _subclass_cloneNodeShallow(): ?Node {
+	protected function _subclass_cloneNodeShallow(): ?Node {
 		return new Attr(
 			null,
 			$this->_localName,
@@ -392,7 +383,7 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	 * @param Node $node
 	 * @return bool
 	 */
-	public function _subclass_isEqualNode( Node $node ): bool {
+	protected function _subclass_isEqualNode( Node $node ): bool {
 		'@phan-var Attr $node';
 		/** @var Attr $node */
 		return (

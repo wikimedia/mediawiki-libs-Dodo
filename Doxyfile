@@ -1,6 +1,6 @@
 # Doxyfile for Dodo
 #
-# See <http://www.stack.nl/~dimitri/doxygen/manual/config.html>
+# See <https://www.doxygen.nl/manual/config.html>
 # for help on how to use this file to configure Doxygen.
 
 PROJECT_NAME           = "Dodo"
@@ -9,11 +9,11 @@ OUTPUT_DIRECTORY       = doc
 JAVADOC_AUTOBRIEF      = YES
 QT_AUTOBRIEF           = YES
 WARN_NO_PARAMDOC       = YES
-INPUT                  = README.md src/
+INPUT                  = README.md src/ vendor/wikimedia/idle-dom/src
 FILE_PATTERNS          = *.php
 RECURSIVE              = YES
 USE_MDFILE_AS_MAINPAGE = README.md
-FILTER_PATTERNS        = *md=build/doxygen_escape.sh
+FILTER_PATTERNS        = *md=build/doxygen_escape.sh *.php="php build/doxygen_php_filters.php"
 HTML_DYNAMIC_SECTIONS  = YES
 GENERATE_TREEVIEW      = YES
 TREEVIEW_WIDTH         = 250
@@ -25,3 +25,4 @@ TEMPLATE_RELATIONS     = YES
 CALL_GRAPH             = NO
 CALLER_GRAPH           = NO
 DOT_MULTI_TARGETS      = YES
+GENERATE_TAGFILE       = doc/dodo.tag
