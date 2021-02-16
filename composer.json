@@ -51,6 +51,9 @@
 			"minus-x fix .",
 			"phpcbf"
 		],
-		"phan": "phan --allow-polyfill-parser"
+		"phan": "phan --allow-polyfill-parser",
+		"update-tags": [
+			"php -r \"copy('https://doc.wikimedia.org/mediawiki-libs-IDLeDOM/main/tagfile.xml', 'tags/idledom.xml');\""
+		]
 	}
 }
