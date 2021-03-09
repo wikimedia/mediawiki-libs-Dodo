@@ -9,5 +9,7 @@ $cfg['directory_list'] = [
 	'.phan/stubs',
 ];
 $cfg['suppress_issue_types'] = [];
+$cfg['exclude_analysis_directory_list'][] = 'tests/w3c/';
+$cfg['exclude_analysis_directory_list'][] = 'tests/wpt/';
 
 return $cfg;

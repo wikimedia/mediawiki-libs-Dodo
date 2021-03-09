@@ -17,6 +17,8 @@
 	<exclude-pattern>vendor</exclude-pattern>
 	<exclude-pattern>doc/html</exclude-pattern>
 	<exclude-pattern>.phan/stubs</exclude-pattern>
+	<exclude-pattern>tests/w3c</exclude-pattern>
+	<exclude-pattern>tests/wpt</exclude-pattern>
 
 	<rule ref="MediaWiki.Commenting.FunctionAnnotations">
 		<properties>
@@ -65,6 +67,13 @@
 			<property name="strict" value="false" />
 		</properties>
 	</rule>
+        <!-- This rule would indent case statements under switch.
+             This is a bit of underspecification/flexibility in the
+             mediawiki code style; generally speaking either
+             indentation style is permitted.  Most of mediawiki-core
+             seems to use the extra indentation of case statements,
+             while other libraries like remex-html consistently do
+             not. -->
 <!--	<rule ref="Generic.WhiteSpace.ScopeIndent">-->
 <!--		<properties>-->
 <!--			<property name="ignoreIndentationTokens" type="array" value="T_COMMENT,T_DOC_COMMENT_OPEN_TAG" />-->

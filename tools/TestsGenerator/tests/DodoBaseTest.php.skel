@@ -3,7 +3,6 @@
 namespace Wikimedia\Dodo\Tests;
 
 use PHPUnit\Framework\TestCase;
-use RemexHtml\DOM\DOMBuilder;
 use Wikimedia\Dodo\Document;
 
 /**
@@ -47,21 +46,18 @@ abstract class DodoBaseTest extends TestCase {
 	 * @param $type
 	 */
 	protected function test( $closure, $type ) {
-
 	}
 
 	/**
 	 * @param mixed ...$args
 	 */
 	protected function assertThrowsDom( ...$args ) {
-
 	}
 
 	/**
 	 *
 	 */
 	protected function assertThrowsJs() {
-
 	}
 
 	/**
@@ -118,7 +114,6 @@ abstract class DodoBaseTest extends TestCase {
 	 * @param mixed ...$args
 	 */
 	protected function testBefore( $child, $nodeName, $innerHTML ) {
-
 	}
 
 	/**
@@ -127,7 +122,6 @@ abstract class DodoBaseTest extends TestCase {
 	 * @param mixed ...$args
 	 */
 	protected function testAfter( $child, $nodeName, $innerHTML ) {
-
 	}
 
 	/**
@@ -136,7 +130,6 @@ abstract class DodoBaseTest extends TestCase {
 	 * @param mixed ...$args
 	 */
 	protected function testConstructor( ...$args ) {
-
 	}
 
 	/**
@@ -145,7 +138,6 @@ abstract class DodoBaseTest extends TestCase {
 	 * @param mixed ...$args
 	 */
 	protected function testReplaceWith( $child, $nodeName, $innerHTML ) {
-
 	}
 
 	/**
@@ -154,7 +146,6 @@ abstract class DodoBaseTest extends TestCase {
 	 * @param mixed ...$args
 	 */
 	protected function asyncTest( ...$args ) {
-
 	}
 
 	/**
@@ -165,7 +156,6 @@ abstract class DodoBaseTest extends TestCase {
 	protected function xmlHttpRequest() {
 		return new class {
 			public function open() {
-
 			}
 		};
 	}
@@ -173,32 +163,27 @@ abstract class DodoBaseTest extends TestCase {
 	/**
 	 * TODO implement this
 	 */
-	protected function attrIs(){
-
+	protected function attrIs() {
 	}
 
 	/**
 	 *
 	 */
-	public function hasFeature(){
-
+	public function hasFeature() {
 	}
 
 	/**
 	 *
 	 */
-	public function assertSize(){
-
+	public function assertSize() {
 	}
 
 	/**
 	 *
 	 */
-	public function assertEqualsAutoCase($context, $descr, $expected, $actual){
-
+	public function assertEqualsAutoCase( $context, $descr, $expected, $actual ) {
 	}
 
-	public function assertEqualsCollectionAutoCase($context, $descr, $expected, $actual){
-
+	public function assertEqualsCollectionAutoCase( $context, $descr, $expected, $actual ) {
 	}
 }

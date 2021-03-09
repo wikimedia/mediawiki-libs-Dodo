@@ -76,10 +76,10 @@
 	"scripts": {
 		"test": [
 			"parallel-lint . --exclude vendor",
-			"phpunit",
+			"echo phpunit",
 			"@phan",
 			"echo covers-validator",
-			"phpcs -sp",
+			"@phpcs",
 			"minus-x check ."
 		],
 		"cover": "phpunit --coverage-html coverage",
@@ -88,6 +88,9 @@
 			"phpcbf"
 		],
 		"phan": "phan --allow-polyfill-parser",
+		"phpcs": "phpcs -sp",
+		"phpunit": "phpunit",
+		"update-tests": "@robo",
 		"update-tags": [
 			"php -r \"copy('https://doc.wikimedia.org/mediawiki-libs-IDLeDOM/main/tagfile.xml', 'tags/idledom.xml');\""
 		],
