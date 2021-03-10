@@ -50,7 +50,7 @@
 	"autoload-dev": {
 		"psr-4": {
 			"Wikimedia\\Dodo\\Tests\\": "tests/",
-			"Wikimedia\\Dodo\\Tools\\TestsGenerator\\": "tools/TestsGenerator/src"
+			"Wikimedia\\Dodo\\Tools\\": "tools/"
 		}
 	},
 	"require": {
@@ -90,10 +90,10 @@
 		"phan": "phan --allow-polyfill-parser",
 		"phpcs": "phpcs -sp",
 		"phpunit": "phpunit",
-		"update-tests": "@robo",
+		"update-tests": "@robo build",
 		"update-tags": [
 			"php -r \"copy('https://doc.wikimedia.org/mediawiki-libs-IDLeDOM/main/tagfile.xml', 'tags/idledom.xml');\""
 		],
-		"robo": "robo --ansi --load-from $(pwd)/tools/TestsGenerator/TestsGenerator.php build"
+		"robo": "robo --ansi"
 	}
 }

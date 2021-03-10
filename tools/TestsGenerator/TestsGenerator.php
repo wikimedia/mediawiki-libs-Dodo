@@ -1,12 +1,13 @@
 <?php
 
+namespace Wikimedia\Dodo\Tools\TestsGenerator;
+
 use Robo\Common\IO;
 use Robo\Exception\TaskException;
 use Robo\Result;
 use Robo\Tasks;
+use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
-use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
-use Wikimedia\Dodo\Tools\TestsGenerator\LoadTasks;
 
 /**
  * Class TestsGenerator
@@ -18,7 +19,7 @@ class TestsGenerator extends Tasks {
 	use \Robo\Task\File\Tasks;
 	use \Robo\Task\Filesystem\Tasks;
 	use \Robo\Task\Base\Tasks;
-	use Robo\Task\Npm\Tasks;
+	use \Robo\Task\Npm\Tasks;
 	use IO;
 	use Helpers;
 
@@ -111,11 +112,11 @@ class TestsGenerator extends Tasks {
 					$new_test_name = $this->snakeToCamel( $test_name );
 
 					if ( $test_type == 'w3c' ) {
-						$test_path = str_replace( $this->root_folder . $this::W3C_TESTS,
+						$test_path = str_replace( $this->root_folder . self::W3C_TESTS,
 							'',
 							$file->getPath() );
 					} else {
-						$test_path = str_replace( $this->root_folder . $this::WPT_TESTS,
+						$test_path = str_replace( $this->root_folder . self::WPT_TESTS,
 							'',
 							$file->getPath() );
 					}
@@ -291,9 +292,9 @@ class TestsGenerator extends Tasks {
 	 * @return Result
 	 */
 	protected function copyFiles() : Result {
-		$cp_dirs = [ $this->root_folder . $this::W3C_TESTS . '/level1/core/files/*.html' =>
+		$cp_dirs = [ $this->root_folder . self::W3C_TESTS . '/level1/core/files/*.html' =>
 			$this->root_folder . '/tests/w3c/level1/core/files/',
-			$this->root_folder . $this::W3C_TESTS . '/level1/html/files/*.html' =>
+			$this->root_folder . self::W3C_TESTS . '/level1/html/files/*.html' =>
 				$this->root_folder . '/tests/w3c/level1/html/files/' ];
 
 		return $this->taskFlattenDir( $cp_dirs )->run();
