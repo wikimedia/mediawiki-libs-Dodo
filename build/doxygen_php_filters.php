@@ -32,11 +32,6 @@ $regexp = '#(\*\/\s*?)((?:final\s+)?(?:public|protected|private)(?:\s+static)?)\
 $replace = '$1$2 $4 $3$4';
 $source = preg_replace( $regexp, $replace, $source );
 
-// Remove @inheritDoc
-$regexp = '#@inheritDoc#';
-$replace = '';
-$source = preg_replace( $regexp, $replace, $source );
-
 // change "@return $this" to '@return [ClassName]'
 $tokens = token_get_all( $source );
 $classes = [];

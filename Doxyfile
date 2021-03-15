@@ -9,6 +9,21 @@ OUTPUT_DIRECTORY       = doc
 JAVADOC_AUTOBRIEF      = YES
 QT_AUTOBRIEF           = YES
 WARN_NO_PARAMDOC       = YES
+ALIASES                = "type{1}=<b> \1 </b>:" \
+                         "types{2}=<b> \1 </b> or <b> \2 </b>:" \
+                         "types{3}=<b> \1 </b>, <b> \2 </b>, or <b> \3 </b>:" \
+                         "access=\par Access:\n" \
+                         "private=\access private" \
+                         "protected=\access protected" \
+                         "copyright=\note" \
+                         "license=\note" \
+                         "inheritDoc=\inheritdoc" \
+                         "codeCoverageIgnore=" \
+                         "codingStandardsIgnoreEnd=" \
+                         "codingStandardsIgnoreStart=" \
+                         "phan=" \
+                         "suppress=" \
+                         "stable=Stable"
 INPUT                  = README.md src/
 TAGFILES               = tags/idledom.xml=https://doc.wikimedia.org/mediawiki-libs-IDLeDOM/main/
 FILE_PATTERNS          = *.php
