@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanParamSignatureMismatch
 // @phan-file-suppress PhanTypeMismatchReturnNullable
 // @phan-file-suppress PhanUndeclaredConstant
-// @phan-file-suppress PhanUndeclaredFunction
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.MethodDoubleUnderscore
@@ -130,6 +129,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 */
 	public const _characterSet = 'UTF-8';
 	public $_encoding = 'UTF-8';
+	public $encoding = 'UTF-8';
 	public $_type = 'xml';
 	public $_contentType = 'application/xml';
 	public $_URL = 'about:blank';
@@ -351,7 +351,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		$lname = strval( $lname );
 
 		if ( !WhatWG::is_valid_xml_name( $lname ) ) {
-			error( "InvalidCharacterError" );
+			Util::error( "InvalidCharacterError" );
 		}
 
 		/*

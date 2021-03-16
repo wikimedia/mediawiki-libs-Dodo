@@ -23,11 +23,16 @@ abstract class DodoBaseTest extends TestCase {
 	protected $type_error;
 
 	/**
-	 * @param $name
+	 * @var string
+	 */
+	protected $contentType;
+
+	/**
+	 * @param string $name
 	 *
 	 * @return mixed
 	 */
-	public function __get( $name ) {
+	public function __get( string $name ) {
 		if ( $name == 'title' ) {
 			return $this->getTitle();
 		}
@@ -35,15 +40,30 @@ abstract class DodoBaseTest extends TestCase {
 
 	/**
 	 * @return mixed
-	 *
 	 */
 	protected function getTitle() {
-		return $this->doc->_documentElement->firstChild()->nodeValue();
+		return $this->doc->_documentElement->getFirstChild()->getNodeValue();
 	}
 
 	/**
-	 * @param $closure
-	 * @param $type
+	 *
+	 */
+	public function hasFeature() {
+	}
+
+	/**
+	 * @param mixed $expected
+	 * @param mixed $actual
+	 *
+	 * @return bool
+	 */
+	public function same( $expected, $actual ) : bool {
+		return $expected === $actual;
+	}
+
+	/**
+	 * @param mixed $closure
+	 * @param mixed $type
 	 */
 	protected function test( $closure, $type ) {
 	}
@@ -73,6 +93,8 @@ abstract class DodoBaseTest extends TestCase {
 
 		$html->appendChild( $body );
 		$this->doc->appendChild( $html );
+
+		$this->contentType = 'text/html';
 	}
 
 	/**
@@ -83,45 +105,23 @@ abstract class DodoBaseTest extends TestCase {
 	}
 
 	/**
-	 * @param ?string $docRef
-	 * @param ?string $plug1
-	 * @param ?string $plug2
+	 * TODO implement this
 	 *
-	 * @return Document
+	 * @param string $child
+	 * @param string $nodeName
+	 * @param string $innerHTML
 	 */
-	protected function load( ?string $docRef = null, ?string $name = null, ?string $href = null ) : Document {
-		if ( $href ) {
-			$path_ = '';
-		}
-
-		return $this->doc;
-	}
-
-	/**
-	 * Temporary stub
-	 *
-	 * @param string $element
-	 *
-	 * @return string
-	 */
-	protected function getElementsByTagName( string $element ) {
-		return '';
+	protected function testBefore( string $child, string $nodeName, string $innerHTML ) {
 	}
 
 	/**
 	 * TODO implement this
 	 *
-	 * @param mixed ...$args
+	 * @param string $child
+	 * @param string $nodeName
+	 * @param string $innerHTML
 	 */
-	protected function testBefore( $child, $nodeName, $innerHTML ) {
-	}
-
-	/**
-	 * TODO implement this
-	 *
-	 * @param mixed ...$args
-	 */
-	protected function testAfter( $child, $nodeName, $innerHTML ) {
+	protected function testAfter( string $child, string $nodeName, string $innerHTML ) {
 	}
 
 	/**
@@ -135,9 +135,11 @@ abstract class DodoBaseTest extends TestCase {
 	/**
 	 * TODO implement this
 	 *
-	 * @param mixed ...$args
+	 * @param string $child
+	 * @param string $nodeName
+	 * @param string $innerHTML
 	 */
-	protected function testReplaceWith( $child, $nodeName, $innerHTML ) {
+	protected function testReplaceWith( string $child, string $nodeName, string $innerHTML ) {
 	}
 
 	/**
@@ -145,45 +147,34 @@ abstract class DodoBaseTest extends TestCase {
 	 *
 	 * @param mixed ...$args
 	 */
-	protected function asyncTest( ...$args ) {
+	protected function asyncTestData( ...$args ) {
 	}
 
 	/**
 	 * TODO implement this
 	 *
 	 * @see xhrResponseTypeDocumentTest.php
+	 * @return mixed
 	 */
 	protected function xmlHttpRequest() {
-		return new class {
-			public function open() {
-			}
-		};
+		return null;
 	}
 
 	/**
-	 * TODO implement this
+	 * @param mixed ...$arg
 	 */
-	protected function attrIs() {
+	protected function attrIs( ...$arg ) {
 	}
 
 	/**
-	 *
+	 * @param mixed ...$arg
 	 */
-	public function hasFeature() {
+	protected function assertEqualsData( ...$arg ) {
 	}
 
 	/**
-	 *
+	 * @param mixed ...$arg
 	 */
-	public function assertSize() {
-	}
-
-	/**
-	 *
-	 */
-	public function assertEqualsAutoCase( $context, $descr, $expected, $actual ) {
-	}
-
-	public function assertEqualsCollectionAutoCase( $context, $descr, $expected, $actual ) {
+	protected function assertArrayEquals( ...$arg ) {
 	}
 }

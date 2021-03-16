@@ -1,5 +1,9 @@
 <?php
 
+declare( strict_types = 1 );
+// XXX Should fix these!
+// @phan-file-suppress PhanUndeclaredProperty
+
 namespace Wikimedia\Dodo\Tools\TestsGenerator;
 
 use Robo\Common\ExecOneCommand;

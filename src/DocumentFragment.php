@@ -90,6 +90,10 @@ class DocumentFragment extends Node implements \Wikimedia\IDLeDOM\DocumentFragme
 		//return nodes.item ? nodes : new NodeList(nodes);
 	}
 
+	public function getElementsByTagName( $tag ) {
+		/* TODO: Stub */
+	}
+
 	/* TODO DELEGATED FROM NODE */
 	public function _subclass_cloneNodeShallow(): ?Node {
 		return new DocumentFragment( $this->_ownerDocument );

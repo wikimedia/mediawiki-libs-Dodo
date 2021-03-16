@@ -1,7 +1,13 @@
 <?php
 
+declare( strict_types = 1 );
+// XXX Should fix these!
+// @phan-file-suppress PhanUndeclaredMethod
+// @phan-file-suppress SecurityCheck-LikelyFalsePositive
+
 namespace Wikimedia\Dodo\Tools\TestsGenerator;
 
+use Exception;
 use Robo\Common\IO;
 use Robo\Exception\TaskException;
 use Robo\Result;
@@ -67,13 +73,20 @@ class TestsGenerator extends Tasks {
 	 * Main task
 	 *
 	 * @param array $opts
+	 * - rewrite
+	 * - phpcbf
+	 * - run
+	 * - cleanup
+	 * - compact = generates all tests in one file
 	 */
-	public function build( array $opts = [ 'rewrite' => false,
-		'limit' => 50,
+	public function build( array $opts = [ 'rewrite' => true,
+		'limit' => -1,
 		'phpcbf' => false,
 		'run' => true,
-		'cleanup' => false ] ) {
+		'cleanup' => false,
+		'compact' => false ] ) {
 		try {
+			$compact_tests = '';
 			// init and check for dependencies
 			$this->initDependencies( $opts['rewrite'] );
 
@@ -95,21 +108,34 @@ class TestsGenerator extends Tasks {
 				'Node-childNodes',
 				'Node-cloneNode-document-with-doctype',
 				'Node-parentNode-iframe',
-				'Node-properties' ];
+				'Node-properties',
+				'attributes-namednodemap' ];
+
+			$files = $result->getData();
+
+			if ( empty( $files ) ) {
+				throw new Exception( 'No tests were loaded.' );
+			}
 
 			foreach ( $result->getData() as $test_type => $tests ) {
-				if ( $test_type == 'w3c_harness' || $test_type == 'wpt_harness' ) {
+				if ( $test_type == 'w3c_harness' || $test_type == 'wpt_harness' || $test_type == 'time' || $test_type
+				== 'wpt' ) {
 					continue;
 				}
+
+				if ( $test_type == 'wpt' ) {
+					$opts['compact'] = false;
+				}
+
 				$tests_per_type = $opts['limit'];
 
 				foreach ( $tests as $file ) {
-					if ( $tests_per_type-- == 0 && $test_type == 'wpt' ) {
+					if ( $tests_per_type-- == 0 ) {
 						break;
 					}
 
 					$test_name = $file->getFilenameWithoutExtension();
-					$new_test_name = $this->snakeToCamel( $test_name );
+					$new_test_name = $this->snakeToPascal( $test_name );
 
 					if ( $test_type == 'w3c' ) {
 						$test_path = str_replace( $this->root_folder . self::W3C_TESTS,
@@ -120,8 +146,8 @@ class TestsGenerator extends Tasks {
 							'',
 							$file->getPath() );
 					}
-					$test_path = $this->root_folder . '/tests/' . "{$test_type}{$test_path}/{$new_test_name}" .
-						'Test' . '.php';
+
+					$test_path = "{$this->root_folder}/tests/{$test_type}{$test_path}/{$new_test_name}Test.php";
 
 					/**
 					 * skip test if it's already generated and there is no --rewrite arg provided,
@@ -135,36 +161,76 @@ class TestsGenerator extends Tasks {
 
 					/* TODO check results */
 					$actual_test = $this->getTranspiledFile( $file );
+					if ( empty( $actual_test ) ) {
+						$this->say( 'Skipped ' . $file );
+						continue;
+					}
+
 					$actual_test = $this->taskParseTest( $actual_test,
 						$test_name,
-						$test_type )->run();
+						$test_type,
+						$opts['compact'],
+						false,
+						$file->getRealPath() )->run();
 
 					if ( !$actual_test->wasSuccessful() ) {
 						throw new Exception( $actual_test->getMessage() );
 					}
 
+					if ( $opts['compact'] ) {
+						$compact_tests .= $actual_test->getData()[0];
+					} else {
+						$phpUnitTest = $actual_test->getData()[0];
+						$this->writeTest( $test_path,
+							$phpUnitTest );
+					}
+				}
+
+				// If compact mode is on.
+				if ( $opts['compact'] && !empty( $compact_tests ) ) {
+					$actual_test = $this->taskParseTest( $compact_tests,
+						$test_type,
+						$test_type,
+						true,
+						true )->run();
+
+					if ( !$actual_test->wasSuccessful() ) {
+						throw new Exception( $actual_test->getMessage() );
+					}
 					$phpUnitTest = $actual_test->getData()[0];
+					$test_path = "{$this->root_folder}/tests/{$this->snakeToPascal($test_type)}Test.php";
 					$this->writeTest( $test_path,
 						$phpUnitTest );
+					$compact_tests = '';
 				}
 			}
-			/* run phpcbf */
+
+			// Run phpcbf.
 			if ( $opts['phpcbf'] ) {
 				$this->runCodeSniffer();
 			}
 
-			// copy html files for tests
+			// Copy html files for tests.
 			$result = $this->copyFiles();
 			if ( !$result->wasSuccessful() || $result->wasCancelled() ) {
 				throw new Exception( $result->getMessage() );
 			}
 
-			/* run phpunit */
+			// Run phpunit.
 			if ( $opts['run'] ) {
+				// Regenerate autoload file.
+				$result = $this->dumpAutoload();
+				if ( !$result->wasSuccessful() || $result->wasCancelled() ) {
+					throw new Exception( $result->getMessage() );
+				}
+
+				// Run tests.
 				$result = $this->runTests();
 				if ( !$result->wasSuccessful() || $result->wasCancelled() ) {
 					throw new Exception( $result->getMessage() );
 				}
+
+				$this->generateFailureList();
 			}
 
 			if ( $opts['cleanup'] ) {
@@ -181,17 +247,25 @@ class TestsGenerator extends Tasks {
 	}
 
 	/**
-	 * Checks for node dependencies. Runs npm install if there is
+	 * Checks for node dependencies.
 	 *
 	 * @param bool $rewrite
 	 *
 	 * @throws TaskException
 	 */
-	public function initDependencies( bool $rewrite ) {
+	public function initDependencies( bool $rewrite = false ) {
+		// WPT harness.
 		if ( !$this->filesystem->exists( $this->root_folder . '/tests/DodoBaseTest.php' ) || $rewrite ) {
 			$this->filesystem->copy( $this->folder . '/tests/DodoBaseTest.php.skel',
 				$this->root_folder . '/tests/DodoBaseTest.php' );
 		}
+
+		// DominoJS harness.
+		if ( !$this->filesystem->exists( $this->root_folder . '/tests/DomTestCase.php' ) || $rewrite ) {
+			$this->filesystem->copy( $this->folder . '/tests/DomTestCase.php.skel',
+				$this->root_folder . '/tests/DomTestCase.php' );
+		}
+
 		// check if js2php is installed
 		if ( !$this->taskExecStack()->stopOnFail()->dir( $this->root_folder )->exec( 'npm list | grep js2php' )
 			->printOutput( false )->run()->getMessage() ) {
@@ -199,9 +273,7 @@ class TestsGenerator extends Tasks {
 			$this->taskNpmInstall()->run();
 		}
 
-		/**
-		 * Not sure about Robo\ResultData return type, looks excessive
-		 */
+		// Not sure about Robo\ResultData return type, looks excessive.
 		if ( !$this->filesystem->exists( $this->root_folder . '/tests/_w3c' ) ) {
 			$domino_path = $this->root_folder . '/vendor/fgnass/domino';
 			if ( !$this->filesystem->exists( $domino_path ) ) {
@@ -211,6 +283,7 @@ class TestsGenerator extends Tasks {
 			}
 		}
 
+		// Source tests.
 		if ( !$this->filesystem->exists( $this->root_folder . '/tests/_wpt' ) ) {
 			/* make sure there are wpt tests */
 			$wpt_path = $this->root_folder . '/vendor/web-platform-tests/wpt';
@@ -228,7 +301,7 @@ class TestsGenerator extends Tasks {
 	 *
 	 * @param SplFileInfo $file
 	 *
-	 * @return string|null
+	 * @return string
 	 * @throws TaskException
 	 * @throws Exception
 	 */
@@ -241,12 +314,14 @@ class TestsGenerator extends Tasks {
 				$file->getContents(),
 				$matches );
 
-			if ( $matches[1] ) {
+			if ( isset( $matches[1] ) && $matches[1] ) {
 				$content = $matches[1]; // without <script> tag
 				$file_path = $this->_tmpDir() . '/' . $file->getFilename();
 				file_put_contents( $file_path,
 					$content );
 				$remove = true;
+			} else {
+				return '';
 			}
 		}
 
@@ -292,10 +367,11 @@ class TestsGenerator extends Tasks {
 	 * @return Result
 	 */
 	protected function copyFiles() : Result {
-		$cp_dirs = [ $this->root_folder . self::W3C_TESTS . '/level1/core/files/*.html' =>
-			$this->root_folder . '/tests/w3c/level1/core/files/',
-			$this->root_folder . self::W3C_TESTS . '/level1/html/files/*.html' =>
-				$this->root_folder . '/tests/w3c/level1/html/files/' ];
+		$w3c_core = $this->root_folder . self::W3C_TESTS . '/level1/core/files/*.html';
+		$w3c_html = $this->root_folder . self::W3C_TESTS . '/level1/html/files/*.html';
+
+		$cp_dirs = [ $w3c_core => $this->root_folder . '/tests/w3c/level1/core/files/',
+			$w3c_html => $this->root_folder . '/tests/w3c/level1/html/files/' ];
 
 		return $this->taskFlattenDir( $cp_dirs )->run();
 	}
@@ -303,8 +379,55 @@ class TestsGenerator extends Tasks {
 	/**
 	 * @return Result
 	 */
+	public function dumpAutoload() : Result {
+		return $this->taskExec( 'composer dumpautoload' )->run();
+	}
+
+	/**
+	 * @return Result
+	 */
 	public function runTests() : Result {
-		return $this->taskPhpUnit()->arg( $this->root_folder . '/tests' )->run();
+		return $this->taskExec( 'composer phpunit' )->run();
+	}
+
+	/**
+	 * Generates a list by tests error category.
+	 */
+	public function generateFailureList() {
+		$log_file = file_get_contents( $this->root_folder . '/tests/log.xml' );
+		if ( empty( $log_file ) ) {
+			$this->yell( 'No log file found.' );
+		}
+
+		$xml = simplexml_load_string( $log_file );
+		$xml->registerXPathNamespace( 'fn',
+			'http://www.w3.org/2005/xpath-functions' );
+		// TODO fn:distinct-values
+		$errors = $xml->xpath( '//error' );
+		// $errors = $xml->xpath('//testsuite[@errors=1]');
+		$distinct_errors = [];
+
+		foreach ( $errors as $error ) {
+			$type = (string)$error->attributes()->type;
+			if ( !in_array( $type,
+				$distinct_errors ) ) {
+				$distinct_errors[] = $type;
+			}
+		}
+
+		if ( empty( $distinct_errors ) ) {
+			$this->say( 'No errors found' );
+		}
+
+		foreach ( $distinct_errors as &$error ) {
+			$tests = $xml->xpath( "//error[@type='$error']/parent::*" );
+			$error = [ 'error' => $error,
+				'tests' => $tests,
+				'total' => count( $tests ) ];
+		}
+
+		$json = json_encode( $distinct_errors, JSON_PRETTY_PRINT );
+		$this->taskWriteToFile( $this->root_folder . '/tests/log.json' )->text( $json )->run();
 	}
 
 	/**
@@ -313,7 +436,6 @@ class TestsGenerator extends Tasks {
 	protected function cleanUp() {
 		$this->filesystem->remove( $this->root_folder . '/tests/wpt' );
 		$this->filesystem->remove( $this->root_folder . '/tests/w3c' );
-		$this->filesystem->remove( $this->root_folder . '/tests/DodoBaseTest.php' );
 	}
 
 	/**
