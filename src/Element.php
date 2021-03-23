@@ -157,7 +157,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		 * Otherwise, its HTML-uppercased qualified name is its
 		 * qualified name."
 		 */
-		if ( $this->isHTMLElement() ) {
+		if ( $this->_isHTMLElement() ) {
 			if ( !isset( self::$UC_Cache[$qname] ) ) {
 				$uc_qname = Util::ascii_to_uppercase( $qname );
 				self::$UC_Cache[$qname] = $uc_qname;
@@ -340,7 +340,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 			Util::error( "InvalidCharacterError" );
 		}
 
-		if ( !ctype_lower( $qname ) && $this->isHTMLElement() ) {
+		if ( !ctype_lower( $qname ) && $this->_isHTMLElement() ) {
 			$qname = Util::ascii_to_lowercase( $qname );
 		}
 
@@ -599,7 +599,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	 */
 
 	/* Calls isHTMLDocument() on ownerDocument */
-	public function isHTMLElement() {
+	public function _isHTMLElement() {
 		if ( $this->_namespaceURI === Util::NAMESPACE_HTML
 			 && $this->_ownerDocument
 			 && $this->_ownerDocument->isHTMLDocument() ) {

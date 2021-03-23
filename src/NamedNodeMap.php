@@ -198,7 +198,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 		 * Per HTML spec, we normalize qname before lookup,
 		 * even though XML itself is case-sensitive.
 		 */
-		if ( !ctype_lower( $qname ) && $this->_element->isHTMLElement() ) {
+		if ( !ctype_lower( $qname ) && $this->_element->_isHTMLElement() ) {
 			$qname = Util::ascii_to_lowercase( $qname );
 		}
 
@@ -220,7 +220,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 		 * Per HTML spec, we normalize qname before lookup,
 		 * even though XML itself is case-sensitive.
 		 */
-		if ( !ctype_lower( $qname ) && $this->_element->isHTMLElement() ) {
+		if ( !ctype_lower( $qname ) && $this->_element->_isHTMLElement() ) {
 			$qname = Util::ascii_to_lowercase( $qname );
 		}
 

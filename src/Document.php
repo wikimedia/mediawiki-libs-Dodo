@@ -581,7 +581,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	public function _isHTMLDocument(): bool {
 		if ( $this->__type === 'html' ) {
 			$elt = $this->getDocumentElement();
-			if ( $elt !== null && $elt->isHTMLElement() ) {
+			if ( $elt !== null && $elt->_isHTMLElement() ) {
 				return true;
 			}
 		}
