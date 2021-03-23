@@ -617,7 +617,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	 * lazy traversals of the tree.
 	 * TODO: Change its name to __next_element then!
 	 */
-	public function nextElement( $root ) {
+	public function _nextElement( $root ) {
 		if ( !$root ) {
 			$root = $this->getOwnerDocument()->getDocumentElement();
 		}
