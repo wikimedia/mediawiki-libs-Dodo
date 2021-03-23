@@ -19,6 +19,8 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Zest\Zest;
+
 /******************************************************************************
  * Element.php
  * -----------
@@ -592,6 +594,29 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		*/
 		$this->_classList = $dtlist;
 		return $dtlist;
+	}
+
+	/**
+	 * @param string $selectors
+	 * @return bool
+	 */
+	public function matches( string $selectors ) : bool {
+		return Zest::matches( $this, $selectors );
+	}
+
+	/**
+	 * @param string $selectors
+	 * @return ?Element
+	 */
+	public function closest( string $selectors ) {
+		$el = $this;
+		do {
+			if ( $el instanceof Element && $el->matches( $selectors ) ) {
+				return $el;
+			}
+			$el = $el->getParentElement() ?? $el->getParentNode();
+		} while ( $el !== null && $el->getNodeType() == Node::ELEMENT_NODE );
+		return null;
 	}
 
 	/*********************************************************************

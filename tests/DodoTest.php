@@ -22,6 +22,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$comment = $doc->createComment( 'Hello, world!' );
 		$p = $doc->createElement( "p" );
 		$img = new HTMLImgElement( $doc, "img", "" ); /* using createElement soon */
+		$img->setAttribute( 'id', "foo" );
 
 		/* Construct the tree */
 		$p->appendChild( $doc->createTextNode( 'Lorem ipsum' ) );
@@ -43,6 +44,9 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 
 		/* Print the width, the value should be an integer */
 		echo( "IMG width: " . $img->width . "\n" );
+
+		$img2 = $html->querySelector( "#foo" );
+		// $this->assertEquals( $img, $img2 );  // This doesn't work yet
 
 		$this->assertTrue( true ); // success is not throwing an exception!
 	}
