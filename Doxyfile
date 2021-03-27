@@ -19,8 +19,7 @@ ALIASES                = "type{1}=<b> \1 </b>:" \
                          "license=\note" \
                          "inheritDoc=\inheritdoc" \
                          "codeCoverageIgnore=" \
-                         "codingStandardsIgnoreEnd=" \
-                         "codingStandardsIgnoreStart=" \
+                         "phpcs=" \
                          "phan=" \
                          "suppress=" \
                          "stable=Stable"
