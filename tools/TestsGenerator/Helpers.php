@@ -7,8 +7,21 @@ use PhpParser\Node\Expr\MethodCall as MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
+use RemexHtml\DOM\DOMBuilder;
+use RemexHtml\Tokenizer\Tokenizer;
+use RemexHtml\TreeBuilder\Dispatcher;
+use RemexHtml\TreeBuilder\TreeBuilder;
+use Symfony\Component\Finder\Finder;
 use Throwable;
+use Wikimedia\Dodo\DOMException;
+use Wikimedia\Dodo\DOMImplementation;
+use Wikimedia\Dodo\Node as DOMNode;
 
+/**
+ * Trait Helpers
+ *
+ * @package Wikimedia\Dodo\Tools\TestsGenerator
+ */
 trait Helpers {
 	/**
 	 * Converts snake case to camel case.
@@ -58,5 +71,27 @@ trait Helpers {
 			$type,
 			[ new Arg( new String_( Throwable::class ) ) ],
 			$attributes ) );
+	}
+
+	/**
+	 * @param string $href
+	 *
+	 * @return DOMNode
+	 */
+	protected function parseHtmlToDom( string $href ) : DOMNode {
+		$realpath = realpath( '.' );
+		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/w3c' )
+			->files()->sortByName() );
+		$file = file_get_contents( array_key_first( $file_path ) );
+
+		$domBuilder = new DOMBuilder( [ 'domImplementationClass' => DOMImplementation::class,
+			'domExceptionClass' => DOMException::class ] );
+		$treeBuilder = new TreeBuilder( $domBuilder );
+		$dispatcher = new Dispatcher( $treeBuilder );
+		$tokenizer = new Tokenizer( $dispatcher,
+			$file );
+		$tokenizer->execute();
+
+		return $domBuilder->getFragment();
 	}
 }

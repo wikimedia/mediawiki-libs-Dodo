@@ -1,17 +1,17 @@
 <?php
 
 declare( strict_types = 1 );
-// XXX Should fix these!
-// @phan-file-suppress PhanUndeclaredMethod
 
 namespace Wikimedia\Dodo\Tools\TestsGenerator;
 
 use Robo\Collection\CollectionBuilder;
+use Robo\TaskAccessor;
 
 /**
  * Load DodoTestsGenerator Robo tasks.
  */
 trait LoadTasks {
+	use TaskAccessor;
 
 	/**
 	 * @param null|string $folder

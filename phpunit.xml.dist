@@ -13,12 +13,7 @@
 			<directory suffix=".php">./src</directory>
 		</whitelist>
 	</filter>
-<!--
-This is putting absolute paths in the log.xml file, which means they
-show up as changed/different for every user who regenerates this file.
-Commenting out until I can figure out how best to fix this issue.
 	<logging>
 		<log type="junit" target="tests/log.xml"/>
 	</logging>
--->
 </phpunit>

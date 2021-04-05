@@ -1,8 +1,6 @@
 <?php
 
-declare( strict_types = 1 );
-// XXX Should fix these!
-// @phan-file-suppress PhanUndeclaredProperty
+declare( strict_types=1 );
 
 namespace Wikimedia\Dodo\Tools\TestsGenerator;
 
@@ -14,8 +12,6 @@ use Symfony\Component\Finder\Finder;
 /**
  * Class TestsLocator
  *
- * @todo
- * - rename to w3c test locator
  * @package DodoTestsGenerator\Robo\Task\Locator
  *
  */
@@ -25,7 +21,7 @@ class LocatorTask extends BaseTask {
 
 	private const W3C_TESTS = "/vendor/fgnass/domino/test/w3c/level1";
 
-	private const WPT_TESTS = "/vendor/web-platform-tests/wpt/dom/nodes";
+	private const WPT_TESTS = "/vendor/web-platform-tests/wpt/dom";
 
 	/**
 	 * @var Finder
@@ -45,6 +41,10 @@ class LocatorTask extends BaseTask {
 	 * @var Finder
 	 */
 	private $w3c_harness;
+	/**
+	 * @var false|string
+	 */
+	private $folder;
 
 	/**
 	 * FileLoader constructor.
@@ -59,9 +59,8 @@ class LocatorTask extends BaseTask {
 	 * @return Result
 	 */
 	public function run() : Result {
-		// pick a few W3C tests
 		$this->initTests();
-		$this->locateHarnesses();
+		// $this->locateHarnesses();
 
 		if ( !$this->w3c_tests->hasResults() ) {
 			return Result::error( $this,
@@ -73,13 +72,11 @@ class LocatorTask extends BaseTask {
 				'No WPT tests were found.' );
 		}
 
-		$tests = [ 'w3c' => iterator_to_array( $this->w3c_tests ),
-			'wpt' => iterator_to_array( $this->wpt_tests ),
-			'w3c_harness' => iterator_to_array( $this->w3c_harness ),
-			'wpt_harness' => iterator_to_array( $this->wpt_harness ) ];
+		$tests = [ 'W3c' => iterator_to_array( $this->w3c_tests ),
+			'Wpt' => iterator_to_array( $this->wpt_tests ) ];
 
-		$w3c_count = count( $tests['w3c'] );
-		$wpt_count = count( $tests['wpt'] );
+		$w3c_count = count( $tests['W3c'] );
+		$wpt_count = count( $tests['Wpt'] );
 
 		$this->printTaskInfo( 'W3C tests: ' . $w3c_count );
 		$this->printTaskInfo( 'WPT tests: ' . $wpt_count );
@@ -100,13 +97,77 @@ class LocatorTask extends BaseTask {
 		$this->w3c_tests = ( new Finder() )->name( '*.js' )->exclude( $exclude_dirs )->in( $w3c_tests_path )
 			->ignoreUnreadableDirs()->files()->sortByName();
 
+		$skips = [ 'DOMImplementation-createDocument', // js2php or parsing issue
+			'Document-createProcessingInstruction', // js2php or parsing issue
+			'Element-classlist', // js2php or parsing issue
+			'MutationObserver-document', // js2php or parsing issue
+			'Node-baseURI', // js2php or parsing issue
+			'Node-childNodes', // js2php or parsing issue
+			'Node-cloneNode-document-with-doctype', // js2php or parsing issue
+			'Node-parentNode-iframe', // js2php or parsing issue
+			'Node-properties', // js2php or parsing issue
+			'attributes-namednodemap', // js2php or parsing issue
+			'HTMLCollection-supported-property-indices', // js2php or parsing issue
+			'DOMTokenList-iteration', // js2php or parsing issue
+			'Range-comparePoint', // js2php or parsing issue
+			'Range-isPointInRange', // js2php or parsing issue
+			'TreeWalker', // js2php or parsing issue
+			'HTMLCollection-supported-property-names', // js2php or parsing issue
+			'Node-cloneNode', // js2php or parsing issue
+			'ParentNode-querySelectorAll-removed-elements', // js2php or parsing issue
+			'case', // Syntax error, unexpected T_USE, expecting '{' on line 57.
+			'remove-unscopable', // uses window & dispatchEvent
+			'remove-from-shadow-host-and-adopt-into-iframe.html', // TakeScreenshot.
+			'remove-and-adopt-thcrash', // uses window, tests a Chrome to crash.
+			'query-target-in-load-event', // uses addEventListener.
+			'remove-from-shadow-host-and-adopt-into-iframe', // takeScreenshot.
+			'ParentNode-replaceChildren', // MutationObserver.
+			'MutationObserver*', // MutationObserver.
+			'Range-mutations-*', // difficult to parse and convert to PHP.
+			'Comment-constructor', // CommentConstructorTest - Object::getPrototypeOf(Object::getPrototypeOf($object))
+			'Document-characterSet-normalization', // async test
+			'DocumentCreateElementTest', // Window and addEventListener
+			'DocumentCreateElementNSTest', // Window and addEventListener, could be transformed
+			'attributes', // uses asyncTest.
+			'comment-constructor.html', // Object::getPrototypeOf(Object::getPrototypeOf($object)
+			'Document-characterSet-normalization', // asyncTest
+			'Document-createElementNS', // addEventListener
+			'Document-createElement', // asyncTest and addEventListener
+			'Document-getElementsByTagName', // HTMLCollection::prototype::namedItem
+			'Document-URL', // $iframe->onload = $this->step_func_done(function () use(&$iframe) {
+			'Text-constructor', // Object::getPrototypeOf(Object::getPrototypeOf($object)
+			'aria-element-reflection.tentative', // hard to make valid
+			//'Node-isEqualNode', // testDeepEquality function and class context
+			'Element-getElementsByTagName', // HTMLCollection::prototype::item
+			'Node-replaceChild', // Node::class::replaceChild
+		];
+
+		array_walk( $skips,
+			function ( &$item, $key ) {
+				$item .= '.*';
+			} );
 		/**
 		 * For now only load .html's
 		 */
-		$exclude_dirs = [ 'Document-createElement-namespace-tests' ];
+		$exclude_dirs = [ 'Document-createElement-namespace-tests',
+			'unfinished',
+			'support',
+			'Document-contentType' ];
 		$wpt_tests_path = $this->folder . self::WPT_TESTS;
-		$this->wpt_tests = ( new Finder() )->name( "*.html" )->in( $wpt_tests_path )->exclude( $exclude_dirs )
-			->ignoreUnreadableDirs()->files()->sortByName();
+
+		$subfolders = [ '/nodes',
+			'/collections',
+			'/traversal',
+			'/ranges',
+			'/lists' ];
+
+		$subfolders = preg_filter( '/^/',
+			$wpt_tests_path,
+			$subfolders );
+
+		$this->wpt_tests = ( new Finder() )->name( [ "*.html",
+			/*"*.js"*/ ] )->notName( $skips )->in( $subfolders )->exclude( $exclude_dirs )->ignoreUnreadableDirs()
+			->files()->sortByName();
 	}
 
 	/**

@@ -1,0 +1,32 @@
+<?php 
+namespace Wikimedia\Dodo\Tests\W3C;
+use Wikimedia\Dodo\Node;
+use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
+// @see vendor/fgnass/domino/test/w3c/level1/html/HTMLTableSectionElement15.js.
+class HTMLTableSectionElement15Test extends W3cTestHarness
+{
+    public function testHTMLTableSectionElement15()
+    {
+        $builder = $this->getBuilder();
+        if ($this->checkInitialization($builder, 'HTMLTableSectionElement15') != null) {
+            return;
+        }
+        $nodeList = null;
+        $rowsnodeList = null;
+        $testNode = null;
+        $vrows = null;
+        $doc = null;
+        $docRef = null;
+        if (gettype($this->doc) != NULL) {
+            $docRef = $this->doc;
+        }
+        $doc = $this->load($docRef, 'doc', 'tablesection');
+        $nodeList = $doc->getElementsByTagName('tbody');
+        $this->assertSizeData('Asize', 2, $nodeList);
+        $testNode = $nodeList->item(1);
+        $rowsnodeList = $testNode->rows;
+        $vrows = count($rowsnodeList);
+        $this->assertEqualsData('rowsLink', 2, $vrows);
+    }
+}

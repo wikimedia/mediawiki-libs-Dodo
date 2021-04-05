@@ -1,0 +1,31 @@
+<?php 
+namespace Wikimedia\Dodo\Tests\W3C;
+use Wikimedia\Dodo\Node;
+use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\HTMLAnchorElement;
+use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
+// @see vendor/fgnass/domino/test/w3c/level1/html/HTMLAnchorElement11.js.
+class HTMLAnchorElement11Test extends W3cTestHarness
+{
+    public function testHTMLAnchorElement11()
+    {
+        $builder = $this->getBuilder();
+        if ($this->checkInitialization($builder, 'HTMLAnchorElement11') != null) {
+            return;
+        }
+        $nodeList = null;
+        $testNode = null;
+        $vtarget = null;
+        $doc = null;
+        $docRef = null;
+        if (gettype($this->doc) != NULL) {
+            $docRef = $this->doc;
+        }
+        $doc = $this->load($docRef, 'doc', 'anchor2');
+        $nodeList = $doc->getElementsByTagName('a');
+        $this->assertSizeData('Asize', 1, $nodeList);
+        $testNode = $nodeList[0];
+        $vtarget = $testNode->target;
+        $this->assertEqualsData('targetLink', 'dynamic', $vtarget);
+    }
+}
