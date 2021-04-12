@@ -373,7 +373,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	 * @return bool
 	 */
 	public function hasAttribute( string $qname ): bool {
-		return $this->attributes->hasNamedItem( $qname );
+		return $this->attributes->_hasNamedItem( $qname );
 	}
 
 	/**
@@ -471,7 +471,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	 * @return bool
 	 */
 	public function hasAttributeNS( ?string $ns, string $lname ): bool {
-		return $this->attributes->hasNamedItemNS( $ns, $lname );
+		return $this->attributes->_hasNamedItemNS( $ns, $lname );
 	}
 
 	/**********************************************************************

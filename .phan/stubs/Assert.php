@@ -22,6 +22,21 @@ abstract class Assert {
 	public static function assertTrue( $condition, string $message = '' ): void {
 	}
 
+    /**
+     * Asserts that a variable is of a given type.
+     *
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     *
+     * @psalm-template ExpectedType of object
+     * @psalm-param class-string<ExpectedType> $expected
+     * @psalm-assert =ExpectedType $actual
+     */
+    public static function assertInstanceOf(string $expected, $actual, string $message = ''): void
+    {
+    }
+
 	/**
 	 * Mark the test as skipped.
 	 *

@@ -5,7 +5,13 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo\Tests;
 
+use RemexHtml\DOM\DOMBuilder;
+use RemexHtml\Tokenizer\Tokenizer;
+use RemexHtml\TreeBuilder\Dispatcher;
+use RemexHtml\TreeBuilder\TreeBuilder;
+
 use Wikimedia\Dodo\Document;
+use Wikimedia\Dodo\DOMImplementation;
 use Wikimedia\Dodo\HTMLImgElement;
 
 /**
@@ -61,5 +67,41 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		// $this->assertEquals( $img, $img2 );  // This doesn't work yet
 
 		$this->assertTrue( true ); // success is not throwing an exception!
+	}
+
+	/** @dataProvider provideRemex */
+	public function testRemex( $html, $expected ) {
+		$domBuilder = new DOMBuilder( [
+			'suppressHtmlNamespace' => true,
+			'domImplementation' => new DOMImplementation()
+		] );
+		$treeBuilder = new TreeBuilder( $domBuilder, [
+			'ignoreErrors' => true
+		] );
+		$dispatcher = new Dispatcher( $treeBuilder );
+		$tokenizer = new Tokenizer( $dispatcher, $html, [
+			'ignoreErrors' => true ]
+		);
+		$tokenizer->execute( [] );
+
+		$this->assertTrue( !$domBuilder->isCoerced() );
+
+		$result = $domBuilder->getFragment();
+		$this->assertInstanceOf( Document::class, $result );
+
+		$this->assertEquals( $expected, $result->_node_serialize() );
+	}
+
+	public function provideRemex() {
+		return [
+			[
+				'<p>hello</p>',
+				'<html><head></head><body><p>hello</p></body></html>'
+			],
+			[
+				'<html><body><i>Italics!',
+				'<html><head></head><body><i>Italics!</i></body></html>'
+			],
+		];
 	}
 }

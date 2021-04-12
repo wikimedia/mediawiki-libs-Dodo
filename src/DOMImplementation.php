@@ -120,7 +120,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	}
 
 	/** @inheritDoc */
-	public function createDocument( ?string $namespace, string $qualifiedName, $doctype = null ) {
+	public function createDocument( ?string $namespace, ?string $qualifiedName, $doctype = null ) {
 		/*
 		 * Note that the current DOMCore spec makes it impossible
 		 * to create an HTML document with this function, even if

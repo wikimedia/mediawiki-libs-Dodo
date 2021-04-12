@@ -10,6 +10,9 @@ $cfg['directory_list'] = [
 	'vendor/nikic/php-parser/lib',
 	'vendor/symfony',
 	'vendor/wikimedia/idle-dom/src',
+	'vendor/wikimedia/remex-html/RemexHtml/Serializer',
+	'vendor/wikimedia/remex-html/RemexHtml/Tokenizer',
+	'vendor/wikimedia/remex-html/RemexHtml/TreeBuilder',
 	'.phan/stubs',
 ];
 $cfg['suppress_issue_types'] = [];
