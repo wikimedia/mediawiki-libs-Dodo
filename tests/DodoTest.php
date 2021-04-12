@@ -1,5 +1,8 @@
 <?php
 
+declare( strict_types = 1 );
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 namespace Wikimedia\Dodo\Tests;
 
 use Wikimedia\Dodo\Document;
@@ -33,17 +36,26 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$doc->appendChild( $html );
 
 		/* Print the tree */
-		echo( $doc->_node_serialize() . "\n\n" );
+		$this->assertEquals(
+			'<html><body><!--Hello, world!--><img id="foo"></img><p>Lorem ipsum</p></body></html>',
+			$doc->_node_serialize()
+		);
 
 		/* Update the attributes on the <img> node */
 		$img->alt = "Incredible Vision";
 		$img->width = "1337px"; // NOTE: width stored as a string
 
 		/* Print the tree again (<img> should have attributes now) */
-		echo( $doc->_node_serialize() . "\n\n" );
+		$this->assertEquals(
+			'<html><body><!--Hello, world!--><img id="foo" alt="Incredible Vision" width="1337px"></img><p>Lorem ipsum</p></body></html>',
+			$doc->_node_serialize()
+		);
 
 		/* Print the width, the value should be an integer */
-		echo( "IMG width: " . $img->width . "\n" );
+		$this->assertEquals(
+			'IMG width: 0', // This doesn't work yet
+			"IMG width: " . $img->width
+		);
 
 		$img2 = $html->querySelector( "#foo" );
 		// $this->assertEquals( $img, $img2 );  // This doesn't work yet
