@@ -169,8 +169,8 @@ abstract class CharacterData extends Node implements \Wikimedia\IDLeDOM\Characte
 	}
 
 	/** @inheritDoc */
-	public function setData( string $value ) : void {
-		$this->replaceData( 0, $this->getLength(), $value );
+	public function setData( ?string $value ) : void {
+		$this->replaceData( 0, $this->getLength(), $value ?? '' );
 	}
 
 }
