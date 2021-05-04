@@ -25,7 +25,7 @@ class RangeAdoptTestTest extends WptTestHarness
     }
     public function testRangeAdoptTest()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-adopt-test.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-adopt-test.html');
         //Tests removing only element
         $this->assertTest(function () {
             $range = $this->createRangeWithUnparentedContainerOfSingleElement();

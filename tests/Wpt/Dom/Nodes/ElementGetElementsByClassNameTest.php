@@ -8,7 +8,7 @@ class ElementGetElementsByClassNameTest extends WptTestHarness
 {
     public function testElementGetElementsByClassName()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-getElementsByClassName.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-getElementsByClassName.html');
         $this->assertTest(function () {
             $a = $this->doc->createElement('a');
             $b = $this->doc->createElement('b');

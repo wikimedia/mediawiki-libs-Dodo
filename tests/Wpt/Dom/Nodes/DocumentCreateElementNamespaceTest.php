@@ -16,7 +16,7 @@ class DocumentCreateElementNamespaceTest extends WptTestHarness
     }
     public function testDocumentCreateElementNamespace()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-createElement-namespace.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createElement-namespace.html');
         // First test various objects we create in JS
         $this->assertTest(function () {
             $this->testDoc($this->doc, 'text/html');

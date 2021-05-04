@@ -18,7 +18,7 @@ class NodeParentNodeTest extends WptTestHarness
     }
     public function testNodeParentNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-parentNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-parentNode.html');
         // XXX need to test for more node types
         $this->assertTest(function () {
             $this->assertEqualsData($this->doc->parentNode, null);

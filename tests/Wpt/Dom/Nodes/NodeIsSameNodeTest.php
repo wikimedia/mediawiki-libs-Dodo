@@ -13,7 +13,7 @@ class NodeIsSameNodeTest extends WptTestHarness
 {
     public function testNodeIsSameNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-isSameNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-isSameNode.html');
         $this->assertTest(function () {
             $doctype1 = $this->doc->implementation->createDocumentType('qualifiedName', 'publicId', 'systemId');
             $doctype2 = $this->doc->implementation->createDocumentType('qualifiedName', 'publicId', 'systemId');

@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeinsertbeforenewchildexists.js.
 class HcNodeinsertbeforenewchildexistsTest extends W3cTestHarness
 {
     public function testHcNodeinsertbeforenewchildexists()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'hc_nodeinsertbeforenewchildexists') != null) {
             return;
         }
@@ -39,7 +42,7 @@ class HcNodeinsertbeforenewchildexistsTest extends W3cTestHarness
         $employeeNode = $elementList->item(1);
         $childList = $employeeNode->getElementsByTagName('*');
         $refChild = $childList->item(5);
-        $newChild = $childList[0];
+        $newChild = $childList->item(0);
         $insertedNode = $employeeNode->insertBefore($newChild, $refChild);
         for ($indexN1008C = 0; $indexN1008C < count($childList); $indexN1008C++) {
             $child = $childList->item($indexN1008C);

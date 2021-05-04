@@ -18,6 +18,11 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	use \Wikimedia\IDLeDOM\Helper\ProcessingInstruction;
 
 	/**
+	 * @var string
+	 */
+	private $_target;
+
+	/**
 	 * @param Document $doc
 	 * @param string $target
 	 * @param string $data

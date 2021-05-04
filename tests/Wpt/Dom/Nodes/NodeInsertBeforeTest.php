@@ -142,7 +142,7 @@ class NodeInsertBeforeTest extends WptTestHarness
     }
     public function testNodeInsertBefore()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-insertBefore.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-insertBefore.html');
         $insertFunc = 'insertBefore';
         $this->preInsertionValidateHierarchy('insertBefore');
         $this->assertTest(function () {

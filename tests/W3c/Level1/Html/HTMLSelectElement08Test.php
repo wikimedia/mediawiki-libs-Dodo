@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLSelectElement08.js.
 class HTMLSelectElement08Test extends W3cTestHarness
 {
     public function testHTMLSelectElement08()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'HTMLSelectElement08') != null) {
             return;
         }
@@ -33,7 +36,7 @@ class HTMLSelectElement08Test extends W3cTestHarness
         $doc = $this->load($docRef, 'doc', 'select');
         $nodeList = $doc->getElementsByTagName('select');
         $this->assertSizeData('Asize', 3, $nodeList);
-        $testNode = $nodeList[0];
+        $testNode = $nodeList->item(0);
         $optionsnodeList = $testNode->options;
         for ($indexN65648 = 0; $indexN65648 < count($optionsnodeList); $indexN65648++) {
             $voption = $optionsnodeList->item($indexN65648);

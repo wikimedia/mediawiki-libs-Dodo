@@ -8,7 +8,7 @@ class ParentNodeChildrenTest extends WptTestHarness
 {
     public function testParentNodeChildren()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ParentNode-children.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-children.html');
         $this->assertTest(function () {
             $node = $this->doc->getElementById('test');
             $parentNode = $node->parentNode;

@@ -18,7 +18,7 @@ class ElementClosestTest extends WptTestHarness
     }
     public function testElementClosest()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-closest.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-closest.html');
         $this->doTest('select', 'test12', 'test3');
         $this->doTest('fieldset', 'test13', 'test2');
         $this->doTest('div', 'test13', 'test6');

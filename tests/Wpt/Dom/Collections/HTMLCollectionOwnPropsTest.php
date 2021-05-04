@@ -19,7 +19,7 @@ class HTMLCollectionOwnPropsTest extends WptTestHarness
     }
     public function testHTMLCollectionOwnProps()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-own-props.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-own-props.html');
         $this->assertTest(function () {
             $name = 'named';
             $tag = 'a';

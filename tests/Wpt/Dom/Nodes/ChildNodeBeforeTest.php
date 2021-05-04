@@ -142,12 +142,12 @@ class ChildNodeBeforeTest extends WptTestHarness
             $x = $this->doc->createElement('x');
             $y = $this->doc->createElement('y');
             $x->before($y);
-            $this->assertEqualsData($x->previousSibling, null);
+            $this->assertEqualsData($x->getPreviousSibling(), null);
         }, $nodeName . '.before() on a child without any parent.');
     }
     public function testChildNodeBefore()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ChildNode-before.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ChildNode-before.html');
         $this->testBefore($this->doc->createComment('test'), 'Comment', '<!--test-->');
         $this->testBefore($this->doc->createElement('test'), 'Element', '<test></test>');
         $this->testBefore($this->doc->createTextNode('test'), 'Text', 'test');

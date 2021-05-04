@@ -10,7 +10,7 @@ class DocumentFragmentGetElementByIdTest extends WptTestHarness
 {
     public function testDocumentFragmentGetElementById()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/DocumentFragment-getElementById.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DocumentFragment-getElementById.html');
         $this->assertTest(function () {
             $this->assertEqualsData((new \ReflectionClass( DocumentFragment::class))->hasMethod( 'getElementById'), 'It must exist on the prototype');
             $this->assertEqualsData(gettype($this->doc->createDocumentFragment()->getElementById), 'function', 'It must exist on an instance');

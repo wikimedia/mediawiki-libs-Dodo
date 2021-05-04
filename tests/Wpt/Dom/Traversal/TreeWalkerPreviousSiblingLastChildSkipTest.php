@@ -26,7 +26,7 @@ class TreeWalkerPreviousSiblingLastChildSkipTest extends WptTestHarness
     }
     public function testTreeWalkerPreviousSiblingLastChildSkip()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-previousSiblingLastChildSkip.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-previousSiblingLastChildSkip.html');
         $testElement = null;
         // setup()
         $testElement = $this->doc->createElement('div');
@@ -94,7 +94,7 @@ class TreeWalkerPreviousSiblingLastChildSkipTest extends WptTestHarness
             $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'D2']);
             $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
             $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'B2']);
-            $this->assertNodeData($walker->previousSibling(), ['type' => Element, 'id' => 'C2']);
+            $this->assertNodeData($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'C2']);
             $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'C2']);
         }, 'Test that previousSibling properly respects the filter.');
     }

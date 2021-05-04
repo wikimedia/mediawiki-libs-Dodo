@@ -8,7 +8,7 @@ class ElementFirstElementChildNamespaceTest extends WptTestHarness
 {
     public function testElementFirstElementChildNamespace()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-firstElementChild-namespace.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-firstElementChild-namespace.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $el = $this->doc->createElementNS('http://ns.example.org/pickle', 'pickle:dill');

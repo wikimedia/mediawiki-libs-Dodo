@@ -8,7 +8,7 @@ class ElementHasAttributesTest extends WptTestHarness
 {
     public function testElementHasAttributes()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-hasAttributes.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-hasAttributes.html');
         $this->assertTest(function () {
             $buttonElement = $this->doc->getElementsByTagName('button')[0];
             $this->assertEqualsData($buttonElement->hasAttributes(), false, 'hasAttributes() on empty element must return false.');

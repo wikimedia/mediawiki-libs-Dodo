@@ -8,7 +8,7 @@ class ElementPreviousElementSiblingTest extends WptTestHarness
 {
     public function testElementPreviousElementSibling()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-previousElementSibling.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-previousElementSibling.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $lec = $this->doc->getElementById('last_element_child');

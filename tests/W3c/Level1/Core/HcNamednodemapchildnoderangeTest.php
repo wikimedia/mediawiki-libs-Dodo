@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_namednodemapchildnoderange.js.
 class HcNamednodemapchildnoderangeTest extends W3cTestHarness
 {
     public function testHcNamednodemapchildnoderange()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'hc_namednodemapchildnoderange') != null) {
             return;
         }
@@ -35,7 +38,7 @@ class HcNamednodemapchildnoderangeTest extends W3cTestHarness
             $child = $attributes->item(2);
             $this->assertNotNullData('attr2', $child);
         }
-        $child = $attributes[0];
+        $child = $attributes->item(0);
         $this->assertNotNullData('attr0', $child);
         $child = $attributes->item(1);
         $this->assertNotNullData('attr1', $child);

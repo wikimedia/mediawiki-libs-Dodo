@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodereplacechildnewchildexists.js.
 class HcNodereplacechildnewchildexistsTest extends W3cTestHarness
 {
     public function testHcNodereplacechildnewchildexists()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'hc_nodereplacechildnewchildexists') != null) {
             return;
         }
@@ -38,7 +41,7 @@ class HcNodereplacechildnewchildexistsTest extends W3cTestHarness
         $elementList = $doc->getElementsByTagName('p');
         $employeeNode = $elementList->item(1);
         $childList = $employeeNode->getElementsByTagName('*');
-        $newChild = $childList[0];
+        $newChild = $childList->item(0);
         $oldChild = $childList->item(5);
         $replacedChild = $employeeNode->replaceChild($newChild, $oldChild);
         $this->assertSameData('return_value_same', $oldChild, $replacedChild);

@@ -77,7 +77,7 @@ class TreeWalkerBasicTest extends WptTestHarness
     }
     public function testTreeWalkerBasic()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-basic.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-basic.html');
         $this->assertTest(function () {
             $root = $this->createSampleDOM();
             $walker = $this->doc->createTreeWalker($root);
@@ -124,7 +124,7 @@ class TreeWalkerBasicTest extends WptTestHarness
             $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'c']);
             $this->assertNodeData($walker->lastChild(), ['type' => Comment, 'nodeValue' => 'j']);
             $this->assertNodeData($walker->currentNode, ['type' => Comment, 'nodeValue' => 'j']);
-            $this->assertNodeData($walker->previousSibling(), ['type' => Element, 'id' => 'd']);
+            $this->assertNodeData($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'd']);
             $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'd']);
             $this->assertNodeData($walker->nextNode(), ['type' => Text, 'nodeValue' => 'e']);
             $this->assertNodeData($walker->currentNode, ['type' => Text, 'nodeValue' => 'e']);

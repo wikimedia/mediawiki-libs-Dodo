@@ -8,7 +8,7 @@ class ElementFirstElementChildTest extends WptTestHarness
 {
     public function testElementFirstElementChild()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-firstElementChild.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-firstElementChild.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $fec = $parentEl->firstElementChild;

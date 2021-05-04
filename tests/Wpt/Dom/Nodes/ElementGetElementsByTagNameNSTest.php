@@ -160,7 +160,7 @@ class ElementGetElementsByTagNameNSTest extends WptTestHarness
     }
     public function testElementGetElementsByTagNameNS()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-getElementsByTagNameNS.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-getElementsByTagNameNS.html');
         $element = null;
         // setup()
         $element = $this->doc->createElement('div');

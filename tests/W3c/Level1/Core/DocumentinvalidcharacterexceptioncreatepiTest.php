@@ -1,12 +1,15 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/documentinvalidcharacterexceptioncreatepi.js.
 class DocumentinvalidcharacterexceptioncreatepiTest extends W3cTestHarness
 {
     public function testDocumentinvalidcharacterexceptioncreatepi()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'documentinvalidcharacterexceptioncreatepi') != null) {
             return;
         }
@@ -17,7 +20,7 @@ class DocumentinvalidcharacterexceptioncreatepiTest extends W3cTestHarness
             $docRef = $this->doc;
         }
         $doc = $this->load($docRef, 'doc', 'hc_staff');
-        if ($builder->contentType == 'text/html' && false) {
+        if ($builder->contentType == 'text/html') {
             $success = false;
             try {
                 $badPI = $doc->createProcessingInstruction('foo', 'data');

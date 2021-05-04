@@ -12,7 +12,7 @@ class NodeNodeNameTest extends WptTestHarness
 {
     public function testNodeNodeName()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-nodeName.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-nodeName.html');
         $this->assertTest(function () {
             $HTMLNS = 'http://www.w3.org/1999/xhtml';
             $SVGNS = 'http://www.w3.org/2000/svg';

@@ -11,7 +11,7 @@ class NodeNormalizeTest extends WptTestHarness
 {
     public function testNodeNormalize()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-normalize.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-normalize.html');
         $this->assertTest(function () {
             $df = $this->doc->createDocumentFragment();
             $t1 = $this->doc->createTextNode('1');

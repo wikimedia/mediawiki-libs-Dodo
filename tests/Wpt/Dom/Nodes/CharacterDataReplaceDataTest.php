@@ -134,7 +134,7 @@ class CharacterDataReplaceDataTest extends WptTestHarness
     }
     public function testCharacterDataReplaceData()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/CharacterData-replaceData.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/CharacterData-replaceData.html');
         $this->testNode(function () {
             return $this->doc->createTextNode('test');
         }, 'Text');

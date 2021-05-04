@@ -25,7 +25,7 @@ class NodeAppendChildTest extends WptTestHarness
     }
     public function testNodeAppendChild()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-appendChild.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-appendChild.html');
         // WebIDL.
         $this->assertTest(function () {
             $this->assertThrowsJsData($this->type_error, function () {

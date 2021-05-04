@@ -104,8 +104,8 @@ trait Common {
 	 * the first Node.
 	 */
 	public function previousNode( $node ) {
-		if ( $node->previousSibling ) {
-			$node = $node->previousSibling;
+		if ( $node->getPreviousSibling() ) {
+			$node = $node->getPreviousSibling();
 			while ( $node->hasChildNodes() ) {
 				$node = $node->lastChild;
 			}

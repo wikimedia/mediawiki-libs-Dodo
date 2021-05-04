@@ -7,7 +7,7 @@ class NodeCloneNodeOnInactiveDocumentCrashTest extends WptTestHarness
 {
     public function testNodeCloneNodeOnInactiveDocumentCrash()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-cloneNode-on-inactive-document-crash.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-cloneNode-on-inactive-document-crash.html');
         $doc = $i->getOwnerDocument();
         $i->remove();
         $doc->cloneNode();

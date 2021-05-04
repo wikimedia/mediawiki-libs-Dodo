@@ -9,7 +9,7 @@ class InsertAdjacentTest extends WptTestHarness
 {
     public function testInsertAdjacent()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/insert-adjacent.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/insert-adjacent.html');
         $possiblePositions = ['beforebegin' => 'previousSibling', 'afterbegin' => 'firstChild', 'beforeend' => 'lastChild', 'afterend' => 'nextSibling'];
         $texts = ['beforebegin' => 'raclette', 'afterbegin' => 'tartiflette', 'beforeend' => 'lasagne', 'afterend' => 'gateau aux pommes'];
         $el = $this->doc->querySelector('#element');

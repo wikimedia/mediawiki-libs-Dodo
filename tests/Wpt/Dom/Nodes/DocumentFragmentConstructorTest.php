@@ -10,7 +10,7 @@ class DocumentFragmentConstructorTest extends WptTestHarness
 {
     public function testDocumentFragmentConstructor()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/DocumentFragment-constructor.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DocumentFragment-constructor.html');
         $this->assertTest(function () {
             $fragment = new DocumentFragment($this->doc);
             $this->assertEqualsData($fragment->ownerDocument, $this->doc);

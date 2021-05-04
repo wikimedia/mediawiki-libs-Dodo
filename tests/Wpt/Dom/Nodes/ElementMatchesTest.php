@@ -189,7 +189,7 @@ class ElementMatchesTest extends WptTestHarness
     }
     public function testElementMatches()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-matches.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-matches.html');
         $this->asyncTest(function () {
             $frame = $this->doc->createElement('iframe');
             $frame->onload = $this->step_func_done(function ($e) {

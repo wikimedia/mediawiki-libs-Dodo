@@ -12,7 +12,7 @@ class DOMTokenListCoverageForAttributesTest extends WptTestHarness
     }
     public function testDOMTokenListCoverageForAttributes()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/lists/DOMTokenList-coverage-for-attributes.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/lists/DOMTokenList-coverage-for-attributes.html');
         $pairs = [
             // Defined in DOM
             ['attr' => 'classList', 'sup' => ['anyElement']],

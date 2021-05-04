@@ -32,7 +32,7 @@ class DocumentCreateCommentTest extends WptTestHarness
     }
     public function testDocumentCreateComment()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-createComment.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createComment.html');
         $this->assertTestCreate('createComment', Comment, 8, '#comment');
     }
 }

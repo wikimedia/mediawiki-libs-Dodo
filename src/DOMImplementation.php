@@ -56,6 +56,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	 *      defensive programming.
 	 */
 	public function hasFeature( string $feature = "", string $version = "" ) : bool {
+		$feature = strtolower( $feature );
 		/*
 		 * Feature/version pairs that DOMImplementation->hasFeature()
 		 * returns true for. It returns false for anything else.
@@ -97,8 +98,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	 */
 	private function isValidQName( string $qualifiedName ) : bool {
 		// $qualifiedName = $this->checkEncoding($qualifiedName);
-
-		return preg_match(
+		return (bool)preg_match(
 			'/^([a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*:)?[a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*$/i',
 			$qualifiedName
 		);

@@ -3,13 +3,16 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\HTMLAnchorElement;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLAnchorElement07.js.
 class HTMLAnchorElement07Test extends W3cTestHarness
 {
     public function testHTMLAnchorElement07()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'HTMLAnchorElement07') != null) {
             return;
         }
@@ -24,7 +27,7 @@ class HTMLAnchorElement07Test extends W3cTestHarness
         $doc = $this->load($docRef, 'doc', 'anchor');
         $nodeList = $doc->getElementsByTagName('a');
         $this->assertSizeData('Asize', 1, $nodeList);
-        $testNode = $nodeList[0];
+        $testNode = $nodeList->item(0);
         $vrel = $testNode->rel;
         $this->assertEqualsData('relLink', 'GLOSSARY', $vrel);
     }

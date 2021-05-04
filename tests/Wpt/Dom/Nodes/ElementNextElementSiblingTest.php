@@ -8,7 +8,7 @@ class ElementNextElementSiblingTest extends WptTestHarness
 {
     public function testElementNextElementSibling()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-nextElementSibling.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-nextElementSibling.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $fec = $this->doc->getElementById('first_element_child');

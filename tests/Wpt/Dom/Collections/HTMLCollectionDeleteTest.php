@@ -7,7 +7,7 @@ class HTMLCollectionDeleteTest extends WptTestHarness
 {
     public function testHTMLCollectionDelete()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-delete.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-delete.html');
         $c = null;
         $expected = null;
         // These might be cached anyway, so explicitly use a single object.

@@ -36,7 +36,7 @@ class RangeCollapseTest extends WptTestHarness
     }
     public function testRangeCollapse()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-collapse.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-collapse.html');
         $tests = [];
         for ($i = 0; $i < count($testRanges); $i++) {
             $tests[] = ['Range ' . $i . ' ' . $testRanges[$i] . ', toStart true', eval($testRanges[$i]), true];

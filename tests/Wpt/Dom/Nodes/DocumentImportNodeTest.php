@@ -9,7 +9,7 @@ class DocumentImportNodeTest extends WptTestHarness
 {
     public function testDocumentImportNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-importNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-importNode.html');
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('Title');
             $div = $doc->body->appendChild($doc->createElement('div'));

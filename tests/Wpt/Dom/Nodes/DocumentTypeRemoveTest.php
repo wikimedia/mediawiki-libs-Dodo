@@ -41,7 +41,7 @@ class DocumentTypeRemoveTest extends WptTestHarness
     }
     public function testDocumentTypeRemove()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/DocumentType-remove.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DocumentType-remove.html');
         $node = null;
         $parentNode = null;
         // setup()

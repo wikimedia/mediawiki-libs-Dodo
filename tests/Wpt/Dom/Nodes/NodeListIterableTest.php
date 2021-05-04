@@ -9,7 +9,7 @@ class NodeListIterableTest extends WptTestHarness
 {
     public function testNodeListIterable()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/NodeList-Iterable.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/NodeList-Iterable.html');
         $paragraphs = null;
         // setup()
         $paragraphs = $this->doc->querySelectorAll('p');

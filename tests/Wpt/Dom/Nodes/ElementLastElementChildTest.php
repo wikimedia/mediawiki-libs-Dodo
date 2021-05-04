@@ -8,7 +8,7 @@ class ElementLastElementChildTest extends WptTestHarness
 {
     public function testElementLastElementChild()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-lastElementChild.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-lastElementChild.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $lec = $parentEl->lastElementChild;

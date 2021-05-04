@@ -7,7 +7,7 @@ class ElementChildElementCountDynamicAddTest extends WptTestHarness
 {
     public function testElementChildElementCountDynamicAdd()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-childElementCount-dynamic-add.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-childElementCount-dynamic-add.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $newChild = $this->doc->createElement('span');

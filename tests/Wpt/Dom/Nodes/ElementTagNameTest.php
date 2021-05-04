@@ -8,7 +8,7 @@ class ElementTagNameTest extends WptTestHarness
 {
     public function testElementTagName()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-tagName.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-tagName.html');
         $this->assertTest(function () {
             $HTMLNS = 'http://www.w3.org/1999/xhtml';
             $this->assertEqualsData($this->doc->createElementNS($HTMLNS, 'I')->tagName, 'I');

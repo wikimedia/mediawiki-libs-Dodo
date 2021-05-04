@@ -7,7 +7,7 @@ class ElementChildElementCountTest extends WptTestHarness
 {
     public function testElementChildElementCount()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-childElementCount.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-childElementCount.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $this->assertTrueData(isset($parentEl['childElementCount']));

@@ -120,7 +120,7 @@ class NodeIteratorTest extends WptTestHarness
     }
     public function testNodeIterator()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/NodeIterator.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/NodeIterator.html');
         $this->assertTest(function () {
             $iter = $this->doc->createNodeIterator($this->doc);
             $iter->detach();

@@ -8,7 +8,7 @@ class DocumentFragmentQuerySelectorAllAfterModificationTest extends WptTestHarne
 {
     public function testDocumentFragmentQuerySelectorAllAfterModification()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/DocumentFragment-querySelectorAll-after-modification.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DocumentFragment-querySelectorAll-after-modification.html');
         $frag = $this->doc->createDocumentFragment();
         $frag->appendChild($this->doc->createElement('div'));
         $this->assertArrayEqualsData($frag->querySelectorAll('img'), [], 'before modification');

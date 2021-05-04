@@ -6,7 +6,7 @@ class RangeConstructorTest extends WptTestHarness
 {
     public function testRangeConstructor()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-constructor.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-constructor.html');
         $this->assertTest(function () {
             $range = new Range();
             $this->assertEqualsData($range->startContainer, $this->doc, 'startContainer');

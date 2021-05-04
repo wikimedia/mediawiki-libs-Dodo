@@ -7,7 +7,7 @@ class ElementChildElementCountDynamicRemoveTest extends WptTestHarness
 {
     public function testElementChildElementCountDynamicRemove()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-childElementCount-dynamic-remove.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-childElementCount-dynamic-remove.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $lec = $parentEl->lastElementChild;

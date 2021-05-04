@@ -7,7 +7,7 @@ class ParentNodeQuerySelectorsExclusiveTest extends WptTestHarness
 {
     public function testParentNodeQuerySelectorsExclusive()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelectors-exclusive.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelectors-exclusive.html');
         $button = $this->doc->createElement('button');
         $this->assertEqualsData($button->querySelector('*'), null, "querySelector, '*', before modification");
         $this->assertEqualsData($button->querySelector('button'), null, "querySelector, 'button', before modification");

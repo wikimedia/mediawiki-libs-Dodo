@@ -13,7 +13,7 @@ use RemexHtml\TreeBuilder\Dispatcher;
 use RemexHtml\TreeBuilder\TreeBuilder;
 use Symfony\Component\Finder\Finder;
 use Throwable;
-use Wikimedia\Dodo\DOMException;
+use Wikimedia\Dodo\Document as DodoDOMDocument;
 use Wikimedia\Dodo\DOMImplementation;
 use Wikimedia\Dodo\Node as DOMNode;
 
@@ -74,23 +74,54 @@ trait Helpers {
 	}
 
 	/**
-	 * @param string $href
+	 * Loads html document.
 	 *
-	 * @return DOMNode
+	 * @param mixed $docRef
+	 * @param string|null $name
+	 * @param string|null $href
+	 *
+	 * @return DodoDOMDocument|null
 	 */
-	protected function parseHtmlToDom( string $href ) : DOMNode {
+	protected function load( $docRef = null, ?string $name = null, ?string $href = null ) : ?DOMNode {
+		// Replace it with actual getElementsByTagName call.
+		// Use this one after Remex integration is complete.
 		$realpath = realpath( '.' );
 		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/w3c' )
 			->files()->sortByName() );
-		$file = file_get_contents( array_key_first( $file_path ) );
 
-		$domBuilder = new DOMBuilder( [ 'domImplementationClass' => DOMImplementation::class,
-			'domExceptionClass' => DOMException::class ] );
-		$treeBuilder = new TreeBuilder( $domBuilder );
+		return $this->parseHtmlToDom( array_key_first( $file_path ) );
+	}
+
+	/**
+	 * Loads html document.
+	 *
+	 * @param mixed $docRef
+	 *
+	 * @return DodoDOMDocument|null
+	 */
+	protected function loadWptHtmlFile( $docRef ) : ?DOMNode {
+		return $this->parseHtmlToDom( realpath( '.' ) . '/' . $docRef );
+	}
+
+	/**
+	 * @param string $file_path
+	 *
+	 * @return DOMNode
+	 */
+	protected function parseHtmlToDom( string $file_path ) : DOMNode {
+		$html = file_get_contents( $file_path );
+		$domBuilder = new DOMBuilder( [
+			'suppressHtmlNamespace' => true,
+			'domImplementation' => new DOMImplementation()
+		] );
+		$treeBuilder = new TreeBuilder( $domBuilder, [
+			'ignoreErrors' => true
+		] );
 		$dispatcher = new Dispatcher( $treeBuilder );
-		$tokenizer = new Tokenizer( $dispatcher,
-			$file );
-		$tokenizer->execute();
+		$tokenizer = new Tokenizer( $dispatcher, $html, [
+				'ignoreErrors' => true ]
+		);
+		$tokenizer->execute( [] );
 
 		return $domBuilder->getFragment();
 	}

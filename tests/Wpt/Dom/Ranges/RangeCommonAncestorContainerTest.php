@@ -7,7 +7,7 @@ class RangeCommonAncestorContainerTest extends WptTestHarness
 {
     public function testRangeCommonAncestorContainer()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-commonAncestorContainer.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-commonAncestorContainer.html');
         array_unshift($testRanges, '[detached]');
         for ($i = 0; $i < count($testRanges); $i++) {
             $this->assertTest(function () use(&$i) {

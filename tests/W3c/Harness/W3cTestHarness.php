@@ -5,10 +5,11 @@ namespace Wikimedia\Dodo\Tests\W3c\Harness;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Wikimedia\Dodo\Document as DodoDOMDocument;
 use Wikimedia\Dodo\DOMException;
-use Wikimedia\Dodo\Node as Node;
+use Wikimedia\Dodo\DOMImplementation;
+use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
+use Wikimedia\Dodo\Document as DodoDOMDocument;
 
 /**
  * W3cTestHarness.php
@@ -51,10 +52,10 @@ abstract class W3cTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param string $message
-	 * @param string $actual
+	 * @param string|null $message
+	 * @param bool|null $actual
 	 */
-	public function assertTrueData( string $message, string $actual ) : void {
+	public function assertTrueData( ?string $message, ?bool $actual ) : void {
 		self::assertTrue( $actual,
 			$message );
 	}
@@ -85,11 +86,11 @@ abstract class W3cTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param string $message
-	 * @param string $expected
-	 * @param string $actual
+	 * @param string|null $message
+	 * @param string|null $expected
+	 * @param string|null $actual
 	 */
-	public function assertEqualsData( string $message, string $expected, string $actual ) : void {
+	public function assertEqualsData( ?string $message, ?string $expected, ?string $actual ) : void {
 		self::assertEquals( $expected,
 			$actual,
 			$message );
@@ -154,7 +155,7 @@ abstract class W3cTestHarness extends TestCase {
 	 * @param string $expected
 	 * @param string $actual
 	 */
-	public function assertEqualsCollectionData( string $descr, string $expected, string $actual ) {
+	public function assertEqualsCollectionData( string $descr, string $expected, string $actual ) : void {
 		//
 		// if they aren't the same size, they aren't equal
 		$this->assertEqualsData( $descr,
@@ -190,7 +191,7 @@ abstract class W3cTestHarness extends TestCase {
 	 * @param string $expected
 	 * @param string $actual
 	 */
-	public function assertEqualsListAutoCaseData( string $context, string $descr, string $expected, string $actual ) {
+	public function assertEqualsListAutoCaseData( string $context, string $descr, string $expected, string $actual ) : void {
 		$minLength = count( $expected );
 		if ( count( $actual ) < $minLength ) {
 			$minLength = count( $actual );
@@ -210,12 +211,12 @@ abstract class W3cTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param string $context
-	 * @param string $descr
-	 * @param string $expected
-	 * @param string $actual
+	 * @param string|null $context
+	 * @param string|null $descr
+	 * @param string|null $expected
+	 * @param string|null $actual
 	 */
-	public function assertEqualsAutoCaseData( string $context, string $descr, string $expected, string $actual ) {
+	public function assertEqualsAutoCaseData( ?string $context, ?string $descr, ?string $expected, ?string $actual ) : void {
 		if ( $this->contentType === 'text/html' ) {
 			if ( $context === 'attribute' ) {
 				$this->assertEqualsData( $descr,
@@ -234,11 +235,11 @@ abstract class W3cTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param string $descr
-	 * @param string $expected
-	 * @param string $actual
+	 * @param string|null $descr
+	 * @param string|null $expected
+	 * @param string|null $actual
 	 */
-	public function assertEqualsListData( string $descr, string $expected, string $actual ) : void {
+	public function assertEqualsListData( ?string $descr, ?string $expected, ?string $actual ) : void {
 		$minLength = count( $expected );
 		if ( count( $actual ) < $minLength ) {
 			$minLength = count( $actual );
@@ -465,35 +466,6 @@ abstract class W3cTestHarness extends TestCase {
 		return '.html';
 	}
 
-	public function generateElement() {
-		$this->generateDoc();
-	}
-
-	protected function generateDoc() {
-		$this->doc = new DodoDOMDocument( 'html' );
-		$html = $this->doc->createElement( 'html' );
-		$title = $this->doc->createElement( 'title' );
-		$title->appendChild( $this->doc->createTextNode( 'NIST DOM HTML Test - Anchorasd fadsfadsf' ) );
-		$html->appendChild( $title );
-		$body = $this->doc->createElement( 'body' );
-
-		$html->appendChild( $body );
-		$this->doc->appendChild( $html );
-
-		$this->contentType = 'text/html';
-	}
-
-	/**
-	 *
-	 */
-	public function executeBeforeFirstTest() : void {
-		// called before the first test is being run
-	}
-
-	public function executeAfterLastTest() : void {
-		// called after the last test has been run
-	}
-
 	/**
 	 * @param string $error
 	 *
@@ -529,88 +501,10 @@ abstract class W3cTestHarness extends TestCase {
 		$this->doc = $doc;
 	}
 
-	/**
-	 * hc_nodtdstaff.html
-	 */
-	protected function generateHcNodtdstaff() {
-		$this->generateDoc();
-	}
-
-	/**
-	 * hc_staff.html
-	 */
-	protected function generateHcStaff() {
-		$this->generateDoc();
-	}
-
-	/**
-	 * hc_staff.html
-	 */
-	protected function generateAnchor() {
-		$this->doc = new DodoDOMDocument( 'html' );
-		$html = $this->doc->createElement( 'html' );
-		$title = $this->doc->createElement( 'title' );
-		$title->appendChild( $this->doc->createTextNode( 'NIST DOM HTML Test - Anchorasd fadsfadsf' ) );
-		$html->appendChild( $title );
-		$body = $this->doc->createElement( 'body' );
-
-		$html->appendChild( $body );
-		$this->doc->appendChild( $html );
-
-		$this->contentType = 'text/html';
-	}
-
-	/**
-	 * hc_staff.html
-	 */
-	protected function generateAnchor2() {
-		$this->generateDoc();
-	}
-
-	/**
-	 * hc_staff.html
-	 */
-	protected function generateForm() {
-		$this->generateDoc();
-	}
-
-	/**
-	 * hc_staff.html
-	 */
-	protected function generateLink() {
-		$this->generateDoc();
-	}
-
-	/**
-	 * hc_staff.html
-	 */
-	protected function generateMod() {
-		$this->generateDoc();
-	}
-
-	/**
-	 *
-	 */
+	/* @inheritDoc */
 	protected function tearDown() : void {
 		parent::tearDown();
 		Mockery::close();
-	}
-
-	/**
-	 * Loads html document.
-	 *
-	 * @param mixed $docRef
-	 * @param string|null $name
-	 * @param string|null $href
-	 *
-	 * @return DodoDOMDocument|null
-	 */
-	protected function load( $docRef = null, ?string $name = null, ?string $href = null ) : ?DodoDOMDocument {
-		// Replace it with actual getElementsByTagName call.
-		// Use this one after Remex integration is complete.
-		// $this->{'generate' . $this->snakeToPascal( $href )}();
-		$this->doc = $this->parseHtmlToDom( $href );
-		return $this->doc;
 	}
 
 	/**
@@ -633,5 +527,12 @@ abstract class W3cTestHarness extends TestCase {
 		$builder->contentType = 'text/html'; // could be image/svg+xml.
 
 		return $builder;
+	}
+
+	/**
+	 * @return DOMImplementation
+	 */
+	protected function getImplementation() : DOMImplementation {
+		return $this->doc->getImplementation();
 	}
 }

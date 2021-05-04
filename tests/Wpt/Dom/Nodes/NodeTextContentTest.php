@@ -12,7 +12,7 @@ class NodeTextContentTest extends WptTestHarness
 {
     public function testNodeTextContent()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-textContent.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-textContent.html');
         // XXX mutation observers?
         // XXX Range gravitation?
         $this->docs = null;

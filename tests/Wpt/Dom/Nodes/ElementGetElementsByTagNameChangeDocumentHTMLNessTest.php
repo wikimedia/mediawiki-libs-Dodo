@@ -7,7 +7,7 @@ class ElementGetElementsByTagNameChangeDocumentHTMLNessTest extends WptTestHarne
 {
     public function testElementGetElementsByTagNameChangeDocumentHTMLNess()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-getElementsByTagName-change-document-HTMLNess.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-getElementsByTagName-change-document-HTMLNess.html');
         $onload = function () {
             $parent = $this->doc->createElement('div');
             $child1 = $this->doc->createElementNS('http://www.w3.org/1999/xhtml', 'a');

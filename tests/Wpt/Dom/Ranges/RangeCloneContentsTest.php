@@ -330,7 +330,7 @@ class RangeCloneContentsTest extends WptTestHarness
     }
     public function testRangeCloneContents()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-cloneContents.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-cloneContents.html');
         $testDiv->parentNode->removeChild($testDiv);
         $actualIframe = $this->doc->createElement('iframe');
         $actualIframe->style->display = 'none';

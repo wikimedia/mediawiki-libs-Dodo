@@ -8,7 +8,7 @@ class ElementSetAttributeTest extends WptTestHarness
 {
     public function testElementSetAttribute()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-setAttribute.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-setAttribute.html');
         $this->assertTest(function () {
             $el = $this->doc->createElement('p');
             $el->setAttributeNS('foo', 'x', 'first');

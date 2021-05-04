@@ -154,7 +154,7 @@ class ParentNodeAppendTest extends WptTestHarness
     }
     public function testParentNodeAppend()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ParentNode-append.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-append.html');
         $this->preInsertionValidateHierarchy('append');
         $this->testAppend($this->doc->createElement('div'), 'Element');
         $this->testAppend($this->doc->createDocumentFragment(), 'DocumentFragment');

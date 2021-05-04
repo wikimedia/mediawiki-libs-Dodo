@@ -7,7 +7,7 @@ class ParentNodeQuerySelectorCaseInsensitiveTest extends WptTestHarness
 {
     public function testParentNodeQuerySelectorCaseInsensitive()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-case-insensitive.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-case-insensitive.html');
         $input = $this->doc->getElementById('testInput');
         $this->assertTest(function () use(&$input) {
             $this->assertEqualsData($this->doc->querySelector('input[name*=user i]'), $input);

@@ -32,7 +32,7 @@ class DOMImplementationCreateHTMLDocumentTest extends WptTestHarness
     }
     public function testDOMImplementationCreateHTMLDocument()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/DOMImplementation-createHTMLDocument.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DOMImplementation-createHTMLDocument.html');
         $this->createHTMLDocuments(function ($doc, $expectedtitle, $normalizedtitle) {
             $this->assertTrueData($doc instanceof Document, 'Should be a Document');
             $this->assertTrueData($doc instanceof Node, 'Should be a Node');

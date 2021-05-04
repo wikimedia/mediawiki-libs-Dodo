@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_noderemovechildgetnodename.js.
 class HcNoderemovechildgetnodenameTest extends W3cTestHarness
 {
     public function testHcNoderemovechildgetnodename()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'hc_noderemovechildgetnodename') != null) {
             return;
         }
@@ -28,7 +31,7 @@ class HcNoderemovechildgetnodenameTest extends W3cTestHarness
         $elementList = $doc->getElementsByTagName('p');
         $employeeNode = $elementList->item(1);
         $childList = $employeeNode->childNodes;
-        $oldChild = $childList[0];
+        $oldChild = $childList->item(0);
         $oldName = $oldChild->nodeName;
         $removedChild = $employeeNode->removeChild($oldChild);
         $this->assertNotNullData('notnull', $removedChild);

@@ -9,7 +9,7 @@ class NodeMutationAdoptNodeTest extends WptTestHarness
 {
     public function testNodeMutationAdoptNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-mutation-adoptNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-mutation-adoptNode.html');
         $this->assertTest(function () {
             $old = $this->doc->implementation->createHTMLDocument('');
             $div = $old->createElement('div');

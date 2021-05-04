@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLFormElement06.js.
 class HTMLFormElement06Test extends W3cTestHarness
 {
     public function testHTMLFormElement06()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'HTMLFormElement06') != null) {
             return;
         }
@@ -23,7 +26,7 @@ class HTMLFormElement06Test extends W3cTestHarness
         $doc = $this->load($docRef, 'doc', 'form');
         $nodeList = $doc->getElementsByTagName('form');
         $this->assertSizeData('Asize', 1, $nodeList);
-        $testNode = $nodeList[0];
+        $testNode = $nodeList->item(0);
         $venctype = $testNode->enctype;
         $this->assertEqualsData('enctypeLink', 'application/x-www-form-urlencoded', $venctype);
     }

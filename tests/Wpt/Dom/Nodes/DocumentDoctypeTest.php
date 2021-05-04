@@ -10,7 +10,7 @@ class DocumentDoctypeTest extends WptTestHarness
 {
     public function testDocumentDoctype()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-doctype.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-doctype.html');
         $this->assertTest(function () {
             $this->assertTrueData($this->doc->doctype instanceof DocumentType, 'Doctype should be a DocumentType');
             $this->assertEqualsData($this->doc->doctype, $this->doc->childNodes[1]);

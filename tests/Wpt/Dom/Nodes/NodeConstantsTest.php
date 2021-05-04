@@ -23,7 +23,7 @@ class NodeConstantsTest extends WptTestHarness
     }
     public function testNodeConstants()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-constants.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-constants.html');
         $objects = null;
         // setup()
         $objects = [[Node, 'Node interface object'], [Node::class, 'Node prototype object'], [$this->doc->createElement('foo'), 'Element object'], [$this->doc->createTextNode('bar'), 'Text object']];

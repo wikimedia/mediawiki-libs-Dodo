@@ -8,7 +8,7 @@ class ElementSetAttributeCrbug1138487Test extends WptTestHarness
 {
     public function testElementSetAttributeCrbug1138487()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-setAttribute-crbug-1138487.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-setAttribute-crbug-1138487.html');
         // Regression test for crbug.com/1138487.
         //
         // It was possible for a non-ASCII-lowercase string to be used when inserting

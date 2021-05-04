@@ -7,7 +7,7 @@ class DocumentTypeLiteralTest extends WptTestHarness
 {
     public function testDocumentTypeLiteral()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/DocumentType-literal.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DocumentType-literal.html');
         $this->assertTest(function () {
             $doctype = $this->doc->firstChild;
             $this->assertTrueData($doctype instanceof DocumentType);

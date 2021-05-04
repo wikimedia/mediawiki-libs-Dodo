@@ -26,7 +26,7 @@ class TreeWalkerAcceptNodeFilterTest extends WptTestHarness
     }
     public function testTreeWalkerAcceptNodeFilter()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-acceptNode-filter.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-acceptNode-filter.html');
         $testElement = null;
         // setup()
         $testElement = $this->doc->createElement('div');

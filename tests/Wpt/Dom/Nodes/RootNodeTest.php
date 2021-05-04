@@ -10,7 +10,7 @@ class RootNodeTest extends WptTestHarness
 {
     public function testRootNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/rootNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/rootNode.html');
         $this->shadowHost = $this->doc->getElementById("shadowHost");
         $this->assertTest(function () {
             $this->shadowHost = $this->doc->createElement('div');

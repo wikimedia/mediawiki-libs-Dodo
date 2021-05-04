@@ -7,7 +7,7 @@ class HTMLCollectionEmptyNameTest extends WptTestHarness
 {
     public function testHTMLCollectionEmptyName()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-empty-name.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-empty-name.html');
         $this->assertTest(function () {
             $c = $this->doc->getElementsByTagName('*');
             $this->assertFalseData(isset($c['']), 'Empty string should not be in the collection.');

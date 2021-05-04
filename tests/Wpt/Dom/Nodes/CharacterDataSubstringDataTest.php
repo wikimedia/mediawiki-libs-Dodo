@@ -116,7 +116,7 @@ class CharacterDataSubstringDataTest extends WptTestHarness
     }
     public function testCharacterDataSubstringData()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/CharacterData-substringData.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/CharacterData-substringData.html');
         $this->testNode(function () {
             return $this->doc->createTextNode('test');
         }, 'Text');

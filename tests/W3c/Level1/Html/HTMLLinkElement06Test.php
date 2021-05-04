@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLLinkElement06.js.
 class HTMLLinkElement06Test extends W3cTestHarness
 {
     public function testHTMLLinkElement06()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'HTMLLinkElement06') != null) {
             return;
         }
@@ -23,7 +26,7 @@ class HTMLLinkElement06Test extends W3cTestHarness
         $doc = $this->load($docRef, 'doc', 'link');
         $nodeList = $doc->getElementsByTagName('link');
         $this->assertSizeData('Asize', 2, $nodeList);
-        $testNode = $nodeList[0];
+        $testNode = $nodeList->item(0);
         $vrel = $testNode->rel;
         $this->assertEqualsData('relLink', 'Glossary', $vrel);
     }

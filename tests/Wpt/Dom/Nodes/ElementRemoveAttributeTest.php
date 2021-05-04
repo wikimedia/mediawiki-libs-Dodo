@@ -8,7 +8,7 @@ class ElementRemoveAttributeTest extends WptTestHarness
 {
     public function testElementRemoveAttribute()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-removeAttribute.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-removeAttribute.html');
         $this->assertTest(function () {
             $el = $this->doc->createElement('p');
             $el->setAttribute('x', 'first');

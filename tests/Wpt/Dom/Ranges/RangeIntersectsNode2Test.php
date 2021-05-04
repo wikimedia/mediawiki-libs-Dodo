@@ -8,7 +8,7 @@ class RangeIntersectsNode2Test extends WptTestHarness
 {
     public function testRangeIntersectsNode2()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode-2.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode-2.html');
         // Taken from Chromium bug: http://crbug.com/822510
         $this->assertTest(function () {
             $range = new Range();

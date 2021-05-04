@@ -7,7 +7,7 @@ class DomstringmapSupportedPropertyNamesTest extends WptTestHarness
 {
     public function testDomstringmapSupportedPropertyNames()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/collections/domstringmap-supported-property-names.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/collections/domstringmap-supported-property-names.html');
         $this->assertTest(function () {
             $element = $this->doc->querySelector('#edge1');
             $this->assertArrayEqualsData(get_object_vars($element->dataset), ['']);

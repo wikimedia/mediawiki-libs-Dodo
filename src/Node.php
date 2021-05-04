@@ -373,7 +373,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			/* If we are using the Linked List representation. */
 			if ( $this->_firstChild !== null ) {
 				/* If we have a firstChild, its previousSibling is the last child. */
-				return $this->_firstChild->previousSibling();
+				return $this->_firstChild->getPreviousSibling();
 			} else {
 				/* Otherwise there are no children, and so last child is null. */
 				return null;
@@ -619,7 +619,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 					 */
 					$this->removeChild( $n );
 				} else {
-					$p = $n->previousSibling();
+					$p = $n->getPreviousSibling();
 					if ( $p && $p->getNodeType() === self::TEXT_NODE ) {
 						/*
 						 * [2]

@@ -98,6 +98,10 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	* @var array<string,string>
 	*/
 	private static $UC_Cache = [];
+	/**
+	 * @var mixed|null
+	 */
+	private $_classList;
 
 	/**
 	 * Element constructor
@@ -577,21 +581,11 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		return $ret;
 	}
 
+	/**
+	 * @return mixed|null
+	 */
 	public function classList() {
-		$self = $this;
-		if ( $this->_classList ) {
-			return $this->_classList;
-		}
-		/* TODO: FIx this into PHP
-		   $dtlist = new DOMTokenList(
-		   function() {
-		   return self.className || "";
-		   },
-		   function(v) {
-		   self.className = v;
-		   }
-		   );
-		*/
+		$dtlist = new DOMTokenList( $this->className );
 		$this->_classList = $dtlist;
 		return $dtlist;
 	}

@@ -147,7 +147,7 @@ class ChildNodeAfterTest extends WptTestHarness
     }
     public function testChildNodeAfter()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ChildNode-after.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ChildNode-after.html');
         $this->testAfter($this->doc->createComment('test'), 'Comment', '<!--test-->');
         $this->testAfter($this->doc->createElement('test'), 'Element', '<test></test>');
         $this->testAfter($this->doc->createTextNode('test'), 'Text', 'test');

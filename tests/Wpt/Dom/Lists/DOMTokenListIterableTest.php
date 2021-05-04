@@ -6,7 +6,7 @@ class DOMTokenListIterableTest extends WptTestHarness
 {
     public function testDOMTokenListIterable()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/lists/DOMTokenList-Iterable.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/lists/DOMTokenList-Iterable.html');
         $elementClasses = null;
         // setup()
         $elementClasses = $this->doc->querySelector('span')->classList;

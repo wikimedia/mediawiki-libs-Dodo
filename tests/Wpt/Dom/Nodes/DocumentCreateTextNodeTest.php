@@ -32,7 +32,7 @@ class DocumentCreateTextNodeTest extends WptTestHarness
     }
     public function testDocumentCreateTextNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-createTextNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createTextNode.html');
         $this->assertTestCreate('createTextNode', Text, 3, '#text');
     }
 }

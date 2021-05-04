@@ -7,7 +7,7 @@ class DOMTokenListValueTest extends WptTestHarness
 {
     public function testDOMTokenListValue()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/lists/DOMTokenList-value.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/lists/DOMTokenList-value.html');
         $this->assertTest(function () {
             $this->assertEqualsData(strval($this->doc->createElement('span')->classList->value), '', 'classList.value should return the empty list for an undefined class attribute');
             $span = $this->doc->querySelector('span');

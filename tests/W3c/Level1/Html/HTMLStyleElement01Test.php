@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLStyleElement01.js.
 class HTMLStyleElement01Test extends W3cTestHarness
 {
     public function testHTMLStyleElement01()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'HTMLStyleElement01') != null) {
             return;
         }
@@ -23,7 +26,7 @@ class HTMLStyleElement01Test extends W3cTestHarness
         $doc = $this->load($docRef, 'doc', 'style');
         $nodeList = $doc->getElementsByTagName('style');
         $this->assertSizeData('Asize', 1, $nodeList);
-        $testNode = $nodeList[0];
+        $testNode = $nodeList->item(0);
         $vdisabled = $testNode->disabled;
         $this->assertFalseData('disabledLink', $vdisabled);
     }

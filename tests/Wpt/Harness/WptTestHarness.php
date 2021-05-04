@@ -12,9 +12,10 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
-use Wikimedia\Dodo\Tests\WpT\Harness\Utils\Common;
-use Wikimedia\Dodo\Tests\WpT\Harness\Utils\Selectors;
+use Wikimedia\Dodo\Tests\Wpt\Harness\Utils\Common;
+use Wikimedia\Dodo\Tests\Wpt\Harness\Utils\Selectors;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
+use Wikimedia\Dodo\Util;
 
 /**
  * WptTestHarness.php
@@ -118,7 +119,7 @@ abstract class WptTestHarness extends TestCase {
 	 *
 	 * @throws Exception
 	 */
-	protected function assertThrowsJsData( $constructor, $func, $description = '' ) {
+	protected function assertThrowsJsData( $constructor, $func, $description = '' ) : void {
 		$this->assertThrowsJsImpl( $constructor,
 			$func,
 			$description,
@@ -196,49 +197,6 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param $expected_true
-	 * @param $function_name
-	 * @param $description
-	 * @param $error
-	 * @param $substitutions
-	 */
-	protected function assertData( $expected_true, $function_name, $description, $error, $substitutions ) {
-		if ( $expected_true !== true ) {
-			$msg = $this->makeMessage( $function_name,
-				$description,
-				$error,
-				$substitutions );
-			throw new AssertionError( $msg );
-		}
-	}
-
-	/**
-	 * @param $function_name
-	 * @param $description
-	 * @param $error
-	 * @param $substitutions
-	 *
-	 * @return string
-	 */
-	protected function makeMessage( $function_name, $description, $error, $substitutions ) {
-
-		foreach ( $substitutions as $p => $___ ) {
-			if ( $substitutions->hasOwnProperty( $p ) ) {
-				$substitutions[$p] = format_value( $substitutions[$p] );
-			}
-		}
-		$node_form = substitute( [ '{text}',
-			'${function_name}: ${description}' . $error ],
-			merge( [ 'function_name' => $function_name,
-				'description' => ( ( $description ) ? $description . ' ' : '' ) ],
-				$substitutions ) );
-
-		return implode( '',
-			array_slice( $node_form,
-				1 ) );
-	}
-
-	/**
 	 *
 	 */
 	protected function setUp() : void {
@@ -256,17 +214,6 @@ abstract class WptTestHarness extends TestCase {
 		$this->invalid_qnames = [ ":a",
 			"b:",
 			"x:y:z" ];
-
-		$this->doc = new Document( 'html' );
-		$html = $this->doc->createElement( 'html' );
-		$title = $this->doc->createElement( 'title' );
-		$title->appendChild( $this->doc->createTextNode( 'NIST DOM HTML Test - Anchorasd fadsfadsf' ) );
-		$html->appendChild( $title );
-		$body = $this->doc->createElement( 'body' );
-
-		$html->appendChild( $body );
-		$this->doc->appendChild( $html );
-
 		$this->contentType = 'text/html';
 	}
 
@@ -338,7 +285,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @param $actual
 	 * @param null $message
 	 */
-	protected function assertFalseData( $actual, $message = null ) {
+	protected function assertFalseData( $actual, $message = null ) : void {
 		$this->assertFalse( $actual,
 			$message );
 	}
@@ -348,7 +295,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @param $actual
 	 * @param $closure
 	 */
-	protected function assertThrowsDomData( $type, $funcOrConstructor, $descriptionOrFunc = null, $maybeDescription = null ) {
+	protected function assertThrowsDomData( $type, $funcOrConstructor, $descriptionOrFunc = null, $maybeDescription = null ) : void {
 		$constructor = null;
 		$func = null;
 		$description = null;
@@ -377,7 +324,7 @@ abstract class WptTestHarness extends TestCase {
 	 * "constructor" argument must be the DOMException constructor from the
 	 * global we expect the exception to come from.
 	 */
-	protected function assertThrowsDomImpl( $type, $func, $description, $assertion_type, $constructor ) {
+	protected function assertThrowsDomImpl( $type, $func, $description, $assertion_type, $constructor ) : void {
 		try {
 			call_user_func( 'func' );
 			$this->assertData( false,
@@ -391,7 +338,7 @@ abstract class WptTestHarness extends TestCase {
 //			}
 
 			// Basic sanity-checks on the thrown exception.
-			$this->assertData( gettype( $e ) === 'object',
+			$this->assertData( is_object( $e ),
 				$assertion_type,
 				$description,
 				'${func} threw ${e} with type ${type}, not an object',
@@ -406,7 +353,7 @@ abstract class WptTestHarness extends TestCase {
 				[ 'func' => $func ] );
 
 			// Sanity-check our type
-			$this->assertData( gettype( $type ) == 'number' || gettype( $type ) == 'string',
+			$this->assertData( is_int( $type ) || is_string( $type ),
 				$assertion_type,
 				$description,
 				'${type} is not a number or string',
@@ -479,18 +426,21 @@ abstract class WptTestHarness extends TestCase {
 			$required_props = [];
 			$name = null;
 
-			if ( gettype( $type ) === 'number' ) {
+			if ( in_int( $type ) ) {
 				if ( $type === 0 ) {
-					throw new AssertionError( 'Test bug: ambiguous DOMException code 0 passed to assert_throws_dom()' );
+					Util::error( 'AssertionError',
+						'Test bug: ambiguous DOMException code 0 passed to assert_throws_dom()' );
 				} elseif ( !( isset( $code_name_map[$type] ) ) ) {
-					throw new AssertionError( 'Test bug: unrecognized DOMException code "' . $type . '" passed to assert_throws_dom()' );
+					Util::error( 'AssertionError',
+						'Test bug: unrecognized DOMException code "' . $type . '" passed to assert_throws_dom()' );
 				}
 				$name = $code_name_map[$type];
 				$required_props->code = $type;
-			} elseif ( gettype( $type ) === 'string' ) {
+			} elseif ( is_string( $type ) ) {
 				$name = ( isset( $codename_name_map[$type] ) ) ? $codename_name_map[$type] : $type;
 				if ( !( isset( $name_code_map[$name] ) ) ) {
-					throw new AssertionError( 'Test bug: unrecognized DOMException code name or name "' . $type . '" passed to assert_throws_dom()' );
+					Util::error( 'AssertionError',
+						'Test bug: unrecognized DOMException code name or name "' . $type . '" passed to assert_throws_dom()' );
 				}
 
 				$required_props->code = $name_code_map[$name];
@@ -525,11 +475,54 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
+	 * @param $expected_true
+	 * @param $function_name
+	 * @param $description
+	 * @param $error
+	 * @param $substitutions
+	 */
+	protected function assertData( $expected_true, $function_name, $description, $error, $substitutions ) : void {
+		if ( $expected_true !== true ) {
+			$msg = $this->makeMessage( $function_name,
+				$description,
+				$error,
+				$substitutions );
+			Util::error( 'AssertionError',
+				$msg );
+		}
+	}
+
+	/**
+	 * @param $function_name
+	 * @param $description
+	 * @param $error
+	 * @param $substitutions
+	 *
+	 * @return string
+	 */
+	protected function makeMessage( $function_name, $description, $error, $substitutions ) {
+//		foreach ( $substitutions as $p => $___ ) {
+//			if ( $substitutions->hasOwnProperty( $p ) ) {
+//				$substitutions[$p] = $this->format_value( $substitutions[$p] );
+//			}
+//		}
+//		$node_form = substitute( [ '{text}',
+//			'${function_name}: ${description}' . $error ],
+//			array_merge ( [ 'function_name' => $function_name,
+//				'description' => ( ( $description ) ? $description . ' ' : '' ) ],
+//				$substitutions ) );
+//
+//		return implode( '',
+//			array_slice( $node_form,
+//				1 ) );
+	}
+
+	/**
 	 * @param $actual
 	 * @param $expected
 	 * @param null $message
 	 */
-	protected function assertNotEqualsData( $actual, $expected, $message = null ) {
+	protected function assertNotEqualsData( $actual, $expected, $message = null ) : void {
 		$this->assertNotEquals( $expected,
 			$actual );
 	}
@@ -539,7 +532,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @param $expected
 	 * @param null $message
 	 */
-	protected function assertEqualNodeData( $actual, $expected, $message = null ) {
+	protected function assertEqualNodeData( $actual, $expected, $message = null ) : void {
 
 	}
 
@@ -553,7 +546,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @todo review this
 	 *
 	 */
-	protected function asyncTest( $func, $name = null, $properties = null ) {
+	protected function asyncTest( $func, $name = null, $properties = null ) : void {
 		$func();
 		/*		if ( $tests->promise_setup_called ) {
 					$tests->status->status = $tests->status->ERROR;
@@ -608,7 +601,7 @@ abstract class WptTestHarness extends TestCase {
 	 * aren't, tries to print a relatively informative reason why not.  TODO: Move
 	 * this to testharness.js?
 	 */
-	protected function assertNodesEqualData( $actual, $expected, $msg ) {
+	protected function assertNodesEqualData( $actual, $expected, $msg ) : void {
 		if ( !$actual->isEqualNode( $expected ) ) {
 			$msg = 'Actual and expected mismatch for ' . $msg . '.  ';
 
@@ -618,7 +611,7 @@ abstract class WptTestHarness extends TestCase {
 				$actual = $this->nextNode( $actual );
 				$expected = $this->nextNode( $expected );
 			}
-			// assert_unreached( "DOMs were not equal but we couldn't figure out why" );
+			$this->assertUnreached( "DOMs were not equal but we couldn't figure out why" );
 		}
 	}
 
@@ -648,12 +641,22 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
+	 * @param mixed ...$arg
+	 */
+	protected function assertUnreached( $description ) {
+		$this->assertData( false,
+			"assert_unreached",
+			$description,
+			"Reached unreachable code" );
+	}
+
+	/**
 	 * Returns the last Node that's before node in tree order, or null if node is
 	 * the first Node.
 	 */
 	protected function previousNode( $node ) {
-		if ( $node->previousSibling ) {
-			$node = $node->previousSibling;
+		if ( $node->getPreviousSibling() ) {
+			$node = $node->getPreviousSibling();
 			while ( $node->hasChildNodes() ) {
 				$node = $node->lastChild;
 			}
@@ -884,7 +887,7 @@ abstract class WptTestHarness extends TestCase {
 					count( $actual ) - 1 ),
 				'actualLength' => count( $actual ) ] );
 
-		for ( $i = 0; $i < count( $actual ); $i++ ) {
+		for ( $i = 0, $iMax = count( $actual ); $i < $iMax; $i++ ) {
 			$this->assertData( $actual->hasOwnProperty( $i ) === $expected->hasOwnProperty( $i ),
 				'assertArrayEquals',
 				$description,
@@ -968,17 +971,17 @@ abstract class WptTestHarness extends TestCase {
 	protected function assertThrowsExactlyImpl( $exception, $func, $description, $assertion_type ) {
 		try {
 			$func();
-			assert( false,
+			$this->assertData( false,
 				$assertion_type,
 				$description,
 				'${func} did not throw',
 				[ 'func' => $func ] );
 		} catch ( Exception $e ) {
-			if ( $e instanceof $AssertionError ) {
+			if ( $e instanceof AssertionError ) {
 				throw $e;
 			}
 
-			assert( $this->sameValue( $e,
+			$this->assertData( $this->sameValue( $e,
 				$exception ),
 				$assertion_type,
 				$description,
@@ -1047,7 +1050,7 @@ abstract class WptTestHarness extends TestCase {
 	protected function generateTests( $func, $args, &$properties ) {
 		foreach ( $args as $x => $i ) {
 			$name = $x[0];
-			$this->assertTest( function () use ($x) {
+			$this->assertTest( function () use ( $x ) {
 				array_slice( $x,
 					1 );
 			},
@@ -1076,38 +1079,28 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param mixed ...$arg
+	 * @param $obj
+	 * @param $method
+	 * @param $type
 	 */
-	protected function assertTestCreate( ...$arg ) {
+	protected function assertIdlAttributeData( $obj, $method, $type ) {
 
 	}
 
 	/**
-	 * @param mixed ...$arg
+	 * @param $actual
+	 * @param $expected
+	 * @param string|null $description
 	 */
-	protected function assertIdlAttributeData( ...$arg ) {
-
-	}
-
-	/**
-	 * @param mixed ...$arg
-	 */
-	protected function assertInArrayData( ...$arg ) {
-
-	}
-
-	/**
-	 * @param mixed ...$arg
-	 */
-	protected function assertUnreachedData( ...$arg ) {
-
-	}
-
-	/**
-	 * @param mixed ...$arg
-	 */
-	protected function getNonParentNodes( ...$arg ) {
-
+	protected function assertInArrayData( $actual, $expected, ?string $description = null ) {
+		$this->assertData( array_search( $actual,
+				$expected,
+				true ) != false,
+			'assertInArrayData',
+			$description,
+			'value ${actual} not in array ${expected}',
+			[ 'actual' => $actual,
+				'expected' => $expected ] );
 	}
 
 	/**

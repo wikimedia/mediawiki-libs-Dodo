@@ -7,7 +7,7 @@ class NodeIteratorRemovalTest extends WptTestHarness
 {
     public function testNodeIteratorRemoval()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/NodeIterator-removal.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/NodeIterator-removal.html');
         for ($i = 0; $i < count($this->testNodes); $i++) {
             $node = eval($this->testNodes[$i]);
             if (!$node->parentNode) {

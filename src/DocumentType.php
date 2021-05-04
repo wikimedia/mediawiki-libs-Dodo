@@ -23,6 +23,19 @@ class DocumentType extends Node implements \Wikimedia\IDLeDOM\DocumentType {
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\DocumentType;
 
+	/**
+	 * @var string
+	 */
+	protected $_name;
+	/**
+	 * @var string
+	 */
+	protected $_publicId;
+	/**
+	 * @var string
+	 */
+	protected $_systemId;
+
 	public function __construct( Document $doc, string $name, string $publicId = '', string $systemId = '' ) {
 		parent::__construct();
 

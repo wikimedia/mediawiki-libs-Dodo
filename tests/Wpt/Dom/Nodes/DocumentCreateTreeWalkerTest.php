@@ -7,7 +7,7 @@ class DocumentCreateTreeWalkerTest extends WptTestHarness
 {
     public function testDocumentCreateTreeWalker()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-createTreeWalker.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createTreeWalker.html');
         $this->assertTest(function () {
             $this->assertThrowsJsData($this->type_error, function () {
                 $this->doc->createTreeWalker();

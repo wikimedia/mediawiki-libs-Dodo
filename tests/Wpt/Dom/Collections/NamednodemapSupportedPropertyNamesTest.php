@@ -9,7 +9,7 @@ class NamednodemapSupportedPropertyNamesTest extends WptTestHarness
 {
     public function testNamednodemapSupportedPropertyNames()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/collections/namednodemap-supported-property-names.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/collections/namednodemap-supported-property-names.html');
         $this->assertTest(function () {
             $elt = $this->doc->querySelector('#simple');
             $this->assertArrayEqualsData(get_object_vars($elt->attributes), ['0', '1', 'id', 'class']);

@@ -3,13 +3,16 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Attr;
 use Wikimedia\Dodo\Comment;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodecommentnodeattributes.js.
 class HcNodecommentnodeattributesTest extends W3cTestHarness
 {
     public function testHcNodecommentnodeattributes()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'hc_nodecommentnodeattributes') != null) {
             return;
         }

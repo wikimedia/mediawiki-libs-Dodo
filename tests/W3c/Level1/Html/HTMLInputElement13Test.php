@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLInputElement13.js.
 class HTMLInputElement13Test extends W3cTestHarness
 {
     public function testHTMLInputElement13()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'HTMLInputElement13') != null) {
             return;
         }
@@ -28,7 +31,7 @@ class HTMLInputElement13Test extends W3cTestHarness
         if (!$hasHTML2) {
             $nodeList = $doc->getElementsByTagName('input');
             $this->assertSizeData('Asize', 9, $nodeList);
-            $testNode = $nodeList[0];
+            $testNode = $nodeList->item(0);
             $vsize = $testNode->size;
             $this->assertEqualsData('sizeLink', '25', $vsize);
         }

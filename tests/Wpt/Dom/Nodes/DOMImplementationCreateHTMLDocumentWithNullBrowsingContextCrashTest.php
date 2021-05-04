@@ -6,7 +6,7 @@ class DOMImplementationCreateHTMLDocumentWithNullBrowsingContextCrashTest extend
 {
     public function testDOMImplementationCreateHTMLDocumentWithNullBrowsingContextCrash()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/DOMImplementation-createHTMLDocument-with-null-browsing-context-crash.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DOMImplementation-createHTMLDocument-with-null-browsing-context-crash.html');
         $doc = $i->getOwnerDocument();
         $i->remove();
         $doc->implementation->createHTMLDocument();

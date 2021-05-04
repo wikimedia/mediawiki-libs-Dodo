@@ -9,7 +9,7 @@ class AriaAttributeReflectionTentativeTest extends WptTestHarness
 {
     public function testAriaAttributeReflectionTentative()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/aria-attribute-reflection.tentative.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/aria-attribute-reflection.tentative.html');
         $this->assertTest(function ($t) {
             $element = $this->doc->getElementById('role');
             $this->assertEqualsData($element->role, 'button');

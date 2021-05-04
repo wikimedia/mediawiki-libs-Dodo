@@ -95,7 +95,7 @@ class ChildNodeReplaceWithTest extends WptTestHarness
     }
     public function testChildNodeReplaceWith()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ChildNode-replaceWith.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ChildNode-replaceWith.html');
         $this->testReplaceWith($this->doc->createComment('test'), 'Comment', '<!--test-->');
         $this->testReplaceWith($this->doc->createElement('test'), 'Element', '<test></test>');
         $this->testReplaceWith($this->doc->createTextNode('test'), 'Text', 'test');

@@ -7,7 +7,7 @@ class ParentNodeQuerySelectorsSpaceAndDashAttributeValueTest extends WptTestHarn
 {
     public function testParentNodeQuerySelectorsSpaceAndDashAttributeValue()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelectors-space-and-dash-attribute-value.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelectors-space-and-dash-attribute-value.html');
         $el = $this->doc->getElementById('testme');
         $this->assertTest(function () use(&$el) {
             $this->assertEqualsData($this->doc->querySelector("a[title='test with - dash and space']"), $el);

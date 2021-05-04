@@ -182,7 +182,7 @@ class RangeInsertNodeTest extends WptTestHarness
     }
     public function testRangeInsertNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-insertNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-insertNode.html');
         $testDiv->parentNode->removeChild($testDiv);
         array_unshift($testRanges, '"detached"');
         $iStart = 0;

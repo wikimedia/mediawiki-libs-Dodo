@@ -8,7 +8,7 @@ class NodeCloneNodeExternalStylesheetNoBcSubTest extends WptTestHarness
 {
     public function testNodeCloneNodeExternalStylesheetNoBcSub()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-cloneNode-external-stylesheet-no-bc.sub.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-cloneNode-external-stylesheet-no-bc.sub.html');
         $doc = $this->doc->implementation->createHTMLDocument();
         // Bug was only triggered by absolute URLs, for some reason...
         $absoluteURL = new URL('/common/canvas-frame.css', $location->href);

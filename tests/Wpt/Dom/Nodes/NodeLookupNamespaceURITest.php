@@ -23,7 +23,7 @@ class NodeLookupNamespaceURITest extends WptTestHarness
     }
     public function testNodeLookupNamespaceURI()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-lookupNamespaceURI.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-lookupNamespaceURI.html');
         $frag = $this->doc->createDocumentFragment();
         $this->lookupNamespaceURI($frag, null, null, 'DocumentFragment should have null namespace, prefix null');
         $this->lookupNamespaceURI($frag, '', null, 'DocumentFragment should have null namespace, prefix ""');

@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLOptGroupElement02.js.
 class HTMLOptGroupElement02Test extends W3cTestHarness
 {
     public function testHTMLOptGroupElement02()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'HTMLOptGroupElement02') != null) {
             return;
         }
@@ -23,7 +26,7 @@ class HTMLOptGroupElement02Test extends W3cTestHarness
         $doc = $this->load($docRef, 'doc', 'optgroup');
         $nodeList = $doc->getElementsByTagName('optgroup');
         $this->assertSizeData('Asize', 2, $nodeList);
-        $testNode = $nodeList[0];
+        $testNode = $nodeList->item(0);
         $vlabel = $testNode->label;
         $this->assertEqualsData('labelLink', 'Regular Employees', $vlabel);
     }

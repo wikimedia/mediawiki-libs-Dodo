@@ -6,7 +6,7 @@ class SvgTemplateQuerySelectorTest extends WptTestHarness
 {
     public function testSvgTemplateQuerySelector()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/svg-template-querySelector.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/svg-template-querySelector.html');
         $this->assertTest(function () {
             $fragment = $this->doc->querySelector('#template1')->content;
             $this->assertNotEqualsData($fragment->querySelector('div'), null);

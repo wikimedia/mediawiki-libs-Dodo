@@ -8,7 +8,7 @@ class NodeCloneNodeXMLDocumentTest extends WptTestHarness
 {
     public function testNodeCloneNodeXMLDocument()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-cloneNode-XMLDocument.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-cloneNode-XMLDocument.html');
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createDocument('namespace', '');
             $this->assertEqualsData($doc->constructor, XMLDocument, 'Precondition check: document.implementation.createDocument() creates an XMLDocument');

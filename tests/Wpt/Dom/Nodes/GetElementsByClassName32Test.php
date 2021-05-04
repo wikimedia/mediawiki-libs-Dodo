@@ -7,7 +7,7 @@ class GetElementsByClassName32Test extends WptTestHarness
 {
     public function testGetElementsByClassName32()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/getElementsByClassName-32.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/getElementsByClassName-32.html');
         $this->assertTest(function () {
             $p = $this->doc->createElement('p');
             $p->className = 'unknown';

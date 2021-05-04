@@ -9,7 +9,7 @@ class TextSplitTextTest extends WptTestHarness
 {
     public function testTextSplitText()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Text-splitText.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Text-splitText.html');
         $this->assertTest(function () {
             $text = $this->doc->createTextNode('camembert');
             $this->assertThrowsDomData('INDEX_SIZE_ERR', function () use(&$text) {

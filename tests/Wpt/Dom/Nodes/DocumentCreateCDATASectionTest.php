@@ -6,7 +6,7 @@ class DocumentCreateCDATASectionTest extends WptTestHarness
 {
     public function testDocumentCreateCDATASection()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-createCDATASection.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createCDATASection.html');
         $this->assertThrowsDomData('NotSupportedError', function () {
             return $this->doc->createCDATASection('foo');
         });

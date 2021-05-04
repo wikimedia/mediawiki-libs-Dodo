@@ -7,7 +7,7 @@ class HTMLCollectionAsPrototypeTest extends WptTestHarness
 {
     public function testHTMLCollectionAsPrototype()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-as-prototype.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-as-prototype.html');
         $this->assertTest(function () {
             $obj = clone $this->doc->getElementsByTagName('script');
             $this->assertThrowsJsData($this->type_error, function () use(&$obj) {

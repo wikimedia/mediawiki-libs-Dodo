@@ -12,7 +12,7 @@ class NodeNodeValueTest extends WptTestHarness
 {
     public function testNodeNodeValue()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-nodeValue.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-nodeValue.html');
         $this->assertTest(function () {
             $the_text = $this->doc->createTextNode('A span!');
             $this->assertEqualsData($the_text->nodeValue, 'A span!');

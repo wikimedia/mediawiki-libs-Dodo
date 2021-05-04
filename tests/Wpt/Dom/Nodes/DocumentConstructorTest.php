@@ -12,7 +12,7 @@ class DocumentConstructorTest extends WptTestHarness
 {
     public function testDocumentConstructor()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-constructor.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-constructor.html');
         $this->assertTest(function () {
             $doc = new Document();
             $this->assertTrueData($doc instanceof Node, 'Should be a Node');

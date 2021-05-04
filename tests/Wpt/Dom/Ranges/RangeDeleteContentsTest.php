@@ -224,7 +224,7 @@ class RangeDeleteContentsTest extends WptTestHarness
     }
     public function testRangeDeleteContents()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-deleteContents.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-deleteContents.html');
         $testDiv->parentNode->removeChild($testDiv);
         $actualIframe = $this->doc->createElement('iframe');
         $actualIframe->style->display = 'none';

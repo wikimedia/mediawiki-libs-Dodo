@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLScriptElement01.js.
 class HTMLScriptElement01Test extends W3cTestHarness
 {
     public function testHTMLScriptElement01()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'HTMLScriptElement01') != null) {
             return;
         }
@@ -23,7 +26,7 @@ class HTMLScriptElement01Test extends W3cTestHarness
         $doc = $this->load($docRef, 'doc', 'script');
         $nodeList = $doc->getElementsByTagName('script');
         $this->assertSizeData('Asize', 1, $nodeList);
-        $testNode = $nodeList[0];
+        $testNode = $nodeList->item(0);
         $vtext = $testNode->text;
         $this->assertEqualsData('textLink', 'var a=2;', $vtext);
     }

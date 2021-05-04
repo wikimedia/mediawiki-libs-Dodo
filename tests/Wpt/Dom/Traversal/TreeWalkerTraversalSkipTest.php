@@ -19,7 +19,7 @@ class TreeWalkerTraversalSkipTest extends WptTestHarness
     }
     public function testTreeWalkerTraversalSkip()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-traversal-skip.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-traversal-skip.html');
         $testElement = null;
         // setup()
         $testElement = $this->doc->createElement('div');
@@ -86,7 +86,7 @@ class TreeWalkerTraversalSkipTest extends WptTestHarness
         $this->assertTest(function () use(&$testElement, &$skipB2Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB2Filter);
             $walker->currentNode = $testElement->querySelectorAll('#B3')[0];
-            $this->assertNodeData($walker->previousSibling(), ['type' => Element, 'id' => 'B1']);
+            $this->assertNodeData($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);
         }, 'Testing previousSibling');
         $this->assertTest(function () use(&$testElement, &$skipB1Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB1Filter);

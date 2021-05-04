@@ -11,7 +11,6 @@ use PhpParser\Comment;
 use PhpParser\Comment\Doc;
 use PhpParser\Error;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
@@ -151,6 +150,7 @@ class ParserTask extends BaseTask {
 			}
 
 			if ( $this->test_type === TestsGenerator::W3C ) {
+				$this->preProcessW3CTest();
 				$ast = $this->parser->parse( '<?php ' . $this->test );
 				$this->parseW3cTest( $ast );
 				$this->removeW3CDisparity();
@@ -209,12 +209,12 @@ class ParserTask extends BaseTask {
 	}
 
 	/**
-	 * @param array $stmts
+	 * @param array $ast
 	 */
-	protected function parseW3cTest( array $stmts ) : void {
-		$traverser = new NodeTraverser;
+	protected function parseW3cTest( array $ast ) : void {
+		$ast = $this->prepareAst( $ast );
 
-		// $dump = $this->dumper->dump( $stmts ) . "n";
+		$traverser = new NodeTraverser;
 
 		$traverser->addVisitor( new class( $this->test_name, $this->factory ) extends NodeVisitorAbstract {
 			use Helpers;
@@ -257,70 +257,70 @@ class ParserTask extends BaseTask {
 						->getNode();
 				}
 
-				if ( $node instanceof Expression && $node->expr instanceof FuncCall ) {
-					$expr_name = $node->expr->name->parts[0];
+				if ( $node instanceof FuncCall ) {
+					$expr_name = $node->name->parts[0] ?? '';
 					if ( empty( $expr_name ) ) {
 						return $node;
 					}
 
 					$functions_calls = [ 'assert',
 						'getImplementation',
-						'checkInitialization' ];
+						'checkInitialization',
+						'load',
+						'createConfiguredBuilder',
+						'setImplementationAttribute',
+						'preload',
+						'catchInitializationError',
+						'checkFeature' ];
 
 					if ( preg_match( '(' . implode( '|',
 								$functions_calls ) . ')',
 							$expr_name ) === 1 ) {
-						$args = $node->expr->args;
+						$args = $node->args;
 
-						$call = new Node\Expr\MethodCall( new Variable( 'this' ),
-							$this->snakeToCamel( $expr_name ) . 'Data',
-							$args,
-							$node->expr->getAttributes() );
+						if ( strpos( $expr_name,
+								'assert' ) !== false ) {
+							$call = new Node\Expr\MethodCall( new Variable( 'this' ),
+								$this->snakeToCamel( $expr_name ) . 'Data',
+								$args,
+								$node->getAttributes() );
+						} else {
+							$call = new Node\Expr\MethodCall( new Variable( 'this' ),
+								$this->snakeToCamel( $expr_name ),
+								$args,
+								$node->getAttributes() );
+						}
 
-						$node->expr = $call;
-
-						return $node;
+						return $call;
 					}
 				}
 
 				// remove all other functions
-				if ( $node instanceof Function_ || $node instanceof Comment || $node instanceof Doc ) {
+				if ( $node instanceof Comment || $node instanceof Doc ) {
 					return NodeTraverser::REMOVE_NODE;
 				}
 
-				// unset variable
-				if ( $node instanceof Expression && $node->expr instanceof Assign ) {
-					if ( $node->expr->var instanceof Variable ) {
-						if ( $node->expr->var->name === 'docsLoaded' || $node->expr->var->name === 'builder' ) {
-							return NodeTraverser::REMOVE_NODE;
-						}
+				if ( $node instanceof Function_ ) {
+					$remove = [ 'toASCIIUppercase',
+						'toASCIILowercase' ];
+					$func_name = $node->name->name;
+
+					if ( preg_match( '(' . implode( '|',
+								$remove ) . ')',
+							$func_name ) === 1 ) {
+						return NodeTraverser::REMOVE_NODE;
 					}
+
+					$node = $this->factory->method( $this->snakeToCamel( $func_name ) )->makePublic()
+						->addStmts( $node->stmts )->addParams( $node->getParams() )->getNode();
+
+					return $node;
 				}
 			}
 		} );
 
-		$traverser->addVisitor( new class( $this->test_name, $this->parser ) extends NodeVisitorAbstract {
+		$traverser->addVisitor( new class extends NodeVisitorAbstract {
 			use Helpers;
-
-			/**
-			 * @var string
-			 */
-			public $test_name;
-			/**
-			 * @var Parser
-			 */
-			private $parser;
-
-			/**
-			 *  constructor.
-			 *
-			 * @param string $test_name
-			 * @param Parser $parser
-			 */
-			public function __construct( string $test_name, Parser $parser ) {
-				$this->test_name = $test_name;
-				$this->parser = $parser;
-			}
 
 			/**
 			 * @param mixed $node
@@ -347,7 +347,7 @@ class ParserTask extends BaseTask {
 			}
 		} );
 
-		$stmts = $traverser->traverse( $stmts );
+		$stmts = $traverser->traverse( $ast );
 
 		if ( !$this->compact ) {
 			$class = $this->factory->class( $this->snakeToPascal( $this->test_name ) . 'Test' )
@@ -359,7 +359,6 @@ class ParserTask extends BaseTask {
 				$class ] )->getNode();
 		}
 
-		/* $load_func = $this->findFuncCall( $ast, 'load' ); */
 		$this->prettyPrint( $stmts );
 	}
 
@@ -385,19 +384,6 @@ class ParserTask extends BaseTask {
 	 * Removes disparity for W3C tests.
 	 */
 	protected function removeW3CDisparity() : void {
-		$find_replace = [ 'global $builder;' => '$builder = $this->getBuilder();',
-			'$success = null;' => '',
-			'load(' => '$this->load(',
-			'->item(0)' => '[0]',
-			'$ex->code' => '$ex->getCode()',
-			'checkInitialization(' => '$this->checkInitialization(',
-			'Exception $ex' => 'DomException $ex',
-			'fail(' => '$this->makeFailed(',
-			'throw $ex;' => '$this->fail($ex->getMessage());' ];
-
-		$this->test = strtr( $this->test,
-			$find_replace );
-
 		// Remove unnecessary empty lines.
 		$this->test = preg_replace( '/^[ \t]*[\r\n]+/m',
 			'',
@@ -466,7 +452,8 @@ class ParserTask extends BaseTask {
 			'MutationEvent\\' => 'MutationEvent::',
 			'Object::getPrototypeOf' => 'get_class',
 			'Document::prototype' => 'Document::class',
-			'Node::prototype' => 'Node::class', ];
+			'Node::prototype' => 'Node::class',
+			'->previousSibling' => '->getPreviousSibling()' ];
 
 		$this->test = strtr( $this->test,
 			$find_replace );
@@ -503,73 +490,7 @@ class ParserTask extends BaseTask {
 	 * @param array $ast
 	 */
 	protected function parseWptTest( array $ast ) : void {
-		$main_method = $this->snakeToCamel( 'test ' . $this->test_name );
-
-		$functions = $this->finder->find( $ast, function ( $node ) {
-			return $node instanceof Function_;
-		} );
-
-		$ast = array_filter( $ast,
-			function ( $smtm ) {
-				if ( !$smtm instanceof Function_ ) {
-					return $smtm;
-				}
-
-				return null;
-			} );
-
-		$source_file = $this->parser->parse( '<?php $this->source_file = \'' . $this->test_path . '\';' );
-		$additional_stmts = [];
-
-		// @see AriaElementReflectionTentativeTest
-		$additional_elements = [ 'i1',
-			'i2',
-			'parentListbox',
-			'parentListbox2',
-			'blankIdParent',
-			'lightParagraph',
-			'shadowHost' ];
-
-		foreach ( $additional_elements as $el ) {
-			if ( strpos( $this->test,
-					'$' . $el ) !== false ) {
-				$_lb = $this->parser->parse( sprintf( '<?php $this->%1$s = $this->doc->getElementById("%1$s");',
-					$el ) );
-				$additional_stmts[] = reset( $_lb );
-			}
-		}
-
-		$traverser = new NodeTraverser;
-		// removes nested functions.
-		$traverser->addVisitor( new class() extends NodeVisitorAbstract {
-			/**
-			 * @param mixed $node
-			 *
-			 * @return int
-			 */
-			public function leaveNode( $node ) {
-				if ( $node instanceof Function_ ) {
-					return NodeTraverser::REMOVE_NODE;
-				}
-			}
-		} );
-
-		foreach ( $functions as $function ) {
-			$function->stmts = $traverser->traverse( $function->stmts );
-		}
-
-		$ast = $traverser->traverse( $ast );
-
-		$node = $this->factory->method( $main_method )->makePublic()->addStmts( $source_file )->addStmts(
-			$additional_stmts )
-			->addStmts( $ast )->getNode();
-
-		$stmts = array_merge( $functions,
-			[ $node ] );
-
-		if ( $main_method === 'testAppendOnDocument' || $main_method === 'testPrependOnDocument' ) {
-			$stmts = $functions;
-		}
+		$stmts = $this->prepareAst( $ast );
 
 		$traverser = new NodeTraverser;
 
@@ -794,7 +715,9 @@ class ParserTask extends BaseTask {
 			'HTMLAreaElement' => 'Wikimedia\Dodo\HTMLAreaElement',
 			'CharacterData' => 'Wikimedia\Dodo\CharacterData',
 			'DocumentType' => 'Wikimedia\Dodo\DocumentType',
-			'URL' => 'Wikimedia\Dodo\URL', ];
+			'URL' => 'Wikimedia\Dodo\URL',
+			'DomException' => 'Wikimedia\Dodo\DomException',
+			'DOMImplementation' => 'Wikimedia\Dodo\DOMImplementation' ];
 
 		foreach ( $list_ns as $use => $namespace ) {
 			if ( strpos( $this->test,
@@ -932,5 +855,117 @@ class ParserTask extends BaseTask {
 		$dumper = new NodeDumper;
 
 		return $dumper->dump( $ast ) . "n";
+	}
+
+	/**
+	 *
+	 */
+	private function preProcessW3CTest() : void {
+		$find_replace = [
+			'global $builder;' => '',
+			'$builder = null;' => '$builder = $this->getBuilder();',
+			'->item(0)' => '[0]',
+			'$ex->code' => '$ex->getCode()',
+			'Exception $ex' => 'DomException $ex',
+			'fail(' => '$this->makeFailed(',
+			'throw $ex;' => '$this->fail($ex->getMessage());',
+			'&& false' => '',
+			'$doc->open()' => '// $doc->open()',
+			'$doc->close()' => '// $doc->close()' ];
+
+		$this->test = strtr( $this->test,
+			$find_replace );
+	}
+
+	/**
+	 * @param array $ast
+	 *
+	 * @return Node[]|Node\Stmt\ClassMethod[]
+	 */
+	private function prepareAst( array $ast ) {
+		$main_method = $this->snakeToCamel( 'test ' . $this->test_name );
+
+		$functions = $this->finder->find( $ast, function ( $node ) {
+			return $node instanceof Function_;
+		} );
+
+		$ast = array_filter( $ast,
+			function ( $smtm ) {
+				if ( !$smtm instanceof Function_ ) {
+					return $smtm;
+				}
+
+				return null;
+			} );
+
+		$additional_stmts = [];
+
+		// @see AriaElementReflectionTentativeTest
+		if ( $this->test_type === 'Wpt' ) {
+			$source_file = $this->parser->parse( '<?php $this->doc = $this->loadWptHtmlFile (\'' . $this->test_path .
+				'\');' );
+			$additional_stmts[] = reset( $source_file );
+			$additional_elements = [ 'i1',
+				'i2',
+				'parentListbox',
+				'parentListbox2',
+				'blankIdParent',
+				'lightParagraph',
+				'shadowHost' ];
+
+			foreach ( $additional_elements as $el ) {
+				if ( strpos( $this->test,
+						'$' . $el ) !== false ) {
+					$_lb = $this->parser->parse( sprintf( '<?php $this->%1$s = $this->doc->getElementById("%1$s");',
+						$el ) );
+					$additional_stmts[] = reset( $_lb );
+				}
+			}
+		}
+
+		$traverser = new NodeTraverser;
+		// removes nested functions.
+		$traverser->addVisitor( new class() extends NodeVisitorAbstract {
+			/**
+			 * @param mixed $node
+			 *
+			 * @return int
+			 */
+			public function leaveNode( $node ) {
+				if ( $node instanceof Function_ ) {
+					return NodeTraverser::REMOVE_NODE;
+				}
+			}
+		} );
+
+		foreach ( $functions as $function ) {
+			$function->stmts = $traverser->traverse( $function->stmts );
+		}
+
+		$ast = $traverser->traverse( $ast );
+
+		if ( $this->test_type === 'W3c' ) {
+			$stmts = array_filter( $functions, function ( &$node ) use ( $ast ) {
+				if ( $node->name->name === $this->test_name ) {
+					$node->stmts = array_merge( $ast, $node->stmts );
+					return $node;
+				}
+
+				return false;
+			} );
+		} else {
+			$node = $this->factory->method( $main_method )->makePublic()->addStmts(
+				$additional_stmts )
+				->addStmts( $ast )->getNode();
+
+			$stmts = array_merge( $functions,
+				[ $node ] );
+		}
+
+		if ( $main_method === 'testAppendOnDocument' || $main_method === 'testPrependOnDocument' ) {
+			$stmts = $functions;
+		}
+
+		return $stmts;
 	}
 }

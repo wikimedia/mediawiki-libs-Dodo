@@ -7,7 +7,7 @@ class NodeContainsTest extends WptTestHarness
 {
     public function testNodeContains()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-contains.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-contains.html');
         foreach ($this->testNodes as $referenceName) {
             $reference = eval($referenceName);
             $this->assertTest(function () use(&$reference) {

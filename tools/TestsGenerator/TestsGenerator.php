@@ -106,7 +106,7 @@ class TestsGenerator extends Tasks {
 			}
 
 			foreach ( $result->getData() as $test_type => $tests ) {
-				if ( $test_type === 'time' ) {
+				if ( $test_type === 'time' || $test_type === 'W3c' ) {
 					continue;
 				}
 
@@ -274,8 +274,7 @@ class TestsGenerator extends Tasks {
 			$this->taskNpmInstall()->run();
 		}
 
-		// Not sure about Robo\ResultData return type, looks excessive.
-		if ( !$this->filesystem->exists( $this->root_folder . '/tests/_w3c' ) ) {
+		if ( !$this->filesystem->exists( $this->root_folder . '/tests/W3c' ) ) {
 			$domino_path = $this->root_folder . '/vendor/fgnass/domino';
 			if ( !$this->filesystem->exists( $domino_path ) ) {
 				if ( !$this->taskComposerInstall()->dev( true )->run()->wasSuccessful() ) {
@@ -284,9 +283,7 @@ class TestsGenerator extends Tasks {
 			}
 		}
 
-		// Source tests.
-		if ( !$this->filesystem->exists( $this->root_folder . '/tests/_wpt' ) ) {
-			/* make sure there are wpt tests */
+		if ( !$this->filesystem->exists( $this->root_folder . '/tests/Wpt' ) ) {
 			$wpt_path = $this->root_folder . '/vendor/web-platform-tests/wpt';
 			if ( !$this->filesystem->exists( $wpt_path ) ) {
 				if ( !$this->taskComposerInstall()->dev( true )->run()->wasSuccessful() ) {
@@ -383,12 +380,12 @@ class TestsGenerator extends Tasks {
 	 *
 	 * @return Result
 	 */
-	protected function copyFiles() : Result {
+	public function copyFiles() : Result {
 		$w3c_core = $this->root_folder . self::W3C_TESTS . '/level1/core/files/*.html';
 		$w3c_html = $this->root_folder . self::W3C_TESTS . '/level1/html/files/*.html';
 
-		$cp_dirs = [ $w3c_core => $this->root_folder . '/tests/w3c/level1/core/files/',
-			$w3c_html => $this->root_folder . '/tests/w3c/level1/html/files/' ];
+		$cp_dirs = [ $w3c_core => $this->root_folder . '/tests/' . self::W3C . '/level1/core/files/',
+			$w3c_html => $this->root_folder . '/tests/' . self::W3C . '/level1/html/files/' ];
 
 		return $this->taskFlattenDir( $cp_dirs )->run();
 	}

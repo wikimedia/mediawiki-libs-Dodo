@@ -123,7 +123,7 @@ class RangeSetTest extends WptTestHarness
     }
     public function testRangeSet()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-set.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-set.html');
         $startTests = [];
         $endTests = [];
         $startBeforeTests = [];

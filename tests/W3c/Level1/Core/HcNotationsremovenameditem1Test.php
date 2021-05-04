@@ -1,12 +1,15 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_notationsremovenameditem1.js.
 class HcNotationsremovenameditem1Test extends W3cTestHarness
 {
     public function testHcNotationsremovenameditem1()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'hc_notationsremovenameditem1') != null) {
             return;
         }

@@ -154,7 +154,7 @@ class ParentNodePrependTest extends WptTestHarness
     }
     public function testParentNodePrepend()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ParentNode-prepend.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-prepend.html');
         $this->preInsertionValidateHierarchy('prepend');
         $this->testPrepend($this->doc->createElement('div'), 'Element');
         $this->testPrepend($this->doc->createDocumentFragment(), 'DocumentFragment');

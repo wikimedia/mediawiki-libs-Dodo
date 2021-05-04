@@ -10,7 +10,7 @@ class DocumentGetElementByIdTest extends WptTestHarness
 {
     public function testDocumentGetElementById()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-getElementById.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-getElementById.html');
         $gBody = $this->doc->getElementsByTagName('body')[0];
         $this->assertTest(function () {
             $this->assertEqualsData($this->doc->getElementById(''), null);

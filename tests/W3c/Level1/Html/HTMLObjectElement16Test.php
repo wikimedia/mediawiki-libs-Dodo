@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLObjectElement16.js.
 class HTMLObjectElement16Test extends W3cTestHarness
 {
     public function testHTMLObjectElement16()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'HTMLObjectElement16') != null) {
             return;
         }
@@ -28,7 +31,7 @@ class HTMLObjectElement16Test extends W3cTestHarness
         if (!$hasHTML2) {
             $nodeList = $doc->getElementsByTagName('object');
             $this->assertSizeData('Asize', 2, $nodeList);
-            $testNode = $nodeList[0];
+            $testNode = $nodeList->item(0);
             $vvspace = $testNode->vspace;
             $this->assertEqualsData('vspaceLink', '0', $vvspace);
         }

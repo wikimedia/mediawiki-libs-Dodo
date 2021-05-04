@@ -25,7 +25,7 @@ class DocumentCreateEventHttpsTest extends WptTestHarness
     }
     public function testDocumentCreateEventHttps()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-createEvent.https.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createEvent.https.html');
         foreach ($aliases as $alias => $___) {
             $iface = $aliases[$alias];
             $this->testAlias($alias, $iface);

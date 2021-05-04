@@ -63,7 +63,7 @@ class RangeCloneRangeTest extends WptTestHarness
     }
     public function testRangeCloneRange()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-cloneRange.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-cloneRange.html');
         $tests = [];
         for ($i = 0; $i < count($testRanges); $i++) {
             $tests[] = ['Range ' . $i . ' ' . $testRanges[$i], eval($testRanges[$i])];

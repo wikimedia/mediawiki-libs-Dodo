@@ -82,7 +82,7 @@ class CharacterDataDeleteDataTest extends WptTestHarness
     }
     public function testCharacterDataDeleteData()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/CharacterData-deleteData.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/CharacterData-deleteData.html');
         $this->testNode(function () {
             return $this->doc->createTextNode('test');
         }, 'Text');

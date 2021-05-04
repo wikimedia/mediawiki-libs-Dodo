@@ -7,7 +7,7 @@ class ElementInsertAdjacentElementTest extends WptTestHarness
 {
     public function testElementInsertAdjacentElement()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-insertAdjacentElement.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-insertAdjacentElement.html');
         $target = $this->doc->getElementById('target');
         $target2 = $this->doc->getElementById('target2');
         $this->assertTest(function () use(&$target, &$target2) {
@@ -20,10 +20,10 @@ class ElementInsertAdjacentElementTest extends WptTestHarness
         }, 'Inserting to an invalid location should cause a Syntax Error exception');
         $this->assertTest(function () use(&$target, &$target2) {
             $el = $target->insertAdjacentElement('beforebegin', $this->doc->getElementById('test1'));
-            $this->assertEqualsData($target->previousSibling->id, 'test1');
+            $this->assertEqualsData($target->getPreviousSibling()->id, 'test1');
             $this->assertEqualsData($el->id, 'test1');
             $el = $target2->insertAdjacentElement('beforebegin', $this->doc->getElementById('test1'));
-            $this->assertEqualsData($target2->previousSibling->id, 'test1');
+            $this->assertEqualsData($target2->getPreviousSibling()->id, 'test1');
             $this->assertEqualsData($el->id, 'test1');
         }, "Inserted element should be target element's previous sibling for 'beforebegin' case");
         $this->assertTest(function () use(&$target, &$target2) {

@@ -27,7 +27,7 @@ class ParentNodeQuerySelectorEscapesTest extends WptTestHarness
     }
     public function testParentNodeQuerySelectorEscapes()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-escapes.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-escapes.html');
         // 4.3.7 from https://drafts.csswg.org/css-syntax/#consume-escaped-code-point
         $this->testMatched('nonescaped', '#nonescaped');
         // - escape hex digit

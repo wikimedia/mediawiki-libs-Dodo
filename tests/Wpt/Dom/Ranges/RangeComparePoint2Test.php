@@ -6,7 +6,7 @@ class RangeComparePoint2Test extends WptTestHarness
 {
     public function testRangeComparePoint2()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-comparePoint-2.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-comparePoint-2.html');
         $this->assertTest(function () {
             $r = $this->doc->createRange();
             $r->detach();

@@ -6,7 +6,7 @@ class ParentNodeQuerySelectorScopeTest extends WptTestHarness
 {
     public function testParentNodeQuerySelectorScope()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-scope.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-scope.html');
         $div = $this->doc->querySelector('div');
         $p = $this->doc->querySelector('p');
         $this->assertTest(function () use(&$div, &$p) {

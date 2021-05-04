@@ -3,13 +3,16 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_textsplittextfour.js.
 class HcTextsplittextfourTest extends W3cTestHarness
 {
     public function testHcTextsplittextfour()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'hc_textsplittextfour') != null) {
             return;
         }
@@ -25,7 +28,7 @@ class HcTextsplittextfourTest extends W3cTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $elementList = $doc->getElementsByTagName('acronym');
-        $addressNode = $elementList[0];
+        $addressNode = $elementList->item(0);
         $textNode = $addressNode->firstChild;
         $splitNode = $textNode->splitText(30);
         $value = $splitNode->nodeValue;

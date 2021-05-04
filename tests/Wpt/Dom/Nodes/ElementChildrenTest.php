@@ -8,7 +8,7 @@ class ElementChildrenTest extends WptTestHarness
 {
     public function testElementChildren()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-children.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-children.html');
         // Add some non-HTML elements in there to test what happens with those.
         // setup()
         $container = $this->doc->getElementById('test');

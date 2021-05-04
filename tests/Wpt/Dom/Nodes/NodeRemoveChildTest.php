@@ -10,7 +10,7 @@ class NodeRemoveChildTest extends WptTestHarness
 {
     public function testNodeRemoveChild()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-removeChild.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-removeChild.html');
         $this->docs = [[function () {
             return $this->doc;
         }, 'the main document'], [function () {

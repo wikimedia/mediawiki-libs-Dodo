@@ -67,7 +67,7 @@ class RangeSelectNodeTest extends WptTestHarness
     }
     public function testRangeSelectNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-selectNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-selectNode.html');
         $range = $this->doc->createRange();
         $foreignRange = $foreignDoc->createRange();
         $xmlRange = $xmlDoc->createRange();

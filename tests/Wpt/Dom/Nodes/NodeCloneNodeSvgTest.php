@@ -8,7 +8,7 @@ class NodeCloneNodeSvgTest extends WptTestHarness
 {
     public function testNodeCloneNodeSvg()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-cloneNode-svg.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-cloneNode-svg.html');
         $svg = $this->doc->querySelector('svg');
         $clone = $svg->cloneNode(true);
         $this->assertTest(function () use(&$clone) {

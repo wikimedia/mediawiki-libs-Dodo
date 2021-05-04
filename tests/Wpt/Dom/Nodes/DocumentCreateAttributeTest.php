@@ -8,7 +8,7 @@ class DocumentCreateAttributeTest extends WptTestHarness
 {
     public function testDocumentCreateAttribute()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-createAttribute.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createAttribute.html');
         $xml_document = null;
         // setup()
         $xml_document = $this->doc->implementation->createDocument(null, null, null);

@@ -41,7 +41,7 @@ class CharacterDataRemoveTest extends WptTestHarness
     }
     public function testCharacterDataRemove()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/CharacterData-remove.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/CharacterData-remove.html');
         $text = null;
         $text_parent = null;
         $comment = null;

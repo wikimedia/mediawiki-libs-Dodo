@@ -22,7 +22,7 @@ class NodeFilterConstantsTest extends WptTestHarness
     }
     public function testNodeFilterConstants()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/NodeFilter-constants.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/NodeFilter-constants.html');
         $objects = null;
         // setup()
         $objects = [[NodeFilter, 'NodeFilter interface object']];

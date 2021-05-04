@@ -8,7 +8,7 @@ class HTMLCollectionIteratorTest extends WptTestHarness
 {
     public function testHTMLCollectionIterator()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-iterator.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-iterator.html');
         $paragraphs = $this->doc->getElementsByTagName('p');
         $this->assertTest(function () use(&$paragraphs) {
             $this->assertTrueData(isset($paragraphs['length']));

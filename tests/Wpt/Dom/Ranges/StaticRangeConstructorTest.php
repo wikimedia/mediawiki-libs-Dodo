@@ -13,7 +13,7 @@ class StaticRangeConstructorTest extends WptTestHarness
 {
     public function testStaticRangeConstructor()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/StaticRange-constructor.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/StaticRange-constructor.html');
         $testDiv = $this->doc->getElementById('testDiv');
         $testTextNode = $testDiv->firstChild;
         $testPINode = $this->doc->createProcessingInstruction('foo', 'abc');

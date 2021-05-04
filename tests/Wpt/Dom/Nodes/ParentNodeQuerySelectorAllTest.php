@@ -316,7 +316,7 @@ class ParentNodeQuerySelectorAllTest extends WptTestHarness
     }
     public function testParentNodeQuerySelectorAll()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-All.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-All.html');
         $this->asyncTest(function () {
             $frame = $this->doc->createElement('iframe');
             $self = $this;

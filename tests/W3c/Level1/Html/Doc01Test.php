@@ -1,12 +1,15 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/doc01.js.
 class Doc01Test extends W3cTestHarness
 {
     public function testDoc01()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'doc01') != null) {
             return;
         }

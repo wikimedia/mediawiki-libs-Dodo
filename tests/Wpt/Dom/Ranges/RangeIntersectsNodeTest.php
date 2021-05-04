@@ -7,7 +7,7 @@ class RangeIntersectsNodeTest extends WptTestHarness
 {
     public function testRangeIntersectsNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode.html');
         // Will be filled in on the first run for that range
         $testRangesCached = [];
         for ($i = 0; $i < count($this->testNodes); $i++) {

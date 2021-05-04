@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/area02.js.
 class Area02Test extends W3cTestHarness
 {
     public function testArea02()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'area02') != null) {
             return;
         }
@@ -23,7 +26,7 @@ class Area02Test extends W3cTestHarness
         $doc = $this->load($docRef, 'doc', 'area');
         $nodeList = $doc->getElementsByTagName('area');
         $this->assertSizeData('Asize', 1, $nodeList);
-        $testNode = $nodeList[0];
+        $testNode = $nodeList->item(0);
         $vnohref = $testNode->noHref;
         $this->assertFalseData('noHrefLink', $vnohref);
     }

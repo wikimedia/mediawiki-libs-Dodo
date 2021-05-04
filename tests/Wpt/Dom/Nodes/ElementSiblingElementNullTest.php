@@ -7,7 +7,7 @@ class ElementSiblingElementNullTest extends WptTestHarness
 {
     public function testElementSiblingElementNull()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-siblingElement-null.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-siblingElement-null.html');
         $this->assertTest(function () {
             $fec = $this->doc->getElementById('first_element_child');
             $this->assertEqualsData($fec->previousElementSibling, null);

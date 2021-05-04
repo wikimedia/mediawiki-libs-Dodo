@@ -7,7 +7,7 @@ class RangeCompareBoundaryPointsTest extends WptTestHarness
 {
     public function testRangeCompareBoundaryPoints()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-compareBoundaryPoints.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-compareBoundaryPoints.html');
         $testRangesCached = [];
         $testRangesCached[] = $this->doc->createRange();
         $testRangesCached[0]->detach();

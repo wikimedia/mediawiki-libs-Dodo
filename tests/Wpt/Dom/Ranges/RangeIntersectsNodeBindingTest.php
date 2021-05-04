@@ -7,7 +7,7 @@ class RangeIntersectsNodeBindingTest extends WptTestHarness
 {
     public function testRangeIntersectsNodeBinding()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode-binding.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode-binding.html');
         $this->assertTest(function () {
             $r = $this->doc->createRange();
             $this->assertThrowsJsData($this->type_error, function () use(&$r) {

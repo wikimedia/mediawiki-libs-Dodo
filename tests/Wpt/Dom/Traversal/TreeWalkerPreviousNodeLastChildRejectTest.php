@@ -26,7 +26,7 @@ class TreeWalkerPreviousNodeLastChildRejectTest extends WptTestHarness
     }
     public function testTreeWalkerPreviousNodeLastChildReject()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-previousNodeLastChildReject.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-previousNodeLastChildReject.html');
         $testElement = null;
         // setup()
         $testElement = $this->doc->createElement('div');

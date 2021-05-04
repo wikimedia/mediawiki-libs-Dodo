@@ -140,6 +140,7 @@ class LocatorTask extends BaseTask {
 			//'Node-isEqualNode', // testDeepEquality function and class context
 			'Element-getElementsByTagName', // HTMLCollection::prototype::item
 			'Node-replaceChild', // Node::class::replaceChild
+			'Range-test-iframe', // uses onload event to run test, no sence to convert
 		];
 
 		array_walk( $skips,

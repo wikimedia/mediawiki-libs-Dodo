@@ -27,7 +27,7 @@ class ElementRemoveAttributeNSTest extends WptTestHarness
     }
     public function testElementRemoveAttributeNS()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-removeAttributeNS.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-removeAttributeNS.html');
         $XML = 'http://www.w3.org/XML/1998/namespace';
         $this->assertTest(function () use(&$XML) {
             $el = $this->doc->createElement('foo');

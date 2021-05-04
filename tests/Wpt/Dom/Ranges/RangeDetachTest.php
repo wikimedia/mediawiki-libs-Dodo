@@ -6,7 +6,7 @@ class RangeDetachTest extends WptTestHarness
 {
     public function testRangeDetach()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-detach.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-detach.html');
         $this->assertTest(function () {
             $r = $this->doc->createRange();
             $r->detach();

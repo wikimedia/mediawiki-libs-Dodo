@@ -1,12 +1,13 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\Wpt\Dom;
+use Wikimedia\Dodo\DOMImplementation;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-implementation.html.
 class DocumentImplementationTest extends WptTestHarness
 {
     public function testDocumentImplementation()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-implementation.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-implementation.html');
         $this->assertTest(function () {
             $implementation = $this->doc->implementation;
             $this->assertTrueData($implementation instanceof DOMImplementation, 'implementation should implement DOMImplementation');

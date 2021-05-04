@@ -8,7 +8,7 @@ class ElementInsertAdjacentTextTest extends WptTestHarness
 {
     public function testElementInsertAdjacentText()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-insertAdjacentText.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-insertAdjacentText.html');
         $target = $this->doc->getElementById('target');
         $target2 = $this->doc->getElementById('target2');
         $this->assertTest(function () use(&$target, &$target2) {
@@ -21,9 +21,9 @@ class ElementInsertAdjacentTextTest extends WptTestHarness
         }, 'Inserting to an invalid location should cause a Syntax Error exception');
         $this->assertTest(function () use(&$target, &$target2) {
             $target->insertAdjacentText('beforebegin', 'test1');
-            $this->assertEqualsData($target->previousSibling->nodeValue, 'test1');
+            $this->assertEqualsData($target->getPreviousSibling()->nodeValue, 'test1');
             $target2->insertAdjacentText('beforebegin', 'test1');
-            $this->assertEqualsData($target2->previousSibling->nodeValue, 'test1');
+            $this->assertEqualsData($target2->getPreviousSibling()->nodeValue, 'test1');
         }, "Inserted text node should be target element's previous sibling for 'beforebegin' case");
         $this->assertTest(function () use(&$target, &$target2) {
             $target->insertAdjacentText('afterbegin', 'test2');

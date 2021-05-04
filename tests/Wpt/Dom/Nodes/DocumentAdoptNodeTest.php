@@ -9,7 +9,7 @@ class DocumentAdoptNodeTest extends WptTestHarness
 {
     public function testDocumentAdoptNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Document-adoptNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-adoptNode.html');
         $this->assertTest(function () {
             $y = $this->doc->getElementsByTagName('x<')[0];
             $child = $y->firstChild;

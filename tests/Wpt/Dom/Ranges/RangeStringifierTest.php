@@ -9,7 +9,7 @@ class RangeStringifierTest extends WptTestHarness
 {
     public function testRangeStringifier()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-stringifier.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-stringifier.html');
         $this->assertTest(function () {
             $r = new Range();
             $testDiv = $this->doc->getElementById('test');

@@ -7,7 +7,7 @@ class DOMImplementationCreateHTMLDocumentWithSavedImplementationTest extends Wpt
 {
     public function testDOMImplementationCreateHTMLDocumentWithSavedImplementation()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/DOMImplementation-createHTMLDocument-with-saved-implementation.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DOMImplementation-createHTMLDocument-with-saved-implementation.html');
         // Test the document location getter is null outside of browser context
         $this->assertTest(function () {
             $iframe = $this->doc->createElement('iframe');

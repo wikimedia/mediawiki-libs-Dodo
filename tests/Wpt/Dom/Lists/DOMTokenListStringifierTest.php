@@ -8,7 +8,7 @@ class DOMTokenListStringifierTest extends WptTestHarness
 {
     public function testDOMTokenListStringifier()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/lists/DOMTokenList-stringifier.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/lists/DOMTokenList-stringifier.html');
         $this->assertTest(function () {
             $this->assertEqualsData(strval($this->doc->createElement('span')->classList), '', 'String(classList) should return the empty list for an undefined class attribute');
             $span = $this->doc->querySelector('span');

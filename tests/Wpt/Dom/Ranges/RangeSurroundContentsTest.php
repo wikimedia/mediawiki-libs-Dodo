@@ -5,6 +5,7 @@ use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-surroundContents.html.
 class RangeSurroundContentsTest extends WptTestHarness
@@ -215,7 +216,7 @@ class RangeSurroundContentsTest extends WptTestHarness
     }
     public function testRangeSurroundContents()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-surroundContents.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-surroundContents.html');
         $testDiv->parentNode->removeChild($testDiv);
         $iStart = 0;
         $iStop = count($testRangesShort);

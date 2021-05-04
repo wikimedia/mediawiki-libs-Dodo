@@ -153,7 +153,7 @@ class RangeExtractContentsTest extends WptTestHarness
     }
     public function testRangeExtractContents()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-extractContents.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-extractContents.html');
         $testDiv->parentNode->removeChild($testDiv);
         $actualIframe = $this->doc->createElement('iframe');
         $actualIframe->style->display = 'none';

@@ -67,7 +67,7 @@ class CharacterDataDataTest extends WptTestHarness
     }
     public function testCharacterDataData()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/CharacterData-data.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/CharacterData-data.html');
         $this->testNode(function () {
             return $this->doc->createTextNode('test');
         }, 'Text');

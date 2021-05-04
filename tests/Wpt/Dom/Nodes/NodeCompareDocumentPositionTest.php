@@ -7,7 +7,7 @@ class NodeCompareDocumentPositionTest extends WptTestHarness
 {
     public function testNodeCompareDocumentPosition()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-compareDocumentPosition.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-compareDocumentPosition.html');
         foreach ($this->testNodes as $referenceName) {
             $reference = eval($referenceName);
             foreach ($this->testNodes as $otherName) {

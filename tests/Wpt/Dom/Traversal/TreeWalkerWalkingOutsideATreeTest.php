@@ -18,7 +18,7 @@ class TreeWalkerWalkingOutsideATreeTest extends WptTestHarness
     }
     public function testTreeWalkerWalkingOutsideATree()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-walking-outside-a-tree.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-walking-outside-a-tree.html');
         $this->assertTest(function () {
             // test 6: walking outside a tree
             $doc = $this->doc->createElement('div');

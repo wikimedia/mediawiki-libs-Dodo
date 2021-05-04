@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_elementretrieveallattributes.js.
 class HcElementretrieveallattributesTest extends W3cTestHarness
 {
     public function testHcElementretrieveallattributes()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'hc_elementretrieveallattributes') != null) {
             return;
         }
@@ -30,7 +33,7 @@ class HcElementretrieveallattributesTest extends W3cTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $addressList = $doc->getElementsByTagName('acronym');
-        $testAddress = $addressList[0];
+        $testAddress = $addressList->item(0);
         $attributes = $testAddress->attributes;
         for ($indexN1006B = 0; $indexN1006B < count($attributes); $indexN1006B++) {
             $attribute = $attributes->item($indexN1006B);

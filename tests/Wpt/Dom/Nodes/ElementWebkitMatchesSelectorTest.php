@@ -189,7 +189,7 @@ class ElementWebkitMatchesSelectorTest extends WptTestHarness
     }
     public function testElementWebkitMatchesSelector()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-webkitMatchesSelector.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-webkitMatchesSelector.html');
         $this->asyncTest(function () {
             $frame = $this->doc->createElement('iframe');
             $frame->onload = $this->step_func_done(function ($e) {

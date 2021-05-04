@@ -34,7 +34,7 @@ class CharacterDataAppendChildTest extends WptTestHarness
     }
     public function testCharacterDataAppendChild()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/CharacterData-appendChild.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/CharacterData-appendChild.html');
         $types = ['Text', 'Comment', 'ProcessingInstruction'];
         foreach ($types as $type1) {
             foreach ($types as $type2) {

@@ -2,13 +2,16 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeinsertbeforenodeancestor.js.
 class HcNodeinsertbeforenodeancestorTest extends W3cTestHarness
 {
     public function testHcNodeinsertbeforenodeancestor()
     {
+        $docsLoaded = -1000000;
         $builder = $this->getBuilder();
+        $success = null;
         if ($this->checkInitialization($builder, 'hc_nodeinsertbeforenodeancestor') != null) {
             return;
         }
@@ -28,7 +31,7 @@ class HcNodeinsertbeforenodeancestorTest extends W3cTestHarness
         $elementList = $doc->getElementsByTagName('p');
         $employeeNode = $elementList->item(1);
         $childList = $employeeNode->childNodes;
-        $refChild = $childList[0];
+        $refChild = $childList->item(0);
         $success = false;
         try {
             $insertedNode = $employeeNode->insertBefore($newChild, $refChild);

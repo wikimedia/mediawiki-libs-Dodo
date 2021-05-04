@@ -17,7 +17,7 @@ class NodeIsConnectedTest extends WptTestHarness
     }
     public function testNodeIsConnected()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-isConnected.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-isConnected.html');
         $this->assertTest(function () {
             $nodes = [$this->doc->createElement('div'), $this->doc->createElement('div'), $this->doc->createElement('div')];
             $this->checkNodes([], $nodes);

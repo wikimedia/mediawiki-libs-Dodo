@@ -19,7 +19,7 @@ class TreeWalkerCurrentNodeTest extends WptTestHarness
     }
     public function testTreeWalkerCurrentNode()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-currentNode.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/TreeWalker-currentNode.html');
         // var subTree = document.createElement('div');
         // subTree.innerHTML = "<p>Lorem ipsum <span>dolor <b>sit</b> amet</span>, consectetur <i>adipisicing</i> elit, sed do eiusmod <tt>tempor <b><i>incididunt ut</i> labore</b> et dolore magna</tt> aliqua.</p>"
         // document.body.appendChild(subTree);
@@ -54,12 +54,12 @@ class TreeWalkerCurrentNodeTest extends WptTestHarness
             $this->assertEqualsData($w->nextSibling(), null);
             $this->assertEqualsData($w->currentNode, $this->doc->documentElement);
             $w->currentNode = $this->doc->documentElement;
-            $this->assertEqualsData($w->previousSibling(), null);
+            $this->assertEqualsData($w->getPreviousSibling()(), null);
             $this->assertEqualsData($w->currentNode, $this->doc->documentElement);
         }, 'Test that we handle setting the currentNode to arbitrary nodes not under the root element.');
         $this->assertTest(function () use(&$subTree, &$all) {
             $w = $this->doc->createTreeWalker($subTree, NodeFilter::SHOW_ELEMENT, $all);
-            $w->currentNode = $subTree->previousSibling;
+            $w->currentNode = $subTree->getPreviousSibling();
             $this->assertEqualsData($w->nextNode(), $subTree);
             $w->currentNode = $this->doc->getElementById('parent');
             $this->assertEqualsData($w->firstChild(), $subTree);

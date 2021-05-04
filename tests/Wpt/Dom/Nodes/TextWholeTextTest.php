@@ -9,7 +9,7 @@ class TextWholeTextTest extends WptTestHarness
 {
     public function testTextWholeText()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Text-wholeText.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Text-wholeText.html');
         $this->assertTest(function () {
             $parent = $this->doc->createElement('div');
             $t1 = $this->doc->createTextNode('a');

@@ -11,7 +11,7 @@ class NodeParentElementTest extends WptTestHarness
 {
     public function testNodeParentElement()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Node-parentElement.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-parentElement.html');
         $this->assertTest(function () {
             $this->assertEqualsData($this->doc->parentElement, null);
         }, 'When the parent is null, parentElement should be null');

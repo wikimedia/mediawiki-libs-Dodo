@@ -7,7 +7,7 @@ class GetElementsByClassNameEmptySetTest extends WptTestHarness
 {
     public function testGetElementsByClassNameEmptySet()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/getElementsByClassName-empty-set.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/getElementsByClassName-empty-set.html');
         $this->assertTest(function () {
             $elements = $this->doc->getElementsByClassName('');
             $this->assertArrayEqualsData($elements, []);

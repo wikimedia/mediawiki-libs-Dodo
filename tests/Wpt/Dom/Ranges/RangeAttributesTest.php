@@ -6,7 +6,7 @@ class RangeAttributesTest extends WptTestHarness
 {
     public function testRangeAttributes()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/ranges/Range-attributes.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-attributes.html');
         $this->assertTest(function () {
             $r = $this->doc->createRange();
             $this->assertEqualsData($r->startContainer, $this->doc);

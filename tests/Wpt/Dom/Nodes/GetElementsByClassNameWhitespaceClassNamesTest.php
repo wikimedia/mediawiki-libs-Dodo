@@ -8,7 +8,7 @@ class GetElementsByClassNameWhitespaceClassNamesTest extends WptTestHarness
 {
     public function testGetElementsByClassNameWhitespaceClassNames()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/getElementsByClassName-whitespace-class-names.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/getElementsByClassName-whitespace-class-names.html');
         $spans = $this->doc->querySelectorAll('span');
         foreach ($spans as $span => $___) {
             $this->assertTest(function () use(&$span) {

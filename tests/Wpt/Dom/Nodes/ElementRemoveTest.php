@@ -41,7 +41,7 @@ class ElementRemoveTest extends WptTestHarness
     }
     public function testElementRemove()
     {
-        $this->source_file = 'vendor/web-platform-tests/wpt/dom/nodes/Element-remove.html';
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-remove.html');
         $node = null;
         $parentNode = null;
         // setup()
