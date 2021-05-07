@@ -17,7 +17,11 @@ trait UnimplementedTrait {
 	// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 
 	protected function _unimplemented() : Exception {
-		return new UnimplementedException();
+		// Identify the function which is unimplemented from the backtrace
+		$dbt = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 2 );
+		$class = $dbt[1]['class'] ?? '<unknown class>';
+		$func = $dbt[1]['function'] ?? '<unknown function>';
+		return new UnimplementedException( "$class::$func" );
 	}
 
 	// phpcs:enable
