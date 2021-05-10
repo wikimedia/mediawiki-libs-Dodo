@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\Util;
+
 // See http://www.whatwg.org/specs/web-apps/current-work/#reflect
 //
 // defval is the default value. If it is a function, then that function

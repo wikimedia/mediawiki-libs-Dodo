@@ -19,6 +19,9 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\UnimplementedTrait;
+use Wikimedia\Dodo\Internal\Util;
+use Wikimedia\Dodo\Internal\WhatWG;
 use Wikimedia\Zest\Zest;
 
 /******************************************************************************

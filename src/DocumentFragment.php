@@ -15,9 +15,11 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
-/******************************************************************************
- * DocumentFragment.php
- * --------------------
+use Wikimedia\Dodo\Internal\UnimplementedTrait;
+use Wikimedia\Dodo\Internal\WhatWG;
+
+/**
+ * DocumentFragment
  */
 class DocumentFragment extends Node implements \Wikimedia\IDLeDOM\DocumentFragment {
 	// DOM mixins

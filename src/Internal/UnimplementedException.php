@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Wikimedia\Dodo;
+namespace Wikimedia\Dodo\Internal;
 
 use Exception;
 

@@ -10,6 +10,8 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\Util;
+
 /*
  * This trait selectively overrides Node, providing an alternative
  * (more performant) base class for Node subclasses that can never

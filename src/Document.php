@@ -16,32 +16,18 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
-/******************************************************************************
- * Document.php
- * ------------
- * Implements a Document. It is a somewhat complicated class,
- * having a number of internal bookkeeping needs.
- */
+use Wikimedia\Dodo\Internal\MultiId;
+use Wikimedia\Dodo\Internal\UnimplementedTrait;
+use Wikimedia\Dodo\Internal\Util;
+use Wikimedia\Dodo\Internal\WhatWG;
 
 /**
- * The Document class. Note that there is another class called
- * HTMLDocument with an extended interface, only for Documents
- * that contain HTML. Rather than use a separate class, we load
- * it onto the Document class and switch behavior using a flag
- * in the constructor. Not sure about that, but it probably
- * things easier.
- */
-
-/*
- * Each document has an associated
- *      encoding (an encoding),
- *      content type (a string),
- *      URL (a URL),
- *      origin (an origin),
- *      type ("xml" or "html"), and
- *      mode ("no-quirks", "quirks", or "limited-quirks").
- */
-/*
+ * The Document class.
+ *
+ * The HTML specification extends this class with a number of additional
+ * methods for Documents which contain HTML.  We use "document type" to
+ * distinguish between XML documents and HTML documents.
+ *
  * Each document has an associated encoding (an encoding), content type
  * (a string), URL (a URL), origin (an origin), type ("xml" or "html"),
  * and mode ("no-quirks", "quirks", or "limited-quirks").
@@ -57,6 +43,8 @@ namespace Wikimedia\Dodo;
  * A document is said to be in no-quirks mode if its mode is "no-quirks",
  * quirks mode if its mode is "quirks", and limited-quirks mode if its mode
  * is "limited-quirks".
+ *
+ * @see https://html.spec.whatwg.org/multipage/dom.html#document
  */
 class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	// DOM mixins

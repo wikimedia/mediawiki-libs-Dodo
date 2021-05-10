@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\UnimplementedTrait;
+
 class CDATASection extends Text implements \Wikimedia\IDLeDOM\CDATASection {
 	// Stub out methods not yet implemented.
 	use \Wikimedia\IDLeDOM\Stub\CDATASection;

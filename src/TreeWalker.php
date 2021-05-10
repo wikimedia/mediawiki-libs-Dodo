@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\UnimplementedTrait;
+
 abstract class TreeWalker implements \Wikimedia\IDLeDOM\TreeWalker {
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\TreeWalker;

@@ -3,7 +3,9 @@
 declare( strict_types = 1 );
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 
-namespace Wikimedia\Dodo;
+namespace Wikimedia\Dodo\Internal;
+
+use Wikimedia\Dodo\Node;
 
 /*
  * DOM-LS specifies that in the

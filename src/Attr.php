@@ -6,6 +6,7 @@ declare( strict_types = 1 );
 namespace Wikimedia\Dodo;
 
 use Exception;
+use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
 /**
  * Attr.php

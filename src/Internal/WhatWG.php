@@ -16,7 +16,13 @@ declare( strict_types = 1 );
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 
-namespace Wikimedia\Dodo;
+namespace Wikimedia\Dodo\Internal;
+
+use Wikimedia\Dodo\Attr;
+use Wikimedia\Dodo\DocumentFragment;
+use Wikimedia\Dodo\DOMException;
+use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\Node;
 
 /******************************************************************************
  * whatwg.php

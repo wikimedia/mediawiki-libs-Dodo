@@ -9,6 +9,9 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\UnimplementedTrait;
+use Wikimedia\Dodo\Internal\Util;
+
 /******************************************************************************
  * DOMImplementation.php
  * ---------------------

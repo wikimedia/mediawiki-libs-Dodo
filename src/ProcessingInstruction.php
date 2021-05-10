@@ -5,6 +5,8 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\UnimplementedTrait;
+
 /******************************************************************************
  * ProcessingInstruction.php
  * -------------------------
