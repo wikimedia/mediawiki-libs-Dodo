@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanTypeMismatchReturn
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
@@ -42,9 +41,15 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	use \Wikimedia\IDLeDOM\Stub\DOMImplementation;
 	use UnimplementedTrait;
 
+	/**
+	 * @var ?Document
+	 */
 	private $_contextObject;
 
-	public function __construct( $contextObject = null ) {
+	/**
+	 * @param ?Document $contextObject
+	 */
+	public function __construct( ?Document $contextObject = null ) {
 		$this->_contextObject = $contextObject;
 	}
 
@@ -70,7 +75,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 			Util::error( 'Invalid qualified name.', 'InvalidCharacterError' );
 		}
 
-		$contextObject = $this->_contextObject ?? new Document( $qualifiedName );
+		$contextObject = $this->_contextObject ?? new Document( null, $qualifiedName );
 
 		return new DocumentType( $contextObject,
 			$qualifiedName,
@@ -110,13 +115,23 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	public function createDocument( ?string $namespace, ?string $qualifiedName = '', $doctype = null ) {
 		/*
 		 * Note that the current DOMCore spec makes it impossible
-		 * to create an HTML document with this function, even if
+		 * to create an "HTML document" with this function, even if
 		 * the namespace and doctype are properly set. See thread:
 		 * http://lists.w3.org/Archives/Public/www-dom/2011AprJun/0132.html
-		 *
-		 * TODO PORT: Okay....so...
+		 * Use ::createHTMLDocument() instead.
 		 */
-		$d = new Document( 'xml', null );
+		if ( $namespace === Util::NAMESPACE_HTML ) {
+			$contentType = "application/xhtml+xml";
+		} elseif ( $namespace === Util::NAMESPACE_SVG ) {
+			$contentType = "image/svg+xml";
+		} else {
+			$contentType = "application/xml";
+		}
+
+		$d = new XMLDocument(
+			$this->_contextObject,
+			$contentType
+		);
 
 		if ( $qualifiedName ) {
 			$e = $d->createElementNS( $namespace, $qualifiedName );
@@ -132,19 +147,11 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 			$d->appendChild( $e );
 		}
 
-		if ( $namespace === Util::NAMESPACE_HTML ) {
-			$d->_contentType = "application/xhtml+xml";
-		} elseif ( $namespace === Util::NAMESPACE_SVG ) {
-			$d->_contentType = "image/svg+xml";
-		} else {
-			$d->_contentType = "application/xml";
-		}
-
 		return $d;
 	}
 
 	public function createHTMLDocument( ?string $titleText = null ) {
-		$d = new Document( 'html', null );
+		$d = new Document( $this->_contextObject, 'html', null );
 
 		$d->appendChild( new DocumentType( $d, "html" ) );
 

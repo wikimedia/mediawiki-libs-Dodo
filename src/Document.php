@@ -63,16 +63,56 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/**********************************************************************
 	 * Properties that are for internal use by this library
 	 */
-	/*
-	 * DEVELOPERS NOTE
-	 * Certain APIs are only defined when the Document contains HTML
-	 * (rather than XML). Rather than implement a separate HTMLDocument
-	 * class, we simply store the type of Document in a variable.
-	 *
-	 * Outside callers will use the isHTMLDocument() method, which
-	 * makes use of this value.
+
+	/**
+	 * Encodings have a 'name' and one or more 'labels'.  This is the
+	 * name of the document encoding.
+	 * @var string Document encoding
+	 * @see https://dom.spec.whatwg.org/#concept-document-encoding
 	 */
-	protected $__type;
+	private $_encoding = 'UTF-8';
+
+	/**
+	 * Document type is "xml" or "html".  We use a boolean to represent
+	 * this enumeration.
+	 * @var bool True if document type is "html", else document type is "xml"
+	 * @see https://dom.spec.whatwg.org/#concept-document-type
+	 */
+	private $_typeIsHtml = false;
+
+	/**
+	 * Document content type.
+	 * @var string
+	 * @see https://dom.spec.whatwg.org/#concept-document-content-type
+	 */
+	protected $_contentType = 'application/xml';
+
+	/**
+	 * Document URL.  This should probably be a more-complicated object
+	 * type at some point, but we'll represent it internally as a string
+	 * for now.
+	 * @var string
+	 * @see https://dom.spec.whatwg.org/#concept-document-url
+	 */
+	private $_URL = 'about:blank';
+
+	/**
+	 * Document Origin.  This should probably be a more-complicated tuple
+	 * type at some point, but we'll represent it internally as a nullable
+	 * string for now.
+	 * @var ?string
+	 * @see https://dom.spec.whatwg.org/#concept-document-origin
+	 */
+	private $_origin = null;
+
+	/**
+	 * Document mode: one of "no-quirks mode", "quirks mode", or
+	 * "limited-quirks mode".  This is only ever changed from the default
+	 * for documents created by the HTML parser.
+	 * @var string
+	 * @see https://dom.spec.whatwg.org/#concept-document-mode
+	 */
+	private $_mode = 'no-quirks';
 
 	/*
 	 * DEVELOPERS NOTE:
@@ -111,18 +151,6 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 * Part of Node parent class
 	 */
 	public $_ownerDocument = null;
-
-	/*
-	 * Part of Document class
-	 */
-	public const _characterSet = 'UTF-8';
-	public $_encoding = 'UTF-8';
-	public $encoding = 'UTF-8';
-	public $_type = 'xml';
-	public $_contentType = 'application/xml';
-	public $_URL = 'about:blank';
-	public $_origin = null;
-	public $_compatMode = 'no-quirks';
 
 	/*
 	 * ANNOYING LIVE REFERENCES
@@ -169,18 +197,24 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	private $_templateDocCache;
 
 	/**
+	 * @param ?Document $contextObject
 	 * @param string $type
 	 * @param ?string $url
 	 */
-	public function __construct( string $type = "xml", ?string $url = null ) {
+	public function __construct(
+		?Document $contextObject = null,
+		string $type = "xml",
+		?string $url = null
+	) {
 		parent::__construct();
 
 		/** DOM-LS */
+		$this->_origin = $contextObject->_origin ?? null;
 
 		/* Having an HTML Document affects some APIs */
 		if ( $type === 'html' ) {
 			$this->_contentType = 'text/html';
-			$this->__type = 'html';
+			$this->_typeIsHtml = true;
 		}
 
 		/* DOM-LS: used by the documentURI and URL method */
@@ -234,17 +268,17 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 * @inheritDoc
 	 */
 	public function getCharacterSet(): string {
-		return $this->_characterSet;
+		return $this->_encoding;
 	}
 
 	/** @return string */
 	public function getCharset(): string {
-		return $this->_characterSet; /* historical alias */
+		return $this->getCharacterSet(); /* historical alias */
 	}
 
 	/** @return string */
 	public function getInputEncoding(): string {
-		return $this->_characterSet; /* historical alias */
+		return $this->getCharacterSet(); /* historical alias */
 	}
 
 	/** @return DOMImplementation */
@@ -259,12 +293,12 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 
 	/** @return string */
 	public function getURL() : string {
-		return $this->_URL; /** Alias for HTMLDocuments */
+		return $this->getDocumentURI(); /** Alias for HTMLDocuments */
 	}
 
 	/** @inheritDoc */
 	public function getCompatMode() : string {
-		return $this->_compatMode === "quirks" ? "BackCompat" : "CSS1Compat";
+		return $this->_mode === "quirks" ? "BackCompat" : "CSS1Compat";
 	}
 
 	/** @inheritDoc */
@@ -314,7 +348,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		if ( !WhatWG::is_valid_xml_name( $localName ) ) {
 			Util::error( 'InvalidCharacterError' );
 		}
-		if ( $this->isHTMLDocument() ) {
+		if ( $this->_isHTMLDocument() ) {
 			$localName = Util::ascii_to_lowercase( $localName );
 		}
 		return new Attr( null, $localName, null, null, '' );
@@ -336,8 +370,6 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 
 	/** @inheritDoc */
 	public function createElement( string $lname, $options = null ) {
-		$lname = strval( $lname );
-
 		if ( !WhatWG::is_valid_xml_name( $lname ) ) {
 			Util::error( "InvalidCharacterError" );
 		}
@@ -562,18 +594,14 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 */
 
 	/**
-	 * TODO Where does this fit in?
+	 * Return true if this document is an HTML document, otherwise it
+	 * is an XML document and will return false.
+	 * @see https://dom.spec.whatwg.org/#html-document
 	 *
 	 * @return bool
 	 */
 	public function _isHTMLDocument(): bool {
-		if ( $this->__type === 'html' ) {
-			$elt = $this->getDocumentElement();
-			if ( $elt !== null && $elt->_isHTMLElement() ) {
-				return true;
-			}
-		}
-		return false;
+		return $this->_typeIsHtml;
 	}
 
 	/**
@@ -585,7 +613,11 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 * @return Document with same invocation as $this
 	 */
 	protected function _subclass_cloneNodeShallow(): Node {
-		$shallow = new Document( $this->isHTMLDocument(), $this->_address );
+		$shallow = new Document(
+			$this,
+			$this->_typeIsHtml ? 'html' : 'xml',
+			$this->_address
+		);
 		$shallow->_mode = $this->_mode;
 		$shallow->_contentType = $this->_contentType;
 		return $shallow;

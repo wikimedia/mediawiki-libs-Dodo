@@ -25,7 +25,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testDodo() {
 		/* Instantiate the nodes */
-		$doc = new Document( 'html' );
+		$doc = new Document( null, 'html' );
 		$html = $doc->createElement( 'html' );
 		$body = $doc->createElement( 'body' );
 		$comment = $doc->createComment( 'Hello, world!' );

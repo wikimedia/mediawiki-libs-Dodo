@@ -269,7 +269,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		 */
 		if ( $this->getNamespaceURI() !== Util::NAMESPACE_HTML
 			 || $this->getPrefix()
-			 || !$this->getOwnerDocument()->isHTMLDocument() ) {
+			 || !$this->getOwnerDocument()->_isHTMLDocument() ) {
 			if ( $this->getPrefix() === null ) {
 				$name = $this->getLocalName();
 			} else {
@@ -624,7 +624,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	public function _isHTMLElement() {
 		if ( $this->_namespaceURI === Util::NAMESPACE_HTML
 			 && $this->_ownerDocument
-			 && $this->_ownerDocument->isHTMLDocument() ) {
+			 && $this->_ownerDocument->_isHTMLDocument() ) {
 			return true;
 		}
 		return false;
