@@ -49,8 +49,7 @@ class Window extends EventTarget {
 	 */
 	public function __construct( Document $doc = null ) {
 		if ( $doc == null ) {
-			$impl = new DOMImplementation( null );
-			$doc = $impl->createHTMLDocument( "" );
+			$doc = new Document( null, 'html' );
 		}
 
 		$this->document = $doc;

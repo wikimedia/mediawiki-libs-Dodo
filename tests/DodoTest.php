@@ -11,7 +11,6 @@ use RemexHtml\TreeBuilder\Dispatcher;
 use RemexHtml\TreeBuilder\TreeBuilder;
 
 use Wikimedia\Dodo\Document;
-use Wikimedia\Dodo\DOMImplementation;
 use Wikimedia\Dodo\HTMLImgElement;
 
 /**
@@ -71,9 +70,10 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 
 	/** @dataProvider provideRemex */
 	public function testRemex( $html, $expected ) {
+		$domImpl = ( new Document( null, 'html' ) )->getImplementation();
 		$domBuilder = new DOMBuilder( [
 			'suppressHtmlNamespace' => true,
-			'domImplementation' => new DOMImplementation()
+			'domImplementation' => $domImpl,
 		] );
 		$treeBuilder = new TreeBuilder( $domBuilder, [
 			'ignoreErrors' => true

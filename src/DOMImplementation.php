@@ -42,14 +42,14 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	use UnimplementedTrait;
 
 	/**
-	 * @var ?Document
+	 * @var Document
 	 */
 	private $_contextObject;
 
 	/**
-	 * @param ?Document $contextObject
+	 * @param Document $contextObject
 	 */
-	public function __construct( ?Document $contextObject = null ) {
+	public function __construct( Document $contextObject ) {
 		$this->_contextObject = $contextObject;
 	}
 
@@ -75,9 +75,8 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 			Util::error( 'Invalid qualified name.', 'InvalidCharacterError' );
 		}
 
-		$contextObject = $this->_contextObject ?? new Document( null, $qualifiedName );
-
-		return new DocumentType( $contextObject,
+		return new DocumentType(
+			$this->_contextObject,
 			$qualifiedName,
 			$publicId,
 			$systemId );

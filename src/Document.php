@@ -197,19 +197,19 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	private $_templateDocCache;
 
 	/**
-	 * @param ?Document $contextObject
+	 * @param ?Document $originDoc
 	 * @param string $type
 	 * @param ?string $url
 	 */
 	public function __construct(
-		?Document $contextObject = null,
+		?Document $originDoc = null,
 		string $type = "xml",
 		?string $url = null
 	) {
 		parent::__construct();
 
 		/** DOM-LS */
-		$this->_origin = $contextObject->_origin ?? null;
+		$this->_origin = $originDoc ? $originDoc->_origin : null; // default
 
 		/* Having an HTML Document affects some APIs */
 		if ( $type === 'html' ) {
@@ -237,7 +237,11 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	public function _templateDoc() {
 		if ( !$this->_templateDocCache ) {
 			/* "associated inert template document" */
-			$newDoc = new Document( $this->isHTML, $this->_address );
+			$newDoc = new Document(
+				$this,
+				$this->_typeIsHtml ? 'html' : 'xml',
+				$this->_URL
+			);
 			$this->_templateDocCache = $newDoc->_templateDocCache = $newDoc;
 		}
 		return $this->_templateDocCache;
@@ -616,7 +620,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		$shallow = new Document(
 			$this,
 			$this->_typeIsHtml ? 'html' : 'xml',
-			$this->_address
+			$this->_URL
 		);
 		$shallow->_mode = $this->_mode;
 		$shallow->_contentType = $this->_contentType;

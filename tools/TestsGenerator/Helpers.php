@@ -14,7 +14,6 @@ use RemexHtml\TreeBuilder\TreeBuilder;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 use Wikimedia\Dodo\Document as DodoDOMDocument;
-use Wikimedia\Dodo\DOMImplementation;
 use Wikimedia\Dodo\Node as DOMNode;
 
 /**
@@ -110,9 +109,10 @@ trait Helpers {
 	 */
 	protected function parseHtmlToDom( string $file_path ) : DOMNode {
 		$html = file_get_contents( $file_path );
+		$domImpl = ( new DodoDOMDocument( null, 'html' ) )->getImplementation();
 		$domBuilder = new DOMBuilder( [
 			'suppressHtmlNamespace' => true,
-			'domImplementation' => new DOMImplementation()
+			'domImplementation' => $domImpl,
 		] );
 		$treeBuilder = new TreeBuilder( $domBuilder, [
 			'ignoreErrors' => true
