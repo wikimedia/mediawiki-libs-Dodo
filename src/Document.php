@@ -285,6 +285,24 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		return $this->getCharacterSet(); /* historical alias */
 	}
 
+	/** @return string */
+	public function getEncoding(): string {
+		return $this->getCharacterSet(); // weird PHP extension
+	}
+
+	/**
+	 * @param string $encoding
+	 */
+	public function setEncoding( string $encoding ) : void {
+		// This is a PHP-specific extension, for compatibility with
+		// DOMDocument.  The PHP docs say: "Encoding of the document, as
+		// specified by the XML declaration. This attribute is not
+		// present in the final DOM Level 3 specification, but is the
+		// only way of manipulating XML document encoding in this
+		// implementation."
+		$this->_encoding = $encoding;
+	}
+
 	/** @return DOMImplementation */
 	public function getImplementation(): DOMImplementation {
 		return $this->_implementation;

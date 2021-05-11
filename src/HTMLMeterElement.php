@@ -6,11 +6,11 @@ namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
-class HTMLHeadElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLHeadElement {
+class HTMLMeterElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLMeterElement {
 	// Stub out methods not yet implemented.
-	use \Wikimedia\IDLeDOM\Stub\HTMLHeadElement;
+	use \Wikimedia\IDLeDOM\Stub\HTMLMeterElement;
 	use UnimplementedTrait;
 
 	// Helper functions from IDLeDOM
-	use \Wikimedia\IDLeDOM\Helper\HTMLHeadElement;
+	use \Wikimedia\IDLeDOM\Helper\HTMLMeterElement;
 }

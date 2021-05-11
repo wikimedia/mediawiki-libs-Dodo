@@ -6,11 +6,11 @@ namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
-class HTMLHeadElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLHeadElement {
+class HTMLAudioElement extends HTMLMediaElement implements \Wikimedia\IDLeDOM\HTMLAudioElement {
 	// Stub out methods not yet implemented.
-	use \Wikimedia\IDLeDOM\Stub\HTMLHeadElement;
+	use \Wikimedia\IDLeDOM\Stub\HTMLAudioElement;
 	use UnimplementedTrait;
 
 	// Helper functions from IDLeDOM
-	use \Wikimedia\IDLeDOM\Helper\HTMLHeadElement;
+	use \Wikimedia\IDLeDOM\Helper\HTMLAudioElement;
 }

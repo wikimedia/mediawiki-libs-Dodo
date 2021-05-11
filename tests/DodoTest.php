@@ -11,7 +11,7 @@ use RemexHtml\TreeBuilder\Dispatcher;
 use RemexHtml\TreeBuilder\TreeBuilder;
 
 use Wikimedia\Dodo\Document;
-use Wikimedia\Dodo\HTMLImgElement;
+use Wikimedia\Dodo\HTMLImageElement;
 
 /**
  * @coversDefaultClass \Wikimedia\Dodo\Document
@@ -29,7 +29,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$body = $doc->createElement( 'body' );
 		$comment = $doc->createComment( 'Hello, world!' );
 		$p = $doc->createElement( "p" );
-		$img = new HTMLImgElement( $doc, "img", "" ); /* using createElement soon */
+		$img = new HTMLImageElement( $doc, "img" ); /* using createElement soon */
 		$img->setAttribute( 'id', "foo" );
 
 		/* Construct the tree */
@@ -42,17 +42,18 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 
 		/* Print the tree */
 		$this->assertEquals(
-			'<html><body><!--Hello, world!--><img id="foo"></img><p>Lorem ipsum</p></body></html>',
+			'<html><body><!--Hello, world!--><img id="foo"><p>Lorem ipsum</p></body></html>',
 			$doc->_node_serialize()
 		);
 
 		/* Update the attributes on the <img> node */
 		$img->alt = "Incredible Vision";
-		$img->width = "1337px"; // NOTE: width stored as a string
+		// $img->width = "1337px"; // NOTE: width stored as a string
+		$img->setAttribute( 'width', '1337px' );
 
 		/* Print the tree again (<img> should have attributes now) */
 		$this->assertEquals(
-			'<html><body><!--Hello, world!--><img id="foo" alt="Incredible Vision" width="1337px"></img><p>Lorem ipsum</p></body></html>',
+			'<html><body><!--Hello, world!--><img id="foo" alt="Incredible Vision" width="1337px"><p>Lorem ipsum</p></body></html>',
 			$doc->_node_serialize()
 		);
 

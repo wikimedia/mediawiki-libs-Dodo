@@ -6,11 +6,13 @@ namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
-class HTMLHeadElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLHeadElement {
+class HTMLIFrameElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLIFrameElement {
+	use ReferrerPolicy;
+
 	// Stub out methods not yet implemented.
-	use \Wikimedia\IDLeDOM\Stub\HTMLHeadElement;
+	use \Wikimedia\IDLeDOM\Stub\HTMLIFrameElement;
 	use UnimplementedTrait;
 
 	// Helper functions from IDLeDOM
-	use \Wikimedia\IDLeDOM\Helper\HTMLHeadElement;
+	use \Wikimedia\IDLeDOM\Helper\HTMLIFrameElement;
 }
