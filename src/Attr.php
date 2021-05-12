@@ -187,19 +187,20 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 		?string $namespaceURI = null,
 		string $value = ""
 	) {
-		if ( $localName !== '' ) {
-			/* DOM-LS: Non-empty string */
-			$this->_localName = $localName;
-		} else {
+		if ( $localName === '' ) {
 			throw new Exception( "Attr local name must be non-empty" );
 		}
-
-		if ( $namespaceURI !== '' ) {
-			/* DOM-LS: NULL or non-empty string */
-			$this->_namespaceURI = $namespaceURI;
+		if ( $prefix === '' ) {
+			throw new Exception( "Attr prefix must be non-empty or null" );
+		}
+		if ( $namespaceURI === '' ) {
+			throw new Exception( "Attr namespace must be non-empty or null" );
 		}
 
-		if ( $prefix !== '' ) {
+		$this->_localName = $localName;
+		$this->_namespaceURI = $namespaceURI;
+
+		if ( $prefix !== null ) {
 			/* DOM-LS: null or non-empty string */
 			$this->_prefix = $prefix;
 
