@@ -14,6 +14,7 @@ use RemexHtml\TreeBuilder\TreeBuilder;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 use Wikimedia\Dodo\Document as DodoDOMDocument;
+use Wikimedia\Dodo\DOMException as DodoDOMException;
 use Wikimedia\Dodo\Node as DOMNode;
 
 /**
@@ -112,7 +113,9 @@ trait Helpers {
 		$domImpl = ( new DodoDOMDocument( null, 'html' ) )->getImplementation();
 		$domBuilder = new DOMBuilder( [
 			'suppressHtmlNamespace' => true,
+			'suppressIdAttribute' => true,
 			'domImplementation' => $domImpl,
+			'domExceptionClass' => DodoDOMException::class,
 		] );
 		$treeBuilder = new TreeBuilder( $domBuilder, [
 			'ignoreErrors' => true

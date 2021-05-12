@@ -11,6 +11,7 @@ use RemexHtml\TreeBuilder\Dispatcher;
 use RemexHtml\TreeBuilder\TreeBuilder;
 
 use Wikimedia\Dodo\Document;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\HTMLImageElement;
 
 /**
@@ -79,7 +80,9 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$domImpl = ( new Document( null, 'html' ) )->getImplementation();
 		$domBuilder = new DOMBuilder( [
 			'suppressHtmlNamespace' => true,
+			'suppressIdAttribute' => true,
 			'domImplementation' => $domImpl,
+			'domExceptionClass' => DOMException::class,
 		] );
 		$treeBuilder = new TreeBuilder( $domBuilder, [
 			'ignoreErrors' => true

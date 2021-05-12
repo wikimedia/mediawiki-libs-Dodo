@@ -21,34 +21,9 @@ namespace Wikimedia\Dodo;
  * (Mostly) implements the WebIDL-1 DOMException interface
  * https://www.w3.org/TR/WebIDL-1/#idl-DOMException*
  */
-class DOMException extends \Exception {
+class DOMException extends \Exception implements \Wikimedia\IDLeDOM\DOMException {
 
-	const ERR_CODE_DOES_NOT_EXIST = -1;	/* [Dodo] Errors without Legacy code */
-	const INDEX_SIZE_ERR = 1;
-	const DOMSTRING_SIZE_ERR = 2;		/* [WEB-IDL-1] No longer present */
-	const HIERARCHY_REQUEST_ERR = 3;
-	const WRONG_DOCUMENT_ERR = 4;
-	const INVALID_CHARACTER_ERR = 5;
-	const NO_DATA_ALLOWED_ERR = 6;		/* [WEB-IDL-1] No longer present */
-	const NO_MODIFICATION_ALLOWED_ERR = 7;
-	const NOT_FOUND_ERR = 8;
-	const NOT_SUPPORTED_ERR = 9;
-	const INUSE_ATTRIBUTE_ERR = 10;
-	const INVALID_STATE_ERR = 11;
-	const SYNTAX_ERR = 12;
-	const INVALID_MODIFICATION_ERR = 13;
-	const NAMESPACE_ERR = 14;
-	const INVALID_ACCESS_ERR = 15;
-	const VALIDATION_ERR = 16;
-	const TYPE_MISMATCH_ERR = 17;		/* [WEB-IDL-1] No longer present */
-	const SECURITY_ERR = 18;
-	const NETWORK_ERR = 19;
-	const ABORT_ERR = 20;
-	const URL_MISMATCH_ERR = 21;
-	const QUOTA_EXCEEDED_ERR = 22;
-	const TIMEOUT_ERR = 23;
-	const INVALID_NODE_TYPE_ERR = 24;
-	const DATA_CLONE_ERR = 25;
+	const ERR_CODE_DOES_NOT_EXIST = 0;	/* [Dodo] Errors without Legacy code */
 
 	const ERROR_NAME_TO_CODE = [
 		'IndexSizeError' => self::INDEX_SIZE_ERR,
@@ -117,25 +92,25 @@ class DOMException extends \Exception {
 	];
 
 	private $_name;
-	private $_err_msg;
-	private $_err_code;
-	private $_usr_msg;
 
 	/*
 	* [WEB-IDL-1] This is the actual constructor prototype.
 	* I think the invocation is ridiculous, so we wrap it
 	* in an error() function (see utilities.php).
 	*/
-	public function __construct( ?string $message, ?string $name ) {
-		$this->_name = $name ?? "";
-		$this->_err_msg  = self::ERROR_NAME_TO_MESSAGE[$this->_name] ?? "";
-		$this->_err_code = self::ERROR_NAME_TO_CODE[$this->_name] ?? -1;
-		$this->_usr_msg  = $message ?? $this->_err_msg;
+	public function __construct( ?string $message = null, ?string $name = null ) {
+		$this->_name = $name ?? "Error";
+		$err_msg  = self::ERROR_NAME_TO_MESSAGE[$this->_name] ?? "";
+		$err_code = self::ERROR_NAME_TO_CODE[$this->_name] ?? self::ERR_CODE_DOES_NOT_EXIST;
 
-		parent::__construct( $this->_err_msg, $this->_err_code );
+		parent::__construct( $message ?? $err_msg, $err_code );
+	}
+
+	public function getName(): string {
+		return $this->_name;
 	}
 
 	public function __toString(): string {
-		return __CLASS__ . ': [' . $this->_name . '] ' . $this->_usr_msg;
+		return __CLASS__ . ': [' . $this->_name . '] ' . $this->getMessage();
 	}
 }
