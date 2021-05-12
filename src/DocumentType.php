@@ -28,15 +28,15 @@ class DocumentType extends Node implements \Wikimedia\IDLeDOM\DocumentType {
 	/**
 	 * @var string
 	 */
-	protected $_name;
+	private $_name;
 	/**
 	 * @var string
 	 */
-	protected $_publicId;
+	private $_publicId;
 	/**
 	 * @var string
 	 */
-	protected $_systemId;
+	private $_systemId;
 
 	public function __construct( Document $doc, string $name, string $publicId = '', string $systemId = '' ) {
 		parent::__construct();
