@@ -52,32 +52,16 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	 * hasFeature()
 	 * @param string $feature a string corresponding to a key in $supportedFeatures
 	 * @param string $version [optional] a string corresponding to a version in $supportedFeatures
-	 * @return False if arg (pair) not in $supportedFeatures, else True
-	 * NOTE[TODO]
-	 *      It returns false due to the data structure having no
-	 *      "" member in the primary array. This is not very
-	 *      defensive programming.
+	 * @return bool Always returns true.
 	 */
 	public function hasFeature( string $feature = "", string $version = "" ) : bool {
-		$feature = strtolower( $feature );
-		/*
-		 * Feature/version pairs that DOMImplementation->hasFeature()
-		 * returns true for. It returns false for anything else.
-		 */
-		static $supported = [
-			"xml"   => [ "" => true, "1.0" => true, "2.0" => true ],
-			"core"  => [ "" => true, "2.0" => true ],
-			"html"  => [ "" => true, "1.0" => true, "2.0" => true ],
-			"xhtml" => [ "" => true, "1.0" => true, "2.0" => true ]
-		];
-
-		if ( !isset( $supported[$feature] ) ) {
-			return false;
-		} else {
-			if ( !isset( $supported[$feature][$version] ) ) {
-				return false;
-			}
-		}
+		// hasFeature() originally would report whether the user agent
+		// claimed to support a given DOM feature, but experience
+		// proved it was not nearly as reliable or granular as simply
+		// checking whether the desired objects, attributes, or methods
+		// existed. As such, it is no longer to be used, but continues
+		// to exist (and simply returns true) so that old pages don’t
+		// stop working.
 		return true;
 	}
 
