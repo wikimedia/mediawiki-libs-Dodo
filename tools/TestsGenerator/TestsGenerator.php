@@ -79,7 +79,7 @@ class TestsGenerator extends Tasks {
 	 * - cleanup
 	 * - compact = generates all tests in one file
 	 */
-	public function build( array $opts = [ 'rewrite' => true,
+	public function build( array $opts = [ 'rewrite' => false,
 		'limit' => -1,
 		'phpcbf' => true,
 		'run' => false,
@@ -391,7 +391,7 @@ class TestsGenerator extends Tasks {
 	}
 
 	/**
-	 *
+	 * Converts file paths to relative.
 	 */
 	public function processLog(): void {
 		$log_exits = $this->filesystem->exists( [ 'tests/log.xml' ] );
@@ -430,7 +430,7 @@ class TestsGenerator extends Tasks {
 			'http://www.w3.org/2005/xpath-functions' );
 		// TODO fn:distinct-values
 		$errors = $xml->xpath( '//error' );
-		// $errors = $xml->xpath('//testsuite[@errors=1]');
+
 		$distinct_errors = [];
 
 		foreach ( $errors as $error ) {

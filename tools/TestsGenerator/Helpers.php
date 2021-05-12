@@ -83,10 +83,8 @@ trait Helpers {
 	 * @return DodoDOMDocument|null
 	 */
 	protected function load( $docRef = null, ?string $name = null, ?string $href = null ) : ?DOMNode {
-		// Replace it with actual getElementsByTagName call.
-		// Use this one after Remex integration is complete.
 		$realpath = realpath( '.' );
-		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/w3c' )
+		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/W3c' )
 			->files()->sortByName() );
 
 		return $this->parseHtmlToDom( array_key_first( $file_path ) );

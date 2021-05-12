@@ -58,6 +58,18 @@ abstract class Assert {
     {
     }
 
+	/**
+	 * Asserts that a variable is not null.
+	 *
+	 * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+	 * @throws ExpectationFailedException
+	 *
+	 * @psalm-assert null $actual
+	 */
+	public static function assertNotNull($actual, string $message = ''): void
+	{
+	}
+
     /**
      * Asserts that two variables have the same type and value.
      * Used on objects, it asserts that two variables reference

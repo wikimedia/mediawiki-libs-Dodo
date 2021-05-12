@@ -12,10 +12,10 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
+use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Tests\Wpt\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Wpt\Harness\Utils\Selectors;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
-use Wikimedia\Dodo\Util;
 
 /**
  * WptTestHarness.php
@@ -319,14 +319,21 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
+	 *
 	 * Similar to assert_throws_dom but allows specifying the assertion type
 	 * (assert_throws_dom or promise_rejects_dom, in practice).  The
 	 * "constructor" argument must be the DOMException constructor from the
 	 * global we expect the exception to come from.
+	 *
+	 * @param $type
+	 * @param callable $func
+	 * @param $description
+	 * @param $assertion_type
+	 * @param $constructor
 	 */
-	protected function assertThrowsDomImpl( $type, $func, $description, $assertion_type, $constructor ) : void {
+	protected function assertThrowsDomImpl( $type, callable $func, $description, $assertion_type, $constructor ) : void {
 		try {
-			call_user_func( 'func' );
+			$func();
 			$this->assertData( false,
 				$assertion_type,
 				$description,
@@ -426,7 +433,7 @@ abstract class WptTestHarness extends TestCase {
 			$required_props = [];
 			$name = null;
 
-			if ( in_int( $type ) ) {
+			if ( is_int( $type ) ) {
 				if ( $type === 0 ) {
 					Util::error( 'AssertionError',
 						'Test bug: ambiguous DOMException code 0 passed to assert_throws_dom()' );
@@ -1106,7 +1113,16 @@ abstract class WptTestHarness extends TestCase {
 	/**
 	 * @param mixed ...$arg
 	 */
-	protected function parseFromString( ...$arg ) {
+	protected function parseFromString( ...$arg ) : void {
 
+	}
+
+	/**
+	 * Returns the <body> or <frameset> node of the current document, or null if no such element
+	 * exists.
+	 */
+	private function getDocBody( $doc ) {
+		// Stub
+		return $doc;
 	}
 }

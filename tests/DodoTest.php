@@ -9,10 +9,11 @@ use RemexHtml\DOM\DOMBuilder;
 use RemexHtml\Tokenizer\Tokenizer;
 use RemexHtml\TreeBuilder\Dispatcher;
 use RemexHtml\TreeBuilder\TreeBuilder;
-
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
+use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\HTMLBodyElement;
+use Wikimedia\Dodo\HTMLCollection;
 use Wikimedia\Dodo\HTMLImageElement;
 use Wikimedia\Dodo\NodeFilter;
 
@@ -81,6 +82,49 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $img, $img2 );
 
 		$this->assertTrue( true ); // success is not throwing an exception!
+
+		/* Test getElementsByTagName  */
+		$p_tags = $doc->getElementsByTagName( 'p' );
+		$this->assertNotNull( $p_tags );
+		$this->assertInstanceOf( HTMLCollection::class, $p_tags );
+		$this->assertSame( 1, $p_tags->length );
+
+		$first_p_tag = $p_tags->item( 0 );
+		$this->assertNotNull( $first_p_tag );
+		$this->assertInstanceOf( Element::class, $first_p_tag );
+		$this->assertEqualsIgnoringCase( 'P', $first_p_tag->tagName );
+
+		$second_p_tag = $p_tags->item( 1 );
+		$this->assertNull( $second_p_tag );
+
+		/* Test getElementsByTagNameNs  */
+		$p_tags_ns = $doc->getElementsByTagNameNs( '*', 'p' );
+		$this->assertNotNull( $p_tags_ns );
+		$this->assertInstanceOf( HTMLCollection::class, $p_tags_ns );
+		$this->assertSame( 1, $p_tags_ns->length );
+
+		$first_p_tag = $p_tags_ns->item( 0 );
+		$this->assertNotNull( $first_p_tag );
+		$this->assertInstanceOf( Element::class, $first_p_tag );
+		$this->assertEqualsIgnoringCase( 'P', $first_p_tag->tagName );
+
+		$second_p_tag = $p_tags_ns->item( 1 );
+		$this->assertNull( $second_p_tag );
+
+		// Test liveness!
+		$body->appendChild( $doc->createElement( "p" ) );
+
+		$this->assertSame( 2, $p_tags->length );
+		$second_p_tag = $p_tags->item( 1 );
+		$this->assertNotNull( $second_p_tag );
+		$this->assertInstanceOf( Element::class, $second_p_tag );
+		$this->assertEqualsIgnoringCase( 'P', $second_p_tag->tagName );
+
+		$this->assertSame( 2, $p_tags_ns->length );
+		$second_p_tag = $p_tags_ns->item( 1 );
+		$this->assertNotNull( $second_p_tag );
+		$this->assertInstanceOf( Element::class, $second_p_tag );
+		$this->assertEqualsIgnoringCase( 'P', $second_p_tag->tagName );
 	}
 
 	/** @dataProvider provideFixture */

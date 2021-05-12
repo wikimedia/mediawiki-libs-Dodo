@@ -659,13 +659,14 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * This is not a DOM method, but is convenient for
 	 * lazy traversals of the tree.
-	 * TODO: Change its name to __next_element then!
+	 * @param ?Element $root
+	 * @return ?Element
 	 */
-	public function _nextElement( $root ) {
+	public function _nextElement( ?Element $root ): ?Element {
 		if ( !$root ) {
 			$root = $this->_nodeDocument->getDocumentElement();
 		}
-		$next = $this->firstElementChild();
+		$next = $this->getFirstElementChild();
 		if ( !$next ) {
 			/* don't use sibling if we're at root */
 			if ( $this === $root ) {
@@ -695,5 +696,138 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @param string $lname
+	 *
+	 * @return HTMLCollection
+	 */
+	public function getElementsByTagName( string $lname ) {
+		$filter = null;
+		if ( !$lname ) {
+			return new HTMLCollection();
+		}
+		if ( $lname === '*' ) {
+			$filter = static function ( $el ) {
+				return true;
+			};
+		} elseif ( $this->_isHTMLElement() ) {
+			$filter = $this->_htmlLocalNameElementFilter( $lname );
+		} else {
+			$filter = $this->_localNameElementFilter( $lname );
+		}
+
+		return new FilteredElementList( $this,
+			$filter );
+	}
+
+	/**
+	 * @param string $names
+	 *
+	 * @return HTMLCollection
+	 */
+	public function getElementsByClassName( string $names ) {
+		if ( empty( $names ) ) {
+			return new HTMLCollection();
+		}
+
+		$names = preg_split( '/[ \t\r\n\f]+/',
+			$names ); // Split on ASCII whitespace
+
+		return new FilteredElementList( $this,
+			$this->_classNamesElementFilter( $names ) );
+	}
+
+	/**
+	 * TODO refactor this
+	 *
+	 * @param string $lname
+	 *
+	 * @return callable(Element):bool
+	 */
+	public function _htmlLocalNameElementFilter( string $lname ) : callable {
+		$lclname = Util::toAsciiLowercase( $lname );
+		if ( $lclname === $lname ) {
+			return $this->_localNameElementFilter( $lname );
+		}
+
+		return static function ( $el ) use ( $lname, $lclname ) {
+			return $el->_isHTMLElement() ? $el->localName === $lclname : $el->localName === $lname;
+		};
+	}
+
+	/**
+	 * @param string $lname
+	 *
+	 * @return callable(Element):bool
+	 */
+	public function _localNameElementFilter( string $lname ) : callable {
+		return static function ( $el ) use ( $lname ) {
+			return $el->localName === $lname;
+		};
+	}
+
+	/**
+	 * @param string|null $ns
+	 * @param string $lname
+	 *
+	 * @return HTMLCollection
+	 */
+	public function getElementsByTagNameNs( ?string $ns, string $lname ) : HTMLCollection {
+		$filter = null;
+		if ( $ns === '*' && $lname === '*' ) {
+			$filter = static function () {
+				return true;
+			};
+		} elseif ( $ns === '*' ) {
+			$filter = $this->_localNameElementFilter( $lname );
+		} elseif ( $lname === '*' ) {
+			$filter = $this->_namespaceElementFilter( $ns );
+		} else {
+			$filter = $this->_namespaceLocalNameElementFilter( $ns,
+				$lname );
+		}
+
+		return new FilteredElementList( $this,
+			$filter );
+	}
+
+	/**
+	 * @param string $ns
+	 *
+	 * @return callable(Element):bool
+	 */
+	public function _namespaceElementFilter( string $ns ) : callable {
+		return static function ( $el ) use ( $ns ) {
+			return $el->namespaceURI === $ns;
+		};
+	}
+
+	/**
+	 * @param string $ns
+	 * @param string $lname
+	 *
+	 * @return callable(Element):bool
+	 */
+	public function _namespaceLocalNameElementFilter( string $ns, string $lname ) : callable {
+		return static function ( $el ) use ( $ns, $lname ) {
+			return $el->namespaceURI === $ns && $el->localName === $lname;
+		};
+	}
+
+	/**
+	 * TODO refactor this
+	 *
+	 * @param array $names
+	 *
+	 * @return callable(Element):bool
+	 */
+	public function _classNamesElementFilter( array $names ) : callable {
+		return static function ( $el ) use ( $names ) {
+			foreach ( $names as $name ) {
+				return $el->classList->contains( $name );
+			}
+		};
 	}
 }

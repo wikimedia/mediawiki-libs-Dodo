@@ -478,29 +478,6 @@ abstract class W3cTestHarness extends TestCase {
 		}
 	}
 
-	/**
-	 *
-	 */
-	protected function setUp() : void {
-		$doc = Mockery::mock( DodoDOMDocument::class,
-			[ 'html' ] )->makePartial();
-		$doc->shouldReceive( 'getElementsByTagName' )->andReturnUsing( function ( $arg ) use ( $doc ) {
-			// Return empty element. Temporary stub.
-			return [ $doc->createElement( $arg ) ];
-		} );
-
-		$html = $doc->createElement( 'html' );
-		$title = $doc->createElement( 'title' );
-		$title->appendChild( $doc->createTextNode( 'NIST DOM HTML Test - Anchor' ) );
-		$html->appendChild( $title );
-		$body = $doc->createElement( 'body' );
-
-		$html->appendChild( $body );
-		$doc->appendChild( $html );
-		$this->contentType = 'text/html';
-		$this->doc = $doc;
-	}
-
 	/* @inheritDoc */
 	protected function tearDown() : void {
 		parent::tearDown();

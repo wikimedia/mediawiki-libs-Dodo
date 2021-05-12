@@ -760,7 +760,9 @@ class ParserTask extends BaseTask {
 			'testConstructor' => 'assertTestConstructor',
 			'testCreate' => 'assertTestCreate',
 			'(new DOMParser())->parseFromString' => '$this->parseFromString',
-			'Node::class::insertBefore' => '\'insertBefore\'' ];
+			'Node::class::insertBefore' => '\'insertBefore\'',
+			'$new_el[$pair[\'attr\']]' => '$new_el->{$pair[\'attr\']}',
+			'$this->doc->body' => '$this->getDocBody( $this->doc )' ];
 
 		// convert $_x to $this->_x.
 		$convert_list = $this->convertVarToClassVar( [ '$i2',
@@ -858,7 +860,7 @@ class ParserTask extends BaseTask {
 	}
 
 	/**
-	 *
+	 * Preprocess W3C test
 	 */
 	private function preProcessW3CTest() : void {
 		$find_replace = [

@@ -4,7 +4,7 @@ namespace Wikimedia\Zest;
 
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\NodeList;
-use Wikimedia\Dodo\ParentNode;
+use Wikimedia\IDLeDOM\ParentNode;
 
 /**
  * Zest.php (https://github.com/wikimedia/zest.php)

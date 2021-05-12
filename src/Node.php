@@ -787,7 +787,8 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		return $this->_cachedSiblingIndex;
 	}
 
-	/** Return the lastModTime value for this node. (For use as a
+	/**
+	 * Return the lastModTime value for this node. (For use as a
 	 * cache invalidation mechanism. If the node does not already
 	 * have one, initialize it from the owner document's modclock
 	 * property. (Note that modclock does not return the actual
