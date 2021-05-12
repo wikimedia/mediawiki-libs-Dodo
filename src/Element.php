@@ -101,10 +101,11 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	* @var array<string,string>
 	*/
 	private static $UC_Cache = [];
+
 	/**
-	 * @var mixed|null
+	 * @var ?DOMTokenList
 	 */
-	private $_classList;
+	private $_classList = null;
 
 	/**
 	 * Element constructor
@@ -132,7 +133,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 			},
 			"class" => function ( $elem, $old, $new ) {
 				if ( $elem->_classList ) {
-					$elem->_classList->_update();
+					$elem->_classList->_getList();
 				}
 			}
 		];
@@ -356,9 +357,9 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 		$attr = $this->attributes->getNamedItem( $qname );
 		if ( $attr === null ) {
 			$attr = new Attr( $this, $qname, null, null );
+			$this->attributes->setNamedItem( $attr );
 		}
 		$attr->setValue( $value ); /* Triggers __onchange_attr */
-		$this->attributes->setNamedItem( $attr );
 	}
 
 	/**
@@ -587,10 +588,11 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	/**
 	 * @return mixed|null
 	 */
-	public function classList() {
-		$dtlist = new DOMTokenList( $this->className );
-		$this->_classList = $dtlist;
-		return $dtlist;
+	public function getClassList() {
+		if ( $this->_classList === null ) {
+			$this->_classList = new DOMTokenList( $this, 'class' );
+		}
+		return $this->_classList;
 	}
 
 	/**

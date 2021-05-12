@@ -50,10 +50,15 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$img->alt = "Incredible Vision";
 		// $img->width = "1337px"; // NOTE: width stored as a string
 		$img->setAttribute( 'width', '1337px' );
+		$img->classList->add( 'foo' );
+		$img->setAttribute( 'class', 'abc foo def' );
+		$img->classList->add( 'bar' );
+		$img->classList->add( 'bat' );
+		$img->classList->replace( 'bat', 'foo' );
 
 		/* Print the tree again (<img> should have attributes now) */
 		$this->assertEquals(
-			'<html><body><!--Hello, world!--><img id="foo" alt="Incredible Vision" width="1337px"><p>Lorem ipsum</p></body></html>',
+			'<html><body><!--Hello, world!--><img id="foo" alt="Incredible Vision" width="1337px" class="abc foo def bar"><p>Lorem ipsum</p></body></html>',
 			$doc->_node_serialize()
 		);
 
