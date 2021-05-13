@@ -341,12 +341,12 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/** @inheritDoc */
-	public function getDoctype() {
+	public function getDoctype() : ?DocumentType {
 		return $this->_doctype;
 	}
 
 	/** @inheritDoc */
-	public function getDocumentElement() {
+	public function getDocumentElement() : ?Element {
 		return $this->_documentElement;
 	}
 
@@ -355,12 +355,12 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 
 	/** @inheritDoc */
-	public function createTextNode( string $data ) {
+	public function createTextNode( string $data ) : Text {
 		return new Text( $this, $data );
 	}
 
 	/** @inheritDoc */
-	public function createComment( string $data ) {
+	public function createComment( string $data ) : Comment {
 		return new Comment( $this, $data );
 	}
 

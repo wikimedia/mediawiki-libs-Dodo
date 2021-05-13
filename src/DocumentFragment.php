@@ -3,7 +3,6 @@
 declare( strict_types = 1 );
 // @phan-file-suppress PhanParamTooFew
 // @phan-file-suppress PhanParamTooMany
-// @phan-file-suppress PhanTypeMismatchArgument
 // @phan-file-suppress PhanTypeMismatchArgumentReal
 // @phan-file-suppress PhanTypeMissingReturn
 // @phan-file-suppress PhanUndeclaredClassMethod
