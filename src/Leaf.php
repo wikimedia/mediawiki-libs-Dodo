@@ -63,9 +63,9 @@ trait Leaf /* domino helper */ {
 	}
 
 	/**
-	 * @copyDoc Node::__remove_children()
+	 * @copyDoc Node::_removeChildren()
 	 */
-	final public function __remove_children() {
+	final public function _removeChildren() {
 		/* no-op */
 	}
 

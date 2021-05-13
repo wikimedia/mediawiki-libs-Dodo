@@ -1109,7 +1109,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * Node::removeChild(), since it calls Node::modify() once.
 	 * TODO: Node::modify() no longer exists. Does this optimization?
 	 */
-	public function __remove_children() {
+	public function _removeChildren() {
 		if ( $this->_isRooted() ) {
 			$root = $this->_ownerDocument;
 		} else {

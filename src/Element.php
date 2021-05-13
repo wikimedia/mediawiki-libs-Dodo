@@ -250,7 +250,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	/** @inheritDoc */
 	public function setTextContent( ?string $value ) : void {
 		$value = $value ?? '';
-		$this->__remove_children();
+		$this->_removeChildren();
 		if ( $value !== "" ) {
 			/* Equivalent to Node:: appendChild without checks! */
 			WhatWG::insert_before_or_replace( $node, $this->_ownerDocument->createTextNode( $value ), null );
