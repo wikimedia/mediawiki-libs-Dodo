@@ -297,7 +297,8 @@ class WhatWG {
 
 		if ( $replace ) {
 			if ( $before->_isRooted() ) {
-				$before->__node_document()->__mutate_remove( $before );
+				// @phan-suppress-next-line PhanTypeMismatchArgumentNullable This is a real bug, to be fixed in a followup
+				$before->__node_document()->_mutateRemove( $before );
 				$before->__uproot();
 			}
 			$before->_parentNode = null;
@@ -380,12 +381,12 @@ class WhatWG {
 		$d = $parent->__node_document();
 
 		if ( $bothWereRooted ) {
-			$d->__mutate_move( $insert[0] );
+			$d->_mutateMove( $insert[0] );
 		} else {
 			if ( $parent->_isRooted() ) {
 				foreach ( $insert as $n ) {
 					$n->__root( $d );
-					$d->__mutate_insert( $n );
+					$d->_mutateInsert( $n );
 				}
 			}
 		}

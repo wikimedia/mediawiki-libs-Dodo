@@ -1120,7 +1120,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			if ( $root !== null ) {
 				/* If we're rooted, mutate */
-				$root->__mutate_remove( $n );
+				$root->_mutateRemove( $n );
 			}
 			$n->_parentNode = null;
 		}

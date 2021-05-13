@@ -338,15 +338,10 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 			 * fired when we call Element::removeAttribute,
 			 * but that's okay for 'id' and 'class'.
 			 *
-			 * TODO: These two mutation handling things
-			 * should be combined.
-			 *
-			 * TODO: Is this trying to implement spec,
-			 * or are we just doing this for our own use?
 			 */
 			$doc = $this->_ownerElement->getOwnerDocument();
 			'@phan-var Document $doc'; // @var Document $doc
-			$doc->__mutate_attr( $this, $old );
+			$doc->_mutateAttr( $this, $old );
 		}
 	}
 

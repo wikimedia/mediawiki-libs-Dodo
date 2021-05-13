@@ -3,7 +3,6 @@
 declare( strict_types = 1 );
 // @phan-file-suppress PhanParamSignatureMismatch
 // @phan-file-suppress PhanTypeMismatchReturnNullable
-// @phan-file-suppress PhanUndeclaredConstant
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.MethodDoubleUnderscore
@@ -17,6 +16,7 @@ declare( strict_types = 1 );
 namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\MultiId;
+use Wikimedia\Dodo\Internal\Mutate;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Internal\WhatWG;
@@ -191,7 +191,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/* TODO: These three amigos. */
 	public $_implementation;
 	public $_readyState;
-	public $__mutation_handler = null;
+	public $_mutationHandler = null;
 
 	// USED EXCLUSIVELY IN htmlelts.js to make <TEMPLATE>
 	private $_templateDocCache;
@@ -728,89 +728,107 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 * MutationObserver, which is confusing.
 	 */
 
-	/*
+	/**
 	 * Implementation-specific function.  Called when a text, comment,
 	 * or pi value changes.
+	 * @param Node $node
 	 */
-	public function __mutate_value( $node ) {
-		if ( $this->__mutation_handler ) {
-			$this->__mutation_handler( [
-				"type" => MUTATE_VALUE,
+	public function _mutateValue( Node $node ): void {
+		$handler = $this->_mutationHandler;
+		if ( $handler ) {
+			$handler( [
+				"type" => Mutate::VALUE,
 				"target" => $node,
-				"data" => $node->getData()
+				"data" => $node->getData(),
 			] );
 		}
 	}
 
-	/*
+	/**
 	 * Invoked when an attribute's value changes. Attr holds the new
 	 * value.  oldval is the old value.  Attribute mutations can also
 	 * involve changes to the prefix (and therefore the qualified name)
+	 * @param Attr $attr
+	 * @param ?string $oldval
 	 */
-	public function __mutate_attr( $attr, $oldval ) {
-		if ( $this->__mutation_handler ) {
-			$this->__mutation_handler( [
-				"type" => MUTATE_ATTR,
+	public function _mutateAttr( Attr $attr, ?string $oldval ) {
+		$handler = $this->_mutationHandler;
+		if ( $handler ) {
+			$handler( [
+				"type" => Mutate::ATTR,
 				"target" => $attr->getOwnerElement(),
-				"attr" => $attr
+				"attr" => $attr,
+				"old" => $oldval,
 			] );
 		}
 	}
 
-	/* Used by removeAttribute and removeAttributeNS for attributes. */
-	public function __mutate_remove_attr( $attr ) {
-		if ( $this->__mutation_handler ) {
-			$this->__mutation_handler( [
-				"type" => MUTATE_REMOVE_ATTR,
+	/**
+	 * Used by removeAttribute and removeAttributeNS for attributes.
+	 * @param Attr $attr
+	 */
+	public function _mutateRemoveAttr( Attr $attr ): void {
+		$handler = $this->_mutationHandler;
+		if ( $handler ) {
+			$handler( [
+				"type" => Mutate::REMOVE_ATTR,
 				"target" => $attr->getOwnerElement(),
-				"attr" => $attr
+				"attr" => $attr,
 			] );
 		}
 	}
 
-	/*
+	/**
 	 * Called by Node.removeChild, etc. to remove a rooted element from
 	 * the tree. Only needs to generate a single mutation event when a
 	 * node is removed, but must recursively mark all descendants as not
 	 * rooted.
+	 * @param Node $node
 	 */
-	public function __mutate_remove( $node ) {
+	public function _mutateRemove( Node $node ): void {
 		/* Send a single mutation event */
-		if ( $this->__mutation_handler ) {
-			$this->__mutation_handler( [
-				"type" => MUTATE_REMOVE,
+		$handler = $this->_mutationHandler;
+		if ( $handler ) {
+			$handler( [
+				"type" => Mutate::REMOVE,
 				"target" => $node->getParentNode(),
-				"node" => $node
+				"node" => $node,
 			] );
 		}
 	}
 
-	/*
+	/**
 	 * Called when a new element becomes rooted.  It must recursively
 	 * generate mutation events for each of the children, and mark
 	 * them all as rooted.
 	 *
 	 * Called in Node::_insertOrReplace.
+	 * @param Node $node
 	 */
-	public function __mutate_insert( $node ) {
+	public function _mutateInsert( Node $node ): void {
+		// Mark node and its descendants as rooted
+		$this->_recursivelyRoot( $node );
 		/* Send a single mutation event */
-		if ( $this->__mutation_handler ) {
-			$this->__mutation_handler( [
-				"type" => MUTATE_INSERT,
+		$handler = $this->_mutationHandler;
+		if ( $handler ) {
+			$handler( [
+				"type" => Mutate::INSERT,
 				"target" => $node->getParentNode(),
-				"node" => $node
+				"node" => $node,
 			] );
 		}
 	}
 
-	/*
+	/**
 	 * Called when a rooted element is moved within the document
+	 * @param Node $node
 	 */
-	public function __mutate_move( $node ) {
-		if ( $this->__mutation_handler ) {
-			$this->__mutation_handler( [
-				"type" => MUTATE_MOVE,
-				"target" => $node
+	public function _mutateMove( Node $node ): void {
+		$handler = $this->_mutationHandler;
+		if ( $handler ) {
+			$handler( [
+				"type" => Mutate::MOVE,
+				"target" => $node,
 			] );
 		}
 	}
