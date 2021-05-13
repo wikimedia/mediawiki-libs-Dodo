@@ -123,7 +123,7 @@ class WhatWG {
 
 		for ( $i = 1; $i < $len; $i++ ) {
 			if ( $node1_ancestors[$i] !== $node2_ancestors[$i] ) {
-				if ( $node1_ancestors[$i]->__sibling_index() < $node2_ancestors[$i]->__sibling_index() ) {
+				if ( $node1_ancestors[$i]->_getSiblingIndex() < $node2_ancestors[$i]->_getSiblingIndex() ) {
 					return Node::DOCUMENT_POSITION_PRECEDING;
 				}
 			}
@@ -282,11 +282,11 @@ class WhatWG {
 
 		if ( $parent->_childNodes ) {
 			if ( $before !== null ) {
-				$ref_index = $before->__sibling_index();
+				$ref_index = $before->_getSiblingIndex();
 			} else {
 				$ref_index = count( $parent->_childNodes );
 			}
-			if ( $node->_parentNode === $parent && $node->__sibling_index() < $ref_index ) {
+			if ( $node->_parentNode === $parent && $node->_getSiblingIndex() < $ref_index ) {
 				$ref_index--;
 			}
 		}

@@ -158,7 +158,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * FIXME It is public because it gets used by the whatwg algorithms page.
 	 */
-	public $__sibling_index;
+	public $_cachedSiblingIndex;
 
 	/* TODO: Unused */
 	public $__roothook;
@@ -837,7 +837,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *                      parentNode      on Node
 	 *                      nextSibling     on Node
 	 *                      previousSibling on Node
-	 *                      __sibling_index on Node
+	 *                      _cachedSiblingIndex on Node
 	 *
 	 *              Possibly sets:
 	 *                      firstChild      on parent of Node, if Node is
@@ -848,7 +848,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *                      parentNode
 	 *                      nextSibling
 	 *                      previousSibling
-	 *                      __sibling_index
+	 *                      _cachedSiblingIndex
 	 *                      parentNode->firstChild, if we were last
 	 *              ???
 	 *                      Does it unset ownerDocument?
@@ -1069,10 +1069,10 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @throws Something if we have no parent
 	 *
 	 * NOTE
-	 * Calling Node::__sibling_index() will automatically trigger a switch
+	 * Calling Node::_getSiblingIndex() will automatically trigger a switch
 	 * to the NodeList representation (see Node::childNodes()).
 	 */
-	public function __sibling_index(): int {
+	public function _getSiblingIndex(): int {
 		if ( $this->_parentNode === null ) {
 			return 0; /* ??? TODO: throw or make an error ??? */
 		}
@@ -1085,7 +1085,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		$childNodes = $this->_parentNode->childNodes();
 
 		/* We end up re-indexing here if we ever run into trouble */
-		if ( $this->___sibling_index === null || $childNodes[$this->___sibling_index] !== $this ) {
+		if ( $this->_cachedSiblingIndex === null || $childNodes[$this->_cachedSiblingIndex] !== $this ) {
 			/*
 			 * Ensure that we don't have an O(N^2) blowup
 			 * if none of the kids have defined indices yet
@@ -1093,12 +1093,12 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			 * previousSibling
 			 */
 			foreach ( $childNodes as $i => $child ) {
-				$child->___sibling_index = $i;
+				$child->_cachedSiblingIndex = $i;
 			}
 
-			Util::assert( $childNodes[$this->___sibling_index] === $this );
+			Util::assert( $childNodes[$this->_cachedSiblingIndex] === $this );
 		}
-		return $this->___sibling_index;
+		return $this->_cachedSiblingIndex;
 	}
 
 	/**
