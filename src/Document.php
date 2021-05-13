@@ -674,6 +674,40 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		return true;
 	}
 
+	/**
+	 * @return HTMLElement|null
+	 */
+	public function getBody() {
+		return $this->_namedHTMLChild( $this->getDocumentElement(), 'body' );
+	}
+
+	/**
+	 * @return HTMLHeadElement|null
+	 */
+	public function getHead() {
+		return $this->_namedHTMLChild( $this->getDocumentElement(), 'head' );
+	}
+
+	/**
+	 * Helper function for getBody() and getHead().
+	 * @param ?Node $parent
+	 * @param string $name
+	 * @return ?Element
+	 */
+	private function _namedHTMLChild( ?Node $parent, string $name ) : ?Element {
+		if ( $parent !== null && $this->_isHTMLDocument() ) {
+			for ( $kid = $parent->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
+				if ( $kid->getNodeType() === Node::ELEMENT_NODE &&
+					$kid->getLocalName() === $name &&
+					$kid->getNamespaceURI() === Util::NAMESPACE_HTML ) {
+					'@phan-var Element $kid'; // @phan-var Element $kid
+					return $kid;
+				}
+			}
+		}
+		return null;
+	}
+
 	/*
 	 * Internal book-keeping tables:
 	 *
