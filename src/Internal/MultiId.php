@@ -47,34 +47,34 @@ class MultiId {
 	 * @param Node $node
 	 */
 	public function __construct( Node $node ) {
-		$this->table[$node->__document_index] = $node;
+		$this->table[$node->_documentIndex] = $node;
 		$this->length = 1;
 		$this->first = null;
 	}
 
 	/**
-	 * Add a Node to array in O(1) time by using Node::$__document_index
+	 * Add a Node to array in O(1) time by using Node::$_documentIndex
 	 * as the array index.
 	 *
 	 * @param Node $node
 	 */
 	public function add( Node $node ) {
-		if ( !isset( $this->table[$node->__document_index] ) ) {
-			$this->table[$node->__document_index] = $node;
+		if ( !isset( $this->table[$node->_documentIndex] ) ) {
+			$this->table[$node->_documentIndex] = $node;
 			$this->length++;
 			$this->first = null; /* invalidate cache */
 		}
 	}
 
 	/**
-	 * Remove a Node from the array in O(1) time by using Node::$__document_index
+	 * Remove a Node from the array in O(1) time by using Node::$_documentIndex
 	 * to perform the lookup.
 	 *
 	 * @param Node $node
 	 */
 	public function del( Node $node ) {
-		if ( $this->table[$node->__document_index] ) {
-			unset( $this->table[$node->__document_index] );
+		if ( $this->table[$node->_documentIndex] ) {
+			unset( $this->table[$node->_documentIndex] );
 			$this->length--;
 			$this->first = null; /* invalidate cache */
 		}

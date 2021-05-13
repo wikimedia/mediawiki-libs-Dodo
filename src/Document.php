@@ -118,14 +118,14 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 * DEVELOPERS NOTE:
 	 * Used to assign the document index to Nodes on ADOPTION.
 	 */
-	protected $__document_index_next = 2;
+	protected $_nextDocumentIndex = 2;
 
 	/*
 	 * DEVELOPERS NOTE:
 	 * Document's aren't going to adopt themselves, so we set this to a default of 1.
 	 */
 	// XXX PORT FIXME this overrides a property of Node!
-	//protected $__document_index = 1;
+	//protected $_documentIndex = 1;
 
 	/**
 	 * Element nodes having an 'id' attribute are stored in this

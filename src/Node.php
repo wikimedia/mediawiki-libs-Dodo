@@ -142,7 +142,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * FIXME It is public because it gets used by the whatwg algorithms page.
 	 */
-	public $__document_index;
+	public $_documentIndex;
 
 	/*
 	 * DEVELOPERS NOTE:
@@ -830,7 +830,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *      [1]->[2] (adoption)
 	 *              Sets:
 	 *                      ownerDocument    on Nodes of subtree rooted at Node
-	 *                      __document_index on Nodes of subtree rooted at Node
+	 *                      _documentIndex on Nodes of subtree rooted at Node
 	 *
 	 *      [2]->[3] (insertion)
 	 *              Sets:
@@ -852,11 +852,11 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *                      parentNode->firstChild, if we were last
 	 *              ???
 	 *                      Does it unset ownerDocument?
-	 *                      Does it unset __document_index?
+	 *                      Does it unset _documentIndex?
 	 *                        (remove_from_node_table does this)
 	 *
-	 * __document_index is being set by add_to_node_table. ugh
-	 * __document_index is being set by add_to_node_table. ugh
+	 * _documentIndex is being set by add_to_node_table. ugh
+	 * _documentIndex is being set by add_to_node_table. ugh
 	 *
 	 * TODO
 	 * Centralize all of this.
@@ -891,7 +891,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * setting whether the document has a doctype
 	 * node or a document element. it's horrible.
 	 *
-	 * And where is __document_index being set?
+	 * And where is _documentIndex being set?
 	 */
 
 	/**
@@ -926,7 +926,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * A Node is rooted if it belongs to a tree, in which case it will
 	 * have an ownerDocument. Document nodes maintain a list of all the
 	 * nodes inside their tree, assigning each an index,
-	 * Node::__document_index.
+	 * Node::_documentIndex.
 	 *
 	 * Therefore if we are currently rooted, we can tell by checking that
 	 * we have one of these.
@@ -934,7 +934,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * TODO: This should be Node::isConnected(), see spec.
 	 */
 	public function _isRooted(): bool {
-		return (bool)$this->__document_index;
+		return (bool)$this->_documentIndex;
 	}
 
 	/* Called by WhatWG::insert_before_or_replace */
