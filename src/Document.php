@@ -483,9 +483,9 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 			 * If the Node is currently inserted in some Document, remove it.
 			 *
 			 * TODO:
-			 * Why is this not using $node->__is_rooted()?
+			 * Why is this not using $node->_isRooted()?
 			 * Is this diagnostic for rooted-ness? Why
-			 * doesn't __is_rooted() just do this?
+			 * doesn't _isRooted() just do this?
 			 */
 			$node->getParentNode()->removeChild( $node );
 		}

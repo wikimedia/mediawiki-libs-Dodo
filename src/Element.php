@@ -121,7 +121,7 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 
 		$this->__onchange_attr = [
 			"id" => function ( $elem, $old, $new ) {
-				if ( !$elem->__is_rooted() ) {
+				if ( !$elem->_isRooted() ) {
 					return;
 				}
 				if ( $old ) {

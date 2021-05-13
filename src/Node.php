@@ -933,7 +933,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * TODO: This should be Node::isConnected(), see spec.
 	 */
-	public function __is_rooted(): bool {
+	public function _isRooted(): bool {
 		return (bool)$this->__document_index;
 	}
 
@@ -1110,7 +1110,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * TODO: Node::modify() no longer exists. Does this optimization?
 	 */
 	public function __remove_children() {
-		if ( $this->__is_rooted() ) {
+		if ( $this->_isRooted() ) {
 			$root = $this->_ownerDocument;
 		} else {
 			$root = null;

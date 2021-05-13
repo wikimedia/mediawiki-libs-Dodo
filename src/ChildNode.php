@@ -169,7 +169,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 			 * with its document,
 			 * if it has one.
 			 */
-			if ( $this->__is_rooted() ) {
+			if ( $this->_isRooted() ) {
 				$doc->__mutate_remove( $this );
 				$doc->__uproot();
 			}

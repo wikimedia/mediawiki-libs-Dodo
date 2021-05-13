@@ -327,7 +327,7 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 			);
 		}
 
-		if ( $this->_ownerElement->__is_rooted() ) {
+		if ( $this->_ownerElement->_isRooted() ) {
 			/*
 			 * Documents must also sometimes take special action
 			 * and be aware of mutations occurring in their tree.

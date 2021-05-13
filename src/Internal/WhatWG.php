@@ -86,7 +86,7 @@ class WhatWG {
 		}
 
 		/* #6 */
-		if ( $node1 === null || $node2 === null || $node1->__node_document() !== $node2->__node_document() || $node1->__is_rooted() !== $node2->__is_rooted() ) {
+		if ( $node1 === null || $node2 === null || $node1->__node_document() !== $node2->__node_document() || $node1->_isRooted() !== $node2->_isRooted() ) {
 			/* UHH, in the spec this is supposed to add DOCUMENT_POSITION_PRECEDING or DOCUMENT_POSITION_FOLLOWING
 			 * in some consistent way, usually based on pointer comparison, which we can't do here. Hmm. Domino
 			 * just straight up omits it. This is stupid, the spec shouldn't ask this. */
@@ -273,7 +273,7 @@ class WhatWG {
 			return;
 		}
 
-		if ( $node instanceof DocumentFragment && $node->__is_rooted() ) {
+		if ( $node instanceof DocumentFragment && $node->_isRooted() ) {
 			Util::error( "HierarchyRequestError" );
 		}
 
@@ -296,7 +296,7 @@ class WhatWG {
 		/************ IF REPLACING, REMOVE OLD CHILD */
 
 		if ( $replace ) {
-			if ( $before->__is_rooted() ) {
+			if ( $before->_isRooted() ) {
 				$before->__node_document()->__mutate_remove( $before );
 				$before->__uproot();
 			}
@@ -305,7 +305,7 @@ class WhatWG {
 
 		/************ IF BOTH ROOTED, FIRE MUTATIONS */
 
-		$bothWereRooted = $node->__is_rooted() && $parent->__is_rooted();
+		$bothWereRooted = $node->_isRooted() && $parent->_isRooted();
 
 		if ( $bothWereRooted ) {
 			/* "soft remove" -- don't want to uproot it. */
@@ -382,7 +382,7 @@ class WhatWG {
 		if ( $bothWereRooted ) {
 			$d->__mutate_move( $insert[0] );
 		} else {
-			if ( $parent->__is_rooted() ) {
+			if ( $parent->_isRooted() ) {
 				foreach ( $insert as $n ) {
 					$n->__root( $d );
 					$d->__mutate_insert( $n );
@@ -421,7 +421,7 @@ class WhatWG {
 		if ( $node === $parent ) {
 			Util::error( "HierarchyRequestError" );
 		}
-		if ( $node->__node_document() === $parent->__node_document() && $node->__is_rooted() === $parent->__is_rooted() ) {
+		if ( $node->__node_document() === $parent->__node_document() && $node->_isRooted() === $parent->_isRooted() ) {
 			/*
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
@@ -607,7 +607,7 @@ class WhatWG {
 		if ( $node === $parent ) {
 			Util::error( "HierarchyRequestError" );
 		}
-		if ( $node->__node_document() === $parent->__node_document() && $node->__is_rooted() === $parent->__is_rooted() ) {
+		if ( $node->__node_document() === $parent->__node_document() && $node->_isRooted() === $parent->_isRooted() ) {
 			/*
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
