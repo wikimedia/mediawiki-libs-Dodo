@@ -164,6 +164,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 
 		$doc = $this->_nodeDocument();
 		if ( $doc ) {
+			$doc->_preremoveNodeIterators( $this );
 			/*
 			 * Un-associate $this
 			 * with its document,

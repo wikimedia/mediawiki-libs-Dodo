@@ -208,6 +208,11 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	private $_templateDocCache = null;
 
 	/**
+	 * @var array List of active NodeIterators, see NodeIterator#_preremove()
+	 */
+	private $_nodeIterators = null;
+
+	/**
 	 * @param ?Document $originDoc
 	 * @param string $type
 	 * @param ?string $url
@@ -464,6 +469,58 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			//return svg\createElement($this, $lname, $prefix);
 		} else {
 			return new Element( $this, $lname, $ns, $prefix );
+		}
+	}
+
+	/**
+	 * @see http://www.w3.org/TR/dom/#dom-document-createnodeiterator
+	 * @param \Wikimedia\IDLeDOM\Node $root
+	 * @param int $whatToShow
+	 * @param \Wikimedia\IDLeDOM\NodeFilter|callable|null $filter
+	 * @return NodeIterator
+	 */
+	public function createNodeIterator( $root, int $whatToShow = NodeFilter::SHOW_ALL, $filter = null ) {
+		if ( $root === null ) {
+			throw new TypeError( "root argument is required" );
+		}
+		if ( !( $root instanceof Node ) ) {
+			throw new TypeError( "root not a node" );
+		}
+		return new NodeIterator( $root, $whatToShow, $filter );
+	}
+
+	/**
+	 * Add a node iterator to the list of NodeIterators associated with
+	 * this Document.
+	 * @param NodeIterator $ni
+	 */
+	public function _attachNodeIterator( NodeIterator $ni ) {
+		// XXX ideally this should be a weak reference from Document to NodeIterator
+		if ( $this->_nodeIterators === null ) {
+			$this->_nodeIterators = [];
+		}
+		$this->_nodeIterators[] = $ni;
+	}
+
+	/**
+	 * Remove a node iterator from the list of NodeIterators associated with
+	 * this Document.
+	 * @param NodeIterator $ni
+	 */
+	public function _detachNodeIterator( NodeIterator $ni ) {
+		// ni should always be in list of node iterators
+		$idx = array_search( $ni, $this->_nodeIterators, true );
+		array_splice( $this->_nodeIterators, $idx, 1 );
+	}
+
+	/**
+	 * Run preremove steps on all NodeIterators associated with this
+	 * document.
+	 * @param Node $toBeRemoved the Node about to be removed
+	 */
+	public function _preremoveNodeIterators( Node $toBeRemoved ): void {
+		foreach ( $this->_nodeIterators ?? [] as $ni ) {
+			$ni->_preremove( $toBeRemoved );
 		}
 	}
 
