@@ -93,7 +93,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * Turn the arguments into
 		 * a DocumentFragment.
 		 */
-		$frag = self::_fragment_from_arguments( $this->__node_document(), $args );
+		$frag = self::_fragment_from_arguments( $this->_nodeDocument(), $args );
 
 		/*
 		 * Insert the DocumentFragment
@@ -137,7 +137,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * Turn the arguments into
 		 * a DocumentFragment.
 		 */
-		$frag = self::_fragment_from_arguments( $this->__node_document(), $args );
+		$frag = self::_fragment_from_arguments( $this->_nodeDocument(), $args );
 
 		$nextSibling = $prevSibling ? $prevSibling->getNextSibling() : $parentNode->firstChild();
 
@@ -162,7 +162,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 			return;
 		}
 
-		$doc = $this->__node_document();
+		$doc = $this->_nodeDocument();
 		if ( $doc ) {
 			/*
 			 * Un-associate $this
@@ -230,7 +230,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * could itself appear in $arguments and we're about to
 		 * move $arguments to a document fragment.
 		 */
-		$frag = self::_fragment_from_arguments( $this->__node_document(), $args );
+		$frag = self::_fragment_from_arguments( $this->_nodeDocument(), $args );
 
 		if ( $this->_parentNode === $parentNode ) {
 			$parentNode->replaceChild( $frag, $this );

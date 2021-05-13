@@ -489,7 +489,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		 * Adopt $node into the Document
 		 * to which $this is rooted.
 		 */
-		$this->__node_document()->adoptNode( $node );
+		$this->_nodeDocument()->adoptNode( $node );
 
 		/*
 		 * [4]
@@ -539,7 +539,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		 * Adopt $node into the Document
 		 * to which $this is rooted.
 		 */
-		if ( $new->__node_document() !== $this->__node_document() ) {
+		if ( $new->_nodeDocument() !== $this->_nodeDocument() ) {
 			/*
 			 * FIXME
 			 * adoptNode has a side-effect
@@ -556,7 +556,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			 * 'node' from its parent) here if we
 			 * need to.
 			 */
-			$this->__node_document()->adoptNode( $new );
+			$this->_nodeDocument()->adoptNode( $new );
 		}
 
 		/*
@@ -1058,7 +1058,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * @return Document
 	 */
-	public function __node_document(): Document {
+	public function _nodeDocument(): Document {
 		return $this->_ownerDocument ?? $this;
 	}
 

@@ -86,7 +86,7 @@ class WhatWG {
 		}
 
 		/* #6 */
-		if ( $node1 === null || $node2 === null || $node1->__node_document() !== $node2->__node_document() || $node1->_isRooted() !== $node2->_isRooted() ) {
+		if ( $node1 === null || $node2 === null || $node1->_nodeDocument() !== $node2->_nodeDocument() || $node1->_isRooted() !== $node2->_isRooted() ) {
 			/* UHH, in the spec this is supposed to add DOCUMENT_POSITION_PRECEDING or DOCUMENT_POSITION_FOLLOWING
 			 * in some consistent way, usually based on pointer comparison, which we can't do here. Hmm. Domino
 			 * just straight up omits it. This is stupid, the spec shouldn't ask this. */
@@ -298,7 +298,7 @@ class WhatWG {
 		if ( $replace ) {
 			if ( $before->_isRooted() ) {
 				// @phan-suppress-next-line PhanTypeMismatchArgumentNullable This is a real bug, to be fixed in a followup
-				$before->__node_document()->_mutateRemove( $before );
+				$before->_nodeDocument()->_mutateRemove( $before );
 				$before->__uproot();
 			}
 			$before->_parentNode = null;
@@ -378,7 +378,7 @@ class WhatWG {
 
 		/************ ROOT NODES AND FIRE MUTATION HANDLERS */
 
-		$d = $parent->__node_document();
+		$d = $parent->_nodeDocument();
 
 		if ( $bothWereRooted ) {
 			$d->_mutateMove( $insert[0] );
@@ -422,7 +422,7 @@ class WhatWG {
 		if ( $node === $parent ) {
 			Util::error( "HierarchyRequestError" );
 		}
-		if ( $node->__node_document() === $parent->__node_document() && $node->_isRooted() === $parent->_isRooted() ) {
+		if ( $node->_nodeDocument() === $parent->_nodeDocument() && $node->_isRooted() === $parent->_isRooted() ) {
 			/*
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
@@ -608,7 +608,7 @@ class WhatWG {
 		if ( $node === $parent ) {
 			Util::error( "HierarchyRequestError" );
 		}
-		if ( $node->__node_document() === $parent->__node_document() && $node->_isRooted() === $parent->_isRooted() ) {
+		if ( $node->_nodeDocument() === $parent->_nodeDocument() && $node->_isRooted() === $parent->_isRooted() ) {
 			/*
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
