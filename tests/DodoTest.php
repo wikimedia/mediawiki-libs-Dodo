@@ -31,7 +31,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$comment = $doc->createComment( 'Hello, world!' );
 		$p = $doc->createElement( "p" );
 		$img = new HTMLImageElement( $doc, "img" ); /* using createElement soon */
-		$img->setAttribute( 'id', "foo" );
+		$img->setAttribute( 'id', "foo2" );
 
 		/* Construct the tree */
 		$p->appendChild( $doc->createTextNode( 'Lorem ipsum' ) );
@@ -40,6 +40,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$body->appendChild( $p );
 		$html->appendChild( $body );
 		$doc->appendChild( $html );
+		$img->setAttribute( 'id', "foo" );
 
 		/* Print the tree */
 		$this->assertEquals(
@@ -69,8 +70,11 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 			"IMG width: " . $img->width
 		);
 
+		$img3 = $doc->getElementById( 'foo' );
+		$this->assertEquals( $img, $img3 );
+
 		$img2 = $html->querySelector( "#foo" );
-		// $this->assertEquals( $img, $img2 );  // This doesn't work yet
+		$this->assertEquals( $img, $img2 );
 
 		$this->assertTrue( true ); // success is not throwing an exception!
 	}

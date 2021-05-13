@@ -2,14 +2,10 @@
 
 declare( strict_types = 1 );
 // @phan-file-suppress PhanImpossibleCondition
-// @phan-file-suppress PhanParamTooMany
 // @phan-file-suppress PhanPluginDuplicateAdjacentStatement
 // @phan-file-suppress PhanPluginInvalidPregRegex
-// @phan-file-suppress PhanPossiblyUndeclaredVariable
 // @phan-file-suppress PhanSuspiciousValueComparison
-// @phan-file-suppress PhanTypeMismatchArgumentNullableInternal
 // @phan-file-suppress PhanUndeclaredMethod
-// @phan-file-suppress PhanUndeclaredProperty
 // @phan-file-suppress PhanUndeclaredVariable
 // @phan-file-suppress PhanUnextractableAnnotationSuffix
 // phpcs:disable Generic.Files.LineLength.TooLong
@@ -254,12 +250,12 @@ class WhatWG {
 	}
 
 	/**
-	 * @param Node $node
+	 * @param Node $child
 	 * @param Node $parent
 	 * @param ?Node $before
 	 * @param bool $replace
 	 */
-	public static function insert_before_or_replace( Node $node, Node $parent, ?Node $before, bool $replace ): void {
+	public static function insert_before_or_replace( Node $child, Node $parent, ?Node $before, bool $replace ): void {
 		/*
 		 * TODO: FACTOR: $before is intended to always be non-NULL
 		 * if $replace is true, but I think that could fail unless
@@ -269,125 +265,150 @@ class WhatWG {
 
 		/******************* PRE-FLIGHT CHECKS */
 
-		if ( $node === $before ) {
-			return;
-		}
-
-		if ( $node instanceof DocumentFragment && $node->_isRooted() ) {
+		if ( $child instanceof DocumentFragment && $child->_isRooted() ) {
 			Util::error( "HierarchyRequestError" );
 		}
 
-		/******************** COMPUTE AN INDEX */
-		/* NOTE: MUST DO HERE BECAUSE STATE WILL CHANGE */
+		/* Ensure index of `before` is cached before we (possibly) remove it. */
 
-		if ( $parent->_childNodes ) {
+		// phan can't tell that $ref_index is non-null iff childNodes is
+		// non-null, so we'll set it here regardless.
+		$ref_index = -1;
+		if ( $parent->_childNodes !== null ) {
 			if ( $before !== null ) {
+				// save this index
 				$ref_index = $before->_getSiblingIndex();
 			} else {
 				$ref_index = count( $parent->_childNodes );
 			}
-			if ( $node->_parentNode === $parent && $node->_getSiblingIndex() < $ref_index ) {
-				$ref_index--;
+			// If we are already a child of the specified parent, then the
+			// index may have to be adjusted
+			if ( $child->_parentNode === $parent ) {
+				$child_index = $child->_getSiblingIndex();
+				// If the child is before the spot it is to be inserted at,
+				// then when it is removed, the index of that spot will be
+				// reduced
+				if ( $child_index < $ref_index ) {
+					$ref_index--;
+				}
 			}
 		}
 
-		$ref_node = $before ?? $parent->getFirstChild();
-
-		/************ IF REPLACING, REMOVE OLD CHILD */
+		// Delete the old child
 
 		if ( $replace ) {
+			Util::assert( $before !== null );
 			if ( $before->_isRooted() ) {
-				// @phan-suppress-next-line PhanTypeMismatchArgumentNullable This is a real bug, to be fixed in a followup
 				$before->_nodeDocument()->_mutateRemove( $before );
-				$before->__uproot();
 			}
 			$before->_parentNode = null;
 		}
 
-		/************ IF BOTH ROOTED, FIRE MUTATIONS */
+		$ref_node = $before ?? $parent->getFirstChild();
+		'@phan-var Node $ref_node'; // @var Node $ref_node
 
-		$bothWereRooted = $node->_isRooted() && $parent->_isRooted();
+		// If both the child and the parent are rooted, then we want to
+		// transplant the child without uprooting and rerooting it.
 
-		if ( $bothWereRooted ) {
-			/* "soft remove" -- don't want to uproot it. */
-			$node->_remove();
-		} else {
-			if ( $node->_parentNode ) {
-				$node->remove();
-			}
-		}
-
-		/************** UPDATE THE NODE LIST DATA */
-
-		$insert = [];
-
-		if ( $node instanceof DocumentFragment ) {
-			for ( $n = $node->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-				$insert[] = $n; /* TODO: Needs to clone? */
+		$bothWereRooted = $child->_isRooted() && $parent->_isRooted();
+		if ( $child instanceof DocumentFragment ) {
+			$insert = [];
+			for ( $n = $child->getFirstChild(); $n !== null; $n = $next ) {
+				$next = $n->getNextSibling();
+				$insert[] = $n;
 				$n->_parentNode = $parent;
 			}
-		} else {
-			$insert[0] = $node; /* TODO: Needs to clone? */
-			$insert[0]->_parentNode = $parent;
-		}
-
-		if ( empty( $insert ) ) {
+			$len = count( $insert );
 			if ( $replace ) {
-				if ( $ref_node !== null /* If you work it out, you'll find that this condition is equivalent to 'if $parent has children' */ ) {
-					LinkedList::ll_replace( $ref_node, null );
+				LinkedList::ll_replace(
+					$ref_node, $len > 0 ? $insert[0] : null
+				);
+			} elseif ( $len > 0 && $ref_node !== null ) {
+				LinkedList::ll_insert_before(
+					$insert[0], $ref_node
+				);
+			}
+			if ( $parent->_childNodes !== null ) {
+				$firstIndex = ( $before === null ) ?
+					count( $parent->_childNodes ) :
+					$before->_cachedSiblingIndex;
+				$parent->_childNodes->_splice(
+					$firstIndex,
+					$replace ? 1 : 0,
+					$insert
+				);
+				foreach ( $insert as $i => $ni ) {
+					$ni->_cachedSiblingIndex = $firstIndex + $i;
 				}
-				if ( $parent->_childNodes === null && $parent->_firstChild === $before ) {
+			} elseif ( $parent->_firstChild === $before ) {
+				if ( count( $insert ) > 0 ) {
+					$parent->_firstChild = $insert[0];
+				} elseif ( $replace ) {
 					$parent->_firstChild = null;
 				}
 			}
-		} else {
-			if ( $ref_node !== null ) {
-				if ( $replace ) {
-					LinkedList::ll_replace( $ref_node, $insert[0] );
-				} else {
-					LinkedList::ll_insert_before( $insert[0], $ref_node );
-				}
-			}
-			if ( $parent->_childNodes !== null ) {
-				if ( $replace ) {
-					array_splice( $parent->_childNodes, $ref_index, 1, $insert );
-				} else {
-					array_splice( $parent->_childNodes, $ref_index, 0, $insert );
-				}
-				foreach ( $insert as $i => $n ) {
-					$n->_index = $ref_index + $i;
-				}
-			} elseif ( $parent->_firstChild === $before ) {
-				$parent->_firstChild = $insert[0];
-			}
-		}
-
-		/*********** EMPTY OUT THE DOCUMENT FRAGMENT */
-
-		if ( $node instanceof DocumentFragment ) {
-			/*
-			 * TODO: Why? SPEC SAYS SO!
-			 */
-			if ( $node->_childNodes ) {
-				/* TODO PORT: easiest way to do this in PHP and preserves references */
-				$node->_childNodes = [];
+			// Remove all nodes from the document fragment
+			if ( $child->_childNodes !== null ) {
+				$child->_childNodes->_splice(
+					0, $child->_childNodes->getLength()
+				);
 			} else {
-				$node->_firstChild = null;
+				$child->_firstChild = null;
 			}
-		}
-
-		/************ ROOT NODES AND FIRE MUTATION HANDLERS */
-
-		$d = $parent->_nodeDocument();
-
-		if ( $bothWereRooted ) {
-			$d->_mutateMove( $insert[0] );
-		} else {
+			// Call the mutation handlers
+			// Use $insert since the original array has been destroyed. The
+			// liveness guarantee requires us to clone the array so that
+			// references to the childNodes of the DocumentFragment will be empty
+			// when the insertion handlers are called.
 			if ( $parent->_isRooted() ) {
-				foreach ( $insert as $n ) {
-					$n->__root( $d );
-					$d->_mutateInsert( $n );
+				$parent->_modify(); // XXX
+				foreach ( $insert as $i => $ni ) {
+					$parent->_nodeDocument()->mutateInsert( $ni );
 				}
+			}
+		} else { // Not a DocumentFragment
+			if ( $before === $child ) {
+				return;
+			}
+
+			if ( $bothWereRooted ) {
+				/* "soft remove" -- don't want to uproot it. */
+				// Remove the child from its current position in the tree
+				// without calling remove(), since we don't want to uproot it.
+				$child->_remove();
+			} elseif ( $child->_parentNode ) {
+				$child->remove();
+			}
+
+			// Insert it as a child of its new parent
+			$child->_parentNode = $parent;
+			if ( $replace ) {
+				LinkedList::ll_replace( $ref_node, $child );
+				if ( $parent->_childNodes !== null ) {
+					$child->_cachedSiblingIndex = $ref_index;
+					$parent->_childNodes->_set( $ref_index, $child );
+				} elseif ( $parent->_firstChild === $before ) {
+					$parent->_firstChild = $child;
+				}
+			} else {
+				if ( $ref_node !== null ) {
+					LinkedList::ll_insert_before( $child, $ref_node );
+				}
+				if ( $parent->_childNodes !== null ) {
+					$child->_cachedSiblingIndex = $ref_index;
+					$parent->_childNodes->_splice( $ref_index, 0, [ $child ] );
+				} elseif ( $parent->_firstChild === $before ) {
+					$parent->_firstChild = $child;
+				}
+			}
+			if ( $bothWereRooted ) {
+				$parent->_modify();
+				// Generate a move mutation event
+				$parent->_nodeDocument()->_mutateMove( $child );
+			} elseif ( $parent->_isRooted() ) {
+				$parent->_modify();
+				// Generate an insertion mutation event
+				$parent->_nodeDocument()->_mutateInsert( $child );
 			}
 		}
 	}

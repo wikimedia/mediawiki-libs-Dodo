@@ -54,7 +54,7 @@ use Wikimedia\Zest\Zest;
  * followed by its local name, otherwise.
  */
 
-class Element extends Node implements \Wikimedia\IDLeDOM\Element {
+class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	// DOM mixins
 	use ChildNode;
 	use NonDocumentTypeChildNode;
@@ -119,16 +119,18 @@ class Element extends Node implements \Wikimedia\IDLeDOM\Element {
 	public function __construct( Document $doc, string $lname, ?string $ns, ?string $prefix = null ) {
 		parent::__construct();
 
+		// XXX CSA This seems very heavy-weight to create for every Element!
+		// In domino the handlers are properties of the *prototype*
 		$this->__onchange_attr = [
 			"id" => function ( $elem, $old, $new ) {
 				if ( !$elem->_isRooted() ) {
 					return;
 				}
 				if ( $old ) {
-					$elem->_ownerDocument->__remove_from_id_table( $old, $elem );
+					$elem->_ownerDocument->_removeFromIdTable( $old, $elem );
 				}
 				if ( $new ) {
-					$elem->_ownerDocument->__add_to_id_table( $new, $elem );
+					$elem->_ownerDocument->_addToIdTable( $new, $elem );
 				}
 			},
 			"class" => function ( $elem, $old, $new ) {

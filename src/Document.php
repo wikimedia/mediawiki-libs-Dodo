@@ -46,7 +46,7 @@ use Wikimedia\Dodo\Internal\WhatWG;
  *
  * @see https://html.spec.whatwg.org/multipage/dom.html#document
  */
-class Document extends Node implements \Wikimedia\IDLeDOM\Document {
+class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	// DOM mixins
 	use DocumentOrShadowRoot;
 	use NonElementParentNode;
@@ -117,15 +117,9 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/*
 	 * DEVELOPERS NOTE:
 	 * Used to assign the document index to Nodes on ADOPTION.
+	 * @var int
 	 */
-	protected $_nextDocumentIndex = 2;
-
-	/*
-	 * DEVELOPERS NOTE:
-	 * Document's aren't going to adopt themselves, so we set this to a default of 1.
-	 */
-	// XXX PORT FIXME this overrides a property of Node!
-	//protected $_documentIndex = 1;
+	private $_nextDocumentIndex = 2;
 
 	/**
 	 * Element nodes having an 'id' attribute are stored in this
@@ -139,18 +133,34 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 *      - mutation of 'id' attribute
 	 *        on an inserted Element.
 	 *
-	 * @var array
+	 * @var array<string,Element|MultiId>
 	 */
-	private $__id_to_element = [];
+	private $_id_to_element = [];
+
+	/**
+	 * Nodes are assigned a document index when they are rooted in this
+	 * document; this table stores them in order of their index.
+	 *
+	 * @var Node[]
+	 */
+	private $_index_to_element = [];
+
+	/**
+	 * This property holds a monotonically increasing value akin to
+	 * a timestamp used to record the last modification time of nodes
+	 * and their subtrees. See the lastModTime attribute and modify()
+	 * method of the Node class. And see FilteredElementList for an example
+	 * of the use of lastModTime.
+	 * @var int
+	 */
+	private $_modclock = 0;
+
+	/** @var ?callable _mutationHandler */
+	private $_mutationHandler = null;
 
 	/**********************************************************************
 	 * Properties that appear in DOM-LS
 	 */
-
-	/*
-	 * Part of Node parent class
-	 */
-	public $_ownerDocument = null;
 
 	/*
 	 * ANNOYING LIVE REFERENCES
@@ -191,10 +201,11 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/* TODO: These three amigos. */
 	public $_implementation;
 	public $_readyState;
-	public $_mutationHandler = null;
 
-	// USED EXCLUSIVELY IN htmlelts.js to make <TEMPLATE>
-	private $_templateDocCache;
+	/**
+	 * @var ?Document "Associated inert template document"
+	 */
+	private $_templateDocCache = null;
 
 	/**
 	 * @param ?Document $originDoc
@@ -225,12 +236,13 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 		/* DOM-LS: DOMImplementation associated with document */
 		$this->_implementation = new DOMImplementation( $this );
 
-		/** JUNK */
-
 		$this->_readyState = "loading";
 
-		/* USED EXCLUSIVELY IN htmlelts.js to make <TEMPLATE> */
-		$this->_templateDocCache = null;
+		// Documents are always rooted, by definition
+		$this->_documentIndex = 1;
+		$this->_nextDocumentIndex = 2;
+		// node index to element map
+		$this->_index_to_element[1] = $this;
 	}
 
 	/* USED EXCLUSIVELY IN htmlelts.js to make <TEMPLATE> */
@@ -535,7 +547,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @inheritDoc
 	 */
-	public function replaceChild( $node, $child ) {
+	public function replaceChild( $node, $child ) : Node {
 		$ret = parent::replaceChild( $node, $child );
 		$this->__rereference_doctype_and_documentElement();
 		return $ret;
@@ -544,7 +556,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @inheritDoc
 	 */
-	public function removeChild( $child ) {
+	public function removeChild( $child ) : Node {
 		$ret = parent::removeChild( $child );
 		$this->__rereference_doctype_and_documentElement();
 		return $ret;
@@ -600,13 +612,13 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	 * @inheritDoc
 	 */
 	public function getElementById( string $id ) {
-		$n = $this->__id_to_element[$id] ?? null;
+		$n = $this->_id_to_element[$id] ?? null;
 		if ( $n === null ) {
 			return null;
 		}
 		if ( $n instanceof MultiId ) {
 			/* there was more than one element with this id */
-			return $n->get_first();
+			return $n->getFirst();
 		}
 		return $n;
 	}
@@ -665,48 +677,72 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 	/*
 	 * Internal book-keeping tables:
 	 *
-	 * Documents manage 2: the node table, and the id table.
-	 * <full explanation goes here>
-	 *
-	 * Called by Node::__root() and Node::__uproot()
-	 *
-	 * See, we are adding, and removing, but never using...?
+	 * Documents manage 2: the index-to-element table and the id-to-element
+	 * table.
 	 */
 
 	/**
-	 * @param string $id
-	 * @param Element $elt
+	 * Add a node from this document.  When this returns it will
+	 * be rooted.
+	 * @param Node $n
 	 */
-	public function __add_to_id_table( string $id, Element $elt ): void {
-		if ( !isset( $this->__id_to_element[$id] ) ) {
-			$this->__id_to_element[$id] = $elt;
-		} else {
-			if ( !( $this->__id_to_element[$id] instanceof MultiId ) ) {
-				$this->__id_to_element[$id] = new MultiId(
-					$this->__id_to_element[$id]
-				);
+	private function _root( Node $n ): void {
+		Util::assert( $n->getOwnerDocument() === $this, "bad doc" );
+		/* Manage index to node mapping */
+		$n->_documentIndex = $this->_nextDocumentIndex++;
+		$this->_index_to_element[$n->_documentIndex] = $n;
+		/* Manage id to element mapping */
+		if ( $n instanceof Element ) {
+			// (only Elements have attributes)
+			$id = $n->getAttribute( 'id' );
+			if ( $id !== null ) {
+				$this->_addToIdTable( $id, $n );
 			}
-			$this->__id_to_element[$id]->add( $elt );
+			// <SCRIPT> elements need to know when they're inserted
+			// into the document
+			$n->_roothook();
 		}
 	}
 
 	/**
-	 * @param string $id
-	 * @param Element $elt
+	 * Remove a node from this document.  When this returns it will no
+	 * longer be rooted.
+	 * @param Node $n
 	 */
-	public function __remove_from_id_table( string $id, Element $elt ): void {
-		if ( isset( $this->__id_to_element[$id] ) ) {
-			if ( $this->__id_to_element[$id] instanceof MultiId ) {
-				$item = $this->__id_to_element[$id];
-				$item->del( $elt );
-
-				// convert back to a single node
-				if ( $item->length === 1 ) {
-					$this->__id_to_element[$id] = $item->downgrade();
-				}
-			} else {
-				unset( $this->__id_to_element[$id] );
+	private function _uproot( Node $n ): void {
+		Util::assert( $n->getOwnerDocument() === $this, "bad doc" );
+		/* Manage id to element mapping */
+		if ( $n instanceof Element ) {
+			// (only Elements have attributes)
+			$id = $n->getAttribute( 'id' );
+			if ( $id !== null ) {
+				$this->_removeFromIdTable( $id, $n );
 			}
+		}
+		/* Manage index to node mapping */
+		unset( $this->_index_to_element[$n->_documentIndex] );
+		$n->_documentIndex = null;
+	}
+
+	/**
+	 * Add a node and all its children to this document.
+	 * @param Node $n
+	 */
+	private function _recursivelyRoot( Node $n ): void {
+		$this->_root( $n );
+		for ( $kid = $n->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
+			$this->_recursivelyRoot( $kid );
+		}
+	}
+
+	/**
+	 * Remove a node and all its children to this document.
+	 * @param Node $n
+	 */
+	private function _recursivelyUproot( Node $n ): void {
+		$this->_uproot( $n );
+		for ( $kid = $n->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
+			$this->_recursivelyUproot( $kid );
 		}
 	}
 
@@ -795,6 +831,7 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 				"node" => $node,
 			] );
 		}
+		$this->_recursivelyUproot( $node );
 	}
 
 	/**
@@ -832,4 +869,39 @@ class Document extends Node implements \Wikimedia\IDLeDOM\Document {
 			] );
 		}
 	}
+
+	/**
+	 * @param string $id
+	 * @param Element $elt
+	 */
+	public function _addToIdTable( string $id, Element $elt ): void {
+		if ( !isset( $this->_id_to_element[$id] ) ) {
+			$this->_id_to_element[$id] = $elt;
+		} else {
+			if ( !( $this->_id_to_element[$id] instanceof MultiId ) ) {
+				$this->_id_to_element[$id] = new MultiId(
+					$this->_id_to_element[$id]
+				);
+			}
+			$this->_id_to_element[$id]->add( $elt );
+		}
+	}
+
+	/**
+	 * @param string $id
+	 * @param Element $elt
+	 */
+	public function _removeFromIdTable( string $id, Element $elt ): void {
+		if ( isset( $this->_id_to_element[$id] ) ) {
+			if ( $this->_id_to_element[$id] instanceof MultiId ) {
+				$multi = $this->_id_to_element[$id];
+				$multi->del( $elt );
+				// possibly convert back to a single node
+				$this->_id_to_element[$id] = $multi->downgrade();
+			} else {
+				unset( $this->_id_to_element[$id] );
+			}
+		}
+	}
+
 }

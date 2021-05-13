@@ -17,11 +17,10 @@ use Wikimedia\Dodo\Internal\Util;
  * CharacterData.php
  * -----------------
  */
-abstract class CharacterData extends Node implements \Wikimedia\IDLeDOM\CharacterData {
+abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\CharacterData {
 	// DOM mixins
 	use ChildNode;
 	use NonDocumentTypeChildNode;
-	use Leaf;
 
 	// Stub out methods not yet implemented.
 	use \Wikimedia\IDLeDOM\Stub\CharacterData;
@@ -97,6 +96,9 @@ abstract class CharacterData extends Node implements \Wikimedia\IDLeDOM\Characte
 	 */
 	public function appendData( string $data ) : void {
 		$this->_data .= strval( $data );
+		if ( $this->_isRooted() ) {
+			$this->getOwnerDocument()->_mutateValue( $this );
+		}
 	}
 
 	// void insertData(unsigned long offset, DOMString data);
@@ -159,6 +161,9 @@ abstract class CharacterData extends Node implements \Wikimedia\IDLeDOM\Characte
 		$suffix = substr( $curtext, $offset + $count );
 
 		$this->_data = $prefix . $data . $suffix;
+		if ( $this->_isRooted() ) {
+			$this->getOwnerDocument()->_mutateValue( $this );
+		}
 	}
 
 	public function getLength(): int {

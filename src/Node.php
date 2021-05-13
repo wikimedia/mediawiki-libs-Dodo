@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanCoalescingNeverUndefined
 // @phan-file-suppress PhanParamSignatureMismatch
 // @phan-file-suppress PhanTypeMismatchArgument
-// @phan-file-suppress PhanTypeMismatchReturn
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
 // @phan-file-suppress PhanUndeclaredTypeThrowsType
@@ -74,55 +73,31 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	public $_parentNode;
 
 	/**
-	 * DEVIATION FROM SPEC
-	 * PURPOSE: SIBLING TRAVERSAL OPTIMIZATION
+	 * The sibling list is stored as a circular linked list: the node "before"
+	 * the first sibling is the last sibling, and the node "after" the last
+	 * sibling is the first sibling.  This makes finding the last sibling
+	 * as quick as finding the first.
 	 *
-	 * If a Node has no siblings, i.e. it is the 'only child' of $_parentNode, then the
-	 * properties $_nextSibling and $_previousSibling are set equal to $this.
+	 * As a consequence, if a Node has no siblings, i.e. it is the 'only child'
+	 * of $_parentNode, then the properties $_nextSibling and $_previousSibling
+	 * are set equal to $this (ie, a single-element circular list).
 	 *
-	 * This is an optimization for traversing siblings, but in DOM-LS, these properties
-	 * should be null in this scenario.
+	 * Obviously, the DOM LS accessors return 'null' at the beginning and
+	 * ends of the list (as well as for both siblings when the node is
+	 * an only child); we tweak the getters to make this work.
 	 *
-	 * The relevant accessors are spec-compliant, returning null in this situation.
+	 * But be very careful when you access `_nextSibling` directly! If you
+	 * want a null-terminated list, use `getNextSibling()` instead!
 	 *
-	 * @var Node|null should be considered read-only
+	 * @var Node
 	 */
 	public $_nextSibling;
 
 	/**
 	 * @see $_nextSibling
-	 * @var Node|null should be considered read-only
+	 * @var Node
 	 */
 	public $_previousSibling;
-
-	/**
-	 * SET WHEN NODE APPENDS SOMETHING
-	 *
-	 * @var Node|null should be considered read-only
-	 */
-	public $_firstChild;
-
-	/*
-	 * DEVIATION FROM SPEC
-	 * PURPOSE: APPEND OPTIMIZATION
-	 *
-	 * The $_childNodes property holds an array-like object (a NodeList) referencing
-	 * each of a Node's children as a live representation of the DOM.
-	 *
-	 * This 'liveness' is somewhat unperformant, and the upkeep of this object has
-	 * a significant impact on append performance.
-	 *
-	 * So, this implementation chooses to defer its construction until a value
-	 * is requested by calling Node::childNodes().
-	 *
-	 * Until that time, it will have the value null.
-	 *
-	 * TODO this should have {at}var with the next line, but that breaks phan
-	 * because even though NodeList extends ArrayObject, it can't be used in array_splice?
-	 *
-	 * NodeList|null should be considered read-only
-	 */
-	public $_childNodes;
 
 	/**********************************************************************
 	 * Properties that are for internal use by this library
@@ -130,19 +105,21 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 	/*
 	 * DEVELOPERS NOTE:
-	 * An index is assigned on ADOPTION. It uniquely identifies the Node
-	 * within its owner Document.
+	 * An index is assigned when a node is added to a Document (becomes
+	 * rooted). It uniquely identifies the Node within its owner Document.
 	 *
 	 * This index makes it simple to represent a Node as an integer.
 	 *
 	 * It exists for a single optimization. If two Elements have the same id,
 	 * they will be stored in an array under their $document_index. This
-	 * means we don't have to search the array for a matching Node, we can
-	 * look it up in O(1). Yep.
+	 * means we don't have to search the array for a matching Node when
+	 * another node with the same ID is added or removed from the document;
+	 * we can do a look up in O(1).  If your document contains lots of
+	 * elements with identical IDs, this prevents a quadratic slowdown.
 	 *
-	 * FIXME It is public because it gets used by the whatwg algorithms page.
+	 * @var ?int
 	 */
-	public $_documentIndex;
+	public $_documentIndex = null;
 
 	/*
 	 * DEVELOPERS NOTE:
@@ -160,21 +137,14 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 */
 	public $_cachedSiblingIndex;
 
-	/* TODO: Unused */
-	public $__roothook;
-
 	public function __construct() {
 		/* Our ancestors */
 		$this->_ownerDocument = null;
 		$this->_parentNode = null;
 
-		/* Our children */
-		$this->_firstChild = null;
-		$this->_childNodes = null;
-
 		/* Our siblings */
-		$this->_nextSibling = $this; // for LL
-		$this->_previousSibling = $this; // for LL
+		$this->_nextSibling = $this; // note: circular linked list
+		$this->_previousSibling = $this; // note: circular linked list
 	}
 
 	/**********************************************************************
@@ -237,7 +207,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * @inheritDoc
 	 */
-	final public function getOwnerDocument() {
+	final public function getOwnerDocument() : ?Document {
 		return $this->_ownerDocument;
 	}
 
@@ -261,7 +231,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * @inheritDoc
 	 */
-	final public function getParentElement() {
+	final public function getParentElement() : ?Element {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
@@ -272,154 +242,60 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	}
 
 	/** @inheritDoc */
-	final public function getPreviousSibling() {
+	final public function getPreviousSibling() : ?Node {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
-		if ( $this->_parentNode->_firstChild === $this ) {
-			/*
-			 * TODO: Why not check $this->_nextSibling === $this
-			 *
-			 * Is it because firstChild will be set to null if we should be using
-			 * NodeList???
-			 */
+		if ( $this->_parentNode->getFirstChild() === $this ) {
+			// Remember that previousSibling is a circular linked list,
+			// so if this is the "first child" then we *should* return null
+			// here (but _previousSibling will actually point to the "last
+			// child" in this case).
 			return null;
 		}
 		return $this->_previousSibling;
 	}
 
 	/** @inheritDoc */
-	final public function getNextSibling() {
+	final public function getNextSibling() : ?Node {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
-		if ( $this->_nextSibling === $this->_parentNode->_firstChild ) {
-			/*
-			 * TODO: Why not check $this->_nextSibling === $this
-			 *
-			 * Is it because firstChild will be set to null if we should be using
-			 * NodeList???
-			 */
+		if ( $this->_nextSibling === $this->_parentNode->getFirstChild() ) {
+			// Remember that nextSibling is a circular linked list,
+			// so if our next sibling is the "first child" then we *should*
+			// return null here (but _nextSibling will actually point back
+			// to the start of the list in this case).
 			return null;
 		}
 		return $this->_nextSibling;
 	}
 
 	/**
-	 * When, in other place of the code, you observe folks testing for
-	 * $this->_childNodes, it is to see whether we should use the NodeList
-	 * or the linked list traversal methods.
-	 *
-	 * FIXME:
-	 * Wait, doesn't this need to be live? I mean, don't we need to re-compute
-	 * this thing when things are appended or removed...? Or is it not live?
-	 *
+	 * This should be overridden in ContainerNode and Leaf.
 	 * @inheritDoc
 	 */
-	public function getChildNodes() {
-		if ( $this->_childNodes === null ) {
-
-			/*
-			 * If childNodes has never been created, we've now created it.
-			 */
-			$this->_childNodes = new NodeList();
-
-			for ( $c = $this->getFirstChild(); $c !== null; $c = $c->getNextSibling() ) {
-				$this->_childNodes[] = $c;
-			}
-
-			/*
-			 * TODO: Must we?
-			 * Setting this to null is a signal that we are not to use the Linked List, but
-			 * it is stupid and I think we don't actually need it.
-			 */
-			$this->_firstChild = null;
-		}
-		return $this->_childNodes;
-	}
+	abstract public function getChildNodes() : ?NodeList;
 
 	/**
-	 * CAUTION
-	 * Directly accessing _firstChild alone is *not* a shortcut for this
-	 * method. Depending on whether we are in NodeList or LinkedList mode, one
-	 * or the other or both may be null.
-	 *
-	 * I'm trying to factor it out, but it will take some time.
-	 *
+	 * This should be overridden in ContainerNode and Leaf.
 	 * @inheritDoc
 	 */
-	public function getFirstChild() {
-		if ( $this->_childNodes === null ) {
-			/*
-			 * If we are using the Linked List representation, then just return
-			 * the backing property (may still be null).
-			 */
-			return $this->_firstChild;
-		}
-		if ( isset( $this->_childNodes[0] ) ) {
-			/*
-			 * If we are using the NodeList representation, and the
-			 * NodeList is not empty, then return the first item in the
-			 * NodeList.
-			 */
-			return $this->_childNodes[0];
-		}
-		/* Otherwise, the NodeList is empty, so return null. */
-		return null;
-	}
+	abstract public function getFirstChild(): ?Node;
 
 	/**
+	 * This should be overridden in ContainerNode and Leaf.
 	 * @inheritDoc
 	 */
-	public function getLastChild() {
-		if ( $this->_childNodes === null ) {
-			/* If we are using the Linked List representation. */
-			if ( $this->_firstChild !== null ) {
-				/* If we have a firstChild, its previousSibling is the last child. */
-				return $this->_firstChild->getPreviousSibling();
-			} else {
-				/* Otherwise there are no children, and so last child is null. */
-				return null;
-			}
-		} else {
-			/* If we are using the NodeList representation. */
-			if ( isset( $this->_childNodes[0] ) ) {
-				/*
-				 * If there is at least one element in the NodeList, return the
-				 * last element in the NodeList.
-				 */
-				return end( $this->_childNodes );
-			} else {
-				/* Otherwise, there are no children, and so last child is null. */
-				return null;
-			}
-		}
-	}
+	abstract public function getLastChild(): ?Node;
 
 	/**
-	 * CAUTION
-	 * Testing _firstChild or _childNodes alone is *not* a shortcut for this
-	 * method. Depending on whether we are in NodeList or LinkedList mode, one
-	 * or the other or both may be null.
-	 *
-	 * I'm trying to factor it out, but it will take some time.
-	 *
-	 * @inheritDoc
+	 * <script> elements need to know when they're inserted into the
+	 * document.  See Document::_root(Node).  Override this method
+	 * to invoke such a hook.
 	 */
-	public function hasChildNodes(): bool {
-		if ( $this->_childNodes === null ) {
-			/*
-			 * If we are using the Linked List representation, then the NULL-ity
-			 * of firstChild is diagnostic.
-			 */
-			return $this->_firstChild !== null;
-		} else {
-			/*
-			 * If we are using the NodeList representation, then the
-			 * non-emptiness of childNodes is diagnostic.
-			 */
-			return !empty( $this->_childNodes );
-		}
+	public function _roothook() {
+		/* do nothing by default */
 	}
 
 	/**********************************************************************
@@ -524,7 +400,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	}
 
 	/** @inheritDoc */
-	public function replaceChild( $new, $old ) {
+	public function replaceChild( $new, $old ) : Node {
 		/*
 		 * [1]
 		 * Ensure pre-replacement validity.
@@ -574,7 +450,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	}
 
 	/** @inheritDoc */
-	public function removeChild( $node ) {
+	public function removeChild( $node ) : Node {
 		if ( $this === $node->_parentNode ) {
 			/* Defined on ChildNode class */
 			$node->remove();
@@ -913,7 +789,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		}
 
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-			$n->__set_owner( $n, $owner );
+			$n->__set_owner( $doc );
 		}
 	}
 
@@ -934,95 +810,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * TODO: This should be Node::isConnected(), see spec.
 	 */
 	public function _isRooted(): bool {
-		return (bool)$this->_documentIndex;
-	}
-
-	/* Called by WhatWG::insert_before_or_replace */
-	/*
-	 * TODO
-	 * This is the only place where
-	 *      __add_to_node_table
-	 *      __add_from_id_table
-	 * is called.
-	 *
-	 * FIXME
-	 * The *REASON* that this, and __uproot(),
-	 * and __set_owner() exist, is fundamentally
-	 * that they need to operate recursively on
-	 * the subtree, which means it needs to be
-	 * down here on Node.
-	 *
-	 * All of this extra stuff in here just
-	 * crept in here over time.
-	 */
-	public function __root(): void {
-		$doc = $this->getOwnerDocument();
-
-		if ( $this->getNodeType() === self::ELEMENT_NODE ) {
-			/* getElementById table */
-			$id = $this->getAttribute( 'id' );
-			if ( $id !== null ) {
-				$doc->__add_to_id_table( $id, $this );
-			}
-			/* <SCRIPT> elements use this hook */
-			/* TODO This hook */
-			if ( $this->__roothook ) {
-				$this->__roothook();
-			}
-
-			/*
-			 * TODO: Why do we only do this for Element?
-			 * This is how it was written in Domino. Is this
-			 * a bug?
-			 *
-			 * Oh, I see, it doesn't recurse if the first
-			 * thing isn't an ELEMENT? Well, maybe then
-			 * it can't have children? I dunno.
-			 */
-
-			/* RECURSE ON CHILDREN */
-			/*
-			 * TODO
-			 * What if we didn't use recursion to do this?
-			 * What if we used some other way? Wouldn't that
-			 * make it even faster?
-			 *
-			 * What if we somehow had a list of indices in
-			 * documentorder that would give us the subtree.
-			 */
-			for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-				$n->__root();
-			}
-		}
-	}
-
-	/*
-	 * TODO
-	 * This is the only place where
-	 *      __remove_from_id_table
-	 *      __remove_from_node_table
-	 * is called.
-	 */
-	public function __uproot(): void {
-		$doc = $this->getOwnerDocument();
-
-		/* Manage id to element mapping */
-		if ( $this->getNodeType() === self::ELEMENT_NODE ) {
-			$id = $this->getAttribute( 'id' );
-			if ( $id !== null ) {
-				$doc->__remove_from_id_table( $id, $this );
-			}
-		}
-
-		/*
-		 * TODO: And here we don't restrict to ELEMENT_NODE.
-		 * Why not? I think this is the intended behavior, no?
-		 * Then does that make the behavior in root() a bug?
-		 * Go over with Scott.
-		 */
-		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-			$n->__uproot();
-		}
+		return $this->_documentIndex !== null;
 	}
 
 	/**
@@ -1073,16 +861,14 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * to the NodeList representation (see Node::childNodes()).
 	 */
 	public function _getSiblingIndex(): int {
-		if ( $this->_parentNode === null ) {
-			return 0; /* ??? TODO: throw or make an error ??? */
-		}
+		Util::assert( $this->_parentNode !== null );
 
 		if ( $this === $this->_parentNode->getFirstChild() ) {
-			return 0;
+			return 0; // fast case
 		}
 
 		/* We fire up the NodeList mode */
-		$childNodes = $this->_parentNode->childNodes();
+		$childNodes = $this->_parentNode->getChildNodes();
 
 		/* We end up re-indexing here if we ever run into trouble */
 		if ( $this->_cachedSiblingIndex === null || $childNodes[$this->_cachedSiblingIndex] !== $this ) {
@@ -1099,6 +885,20 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			Util::assert( $childNodes[$this->_cachedSiblingIndex] === $this );
 		}
 		return $this->_cachedSiblingIndex;
+	}
+
+	/**
+	 * Increment the owner document's modclock and use the new
+	 * value to update the lastModTime value for this node and
+	 * all of its ancestors. Nodes that have never had their
+	 * lastModTime value queried do not need to have a
+	 * lastModTime property set on them since there is no
+	 * previously queried value to ever compare the new value
+	 * against, so only update nodes that already have a
+	 * _lastModTime property.
+	 */
+	public function _modify() : void {
+		// XXX implement me
 	}
 
 	/**

@@ -21,7 +21,7 @@ use Wikimedia\Dodo\Internal\WhatWG;
 /**
  * DocumentFragment
  */
-class DocumentFragment extends Node implements \Wikimedia\IDLeDOM\DocumentFragment {
+class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\DocumentFragment {
 	// DOM mixins
 	use NonElementParentNode;
 	use ParentNode;

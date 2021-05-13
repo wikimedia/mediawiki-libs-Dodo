@@ -126,7 +126,7 @@ use Wikimedia\Dodo\Internal\UnimplementedTrait;
  * most recent DOM-LS at the time of this
  * writing (2021-02-11), it extends Node.
  */
-class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
+class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	// Stub out methods not yet implemented.
 	use \Wikimedia\IDLeDOM\Stub\Attr;
 	use UnimplementedTrait;
@@ -165,7 +165,7 @@ class Attr extends Node implements \Wikimedia\IDLeDOM\Attr {
 	 * @var Element|null
 	 * Should be considered readonly
 	 */
-	protected $_ownerElement = null;
+	public $_ownerElement = null;
 
 	/**
 	 * @var bool

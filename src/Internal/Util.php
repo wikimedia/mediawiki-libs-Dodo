@@ -47,6 +47,7 @@ class Util {
 	 * @param bool $condition
 	 * @param ?string $message
 	 * @throws \Exception
+	 * @phan-assert-true-condition $condition
 	 */
 	public static function assert( bool $condition, ?string $message = "" ) {
 		if ( !$condition ) {
@@ -59,7 +60,6 @@ class Util {
 	 *
 	 * @param string $name one of the values below
 	 * @param string|null $message an optional message to include in the Exception
-	 * @return void
 	 * @throws DOMException
 	 *
 	 * NOTE

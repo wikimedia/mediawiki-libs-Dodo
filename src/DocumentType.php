@@ -13,10 +13,9 @@ use Wikimedia\Dodo\Internal\UnimplementedTrait;
  * DocumentType.php
  * ----------------
  */
-class DocumentType extends Node implements \Wikimedia\IDLeDOM\DocumentType {
+class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 	// DOM mixins
 	use ChildNode;
-	use Leaf;
 
 	// Stub out methods not yet implemented.
 	use \Wikimedia\IDLeDOM\Stub\DocumentType;

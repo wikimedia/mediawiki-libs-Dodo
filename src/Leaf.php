@@ -18,65 +18,68 @@ use Wikimedia\Dodo\Internal\Util;
  * have children, such as those derived from the abstract CharacterData
  * class.
  */
-trait Leaf /* domino helper */ {
+abstract class Leaf /* domino helper */ extends Node {
 
 	/**
-	 * @copyDoc Node::hasChildNodes()
+	 * @inheritDoc
 	 */
 	final public function hasChildNodes(): bool {
 		return false;
 	}
 
 	/**
-	 * @copyDoc Node::getFirstChild()
+	 * @inheritDoc
 	 */
-	final public function getFirstChild() {
+	final public function getFirstChild() : ?Node {
 		return null;
 	}
 
 	/**
-	 * @copyDoc Node::getLastChild()
+	 * @inheritDoc
 	 */
-	final public function getLastChild() {
+	final public function getLastChild() : ?Node {
 		return null;
 	}
 
 	/**
-	 * @copyDoc Node::insertBefore()
+	 * @inheritDoc
 	 */
 	final public function insertBefore( $node, $refChild ) {
 		Util::error( "NotFoundError" );
+		throw new \Error( "impossible" ); // for phan
 	}
 
 	/**
-	 * @copyDoc Node::replaceChild()
+	 * @inheritDoc
 	 */
-	final public function replaceChild( $node, $refChild ) {
+	final public function replaceChild( $node, $refChild ) : Node {
 		Util::error( "HierarchyRequestError" );
+		throw new \Error( "impossible" ); // for phan
 	}
 
 	/**
-	 * @copyDoc Node::removeChild()
+	 * @inheritDoc
 	 */
-	final public function removeChild( $node ) {
+	final public function removeChild( $node ) : Node {
 		Util::error( "NotFoundError" );
+		throw new \Error( "impossible" ); // for phan
 	}
 
 	/**
-	 * @copyDoc Node::_removeChildren()
+	 * @inheritDoc
 	 */
-	final public function _removeChildren() {
+	final public function _removeChildren() : void {
 		/* no-op */
 	}
 
 	/**
-	 * @copyDoc Node::getChildNodes()
+	 * @inheritDoc
 	 */
-	final public function getChildNodes() {
-		'@phan-var Node $this'; // @var Node $this
-		if ( $this->_childNodes === null ) {
-			$this->_childNodes = new NodeList();
-		}
-		return $this->_childNodes;
+	final public function getChildNodes() : NodeList {
+		// Possibly not entirely spec-compliant, but we don't want to
+		// allocate an extra property in every leaf node *just in case*.
+		// If object identity is important, we could change this to
+		// NodeList::emptySingleton() or something like that.
+		return new NodeList();
 	}
 }

@@ -173,6 +173,19 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 			} else {
 				unset( $this->_qname_to_attr[$qname] );
 			}
+			$el = $a->getOwnerElement();
+			$a->_ownerElement = null;
+			// onchange handler for the attribute
+			$localName = $a->getLocalName();
+			if ( $el && $el->__onchange_attr[$localName] ) {
+				$el->__onchange_attr[$localName](
+					$el, $a->getValue(), null
+				);
+			}
+			// Mutation event
+			if ( $el && $el->_isRooted() ) {
+				$el->getOwnerDocument()->_mutateRemoveAttr( $a );
+			}
 			return;
 		}
 		Util::error( 'NotFoundError' );

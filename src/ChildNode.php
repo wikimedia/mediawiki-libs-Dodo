@@ -171,7 +171,6 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 			 */
 			if ( $this->_isRooted() ) {
 				$doc->_mutateRemove( $this );
-				$doc->__uproot();
 			}
 		}
 

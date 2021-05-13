@@ -92,15 +92,15 @@ class MultiId {
 	 *
 	 * @return Node|null null if there are no nodes
 	 */
-	public function get_first() {
+	public function getFirst() {
 		if ( $this->first !== null ) {
 			return $this->first;
 		}
 
 		// No item has been cached. Well, let's find it then.
-		foreach ( $this->table as $document_index => $node ) {
+		foreach ( $this->table as $index => $node ) {
 			if ( $this->first === null ||
-				$this->first->compareDocumentPosition( $node ) & Node::DOCUMENT_POSITION_PRECEDING
+				 $this->first->compareDocumentPosition( $node ) & Node::DOCUMENT_POSITION_PRECEDING
 			) {
 				$this->first = $node;
 			}
@@ -115,7 +115,7 @@ class MultiId {
 	 */
 	public function downgrade() {
 		if ( $this->length === 1 ) {
-			foreach ( $this->table as $document_index => $node ) {
+			foreach ( $this->table as $index => $node ) {
 				return $node;
 			}
 		}
