@@ -573,7 +573,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return bool
 	 */
 	public function hasAttributes(): bool {
-		return !empty( $this->_attributes->index_to_attr );
+		return count( $this->_attributes ) > 0;
 	}
 
 	/**

@@ -75,14 +75,14 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 	 * index number => Attr
 	 * @var Attr[]
 	 */
-	public $_index_to_attr = [];
+	private $_index_to_attr = [];
 
 	/**
 	 * DOM-LS associated element, defined in spec but not given property.
 	 *
 	 * @var ?Element
 	 */
-	public $_element = null;
+	private $_element = null;
 
 	/**
 	 * @param ?Element $element
