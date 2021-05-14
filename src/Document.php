@@ -785,9 +785,11 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		/* Manage id to element mapping */
 		if ( $n instanceof Element ) {
 			// (only Elements have attributes)
-			$id = $n->getAttribute( 'id' );
-			if ( $id !== null ) {
-				$this->_addToIdTable( $id, $n );
+			$idAttr = $n->getAttributeNode( 'id' );
+			if ( $idAttr !== null ) {
+				$idAttr->_handleAttributeChanges(
+					$n, null, $idAttr->getValue(), true
+				);
 			}
 			// <SCRIPT> elements need to know when they're inserted
 			// into the document
@@ -805,9 +807,11 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		/* Manage id to element mapping */
 		if ( $n instanceof Element ) {
 			// (only Elements have attributes)
-			$id = $n->getAttribute( 'id' );
-			if ( $id !== null ) {
-				$this->_removeFromIdTable( $id, $n );
+			$idAttr = $n->getAttributeNode( 'id' );
+			if ( $idAttr !== null ) {
+				$idAttr->_handleAttributeChanges(
+					$n, $idAttr->getValue(), null, true
+				);
 			}
 		}
 		/* Manage index to node mapping */

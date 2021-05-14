@@ -121,12 +121,15 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 		$this->_lname_to_attr[$key] = $a;
 		$this->_lname_to_index[$key] = count( $this->_index_to_attr );
 		$this->_index_to_attr[] = $a;
+
+		$a->_handleAttributeChanges( $a->getOwnerElement(), null, $a->getValue() );
 	}
 
 	/**
+	 * @param Attr $oldAttr
 	 * @param Attr $a
 	 */
-	private function _replace( Attr $a ) {
+	private function _replace( Attr $oldAttr, Attr $a ) {
 		$qname = $a->getName();
 
 		/* NO COLLISION */
@@ -148,6 +151,8 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 
 		$this->_lname_to_attr[$key] = $a;
 		$this->_index_to_attr[$this->_lname_to_index[$key]] = $a;
+
+		$a->_handleAttributeChanges( $a->getOwnerElement(), $oldAttr->getValue(), $a->getValue() );
 	}
 
 	/**
@@ -175,17 +180,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 			}
 			$el = $a->getOwnerElement();
 			$a->_ownerElement = null;
-			// onchange handler for the attribute
-			$localName = $a->getLocalName();
-			if ( $el && $el->__onchange_attr[$localName] ) {
-				$el->__onchange_attr[$localName](
-					$el, $a->getValue(), null
-				);
-			}
-			// Mutation event
-			if ( $el && $el->_isRooted() ) {
-				$el->getOwnerDocument()->_mutateRemoveAttr( $a );
-			}
+			$a->_handleAttributeChanges( $el, $a->getValue(), null );
 			return;
 		}
 		Util::error( 'NotFoundError' );
@@ -231,7 +226,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 	}
 
 	/** @inheritDoc */
-	public function getNamedItem( string $qname ) {
+	public function getNamedItem( string $qname ) : ?Attr {
 		/*
 		 * Per HTML spec, we normalize qname before lookup,
 		 * even though XML itself is case-sensitive.
@@ -252,7 +247,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 	}
 
 	/** @inheritDoc */
-	public function getNamedItemNS( ?string $ns, string $lname ) {
+	public function getNamedItemNS( ?string $ns, string $lname ) : ?Attr {
 		$ns = $ns ?? "";
 		return $this->_lname_to_attr["$ns|$lname"] ?? null;
 	}
@@ -273,7 +268,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 		}
 
 		if ( $oldAttr !== null ) {
-			$this->_replace( $attr );
+			$this->_replace( $oldAttr, $attr );
 		} else {
 			$this->_append( $attr );
 		}
@@ -297,7 +292,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 		}
 
 		if ( $oldAttr !== null ) {
-			$this->_replace( $attr );
+			$this->_replace( $oldAttr, $attr );
 		} else {
 			$this->_append( $attr );
 		}
@@ -310,7 +305,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 	 *
 	 * @inheritDoc
 	 */
-	public function removeNamedItem( string $qname ) {
+	public function removeNamedItem( string $qname ): Attr {
 		$attr = $this->getNamedItem( $qname );
 		if ( $attr !== null ) {
 			'@phan-var Attr $attr'; // @var Attr $attr

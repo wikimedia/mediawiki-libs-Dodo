@@ -288,10 +288,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 
 	/** @inheritDoc */
 	public function setValue( string $value = null ) : void {
-		/*
-		 * NOTE
-		 * You can unset an attribute by calling Attr::value("");
-		 */
+		$value = $value ?? '';
 
 		if ( $this->_value === $value ) {
 			return;
@@ -300,48 +297,47 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 		$old = $this->_value;
 		$this->_value = $value;
 
-		if ( $this->_ownerElement
-			 && ( isset( $this->_ownerElement->__onchange_attr[$this->_localName] ) )
-		) {
-			/*
-			 * Elements must take special action if the
-			 * value of certain attributes are updated.
-			 * This allows the Attr to inform the Element
-			 * it has been updated, so the Element can
-			 * take the appropriate steps.
-			 *
-			 * For example, updating the 'id' attribute
-			 * will cause a rooted Element to delete its
-			 * old id from and add its new id to its
-			 * ownerDocument's node id cache.
-			 *
-			 * WARNING: This is only fired when we modify
-			 * the attribute using .value(). This is not
-			 * fired when we call Element::removeAttribute,
-			 * but that's okay for 'id' and 'class'.
-			 */
-			$this->_ownerElement->__onchange_attr[$this->_localName](
-				$this->_ownerElement,
-				$old,
-				$value
-			);
+		$this->_handleAttributeChanges( $this->_ownerElement, $old, $value );
+	}
+
+	/**
+	 * @see https://dom.spec.whatwg.org/#handle-attribute-changes
+	 * @param ?Element $elem
+	 * @param ?string $oldValue null indicates this is a new element
+	 * @param ?string $newValue null indicates the attribute was removed
+	 * @param bool $rootChange is this an update solely in rooted status?
+	 */
+	public function _handleAttributeChanges(
+		?Element $elem, ?string $oldValue, ?string $newValue,
+		bool $rootChange = false
+	) {
+		if ( $elem === null || !( $elem->_isRooted() ) ) {
+			return;
+		}
+		// Some of these mutation steps don't trigger when the only change
+		// if that the element is newly-rooted.
+		if ( !$rootChange ) {
+			// "Queue a mutation record"
+			if ( $newValue !== null ) {
+				$elem->_nodeDocument()->_mutateAttr( $this, $oldValue );
+			} else {
+				$elem->_nodeDocument()->_mutateRemoveAttr( $this );
+			}
+			// "If element is custom..." (not implemented)
+			// "Run the attribute change steps" (not implemented)
 		}
 
-		if ( $this->_ownerElement->_isRooted() ) {
-			/*
-			 * Documents must also sometimes take special action
-			 * and be aware of mutations occurring in their tree.
-			 * These methods are for that.
-			 *
-			 * WARNING: This is only fired when we modify
-			 * the attribute using .value(). This is not
-			 * fired when we call Element::removeAttribute,
-			 * but that's okay for 'id' and 'class'.
-			 *
-			 */
-			$doc = $this->_ownerElement->getOwnerDocument();
-			'@phan-var Document $doc'; // @var Document $doc
-			$doc->_mutateAttr( $this, $old );
+		// Our own change steps:
+		// Documents must also sometimes take special action
+		// and be aware of mutations occurring in their tree.
+		// These methods are for that.
+		$handler = Element::_attributeChangeHandlerFor( $this->_localName );
+		if ( $handler !== null ) {
+			$handler(
+				$elem,
+				$oldValue,
+				$newValue
+			);
 		}
 	}
 

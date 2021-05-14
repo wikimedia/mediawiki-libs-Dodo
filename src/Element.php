@@ -68,10 +68,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\Element;
 
-	/* Provided by Node
-	   public $_ownerDocument = NULL;
-	*/
-
 	// XXX figure out how to save storage by only storing this for
 	// HTMLUnknownElement etc; for specific HTML*Element subclasses
 	// we should be able to get this from the object type.
@@ -86,8 +82,35 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	/* Actually attached without an accessor */
 	public $attributes = null;
 
-	/* Watch these attributes */
-	public $__onchange_attr = [];
+	/**
+	 * A registry of handlers for changes to specific attributes.
+	 * @var array<string,callable>|null
+	 */
+	public static $_attributeChangeHandlers = null;
+
+	public static function _attributeChangeHandlerFor( string $localName ) {
+		if ( static::$_attributeChangeHandlers === null ) {
+			static::$_attributeChangeHandlers = [
+				"id" => function ( $elem, $old, $new ) {
+					if ( !$elem->_isRooted() ) {
+						return;
+					}
+					if ( $old !== null ) {
+						$elem->_ownerDocument->_removeFromIdTable( $old, $elem );
+					}
+					if ( $new !== null ) {
+						$elem->_ownerDocument->_addToIdTable( $new, $elem );
+					}
+				},
+				"class" => function ( $elem, $old, $new ) {
+					if ( $elem->_classList !== null ) {
+						$elem->_classList->_getList();
+					}
+				},
+			];
+		}
+		return static::$_attributeChangeHandlers[$localName] ?? null;
+	}
 
 	/*
 	* OPTIMIZATION: When we create a DOM tree, we will likely create many
@@ -118,27 +141,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 */
 	public function __construct( Document $doc, string $lname, ?string $ns, ?string $prefix = null ) {
 		parent::__construct();
-
-		// XXX CSA This seems very heavy-weight to create for every Element!
-		// In domino the handlers are properties of the *prototype*
-		$this->__onchange_attr = [
-			"id" => function ( $elem, $old, $new ) {
-				if ( !$elem->_isRooted() ) {
-					return;
-				}
-				if ( $old ) {
-					$elem->_ownerDocument->_removeFromIdTable( $old, $elem );
-				}
-				if ( $new ) {
-					$elem->_ownerDocument->_addToIdTable( $new, $elem );
-				}
-			},
-			"class" => function ( $elem, $old, $new ) {
-				if ( $elem->_classList ) {
-					$elem->_classList->_getList();
-				}
-			}
-		];
 
 		/*
 		 * TODO
@@ -232,14 +234,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 
 	public function getTagName(): string {
 		return $this->getNodeName();
-	}
-
-	public function id( ?string $v = null ) {
-		if ( $v === null ) {
-			return $this->getAttribute( "id" );
-		} else {
-			return $this->setAttribute( "id", $v );
-		}
 	}
 
 	/** @inheritDoc */
@@ -358,10 +352,11 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 
 		$attr = $this->attributes->getNamedItem( $qname );
 		if ( $attr === null ) {
-			$attr = new Attr( $this, $qname, null, null );
+			$attr = new Attr( $this, $qname, null, null, $value );
 			$this->attributes->setNamedItem( $attr );
+		} else {
+			$attr->setValue( $value ); /* Triggers _handleAttributeChanges */
 		}
-		$attr->setValue( $value ); /* Triggers __onchange_attr */
 	}
 
 	/**
@@ -371,7 +366,11 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 */
 	public function removeAttribute( string $qname ): void {
-		$this->attributes->removeNamedItem( $qname );
+		$attr = $this->attributes->getNamedItem( $qname );
+		if ( $attr !== null ) {
+			// This throws an exception if the attribute is not found!
+			$this->attributes->removeNamedItem( $qname );
+		}
 	}
 
 	/**
@@ -454,10 +453,11 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 
 		$attr = $this->attributes->getNamedItemNS( $ns, $qname );
 		if ( $attr === null ) {
-			$attr = new Attr( $this, $lname, $prefix, $ns );
+			$attr = new Attr( $this, $lname, $prefix, $ns, $value );
+			$this->attributes->setNamedItemNS( $attr );
+		} else {
+			$attr->setValue( $value );
 		}
-		$attr->setValue( $value );
-		$this->attributes->setNamedItemNS( $attr );
 	}
 
 	/**
@@ -468,7 +468,11 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @inheritDoc
 	 */
 	public function removeAttributeNS( ?string $ns, string $lname ) : void {
-		$this->attributes->removeNamedItemNS( $ns, $lname );
+		$attr = $this->attributes->getNamedItemNS( $ns, $lname );
+		if ( $attr !== null ) {
+			// This throws an exception if the attribute is not found!
+			$this->attributes->removeNamedItemNS( $ns, $lname );
+		}
 	}
 
 	/**
