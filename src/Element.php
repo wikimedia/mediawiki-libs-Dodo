@@ -79,8 +79,10 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	public $_localName = null;
 	public $_prefix = null;
 
-	/* Actually attached without an accessor */
-	public $attributes = null;
+	/**
+	 * @var NamedNodeMap Attribute storage
+	 */
+	public $_attributes = null;
 
 	/**
 	 * A registry of handlers for changes to specific attributes.
@@ -196,7 +198,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		 * given when an element is created, its attribute list is
 		 * empty."
 		 */
-		$this->attributes = new NamedNodeMap( $this );
+		$this->_attributes = new NamedNodeMap( $this );
 	}
 
 	/**********************************************************************
@@ -215,6 +217,13 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 */
 	final public function getNodeName() : string {
 		return $this->_nodeName;
+	}
+
+	/**
+	 * @return NamedNodeMap
+	 */
+	public function getAttributes() : NamedNodeMap {
+		return $this->_attributes;
 	}
 
 	/* TODO: Also in Attr... are they part of Node ? */
@@ -283,7 +292,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		}
 		'@phan-var Element $clone'; // @var Element $clone
 
-		foreach ( $this->attributes as $a ) {
+		foreach ( $this->_attributes as $a ) {
 			$clone->setAttributeNodeNS( $a->cloneNode() );
 		}
 
@@ -294,7 +303,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		if ( $this->getLocalName() !== $node->getLocalName()
 			 || $this->getNamespaceURI() !== $node->getNamespaceURI()
 			 || $this->getPrefix() !== $node->getPrefix()
-			 || count( $this->attributes ) !== count( $node->attributes ) ) {
+			 || count( $this->_attributes ) !== count( $node->_attributes ) ) {
 			return false;
 		}
 
@@ -302,7 +311,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		 * Compare the sets of attributes, ignoring order
 		 * and ignoring attribute prefixes.
 		 */
-		foreach ( $this->attributes as $a ) {
+		foreach ( $this->_attributes as $a ) {
 			if ( !$node->hasAttributeNS( $a->getNamespaceURI(), $a->getLocalName() ) ) {
 				return false;
 			}
@@ -324,7 +333,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * return ?string the value of the attribute
 	 */
 	public function getAttribute( string $qname ): ?string {
-		$attr = $this->attributes->getNamedItem( $qname );
+		$attr = $this->_attributes->getNamedItem( $qname );
 		return $attr ? $attr->getValue() : null;
 	}
 
@@ -350,10 +359,10 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$qname = Util::ascii_to_lowercase( $qname );
 		}
 
-		$attr = $this->attributes->getNamedItem( $qname );
+		$attr = $this->_attributes->getNamedItem( $qname );
 		if ( $attr === null ) {
 			$attr = new Attr( $this, $qname, null, null, $value );
-			$this->attributes->setNamedItem( $attr );
+			$this->_attributes->setNamedItem( $attr );
 		} else {
 			$attr->setValue( $value ); /* Triggers _handleAttributeChanges */
 		}
@@ -366,10 +375,10 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 */
 	public function removeAttribute( string $qname ): void {
-		$attr = $this->attributes->getNamedItem( $qname );
+		$attr = $this->_attributes->getNamedItem( $qname );
 		if ( $attr !== null ) {
 			// This throws an exception if the attribute is not found!
-			$this->attributes->removeNamedItem( $qname );
+			$this->_attributes->removeNamedItem( $qname );
 		}
 	}
 
@@ -382,7 +391,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return bool
 	 */
 	public function hasAttribute( string $qname ): bool {
-		return $this->attributes->_hasNamedItem( $qname );
+		return $this->_attributes->_hasNamedItem( $qname );
 	}
 
 	/**
@@ -399,7 +408,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			Util::error( "InvalidCharacterError" );
 		}
 
-		$a = $this->attributes->getNamedItem( $qname );
+		$a = $this->_attributes->getNamedItem( $qname );
 
 		if ( $a === null ) {
 			if ( $force === null || $force === true ) {
@@ -430,7 +439,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return ?string the value of the attribute
 	 */
 	public function getAttributeNS( ?string $ns, string $lname ): ?string {
-		$attr = $this->attributes->getNamedItemNS( $ns, $lname );
+		$attr = $this->_attributes->getNamedItemNS( $ns, $lname );
 		return $attr ? $attr->getValue() : null;
 	}
 
@@ -451,10 +460,10 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 
 		WhatWG::validate_and_extract( $ns, $qname, $prefix, $lname );
 
-		$attr = $this->attributes->getNamedItemNS( $ns, $qname );
+		$attr = $this->_attributes->getNamedItemNS( $ns, $qname );
 		if ( $attr === null ) {
 			$attr = new Attr( $this, $lname, $prefix, $ns, $value );
-			$this->attributes->setNamedItemNS( $attr );
+			$this->_attributes->setNamedItemNS( $attr );
 		} else {
 			$attr->setValue( $value );
 		}
@@ -468,10 +477,10 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @inheritDoc
 	 */
 	public function removeAttributeNS( ?string $ns, string $lname ) : void {
-		$attr = $this->attributes->getNamedItemNS( $ns, $lname );
+		$attr = $this->_attributes->getNamedItemNS( $ns, $lname );
 		if ( $attr !== null ) {
 			// This throws an exception if the attribute is not found!
-			$this->attributes->removeNamedItemNS( $ns, $lname );
+			$this->_attributes->removeNamedItemNS( $ns, $lname );
 		}
 	}
 
@@ -485,7 +494,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return bool
 	 */
 	public function hasAttributeNS( ?string $ns, string $lname ): bool {
-		return $this->attributes->_hasNamedItemNS( $ns, $lname );
+		return $this->_attributes->_hasNamedItemNS( $ns, $lname );
 	}
 
 	/**********************************************************************
@@ -500,7 +509,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * spec DOM-LS
 	 */
 	public function getAttributeNode( string $qname ): ?Attr {
-		return $this->attributes->getNamedItem( $qname );
+		return $this->_attributes->getNamedItem( $qname );
 	}
 
 	/**
@@ -509,7 +518,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @inheritDoc
 	 */
 	public function setAttributeNode( $attr ) {
-		return $this->attributes->setNamedItem( $attr );
+		return $this->_attributes->setNamedItem( $attr );
 	}
 
 	/**
@@ -521,7 +530,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 */
 	public function removeAttributeNode( $attr ) {
 		/* TODO: This is not a public function */
-		$this->attributes->_remove( $attr );
+		$this->_attributes->_remove( $attr );
 		return $attr;
 	}
 
@@ -539,7 +548,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return ?Attr the attribute node, or NULL
 	 */
 	public function getAttributeNodeNS( ?string $ns, string $lname ): ?Attr {
-		return $this->attributes->getNamedItemNS( $ns, $lname );
+		return $this->_attributes->getNamedItemNS( $ns, $lname );
 	}
 
 	/**
@@ -549,7 +558,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return ?Attr
 	 */
 	public function setAttributeNodeNS( $attr ) {
-		return $this->attributes->setNamedItemNS( $attr );
+		return $this->_attributes->setNamedItemNS( $attr );
 	}
 
 	/*********************************************************************
@@ -564,7 +573,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return bool
 	 */
 	public function hasAttributes(): bool {
-		return !empty( $this->attributes->index_to_attr );
+		return !empty( $this->_attributes->index_to_attr );
 	}
 
 	/**
@@ -584,7 +593,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		 */
 		$ret = [];
 
-		foreach ( $this->attributes as $a ) {
+		foreach ( $this->_attributes as $a ) {
 			$ret[] = $a->getName();
 		}
 
