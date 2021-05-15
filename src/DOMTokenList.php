@@ -152,7 +152,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 		}
 
 		foreach ( $tokens as $token ) {
-			$this->_list = array_filter( $this->_list, function ( $e ) use ( $token ){
+			$this->_list = array_filter( $this->_list, static function ( $e ) use ( $token ){
 				return $e !== $token;
 			} );
 		}

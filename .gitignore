@@ -5,5 +5,4 @@
 /.idea
 /.phpunit.result.cache
 /node_modules
-package-lock.json
 /.docksal

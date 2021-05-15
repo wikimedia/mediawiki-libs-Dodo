@@ -83,7 +83,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	/** @dataProvider provideFixture */
 	public function testNodeIterator1( Document $doc ) {
 		$root = $doc->getElementById( 'tw' );
-		$ni = $doc->createNodeIterator( $root, NodeFilter::SHOW_TEXT, function ( $n ) {
+		$ni = $doc->createNodeIterator( $root, NodeFilter::SHOW_TEXT, static function ( $n ) {
 			return ( $n->data === 'ignore' ) ?
 				NodeFilter::FILTER_REJECT : NodeFilter::FILTER_ACCEPT;
 		} );
@@ -115,7 +115,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$ni = $doc->createNodeIterator(
 			$body,
 			NodeFilter::SHOW_ELEMENT | NodeFilter::SHOW_COMMENT | NodeFilter::SHOW_TEXT,
-			function ( $n ) { return NodeFilter::FILTER_ACCEPT;
+			static function ( $n ) { return NodeFilter::FILTER_ACCEPT;
 			}
 		);
 		$node = $ni->nextNode();

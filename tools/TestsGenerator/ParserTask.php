@@ -825,7 +825,7 @@ class ParserTask extends BaseTask {
 	 */
 	protected function findFuncCall( array $ast, string $name ) : ?Node {
 		return $this->finder->findFirst( $ast,
-			function ( $node ) use ( $name ) {
+			static function ( $node ) use ( $name ) {
 				if ( isset( $node->expr ) && isset( $node->expr->name ) && $node->expr instanceof FuncCall ) {
 					$expr_name = $node->expr->name->toString();
 					if ( $expr_name == $name ) {
@@ -885,12 +885,12 @@ class ParserTask extends BaseTask {
 	private function prepareAst( array $ast ) {
 		$main_method = $this->snakeToCamel( 'test ' . $this->test_name );
 
-		$functions = $this->finder->find( $ast, function ( $node ) {
+		$functions = $this->finder->find( $ast, static function ( $node ) {
 			return $node instanceof Function_;
 		} );
 
 		$ast = array_filter( $ast,
-			function ( $smtm ) {
+			static function ( $smtm ) {
 				if ( !$smtm instanceof Function_ ) {
 					return $smtm;
 				}

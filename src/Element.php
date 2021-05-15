@@ -93,7 +93,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	public static function _attributeChangeHandlerFor( string $localName ) {
 		if ( static::$_attributeChangeHandlers === null ) {
 			static::$_attributeChangeHandlers = [
-				"id" => function ( $elem, $old, $new ) {
+				"id" => static function ( $elem, $old, $new ) {
 					if ( !$elem->_isRooted() ) {
 						return;
 					}
@@ -104,7 +104,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 						$elem->_ownerDocument->_addToIdTable( $new, $elem );
 					}
 				},
-				"class" => function ( $elem, $old, $new ) {
+				"class" => static function ( $elem, $old, $new ) {
 					if ( $elem->_classList !== null ) {
 						$elem->_classList->_getList();
 					}

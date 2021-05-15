@@ -91,7 +91,7 @@ class Util {
 	 * @return string
 	 */
 	public static function ascii_to_lowercase( string $s ): string {
-		return preg_replace_callback( '/[A-Z]+/', function ( $matches ) {
+		return preg_replace_callback( '/[A-Z]+/', static function ( $matches ) {
 			return strtolower( $matches[0] );
 		}, $s );
 	}
@@ -101,7 +101,7 @@ class Util {
 	 * @return string
 	 */
 	public static function ascii_to_uppercase( string $s ): string {
-		return preg_replace_callback( '/[a-z]+/', function ( $matches ) {
+		return preg_replace_callback( '/[a-z]+/', static function ( $matches ) {
 			return strtoupper( $matches[0] );
 		}, $s );
 	}

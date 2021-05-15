@@ -231,7 +231,7 @@ class WhatWG {
 				return self::locate_prefix( $node->_documentElement, $ns );
 			}
 			break;
-		case  Node::ATTRIBUTE_NODE:
+		case Node::ATTRIBUTE_NODE:
 			if ( $node->_ownerElement ) {
 				return self::locate_prefix( $node->_ownerElement, $ns );
 			}

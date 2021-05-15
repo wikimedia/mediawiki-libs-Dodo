@@ -144,7 +144,7 @@ class LocatorTask extends BaseTask {
 		];
 
 		array_walk( $skips,
-			function ( &$item, $key ) {
+			static function ( &$item, $key ) {
 				$item .= '.*';
 			} );
 		/**
