@@ -210,7 +210,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 		 * even though XML itself is case-sensitive.
 		 */
 		if ( !ctype_lower( $qname ) && $this->_element->_isHTMLElement() ) {
-			$qname = Util::ascii_to_lowercase( $qname );
+			$qname = Util::toAsciiLowercase( $qname );
 		}
 
 		return isset( $this->_qname_to_attr[$qname] );
@@ -232,7 +232,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 		 * even though XML itself is case-sensitive.
 		 */
 		if ( !ctype_lower( $qname ) && $this->_element->_isHTMLElement() ) {
-			$qname = Util::ascii_to_lowercase( $qname );
+			$qname = Util::toAsciiLowercase( $qname );
 		}
 
 		if ( !isset( $this->_qname_to_attr[$qname] ) ) {

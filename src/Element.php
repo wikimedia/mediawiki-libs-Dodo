@@ -175,7 +175,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		 */
 		if ( $this->_isHTMLElement() ) {
 			if ( !isset( self::$UC_Cache[$qname] ) ) {
-				$uc_qname = Util::ascii_to_uppercase( $qname );
+				$uc_qname = Util::toAsciiUppercase( $qname );
 				self::$UC_Cache[$qname] = $uc_qname;
 			} else {
 				$uc_qname = self::$UC_Cache[$qname];
@@ -356,7 +356,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		}
 
 		if ( !ctype_lower( $qname ) && $this->_isHTMLElement() ) {
-			$qname = Util::ascii_to_lowercase( $qname );
+			$qname = Util::toAsciiLowercase( $qname );
 		}
 
 		$attr = $this->_attributes->getNamedItem( $qname );

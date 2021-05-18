@@ -82,27 +82,44 @@ class Util {
 	 */
 
 	/**
-	 * TODO: Why? I don't know. strtolower()/strtoupper() don't do the right thing
-	 * for non-ASCII characters, and mb_strtolower()/mb_strtoupper() are up
-	 * to 30x slower. But these are only called on things that should accept
-	 * only ASCII values to begin with (e.g. attribute names in HTML). So -- why?
+	 * ASCII lowercase a string.
+	 *
+	 * @see https://infra.spec.whatwg.org/#ascii-lowercase
 	 *
 	 * @param string $s
 	 * @return string
 	 */
-	public static function ascii_to_lowercase( string $s ): string {
-		return preg_replace_callback( '/[A-Z]+/', static function ( $matches ) {
-			return strtolower( $matches[0] );
-		}, $s );
+	public static function toAsciiLowercase( string $s ): string {
+		// Note that strtolower depends on the locale set in the environment,
+		// aka https://www.php.net/manual/en/function.strtolower.php says
+		// "Note that 'alphabetic' is determined by the current locale."
+		// and mb_strtolower() is up to 30x slower.  The DOM spec is
+		// deliberately minimalistic.
+		return strtr(
+			$s,
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+			"abcdefghijklmnopqrstuvwxyz"
+		);
 	}
 
 	/**
+	 * ASCII uppercase a string.
+	 *
+	 * @see https://infra.spec.whatwg.org/#ascii-uppercase
+	 *
 	 * @param string $s
 	 * @return string
 	 */
-	public static function ascii_to_uppercase( string $s ): string {
-		return preg_replace_callback( '/[a-z]+/', static function ( $matches ) {
-			return strtoupper( $matches[0] );
-		}, $s );
+	public static function toAsciiUppercase( string $s ): string {
+		// Note that strtoupper depends on the locale set in the environment,
+		// aka https://www.php.net/manual/en/function.strtoupper.php says
+		// "Note that 'alphabetic' is determined by the current locale."
+		// and mb_strtoupper() is up to 30x slower.  The DOM spec is
+		// deliberately minimalistic.
+		return strtr(
+			$s,
+			"abcdefghijklmnopqrstuvwxyz",
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		);
 	}
 }

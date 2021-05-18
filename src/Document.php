@@ -404,7 +404,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			Util::error( 'InvalidCharacterError' );
 		}
 		if ( $this->_isHTMLDocument() ) {
-			$localName = Util::ascii_to_lowercase( $localName );
+			$localName = Util::toAsciiLowercase( $localName );
 		}
 		return new Attr( null, $localName, null, null, '' );
 	}
@@ -439,7 +439,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 
 		// if ($this->_contentType === 'text/html') {
 		//if (!ctype_lower($lname)) {
-		//$lname = Util::ascii_to_lowercase($lname);
+		//$lname = Util::toAsciiLowercase($lname);
 		//}
 
 		//[> TODO STUB <]

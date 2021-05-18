@@ -18,7 +18,7 @@ class Encoding {
 	 * @return ?string An encoding name, or null if the label is not found
 	 */
 	public static function getEncodingFromLabel( string $label ): ?string {
-		$label = Util::ascii_to_lowercase( trim( $label, ' ' ) );
+		$label = Util::toAsciiLowercase( trim( $label, ' ' ) );
 		return self::$labelMap[$label] ?? null;
 	}
 
