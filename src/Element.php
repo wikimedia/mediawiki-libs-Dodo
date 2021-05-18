@@ -71,13 +71,25 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	// XXX figure out how to save storage by only storing this for
 	// HTMLUnknownElement etc; for specific HTML*Element subclasses
 	// we should be able to get this from the object type.
-	/** @var string */
-	public $_nodeName; // HTML-uppercased qualified name
+	// Split Element into AbstractElement and Element, where only
+	// element has these fields; then
+	// HTMLElement extends HTMLAbstractElement extends AbstractElement
+	// where HTMLElement has these fields; then every class which
+	// maps 1:1 on a particular localName will extend HTMLAbstractElement
+	// not HTMLElement.
+	// _prefix is in AbstractElement (since even HTML interfaces may have
+	//   arbitrary prefixes in some documents; this is harder to factor out)
+	// _namespaceURI and _localName are in Element
+	// _localName is in HTMLElement (since every HTML element hard codes the
+	//   namespace)
+	// _nodeName is always computed, never stored.
 
-	/* Required by Element */
-	public $_namespaceURI = null;
-	public $_localName = null;
-	public $_prefix = null;
+	/** @var ?string */
+	private $_namespaceURI = null;
+	/** @var ?string */
+	private $_localName = null;
+	/** @var ?string */
+	private $_prefix = null;
 
 	/**
 	 * @var ?NamedNodeMap Attribute storage; null if no attributes
@@ -114,19 +126,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		return static::$_attributeChangeHandlers[$localName] ?? null;
 	}
 
-	/*
-	* OPTIMIZATION: When we create a DOM tree, we will likely create many
-	* elements with the same tag name / qualified name, and thus need to
-	* repeatedly convert those strings to ASCII uppercase to form the
-	* HTML-uppercased qualified name.
-	*
-	* This table caches the results of that ASCII uppercase conversion,
-	* turning subsequent calls into O(1) table lookups.
-	*
-	* @var array<string,string>
-	*/
-	private static $UC_Cache = [];
-
 	/**
 	 * @var ?DOMTokenList
 	 */
@@ -145,7 +144,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		parent::__construct();
 
 		/*
-		 * TODO
 		 * DOM-LS: "Elements have an associated namespace, namespace
 		 * prefix, local name, custom element state, custom element
 		 * definition, is value. When an element is created, all of
@@ -155,42 +153,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$this->_prefix        = $prefix;
 		$this->_localName     = $lname;
 		$this->_ownerDocument = $doc;
-
-		/*
-		 * DOM-LS: "An Element's qualified name is its local name
-		 * if its namespace prefix is null, and its namespace prefix,
-		 * followed by ":", followed by its local name, otherwise."
-		 */
-		$qname = ( $prefix === null ) ? $lname : "$prefix:$lname";
-
-		/*
-		 * DOM-LS: "An element's tagName is its HTML-uppercased
-		 * qualified name".
-		 *
-		 * DOM-LS: "If an Element is in the HTML namespace and its node
-		 * document is an HTML document, then its HTML-uppercased
-		 * qualified name is its qualified name in ASCII uppercase.
-		 * Otherwise, its HTML-uppercased qualified name is its
-		 * qualified name."
-		 */
-		if ( $this->_isHTMLElement() ) {
-			if ( !isset( self::$UC_Cache[$qname] ) ) {
-				$uc_qname = Util::toAsciiUppercase( $qname );
-				self::$UC_Cache[$qname] = $uc_qname;
-			} else {
-				$uc_qname = self::$UC_Cache[$qname];
-			}
-		} else {
-			/* If not an HTML element, don't uppercase. */
-			$uc_qname = $qname;
-		}
-
-		/*
-		 * DOM-LS: "User agents could optimize qualified name and
-		 * HTML-uppercased qualified name by storing them in internal
-		 * slots."
-		 */
-		$this->_nodeName = $uc_qname;
 
 		/*
 		 * DOM-LS: "Elements also have an attribute list, which is
@@ -216,7 +178,18 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @inheritDoc
 	 */
 	final public function getNodeName() : string {
-		return $this->_nodeName;
+		$prefix = $this->getPrefix();
+		$lname = $this->getLocalName();
+		/*
+		 * DOM-LS: "An Element's qualified name is its local name
+		 * if its namespace prefix is null, and its namespace prefix,
+		 * followed by ":", followed by its local name, otherwise."
+		 */
+		$qname = ( $prefix === null ) ? $lname : ( $prefix . ':' . $lname );
+		if ( $this->_isHTMLElement() ) {
+			$qname = Util::toAsciiUppercase( $qname );
+		}
+		return $qname;
 	}
 
 	/**
@@ -229,22 +202,19 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		return $this->_attributes;
 	}
 
-	/* TODO: Also in Attr... are they part of Node ? */
 	public function getPrefix(): ?string {
 		return $this->_prefix;
 	}
 
-	/* TODO: Also in Attr... are they part of Node ? */
 	public function getLocalName(): string {
 		return $this->_localName;
 	}
 
-	/* TODO: Also in Attr... are they part of Node ? */
 	public function getNamespaceURI(): ?string {
 		return $this->_namespaceURI;
 	}
 
-	public function getTagName(): string {
+	final public function getTagName(): string {
 		return $this->getNodeName();
 	}
 
@@ -670,7 +640,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 
 	/* Calls isHTMLDocument() on ownerDocument */
 	public function _isHTMLElement() {
-		if ( $this->_namespaceURI === Util::NAMESPACE_HTML
+		if ( $this->getNamespaceURI() === Util::NAMESPACE_HTML
 			 && $this->_ownerDocument
 			 && $this->_ownerDocument->_isHTMLDocument() ) {
 			return true;
