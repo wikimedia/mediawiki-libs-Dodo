@@ -286,27 +286,6 @@ will no longer be "live".
 Solution would be to update `lastModTime` when those attributes are
 mutated.
 
-### Blacklisted things from the spec that we will not support
-
-The old-style [HTMLCollection](https://dom.spec.whatwg.org/#old-style-collections)
-has a 'liveness' requirement that requires us to constantly
-keep track of modifications to the subtree. This is annoying and
-has serious performance implications.
-
-#### HTMLCollection
-
-Things that use `HTMLCollection` (hence cannot be used):
-```
- Document::getElementsByTagName()
- Document::getElementsByTagNameNS()
- Document::getElementsByClassNames()
- Element::getElementsByTagName()
- Element::getElementsByTagNameNS()
- Element::getElementsByClassNames()
-
- Element::children
-```
-
 ### Performance tips
 
 - Make sure your Element ids stay unique. The spec requries that you

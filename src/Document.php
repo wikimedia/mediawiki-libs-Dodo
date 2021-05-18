@@ -154,7 +154,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * of the use of lastModTime.
 	 * @var int
 	 */
-	private $_modclock = 0;
+	public $_modclock = 0;
 
 	/** @var ?callable _mutationHandler */
 	private $_mutationHandler = null;

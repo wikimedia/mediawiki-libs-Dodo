@@ -361,7 +361,7 @@ class WhatWG {
 			// references to the childNodes of the DocumentFragment will be empty
 			// when the insertion handlers are called.
 			if ( $parent->_isRooted() ) {
-				$parent->_modify(); // XXX
+				$parent->_modify();
 				foreach ( $insert as $i => $ni ) {
 					$parent->_nodeDocument()->mutateInsert( $ni );
 				}

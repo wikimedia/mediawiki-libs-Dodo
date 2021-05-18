@@ -197,12 +197,13 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		$parent = $this->_parentNode;
 
 		if ( $parent->_childNodes !== null ) {
-			array_splice( $parent->_childNodes, $this->_getSiblingIndex(), 1 );
+			$parent->_childNodes->_splice( $this->_getSiblingIndex(), 1 );
 		} elseif ( $parent->_firstChild === $this ) {
 			$parent->_firstChild = $this->getNextSibling();
 		}
 
 		LinkedList::ll_remove( $this );
+		$parent->_modify();
 	}
 
 	/**

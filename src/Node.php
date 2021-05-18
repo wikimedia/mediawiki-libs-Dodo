@@ -887,18 +887,42 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		return $this->_cachedSiblingIndex;
 	}
 
+	/** Return the lastModTime value for this node. (For use as a
+	 * cache invalidation mechanism. If the node does not already
+	 * have one, initialize it from the owner document's modclock
+	 * property. (Note that modclock does not return the actual
+	 * time; it is simply a counter incremented on each document
+	 * modification.)
+	 * @return int
+	 */
+	public function _lastModTime() : int {
+		// In domino we'd first consult the per-node counter and return that
+		// if present.  But we're saving space in our Nodes by keeping only
+		// the document-level modclock.
+		return $this->_nodeDocument()->_modclock;
+	}
+
 	/**
-	 * Increment the owner document's modclock and use the new
+	 * Increment the owner document's modclock [and use the new
 	 * value to update the lastModTime value for this node and
 	 * all of its ancestors. Nodes that have never had their
 	 * lastModTime value queried do not need to have a
 	 * lastModTime property set on them since there is no
 	 * previously queried value to ever compare the new value
 	 * against, so only update nodes that already have a
-	 * _lastModTime property.
+	 * _lastModTime property.]
 	 */
 	public function _modify() : void {
-		// XXX implement me
+		$this->_nodeDocument()->_modclock++;
+		// In domino, we keep a per-node modification counter as well,
+		// and we would now set the per-node counter to the document
+		// modclock and walk up the ancestor tree setting each parent's
+		// per-node counter.  This lets us distinguish modifications
+		// which occur in separate subtrees.  In dodo we're going to
+		// simplify and maintain only the document-level modification
+		// counter.  If we need to we can always implement domino's
+		// per-node counters here later, at the cost of extra storage
+		// space in every node.
 	}
 
 	/**
@@ -906,8 +930,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * NOTE
 	 * Provides minor optimization over iterative calls to
-	 * Node::removeChild(), since it calls Node::modify() once.
-	 * TODO: Node::modify() no longer exists. Does this optimization?
+	 * Node::removeChild(), since it calls Node::_modify() once.
 	 */
 	public function _removeChildren() {
 		if ( $this->_isRooted() ) {
@@ -933,6 +956,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			/* BRANCH: circular linked list */
 			$this->_firstChild = null;
 		}
+		$this->_modify(); // Update last modified time once only
 	}
 
 	/**
