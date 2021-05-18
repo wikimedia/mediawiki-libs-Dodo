@@ -8,6 +8,7 @@ use RemexHtml\TreeBuilder\Element;
 use RemexHtml\TreeBuilder\TreeBuilder;
 use RemexHtml\TreeBuilder\TreeHandler;
 
+use Wikimedia\Dodo\Document as DOMDocument;
 use Wikimedia\Dodo\Node as DOMNode;
 
 /**
@@ -70,6 +71,55 @@ class DOMBuilder implements TreeHandler {
 	 * @return bool
 	 */
 	public function isCoerced() {
-		return $this->coerced;
+	}
+
+	public function startDocument( $fragmentNamespace, $fragmentName ) {
+	}
+
+	/**
+	 * @param string|null $doctypeName
+	 * @param string|null $public
+	 * @param string|null $system
+	 * @return DOMDocument
+	 */
+	protected function createDocument(
+		string $doctypeName = null,
+		string $public = null,
+		string $system = null
+	) {
+	}
+
+	public function endDocument( $pos ) {
+	}
+
+	public function characters( $preposition, $refElement, $text, $start, $length,
+		$sourceStart, $sourceLength
+	) {
+	}
+
+	public function insertElement( $preposition, $refElement, Element $element, $void,
+		$sourceStart, $sourceLength
+	) {
+	}
+
+	public function endTag( Element $element, $sourceStart, $sourceLength ) {
+	}
+
+	public function doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength ) {
+	}
+
+	public function comment( $preposition, $refElement, $text, $sourceStart, $sourceLength ) {
+	}
+
+	public function error( $text, $pos ) {
+	}
+
+	public function mergeAttributes( Element $element, Attributes $attrs, $sourceStart ) {
+	}
+
+	public function removeNode( Element $element, $sourceStart ) {
+	}
+
+	public function reparentChildren( Element $element, Element $newParent, $sourceStart ) {
 	}
 }

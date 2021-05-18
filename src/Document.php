@@ -106,9 +106,10 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	private $_origin = null;
 
 	/**
-	 * Document mode: one of "no-quirks mode", "quirks mode", or
-	 * "limited-quirks mode".  This is only ever changed from the default
-	 * for documents created by the HTML parser.
+	 * Document mode: one of "no-quirks", "quirks", or
+	 * "limited-quirks" mode.  This is only ever changed from the default
+	 * for documents created by the HTML parser, using the (nonstandard)
+	 * Document::_setQuirksMode() method.
 	 * @var string
 	 * @see https://dom.spec.whatwg.org/#concept-document-mode
 	 */
@@ -262,6 +263,21 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			$this->_templateDocCache = $newDoc->_templateDocCache = $newDoc;
 		}
 		return $this->_templateDocCache;
+	}
+
+	/**
+	 * Used by a callback in the HTML Parser (RemexHtml) to force quirks mode
+	 * depending on the value of the DOCTYPE token.
+	 * @see https://html.spec.whatwg.org/multipage/parsing.html#the-initial-insertion-mode
+	 * @param string $mode
+	 */
+	public function _setQuirksMode( string $mode ) {
+		Util::assert(
+			$mode === 'quirks' ||
+			$mode === 'limited-quirks' ||
+			$mode === 'no-quirks'
+		);
+		$this->_mode = $mode;
 	}
 
 	/*

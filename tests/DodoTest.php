@@ -151,13 +151,43 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	 * @return Document
 	 */
 	private function parse( $html ) {
-		$domImpl = ( new Document( null, 'html' ) )->getImplementation();
-		$domBuilder = new DOMBuilder( [
+		// This code will move into DOMParser::parseFromString eventually
+		$domBuilder = new class( [
 			'suppressHtmlNamespace' => true,
 			'suppressIdAttribute' => true,
-			'domImplementation' => $domImpl,
 			'domExceptionClass' => DOMException::class,
-		] );
+		] ) extends DOMBuilder {
+				/** @var Document */
+				private $doc;
+
+				/** @inheritDoc */
+				protected function createDocument(
+					string $doctypeName = null,
+					string $public = null,
+					string $system = null
+				) {
+					// Force this to be an HTML document (not an XML document)
+					$this->doc = new Document( null, 'html' );
+					return $this->doc;
+				}
+
+				/** @inheritDoc */
+				public function doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength ) {
+					parent::doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength );
+					// Set quirks mode on our document.
+					switch ( $quirks ) {
+					case TreeBuilder::NO_QUIRKS:
+						$this->doc->_setQuirksMode( 'no-quirks' );
+						break;
+					case TreeBuilder::LIMITED_QUIRKS:
+						$this->doc->_setQuirksMode( 'limited-quirks' );
+						break;
+					case TreeBuilder::QUIRKS:
+						$this->doc->_setQuirksMode( 'quirks' );
+						break;
+					}
+				}
+		};
 		$treeBuilder = new TreeBuilder( $domBuilder, [
 			'ignoreErrors' => true
 		] );
