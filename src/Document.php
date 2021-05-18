@@ -429,46 +429,26 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			Util::error( "InvalidCharacterError" );
 		}
 
-		/*
-		 * Per spec, namespace should be HTML namespace if
-		 * "context object is an HTML document or context
-		 * object's content type is "application/xhtml+xml",
-		 * and null otherwise.
-		 */
-		return new Element( $this, $lname, null, null );
+		// We don't support the "is" option at this time.
 
-		// if ($this->_contentType === 'text/html') {
-		//if (!ctype_lower($lname)) {
-		//$lname = Util::toAsciiLowercase($lname);
-		//}
-
-		//[> TODO STUB <]
-		////return Dodo\html\createElement($this, $lname, NULL);
-
-		//} else if ($this->_contentType === 'application/xhtml+xml') {
-		//[> TODO STUB <]
-		////return Dodo\html\createElement($this, $lname, NULL);
-		//} else {
-		//return new Element($this, $lname, NULL, NULL);
-		//}
+		if ( $this->_typeIsHtml ) {
+			// Performance optimization: create a new string only if we need to
+			// This is a fast way to test for the presence of a set of chars
+			if ( strcspn( $lname, "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ) < strlen( $lname ) ) {
+				$lname = Util::toAsciiLowercase( $lname );
+			}
+			return HTMLElement::_createElement( $this, $lname, null );
+		} elseif ( $this->_contentType === 'application/xhtml+xml' ) {
+			return HTMLElement::_createElement( $this, $lname, null );
+		} else {
+			return new Element( $this, $lname, null, null );
+		}
 	}
 
 	/** @inheritDoc */
 	public function createElementNS( ?string $ns, string $qname, $options = null ) {
-		/* Convert parameter types according to WebIDL */
-		if ( $ns === null || $ns === "" ) {
-			$ns = null;
-		} else {
-			$ns = strval( $ns );
-		}
-
-		$qname = strval( $qname );
-
-		$lname = null;
-		$prefix = null;
-
 		WhatWG::validate_and_extract( $ns, $qname, $prefix, $lname );
-
+		// We don't support the "is" option at this time.
 		return $this->_createElementNS( $lname, $ns, $prefix );
 	}
 
@@ -477,12 +457,17 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * elements with localNames containing ':' and non-default namespaces
 	 */
 	public function _createElementNS( $lname, $ns, $prefix ) {
+		// https://dom.spec.whatwg.org/#concept-element-interface
+		// "The element interface for any name and namespace is Element,
+		// unless stated otherwise."
 		if ( $ns === Util::NAMESPACE_HTML ) {
-			/* TODO STUB */
-			//return Dodo\html\createElement($this, $lname, $prefix);
+			// The HTML spec "states otherwise" for elements in the
+			// HTML namespace:
+			// https://html.spec.whatwg.org/#elements-in-the-dom:element-interface
+			return HTMLElement::_createElement( $this, $lname, $prefix );
 		} elseif ( $ns === Util::NAMESPACE_SVG ) {
-			/* TODO STUB */
-			//return svg\createElement($this, $lname, $prefix);
+			// Similarly in the SVG spec
+			throw $this->_unimplemented();
 		} else {
 			return new Element( $this, $lname, $ns, $prefix );
 		}
@@ -750,32 +735,28 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @return HTMLElement|null
 	 */
-	public function getBody() {
-		return $this->_namedHTMLChild( $this->getDocumentElement(), 'body' );
+	public function getBody() : ?HTMLElement {
+		$html = $this->getDocumentElement();
+		if ( $html === null ) { return null;
+		}
+		for ( $kid = $html->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
+			if ( $kid instanceof HTMLBodyElement || $kid instanceof HTMLFrameSetElement ) {
+				return $kid;
+			}
+		}
+		return null;
 	}
 
 	/**
 	 * @return HTMLHeadElement|null
 	 */
-	public function getHead() {
-		return $this->_namedHTMLChild( $this->getDocumentElement(), 'head' );
-	}
-
-	/**
-	 * Helper function for getBody() and getHead().
-	 * @param ?Node $parent
-	 * @param string $name
-	 * @return ?Element
-	 */
-	private function _namedHTMLChild( ?Node $parent, string $name ) : ?Element {
-		if ( $parent !== null && $this->_isHTMLDocument() ) {
-			for ( $kid = $parent->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
-				if ( $kid->getNodeType() === Node::ELEMENT_NODE &&
-					$kid->getLocalName() === $name &&
-					$kid->getNamespaceURI() === Util::NAMESPACE_HTML ) {
-					'@phan-var Element $kid'; // @phan-var Element $kid
-					return $kid;
-				}
+	public function getHead() : ?HTMLHeadElement {
+		$html = $this->getDocumentElement();
+		if ( $html === null ) { return null;
+		}
+		for ( $kid = $html->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
+			if ( $kid instanceof HTMLHeadElement ) {
+				return $kid;
 			}
 		}
 		return null;

@@ -12,6 +12,7 @@ use RemexHtml\TreeBuilder\TreeBuilder;
 
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
+use Wikimedia\Dodo\HTMLBodyElement;
 use Wikimedia\Dodo\HTMLImageElement;
 use Wikimedia\Dodo\NodeFilter;
 
@@ -42,6 +43,8 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$html->appendChild( $body );
 		$doc->appendChild( $html );
 		$img->setAttribute( 'id', "foo" );
+
+		$this->assertEquals( $body, $doc->getBody() );
 
 		/* Print the tree */
 		$this->assertEquals(
@@ -106,12 +109,10 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$doc = $this->parse(
 			'<a>123<b>456<script>alert(1)</script></b></a>789'
 		);
-		$body = null; // work around lack of $doc->getBody()
-		foreach ( $doc->documentElement->childNodes ?? [] as $n ) {
-			if ( $n->nodeName === 'body' ) {
-				$body = $n;
-			}
-		}
+		$body = $doc->getBody();
+		$this->assertTrue( $body !== null );
+		'@phan-var HTMLBodyElement $body'; // @phan-var HTMLBodyElement $body
+
 		$ni = $doc->createNodeIterator(
 			$body,
 			NodeFilter::SHOW_ELEMENT | NodeFilter::SHOW_COMMENT | NodeFilter::SHOW_TEXT,
