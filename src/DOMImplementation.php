@@ -1,17 +1,13 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 
-/******************************************************************************
+/*
  * DOMImplementation.php
  * ---------------------
  * The DOMImplementation interface represents an object providing methods
@@ -32,7 +28,7 @@ use Wikimedia\Dodo\Internal\Util;
  *
  */
 
-/*
+/**
  * Each Document must have its own instance of
  * a DOMImplementation object
  */
@@ -70,6 +66,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 		return true;
 	}
 
+	/** @inheritDoc */
 	public function createDocumentType( $qualifiedName, $publicId, $systemId ) {
 		if ( !$this->isValidQName( $qualifiedName ) ) {
 			Util::error( 'Invalid qualified name.', 'InvalidCharacterError' );
@@ -149,6 +146,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 		return $d;
 	}
 
+	/** @inheritDoc */
 	public function createHTMLDocument( ?string $titleText = null ) {
 		$d = new Document( $this->_contextObject, 'html', null );
 
