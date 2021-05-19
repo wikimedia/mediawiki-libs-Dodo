@@ -27,7 +27,7 @@ class FilteredElementList extends HTMLCollection {
 	 */
 	private $filter;
 	/**
-	 * @var Element
+	 * @var Document|Element
 	 */
 	private $root;
 	/**
@@ -42,10 +42,10 @@ class FilteredElementList extends HTMLCollection {
 	/**
 	 * FilteredElementList constructor.
 	 *
-	 * @param Element $root
+	 * @param Document|Element $root
 	 * @param callable(Element):bool $filter
 	 */
-	public function __construct( Element $root, callable $filter ) {
+	public function __construct( $root, callable $filter ) {
 		parent::__construct();
 		$this->root = $root;
 		$this->filter = $filter;
@@ -67,7 +67,17 @@ class FilteredElementList extends HTMLCollection {
 			$n++;
 		}
 
-		$elt = $this->_next( $this->root );
+		if ( $this->root instanceof Document ) {
+			$start = $this->root->getDocumentElement();
+			if ( $start === null ) {
+				// No elements in this document yet!
+				$this->done = true;
+				return;
+			}
+		} else {
+			$start = $this->root;
+		}
+		$elt = $this->_next( $start );
 		while ( $elt !== null ) {
 			$this->cache[] = $elt;
 			if ( $n && count( $this->cache ) === $n ) {
@@ -86,14 +96,15 @@ class FilteredElementList extends HTMLCollection {
 	 * @return Element|null
 	 */
 	private function _next( Element $start ) : ?Element {
-		$elt = $start->_nextElement( $this->root );
+		$root = ( $this->root instanceof Document ) ? null : $this->root;
+		$elt = $start->_nextElement( $root );
 
 		while ( $elt ) {
 			if ( ( $this->filter )( $elt ) ) {
 				return $elt;
 			}
 
-			$elt = $elt->_nextElement( $this->root );
+			$elt = $elt->_nextElement( $root );
 		}
 
 		return null;

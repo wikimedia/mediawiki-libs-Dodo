@@ -29,6 +29,10 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	public function testDodo() {
 		/* Instantiate the nodes */
 		$doc = new Document( null, 'html' );
+
+		$all_elements = $doc->getElementsByTagName( '*' );
+		$this->assertSame( 0, $all_elements->length );
+
 		$html = $doc->createElement( 'html' );
 		$body = $doc->createElement( 'body' );
 		$comment = $doc->createComment( 'Hello, world!' );
@@ -113,6 +117,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 
 		// Test liveness!
 		$body->appendChild( $doc->createElement( "p" ) );
+		$this->assertSame( 4, $all_elements->length );
 
 		$this->assertSame( 2, $p_tags->length );
 		$second_p_tag = $p_tags->item( 1 );

@@ -703,7 +703,16 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return HTMLCollection
 	 */
-	public function getElementsByTagName( string $lname ) {
+	public function getElementsByTagName( string $lname ) : HTMLCollection {
+		return static::_getElementsByTagName( $this, $lname );
+	}
+
+	/**
+	 * @param Document|Element $root
+	 * @param string $lname
+	 * @return HTMLCollection
+	 */
+	public static function _getElementsByTagName( $root, string $lname ) : HTMLCollection {
 		$filter = null;
 		if ( !$lname ) {
 			return new HTMLCollection();
@@ -712,14 +721,13 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$filter = static function ( $el ) {
 				return true;
 			};
-		} elseif ( $this->_isHTMLElement() ) {
-			$filter = $this->_htmlLocalNameElementFilter( $lname );
+		} elseif ( $root->_nodeDocument->_isHTMLDocument() ) {
+			$filter = static::_htmlLocalNameElementFilter( $lname );
 		} else {
-			$filter = $this->_localNameElementFilter( $lname );
+			$filter = static::_localNameElementFilter( $lname );
 		}
 
-		return new FilteredElementList( $this,
-			$filter );
+		return new FilteredElementList( $root, $filter );
 	}
 
 	/**
@@ -735,8 +743,10 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$names = preg_split( '/[ \t\r\n\f]+/',
 			$names ); // Split on ASCII whitespace
 
-		return new FilteredElementList( $this,
-			$this->_classNamesElementFilter( $names ) );
+		return new FilteredElementList(
+			$this,
+			static::_classNamesElementFilter( $names )
+		);
 	}
 
 	/**
@@ -746,10 +756,10 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return callable(Element):bool
 	 */
-	public function _htmlLocalNameElementFilter( string $lname ) : callable {
+	private static function _htmlLocalNameElementFilter( string $lname ) : callable {
 		$lclname = Util::toAsciiLowercase( $lname );
 		if ( $lclname === $lname ) {
-			return $this->_localNameElementFilter( $lname );
+			return static::_localNameElementFilter( $lname );
 		}
 
 		return static function ( $el ) use ( $lname, $lclname ) {
@@ -762,7 +772,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return callable(Element):bool
 	 */
-	public function _localNameElementFilter( string $lname ) : callable {
+	private static function _localNameElementFilter( string $lname ) : callable {
 		return static function ( $el ) use ( $lname ) {
 			return $el->localName === $lname;
 		};
@@ -775,22 +785,30 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagNameNs( ?string $ns, string $lname ) : HTMLCollection {
+		return static::_getElementsByTagNameNs( $this, $ns, $lname );
+	}
+
+	/**
+	 * @param Document|Element $root
+	 * @param ?string $ns
+	 * @param string $lname
+	 * @return HTMLCollection
+	 */
+	public static function _getElementsByTagNameNs( $root, ?string $ns, string $lname ) : HTMLCollection {
 		$filter = null;
 		if ( $ns === '*' && $lname === '*' ) {
 			$filter = static function () {
 				return true;
 			};
 		} elseif ( $ns === '*' ) {
-			$filter = $this->_localNameElementFilter( $lname );
+			$filter = static::_localNameElementFilter( $lname );
 		} elseif ( $lname === '*' ) {
-			$filter = $this->_namespaceElementFilter( $ns );
+			$filter = static::_namespaceElementFilter( $ns );
 		} else {
-			$filter = $this->_namespaceLocalNameElementFilter( $ns,
-				$lname );
+			$filter = static::_namespaceLocalNameElementFilter( $ns, $lname );
 		}
 
-		return new FilteredElementList( $this,
-			$filter );
+		return new FilteredElementList( $root, $filter );
 	}
 
 	/**
@@ -798,7 +816,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return callable(Element):bool
 	 */
-	public function _namespaceElementFilter( string $ns ) : callable {
+	private static function _namespaceElementFilter( string $ns ) : callable {
 		return static function ( $el ) use ( $ns ) {
 			return $el->namespaceURI === $ns;
 		};
@@ -810,24 +828,37 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return callable(Element):bool
 	 */
-	public function _namespaceLocalNameElementFilter( string $ns, string $lname ) : callable {
+	private static function _namespaceLocalNameElementFilter( string $ns, string $lname ) : callable {
 		return static function ( $el ) use ( $ns, $lname ) {
 			return $el->namespaceURI === $ns && $el->localName === $lname;
 		};
 	}
 
 	/**
-	 * TODO refactor this
-	 *
 	 * @param array $names
 	 *
 	 * @return callable(Element):bool
 	 */
-	public function _classNamesElementFilter( array $names ) : callable {
+	private static function _classNamesElementFilter( array $names ) : callable {
 		return static function ( $el ) use ( $names ) {
-			foreach ( $names as $name ) {
-				return $el->classList->contains( $name );
+			$quirks = $el->_nodeDocument->getCompatMode() === 'BackCompat';
+			if ( !$quirks ) {
+				foreach ( $names as $name ) {
+					if ( $el->classList->contains( $name ) ) {
+						return true;
+					}
+				}
+			} else {
+				// This is inefficient, but it is rarely used
+				foreach ( $names as $c1 ) {
+					foreach ( $el->classList as $c2 ) {
+						if ( Util::toAsciiLowercase( $c1 ) === Util::toAsciiLowercase( $c2 ) ) {
+							return true;
+						}
+					}
+				}
 			}
+			return false;
 		};
 	}
 }

@@ -692,13 +692,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagName( string $lname ) : HTMLCollection {
-		$element = $this->getDocumentElement();
-		if ( $element !== null ) {
-			return $element->getElementsByTagName( $lname );
-		}
-		// FIXME ideally this should be a live collection, not a fixed
-		// zero-length collection, in case a document element were later added
-		return new HTMLCollection();
+		return Element::_getElementsByTagName( $this, $lname );
 	}
 
 	/**
@@ -708,13 +702,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagNameNs( ?string $ns, string $lname ) : HTMLCollection {
-		$element = $this->getDocumentElement();
-		if ( $element !== null ) {
-			return $element->getElementsByTagNameNS( $ns, $lname );
-		}
-		// FIXME ideally this should be a live collection, not a fixed
-		// zero-length collection, in case a document element were later added
-		return new HTMLCollection();
+		return Element::_getElementsByTagNameNs( $this, $ns, $lname );
 	}
 
 	/*
