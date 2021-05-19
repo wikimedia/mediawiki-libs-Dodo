@@ -1,25 +1,22 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanImpossibleCondition
-// @phan-file-suppress PhanPluginDuplicateAdjacentStatement
-// @phan-file-suppress PhanPluginInvalidPregRegex
-// @phan-file-suppress PhanSuspiciousValueComparison
-// @phan-file-suppress PhanUndeclaredMethod
-// @phan-file-suppress PhanUndeclaredVariable
-// @phan-file-suppress PhanUnextractableAnnotationSuffix
 // phpcs:disable Generic.Files.LineLength.TooLong
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
-// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 
 namespace Wikimedia\Dodo\Internal;
 
 use Wikimedia\Dodo\Attr;
+use Wikimedia\Dodo\Comment;
+use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DocumentFragment;
+use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Node;
+use Wikimedia\Dodo\ProcessingInstruction;
 use Wikimedia\Dodo\Text;
+use Wikimedia\IDLeDOM\ChildNode as IChildNode;
 
 /******************************************************************************
  * whatwg.php
@@ -62,11 +59,13 @@ class WhatWG {
 
 		/* #4 */
 		if ( $node1->getNodeType() === Node::ATTRIBUTE_NODE ) {
+			'@phan-var Attr $node1'; // @var Attr $node1
 			$attr1 = $node1;
 			$node1 = $attr1->getOwnerElement();
 		}
 		/* #5 */
 		if ( $node2->getNodeType() === Node::ATTRIBUTE_NODE ) {
+			'@phan-var Attr $node2'; // @var Attr $node2
 			$attr2 = $node2;
 			$node2 = $attr2->getOwnerElement();
 
@@ -117,6 +116,8 @@ class WhatWG {
 		$node1_ancestors = array_reverse( $node1_ancestors );
 		$node2_ancestors = array_reverse( $node2_ancestors );
 		$len = min( count( $node1_ancestors ), count( $node2_ancestors ) );
+		'@phan-var Node[] $node1_ancestors'; // @var Node[] $node1_ancestors
+		'@phan-var Node[] $node2_ancestors'; // @var Node[] $node2_ancestors
 
 		for ( $i = 1; $i < $len; $i++ ) {
 			if ( $node1_ancestors[$i] !== $node2_ancestors[$i] ) {
@@ -160,42 +161,43 @@ class WhatWG {
 		case Node::NOTATION_NODE:
 		case Node::DOCUMENT_TYPE_NODE:
 		case Node::DOCUMENT_FRAGMENT_NODE:
-			break;
+			return null;
+
 		case Node::ELEMENT_NODE:
-			if ( $node->getNamespaceURI() !== null && $node->prefix() === $prefix ) {
+			'@phan-var Element $node'; // @var Element $node
+			if ( $node->getNamespaceURI() !== null && $node->getPrefix() === $prefix ) {
 				return $node->getNamespaceURI();
 			}
 			foreach ( $node->attributes as $a ) {
 				if ( $a->getNamespaceURI() === Util::NAMESPACE_XMLNS ) {
-					if ( ( $a->prefix() === 'xmlns' && $a->getLocalName() === $prefix )
-						 || ( $prefix === null && $a->prefix() === null && $a->getLocalName() === 'xmlns' ) ) {
+					if ( ( $a->getPrefix() === 'xmlns' && $a->getLocalName() === $prefix )
+						 || ( $prefix === null && $a->getPrefix() === null && $a->getLocalName() === 'xmlns' ) ) {
 						$val = $a->getValue();
 						return ( $val === "" ) ? null : $val;
 					}
 				}
 			}
-			break;
-		case Node::DOCUMENT_NODE:
-			if ( $node->_documentElement ) {
-				return self::locate_namespace( $node->_documentElement, $prefix );
-			}
-			break;
-		case Node::ATTRIBUTE_NODE:
-			if ( $node->_ownerElement ) {
-				return self::locate_namespace( $node->_ownerElement, $prefix );
-			}
-			break;
+			// fall through
 		default:
 			$parent = $node->getParentElement();
 			if ( $parent === null ) {
 				return null;
 			} else {
-				'@phan-var Element $parent'; // @var Element $parent
-				return self::locate_namespace( $parent, $ns );
+				return self::locate_namespace( $parent, $prefix );
 			}
-		}
 
-		return null;
+		case Node::DOCUMENT_NODE:
+			'@phan-var Document $node'; // @var Document $node
+			$el = $node->getDocumentElement();
+			return ( $el === null ) ? null :
+				self::locate_namespace( $el, $prefix );
+
+		case Node::ATTRIBUTE_NODE:
+			'@phan-var Attr $node'; // @var Attr $node
+			$el = $node->getOwnerElement();
+			return ( $el === null ) ? null :
+				self::locate_namespace( $el, $prefix );
+		}
 	}
 
 	/**
@@ -215,28 +217,20 @@ class WhatWG {
 		case Node::NOTATION_NODE:
 		case Node::DOCUMENT_FRAGMENT_NODE:
 		case Node::DOCUMENT_TYPE_NODE:
-			break;
+			return null;
+
 		case Node::ELEMENT_NODE:
-			if ( $node->getNamespaceURI() !== null && $node->getNamespaceURI() === $ns ) {
-				return $node->prefix();
+			'@phan-var Element $node'; // @var Element $node
+			if ( $node->getNamespaceURI() === $ns ) {
+				return $node->getPrefix();
 			}
 
 			foreach ( $node->attributes as $a ) {
-				if ( $a->prefix() === "xmlns" && $a->getValue() === $ns ) {
+				if ( $a->getPrefix() === "xmlns" && $a->getValue() === $ns ) {
 					return $a->getLocalName();
 				}
 			}
-			break;
-		case Node::DOCUMENT_NODE:
-			if ( $node->_documentElement ) {
-				return self::locate_prefix( $node->_documentElement, $ns );
-			}
-			break;
-		case Node::ATTRIBUTE_NODE:
-			if ( $node->_ownerElement ) {
-				return self::locate_prefix( $node->_ownerElement, $ns );
-			}
-			break;
+			// fall through
 		default:
 			$parent = $node->getParentElement();
 			if ( $parent === null ) {
@@ -245,9 +239,19 @@ class WhatWG {
 				'@phan-var Element $parent'; // @var Element $parent
 				return self::locate_prefix( $parent, $ns );
 			}
-		}
 
-		return null;
+		case Node::DOCUMENT_NODE:
+			'@phan-var Document $node'; // @var Document $node
+			$el = $node->getDocumentElement();
+			return ( $el === null ) ? null :
+				self::locate_prefix( $el, $ns );
+
+		case Node::ATTRIBUTE_NODE:
+			'@phan-var Attr $node'; // @var Attr $node
+			$el = $node->getOwnerElement();
+			return ( $el === null ) ? null :
+				self::locate_prefix( $el, $ns );
+		}
 	}
 
 	/**
@@ -364,7 +368,7 @@ class WhatWG {
 			if ( $parent->getIsConnected() ) {
 				$parent->_modify();
 				foreach ( $insert as $i => $ni ) {
-					$parent->_nodeDocument->mutateInsert( $ni );
+					$parent->_nodeDocument->_mutateInsert( $ni );
 				}
 			}
 		} else { // Not a DocumentFragment
@@ -376,8 +380,10 @@ class WhatWG {
 				/* "soft remove" -- don't want to uproot it. */
 				// Remove the child from its current position in the tree
 				// without calling remove(), since we don't want to uproot it.
+				// @phan-suppress-next-line PhanUndeclaredMethod in ChildNode trait
 				$child->_remove();
 			} elseif ( $child->_parentNode ) {
+				'@phan-var IChildNode $child'; // @var IChildNode $child
 				$child->remove();
 			}
 
@@ -582,7 +588,7 @@ class WhatWG {
 			 * is preceding child,
 			 */
 			if ( $child !== null ) {
-				for ( $n = $child->previousSibling(); $n !== null; $n = $n->previousSibling() ) {
+				for ( $n = $child->getPreviousSibling(); $n !== null; $n = $n->getPreviousSibling() ) {
 					if ( $n->getNodeType() === Node::ELEMENT_NODE ) {
 						Util::error( "HierarchyRequestError" );
 					}
@@ -745,7 +751,7 @@ class WhatWG {
 				}
 			}
 			/* #6c-2: an Element is preceding child */
-			for ( $n = $child->previousSibling(); $n !== null; $n = $n->previousSibling() ) {
+			for ( $n = $child->getPreviousSibling(); $n !== null; $n = $n->getPreviousSibling() ) {
 				if ( $n->getNodeType() === Node::ELEMENT_NODE ) {
 					Util::error( "HierarchyRequestError" );
 				}
@@ -765,7 +771,7 @@ class WhatWG {
 			$bits[] = $node->_data;
 		} else {
 			for ( $kid = $node->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
-				static::descendantTextContent( $kid, $bits );
+				self::descendantTextContent( $kid, $bits );
 			}
 		}
 	}
@@ -901,6 +907,7 @@ class WhatWG {
 
 		switch ( $child->getNodeType() ) {
 		case Node::ELEMENT_NODE:
+			'@phan-var Element $child'; // @var Element $child
 			$ns = $child->getNamespaceURI();
 			$html = ( $ns === Util::NAMESPACE_HTML );
 
@@ -940,7 +947,8 @@ class WhatWG {
 
 		case Node::TEXT_NODE:
 		case Node::CDATA_SECTION_NODE:
-			if ( $parent->getNodeType() === Node::ELEMENT_NODE && $parent->getNamespaceURI() === Util::NAMESPACE_HTML ) {
+			'@phan-var Text $child'; // @var Text $child
+			if ( $parent->getNodeType() === Node::ELEMENT_NODE && $parent instanceof Element && $parent->getNamespaceURI() === Util::NAMESPACE_HTML ) {
 				$parenttag = $parent->getTagName();
 			} else {
 				$parenttag = '';
@@ -954,27 +962,32 @@ class WhatWG {
 			break;
 
 		case Node::COMMENT_NODE:
+			'@phan-var Comment $child'; // @var Comment $child
 			$s .= '<!--' . $child->getData() . '-->';
 			break;
 
 		case Node::PROCESSING_INSTRUCTION_NODE:
+			'@phan-var ProcessingInstruction $child'; // @var ProcessingInstruction $child
 			$s .= '<?' . $child->getTarget() . ' ' . $child->getData() . '?>';
 			break;
 
 		case Node::DOCUMENT_TYPE_NODE:
+			// See
+			// https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-doctype
+			// BUT
+			// https://html.spec.whatwg.org/multipage/parsing.html#serialising-html-fragments
+			// omits the public/system ID.
+			'@phan-var DocumentType $child'; // @var DocumentType $child
 			$s .= '<!DOCTYPE ' . $child->getName();
 
-            // phpcs:ignore Generic.CodeAnalysis.UnconditionalIfStatement.Found
-			if ( false ) {
-				// Latest HTML serialization spec omits the public/system ID
-				if ( $child->_publicID ) {
-					$s .= ' PUBLIC "' . $child->_publicId . '"';
-				}
+			// Latest HTML serialization spec omits the public/system ID
+			// if ( $child->getPublicID() !== '' ) {
+			//	$s .= ' PUBLIC "' . $child->getPublicId() . '"';
+			// }
 
-				if ( $child->_systemId ) {
-					$s .= ' "' . $child->_systemId . '"';
-				}
-			}
+			// if ( $child->getSystemId() !== '' ) {
+			//	$s .= ' "' . $child->getSystemId() . '"';
+			// }
 
 			$s .= '>';
 			break;
@@ -985,10 +998,9 @@ class WhatWG {
 		return $s;
 	}
 
-	/******************************************************************************
+	/*
 	 * XML NAMES
-	 */
-	/******************************************************************************
+	 *
 	 * In XML, valid names for Elements or Attributes are governed by a
 	 * number of overlapping rules, reflecting a gradual standardization
 	 * process.
@@ -1022,136 +1034,88 @@ class WhatWG {
 	 * NCName         ::= Name - (Char* ':' Char*)
 	 *                    # An XML Name, minus the ":"
 	 */
-	/* TODO: PHP /u unicode matching? */
 
-	/*
-	 * Most names will be ASCII only. Try matching against simple regexps first
-	 *
-	 * [HTML-5] Attribute names may be written with any mix of ASCII lowercase
-	 * and ASCII uppercase alphanumerics.
-	 *
-	 * Recall:
-	 *      \w matches any alphanumeric character A-Za-z0-9
+	/**
+	 * NameStartChar minus :
+	 * @see https://www.w3.org/TR/xml/#NT-NameStartChar
 	 */
-	/*
-	 * TODO: PORT NOTE: in Domino, this pattern was '/^[_:A-Za-z][-.:\w]+$/',
-	 * which fails for one-letter tagnames (e.g. <p>). This was not a problem
-	 * because <p> is an HTML element and is thus instantiated differently, but
-	 * I think one-letter tagnames is still valid, right?
-	 *
-	 * Also, in PHP, sending 'p' as the name will not add '\n' to the end of
-	 * the string, while sending "p" DOES add the newline. The newline is
-	 * matched by \w and will thus allow a match, but it depends on whether
-	 * the string was single or double-quoted.
-	 *
-	 * To avoid this complication, we switched the '+' to a '*'.
-	 *
-	 * Interestingly, in the regex patterns in the next section, it seems that
-	 * we do indeed use '*' in Domino, so why was '+' being preferred here?
+	private const NCNAME_START_CHAR = 'A-Z_a-z\x{C0}-\x{D6}\x{D8}-\x{F6}\x{F8}-\x{2FF}\x{370}-\x{37D}\x{37F}-\x{1FFF}\x{200C}-\x{200D}\x{2070}-\x{218F}\x{2C00}-\x{2FEF}\x{3001}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFFD}\x{10000}-\x{EFFFF}';
+
+	/**
+	 * NameChar minus :
+	 * @see https://www.w3.org/TR/xml/#NT-NameChar
 	 */
-	private const pattern_ascii_name = '/^[_:A-Za-z][-.:\w]*$/';
-	private const pattern_ascii_qname = '/^([_A-Za-z][-.\w]*|[_A-Za-z][-.\w]*:[_A-Za-z][-.\w]*)$/';
+	private const NCNAME_CHAR = self::NCNAME_START_CHAR . '\x{2D}.0-9\x{B7}\x{0300}-\x{036F}\x{203F}-\x{2040}';
 
-	/*
-	 * If the regular expressions above fail, try more complex ones that work
-	 * for any identifiers using codepoints from the Unicode BMP
+	/**
+	 * Name minus :
+	 * @see https://www.w3.org/TR/xml-names/#NT-NCName
 	 */
-	private const start = '_A-Za-z\\x{00C0}-\\x{00D6}\\x{00D8}-\\x{00F6}\\x{00F8}-\\x{02ff}\\x{0370}-\\x{037D}\\x{037F}-\\x{1FFF}\\x{200C}-\\x{200D}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}';
-	private const char = '-._A-Za-z0-9\\x{00B7}\\x{00C0}-\\x{00D6}\\x{00D8}-\\x{00F6}\\x{00F8}-\\x{02ff}\\x{0300}-\\x{037D}\\x{037F}-\\x{1FFF}\\x{200C}\\x{200D}\\x{203f}\\x{2040}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}';
+	private const NCNAME = '[' . self::NCNAME_START_CHAR . '][' . self::NCNAME_CHAR . ']*';
 
-	private const pattern_name = '/^[' . self::start . ']' . '[:' . self::char . ']*$/';
-	private const pattern_qname = '/^([' . self::start . '][' . self::char . ']*|[' . self::start . '][' . self::char . ']*:[' . self::start . '][' . self::char . ']*)$/';
-
-	/*
-	 * XML says that these characters are also legal:
-	 * [#x10000-#xEFFFF].  So if the patterns above fail, and the
-	 * target string includes surrogates, then try the following
-	 * patterns that allow surrogates and then run an extra validation
-	 * step to make sure that the surrogates are in valid pairs and in
-	 * the right range.  Note that since the characters \uf0000 to \u1f0000
-	 * are not allowed, it means that the high surrogate can only go up to
-	 * \uDB7f instead of \uDBFF.
+	/**
+	 * QName
+	 * @see https://www.w3.org/TR/xml-names/#NT-QName
 	 */
-	private const surrogates = '\\x{D800}-\\x{DB7F}\\x{DC00}-\\x{DFFF}';
+	private const QNAME = '/^' . self::NCNAME . '(:' . self::NCNAME . ')?$/u';
 
-	private const pattern_has_surrogates = '/[' . self::surrogates . ']/';
-	private const pattern_surrogate_chars = '/[' . self::surrogates . ']/';
-	private const pattern_surrogate_pairs = '/[\\x{D800}-\\x{DB7F}][\\x{DC00}-\\x{DFFF}]/';
+	/**
+	 * Fast case QNAME, non-unicode.
+	 */
+	private const QNAME_ASCII = '/^[A-Za-z_][-A-Za-z_.0-9]*(:[A-Za-z_][-A-Za-z_.0-9]*)?$/';
 
-	private const surrogate_start = self::start . self::surrogates;
-	private const surrogate_char = self::char . self::surrogates;
+	/**
+	 * NameStartChar including the :
+	 * @see https://www.w3.org/TR/xml/#NT-NameStartChar
+	 */
+	private const NAME_START_CHAR = self::NCNAME_START_CHAR . ':';
 
-	private const pattern_surrogate_name = '/^[' . self::surrogate_start . ']' . '[:' . self::surrogate_char . ']*$/';
-	private const pattern_surrogate_qname = '/^([' . self::surrogate_start . '][' . self::surrogate_char . ']*|[' . self::surrogate_start . '][' . self::surrogate_char . ']*:[' . self::surrogate_start . '][' . self::surrogate_char . ']*)$/';
+	/**
+	 * NameChar including the :
+	 * @see https://www.w3.org/TR/xml/#NT-NameChar
+	 */
+	private const NAME_CHAR = self::NCNAME_CHAR . ':';
+
+	/**
+	 * Name
+	 * @see https://www.w3.org/TR/REC-xml/#NT-Name
+	 */
+	private const NAME = '/^[' . self::NAME_START_CHAR . '][' . self::NAME_CHAR . ']*$/u';
+
+	/**
+	 * Fast case NAME, ASCII-only.
+	 */
+	private const NAME_ASCII = '/^[A-Za-z_:][-A-Za-z_.0-9:]*$/';
 
 	/**
 	 * @param string $s
 	 * @return bool
 	 */
 	public static function is_valid_xml_name( $s ) {
-		if ( preg_match( self::pattern_ascii_name, $s ) ) {
+		if ( preg_match( self::NAME_ASCII, $s ) === 1 ) {
 			return true; // Plain ASCII
 		}
-		if ( preg_match( self::pattern_name, $s ) ) {
+		if ( preg_match( self::NAME, $s ) === 1 ) {
 			return true; // Unicode BMP
 		}
-
-		/*
-		 * Maybe the tests above failed because s includes surrogate pairs
-		 * Most likely, though, they failed for some more basic syntax problem
-		 */
-		if ( !preg_match( self::pattern_has_surrogates, $s ) ) {
-			return false;
-		}
-
-		/* Is the string a valid name if we allow surrogates? */
-		if ( !preg_match( self::pattern_surrogate_name, $s ) ) {
-			return false;
-		}
-
-		/* Finally, are the surrogates all correctly paired up? */
-		$matches_chars = [];
-		$matches_pairs = [];
-
-		$ret0 = preg_match( self::pattern_surrogate_chars, $s, $matches_chars );
-		$ret1 = preg_match( self::pattern_surrogate_pairs, $s, $matches_pairs );
-
-		return ( $ret0 && $ret1 ) && ( ( 2 * count( $matches_pairs ) ) === count( $matches_chars ) );
+		return false;
 	}
 
 	/**
+	 * @see https://dom.spec.whatwg.org/#validate
 	 * @param string $s
 	 * @return bool
 	 */
 	public static function is_valid_xml_qname( $s ) {
-		if ( preg_match( self::pattern_ascii_qname, $s ) ) {
+		// Fast case: an ASCII name.
+		if ( preg_match( self::QNAME_ASCII, $s ) === 1 ) {
 			return true; // Plain ASCII
 		}
-		if ( preg_match( self::pattern_ascii_qname, $s ) ) {
-			return true; // Unicode BMP
+		// Slower: full unicode pattern.
+		if ( preg_match( self::QNAME, $s ) === 1 ) {
+			return true;
 		}
-
-		/*
-		 * Maybe the tests above failed because s includes surrogate pairs
-		 * Most likely, though, they failed for some more basic syntax problem
-		 */
-		if ( !preg_match( self::pattern_has_surrogates, $s ) ) {
-			return false;
-		}
-
-		/* Is the string a valid name if we allow surrogates? */
-		if ( !preg_match( self::pattern_surrogate_qname, $s ) ) {
-			return false;
-		}
-
-		/* Finally, are the surrogates all correctly paired up? */
-		$matches_chars = [];
-		$matches_pairs = [];
-
-		$ret0 = preg_match( self::pattern_surrogate_chars, $s, $matches_chars );
-		$ret1 = preg_match( self::pattern_surrogate_pairs, $s, $matches_pairs );
-
-		return ( $ret0 && $ret1 ) && ( ( 2 * count( $matches_pairs ) ) === count( $matches_chars ) );
+		return false;
 	}
 
 	/**
@@ -1159,14 +1123,14 @@ class WhatWG {
 	 *
 	 * Used to map (namespace, qualifiedName) => (namespace, prefix, localName)
 	 *
-	 * spec https://dom.spec.whatwg.org/#validate-and-extract
+	 * @see https://dom.spec.whatwg.org/#validate-and-extract
 	 *
 	 * @param ?string &$ns
 	 * @param string $qname
 	 * @param ?string &$prefix reference (will be NULL or contain prefix string)
 	 * @param ?string &$lname reference (will be qname or contain lname string)
 	 * @return void
-	 * @throws DOMException("NamespaceError")
+	 * @throws DOMException "NamespaceError"
 	 */
 	public static function validate_and_extract( ?string &$ns, string $qname, ?string &$prefix, ?string &$lname ): void {
 		/*
@@ -1193,7 +1157,7 @@ class WhatWG {
 		if ( $prefix !== null && $ns === null ) {
 			Util::error( "NamespaceError" );
 		}
-		if ( $prefix === "xml" && $namespace !== Util::NAMESPACE_XML ) {
+		if ( $prefix === "xml" && $ns !== Util::NAMESPACE_XML ) {
 			Util::error( "NamespaceError" );
 		}
 		if ( ( $prefix === "xmlns" || $qname === "xmlns" ) && $ns !== Util::NAMESPACE_XMLNS ) {
