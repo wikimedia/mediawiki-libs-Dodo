@@ -16,7 +16,7 @@ class NodeMutationAdoptNodeTest extends WptTestHarness
             $div->appendChild($old->createTextNode('text'));
             $this->assertEqualsData($div->ownerDocument, $old);
             $this->assertEqualsData($div->firstChild->ownerDocument, $old);
-            $this->doc->body->appendChild($div);
+            $this->getDocBody( $this->doc )->appendChild($div);
             $this->assertEqualsData($div->ownerDocument, $this->doc);
             $this->assertEqualsData($div->firstChild->ownerDocument, $this->doc);
         }, 'simple append of foreign div with text');

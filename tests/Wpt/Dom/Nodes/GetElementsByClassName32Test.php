@@ -11,21 +11,21 @@ class GetElementsByClassName32Test extends WptTestHarness
         $this->assertTest(function () {
             $p = $this->doc->createElement('p');
             $p->className = 'unknown';
-            $this->doc->body->appendChild($p);
+            $this->getDocBody( $this->doc )->appendChild($p);
             $elements = $this->doc->getElementsByClassName('first-p');
             $this->assertArrayEqualsData($elements, []);
         }, 'cannot find the class name');
         $this->assertTest(function () {
             $p = $this->doc->createElement('p');
             $p->className = 'first-p';
-            $this->doc->body->appendChild($p);
+            $this->getDocBody( $this->doc )->appendChild($p);
             $elements = $this->doc->getElementsByClassName('first-p');
             $this->assertArrayEqualsData($elements, [$p]);
         }, 'finds the class name');
         $this->assertTest(function () {
             $p = $this->doc->createElement('p');
             $p->className = 'the-p second third';
-            $this->doc->body->appendChild($p);
+            $this->getDocBody( $this->doc )->appendChild($p);
             $elements1 = $this->doc->getElementsByClassName('the-p');
             $this->assertArrayEqualsData($elements1, [$p]);
             $elements2 = $this->doc->getElementsByClassName('second');

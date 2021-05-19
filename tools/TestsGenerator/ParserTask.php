@@ -143,6 +143,7 @@ class ParserTask extends BaseTask {
 	public function run() : Result {
 		try {
 			$this->preprocessTest();
+
 			if ( $this->wrap_only ) {
 				// TestWrapper is need only for proper parsing.
 				$ast = $this->parser->parse( '<?php class TestWrapper {' . $this->test . '}' );
@@ -873,7 +874,9 @@ class ParserTask extends BaseTask {
 			'throw $ex;' => '$this->fail($ex->getMessage());',
 			'&& false' => '',
 			'$doc->open()' => '// $doc->open()',
-			'$doc->close()' => '// $doc->close()' ];
+			'$doc->close()' => '// $doc->close()',
+			'count( $childValue )' => 'strlen($childValue)',
+			'count( $child )' => 'strlen($child)' ];
 
 		$this->test = strtr( $this->test,
 			$find_replace );

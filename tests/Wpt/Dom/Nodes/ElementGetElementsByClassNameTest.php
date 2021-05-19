@@ -29,9 +29,9 @@ class ElementGetElementsByClassNameTest extends WptTestHarness
             $b = $this->doc->createElement('b');
             $c = $this->doc->createElement('c');
             $b->className = 'foo';
-            $this->doc->body->appendChild($a);
+            $this->getDocBody( $this->doc )->appendChild($a);
             $this->{$this}->addCleanup(function () use(&$a) {
-                $this->doc->body->removeChild($a);
+                $this->getDocBody( $this->doc )->removeChild($a);
             });
             $a->appendChild($b);
             $l = $a->getElementsByClassName('foo');

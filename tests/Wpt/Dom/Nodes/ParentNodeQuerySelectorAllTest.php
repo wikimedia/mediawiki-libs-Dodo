@@ -327,7 +327,7 @@ class ParentNodeQuerySelectorAllTest extends WptTestHarness
                 requestAnimationFrame($self->step_func_done($init->bind($self, $frame)));
             };
             $frame->src = 'ParentNode-querySelector-All-content.html#target';
-            $this->doc->body->appendChild($frame);
+            $this->getDocBody( $this->doc )->appendChild($frame);
         });
         // Bit-mapped flags to indicate which tests the selector is suitable for
         $TEST_QSA = 0x1;

@@ -28,7 +28,7 @@ class NodeRemoveChildTest extends WptTestHarness
                     $s = $doc[$creator]('a');
                     $this->assertEqualsData($s->ownerDocument, $doc);
                     $this->assertThrowsDomData('NOT_FOUND_ERR', function () use(&$s) {
-                        $this->doc->body->removeChild($s);
+                        $this->getDocBody( $this->doc )->removeChild($s);
                     });
                     $this->assertEqualsData($s->ownerDocument, $doc);
                 }, 'Passing a detached ' . $p . ' from ' . $description . ' to removeChild should not affect it.');
@@ -38,7 +38,7 @@ class NodeRemoveChildTest extends WptTestHarness
                     $doc->documentElement->appendChild($s);
                     $this->assertEqualsData($s->ownerDocument, $doc);
                     $this->assertThrowsDomData('NOT_FOUND_ERR', function () use(&$s) {
-                        $this->doc->body->removeChild($s);
+                        $this->getDocBody( $this->doc )->removeChild($s);
                     });
                     $this->assertEqualsData($s->ownerDocument, $doc);
                 }, 'Passing a non-detached ' . $p . ' from ' . $description . ' to removeChild should not affect it.');
@@ -55,10 +55,10 @@ class NodeRemoveChildTest extends WptTestHarness
         }
         $this->assertTest(function () {
             $this->assertThrowsJsData($this->type_error, function () {
-                $this->doc->body->removeChild(null);
+                $this->getDocBody( $this->doc )->removeChild(null);
             });
             $this->assertThrowsJsData($this->type_error, function () {
-                $this->doc->body->removeChild(['a' => 'b']);
+                $this->getDocBody( $this->doc )->removeChild(['a' => 'b']);
             });
         }, 'Passing a value that is not a Node reference to removeChild should throw TypeError.');
         $creators = ['element' => 'createElement', 'text' => 'createTextNode', 'comment' => 'createComment'];

@@ -242,11 +242,11 @@ class RangeSurroundContentsTest extends WptTestHarness
         $actualIframe = $this->doc->createElement('iframe');
         $actualIframe->style->display = 'none';
         $actualIframe->id = 'actual';
-        $this->doc->body->appendChild($actualIframe);
+        $this->getDocBody( $this->doc )->appendChild($actualIframe);
         $expectedIframe = $this->doc->createElement('iframe');
         $expectedIframe->style->display = 'none';
         $expectedIframe->id = 'expected';
-        $this->doc->body->appendChild($expectedIframe);
+        $this->getDocBody( $this->doc )->appendChild($expectedIframe);
         $referenceDoc = $this->doc->implementation->createHTMLDocument('');
         $referenceDoc->removeChild($referenceDoc->documentElement);
         $actualIframe->onload = function () use(&$expectedIframe, &$iStart, &$iStop, &$jStart, &$jStop, &$referenceDoc, &$actualIframe) {

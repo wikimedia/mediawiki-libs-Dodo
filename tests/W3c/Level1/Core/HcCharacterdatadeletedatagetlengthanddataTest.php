@@ -33,7 +33,7 @@ class HcCharacterdatadeletedatagetlengthanddataTest extends W3cTestHarness
         $child->deleteData(30, 5);
         $childData = $child->data;
         $this->assertEqualsData('data', '1230 North Ave. Dallas, Texas ', $childData);
-        $childLength = count($child);
+        $childLength = strlen($child);
         $this->assertEqualsData('length', 30, $childLength);
     }
 }

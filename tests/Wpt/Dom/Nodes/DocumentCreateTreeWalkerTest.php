@@ -14,32 +14,32 @@ class DocumentCreateTreeWalkerTest extends WptTestHarness
             });
         }, 'Required arguments to createTreeWalker should be required.');
         $this->assertTest(function () {
-            $tw = $this->doc->createTreeWalker($this->doc->body);
-            $this->assertEqualsData($tw->root, $this->doc->body);
-            $this->assertEqualsData($tw->currentNode, $this->doc->body);
+            $tw = $this->doc->createTreeWalker($this->getDocBody( $this->doc ));
+            $this->assertEqualsData($tw->root, $this->getDocBody( $this->doc ));
+            $this->assertEqualsData($tw->currentNode, $this->getDocBody( $this->doc ));
             $this->assertEqualsData($tw->whatToShow, 0xffffffff);
             $this->assertEqualsData($tw->filter, null);
         }, 'Optional arguments to createTreeWalker should be optional (1 passed).');
         $this->assertTest(function () {
-            $tw = $this->doc->createTreeWalker($this->doc->body, 42);
-            $this->assertEqualsData($tw->root, $this->doc->body);
-            $this->assertEqualsData($tw->currentNode, $this->doc->body);
+            $tw = $this->doc->createTreeWalker($this->getDocBody( $this->doc ), 42);
+            $this->assertEqualsData($tw->root, $this->getDocBody( $this->doc ));
+            $this->assertEqualsData($tw->currentNode, $this->getDocBody( $this->doc ));
             $this->assertEqualsData($tw->whatToShow, 42);
             $this->assertEqualsData($tw->filter, null);
         }, 'Optional arguments to createTreeWalker should be optional (2 passed).');
         $this->assertTest(function () {
-            $tw = $this->doc->createTreeWalker($this->doc->body, 42, null);
-            $this->assertEqualsData($tw->root, $this->doc->body);
-            $this->assertEqualsData($tw->currentNode, $this->doc->body);
+            $tw = $this->doc->createTreeWalker($this->getDocBody( $this->doc ), 42, null);
+            $this->assertEqualsData($tw->root, $this->getDocBody( $this->doc ));
+            $this->assertEqualsData($tw->currentNode, $this->getDocBody( $this->doc ));
             $this->assertEqualsData($tw->whatToShow, 42);
             $this->assertEqualsData($tw->filter, null);
         }, 'Optional arguments to createTreeWalker should be optional (3 passed, null).');
         $this->assertTest(function () {
             $fn = function () {
             };
-            $tw = $this->doc->createTreeWalker($this->doc->body, 42, $fn);
-            $this->assertEqualsData($tw->root, $this->doc->body);
-            $this->assertEqualsData($tw->currentNode, $this->doc->body);
+            $tw = $this->doc->createTreeWalker($this->getDocBody( $this->doc ), 42, $fn);
+            $this->assertEqualsData($tw->root, $this->getDocBody( $this->doc ));
+            $this->assertEqualsData($tw->currentNode, $this->getDocBody( $this->doc ));
             $this->assertEqualsData($tw->whatToShow, 42);
             $this->assertEqualsData($tw->filter, $fn);
         }, 'Optional arguments to createTreeWalker should be optional (3 passed, function).');

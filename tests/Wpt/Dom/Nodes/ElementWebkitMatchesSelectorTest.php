@@ -196,7 +196,7 @@ class ElementWebkitMatchesSelectorTest extends WptTestHarness
                 return $this->init($e, 'webkitMatchesSelector');
             });
             $frame->src = '/dom/nodes/ParentNode-querySelector-All-content.html#target';
-            $this->doc->body->appendChild($frame);
+            $this->getDocBody( $this->doc )->appendChild($frame);
         });
     }
 }

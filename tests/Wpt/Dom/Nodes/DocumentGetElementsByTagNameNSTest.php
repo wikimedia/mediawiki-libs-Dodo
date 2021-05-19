@@ -158,6 +158,6 @@ class DocumentGetElementsByTagNameNSTest extends WptTestHarness
     public function testDocumentGetElementsByTagNameNS()
     {
         $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-getElementsByTagNameNS.html');
-        $this->testGetElementsByTagNameNS($this->doc, $this->doc->body);
+        $this->testGetElementsByTagNameNS($this->doc, $this->getDocBody( $this->doc ));
     }
 }

@@ -30,7 +30,7 @@ class HcCharacterdatagetlengthTest extends W3cTestHarness
         $nameNode = $elementList->item(0);
         $child = $nameNode->firstChild;
         $childValue = $child->data;
-        $childLength = count($childValue);
+        $childLength = strlen($childValue);
         $this->assertEqualsData('characterdataGetLengthAssert', 15, $childLength);
     }
 }

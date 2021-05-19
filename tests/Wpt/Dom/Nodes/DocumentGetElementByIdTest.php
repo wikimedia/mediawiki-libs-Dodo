@@ -18,18 +18,18 @@ class DocumentGetElementByIdTest extends WptTestHarness
         $this->assertTest(function () {
             $element = $this->doc->createElement('div');
             $element->setAttribute('id', 'null');
-            $this->doc->body->appendChild($element);
+            $this->getDocBody( $this->doc )->appendChild($element);
             $this->{$this}->addCleanup(function () use(&$element) {
-                $this->doc->body->removeChild($element);
+                $this->getDocBody( $this->doc )->removeChild($element);
             });
             $this->assertEqualsData($this->doc->getElementById(null), $element);
         }, 'Calling document.getElementById with a null argument.');
         $this->assertTest(function () {
             $element = $this->doc->createElement('div');
             $element->setAttribute('id', NULL);
-            $this->doc->body->appendChild($element);
+            $this->getDocBody( $this->doc )->appendChild($element);
             $this->{$this}->addCleanup(function () use(&$element) {
-                $this->doc->body->removeChild($element);
+                $this->getDocBody( $this->doc )->removeChild($element);
             });
             $this->assertEqualsData($this->doc->getElementById(null), $element);
         }, 'Calling document.getElementById with an undefined argument.');
@@ -79,7 +79,7 @@ class DocumentGetElementByIdTest extends WptTestHarness
             $e = $this->doc->createElement('div');
             $e->setAttribute('id', $TEST_ID);
             $this->assertEqualsData($this->doc->getElementById($TEST_ID), null, 'should be null');
-            $this->doc->body->appendChild($e);
+            $this->getDocBody( $this->doc )->appendChild($e);
             $this->assertEqualsData($this->doc->getElementById($TEST_ID), $e, 'should be the appended element');
         }, 'Ensure that the id attribute only affects elements present in a document');
         $this->assertTest(function () use(&$gBody) {

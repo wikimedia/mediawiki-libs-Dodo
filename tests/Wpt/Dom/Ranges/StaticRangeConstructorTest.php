@@ -18,7 +18,7 @@ class StaticRangeConstructorTest extends WptTestHarness
         $testTextNode = $testDiv->firstChild;
         $testPINode = $this->doc->createProcessingInstruction('foo', 'abc');
         $testCommentNode = $this->doc->createComment('abc');
-        $this->doc->body->append($testPINode, $testCommentNode);
+        $this->getDocBody( $this->doc )->append($testPINode, $testCommentNode);
         $this->assertTest(function () use(&$testDiv) {
             $staticRange = new StaticRange(['startContainer' => $testDiv, 'startOffset' => 1, 'endContainer' => $testDiv, 'endOffset' => 2]);
             $this->assertEqualsData($staticRange->startContainer, $testDiv, 'valid startContainer');
@@ -104,10 +104,10 @@ class StaticRangeConstructorTest extends WptTestHarness
             $this->assertTrueData($staticRange->collapsed, 'collapsed');
         }, 'Construct collapsed static range');
         $this->assertTest(function () use(&$testDiv) {
-            $staticRange = new StaticRange(['startContainer' => $testDiv, 'startOffset' => 1, 'endContainer' => $this->doc->body, 'endOffset' => 0]);
+            $staticRange = new StaticRange(['startContainer' => $testDiv, 'startOffset' => 1, 'endContainer' => $this->getDocBody( $this->doc ), 'endOffset' => 0]);
             $this->assertEqualsData($staticRange->startContainer, $testDiv, 'valid startContainer');
             $this->assertEqualsData($staticRange->startOffset, 1, 'valid startOffset');
-            $this->assertEqualsData($staticRange->endContainer, $this->doc->body, 'valid endContainer');
+            $this->assertEqualsData($staticRange->endContainer, $this->getDocBody( $this->doc ), 'valid endContainer');
             $this->assertEqualsData($staticRange->endOffset, 0, 'valid endOffset');
             $this->assertFalseData($staticRange->collapsed, 'not collapsed');
         }, 'Construct inverted static range');

@@ -31,7 +31,7 @@ class HcCharacterdataappenddataTest extends W3cTestHarness
         $child = $nameNode->firstChild;
         $child->appendData(', Esquire');
         $childValue = $child->data;
-        $childLength = count($childValue);
+        $childLength = strlen($childValue);
         $this->assertEqualsData('characterdataAppendDataAssert', 24, $childLength);
     }
 }

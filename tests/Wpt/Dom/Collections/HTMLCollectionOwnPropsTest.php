@@ -11,7 +11,7 @@ class HTMLCollectionOwnPropsTest extends WptTestHarness
         if ($name) {
             $element->id = $name;
         }
-        $this->doc->body->appendChild($element);
+        $this->getDocBody( $this->doc )->appendChild($element);
         $t->{$this}->addCleanup(function () use(&$element) {
             $element->remove();
         });

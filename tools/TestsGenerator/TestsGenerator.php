@@ -79,7 +79,7 @@ class TestsGenerator extends Tasks {
 	 * - cleanup
 	 * - compact = generates all tests in one file
 	 */
-	public function build( array $opts = [ 'rewrite' => false,
+	public function build( array $opts = [ 'rewrite' => true,
 		'limit' => -1,
 		'phpcbf' => true,
 		'run' => false,
@@ -106,7 +106,7 @@ class TestsGenerator extends Tasks {
 			}
 
 			foreach ( $result->getData() as $test_type => $tests ) {
-				if ( $test_type === 'time' || $test_type === 'W3c' ) {
+				if ( $test_type === 'time' ) {
 					continue;
 				}
 

@@ -67,9 +67,9 @@ class DocumentCreateElementNamespaceTest extends WptTestHarness
                     $iframe->src = 'Document-createElement-namespace-tests/' . $testName . '.' . $ext;
                     $iframe->onload = $t->step_func_done(function () use(&$iframe, &$testExtensions, &$ext) {
                         $this->testDoc($iframe->getOwnerDocument(), $testExtensions[$ext]);
-                        $this->doc->body->removeChild($iframe);
+                        $this->getDocBody( $this->doc )->removeChild($iframe);
                     });
-                    $this->doc->body->appendChild($iframe);
+                    $this->getDocBody( $this->doc )->appendChild($iframe);
                 }, "Created element's namespace in " . $testName . '.' . $ext);
             }
         }

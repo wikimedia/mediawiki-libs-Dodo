@@ -334,10 +334,10 @@ class RangeCloneContentsTest extends WptTestHarness
         $testDiv->parentNode->removeChild($testDiv);
         $actualIframe = $this->doc->createElement('iframe');
         $actualIframe->style->display = 'none';
-        $this->doc->body->appendChild($actualIframe);
+        $this->getDocBody( $this->doc )->appendChild($actualIframe);
         $expectedIframe = $this->doc->createElement('iframe');
         $expectedIframe->style->display = 'none';
-        $this->doc->body->appendChild($expectedIframe);
+        $this->getDocBody( $this->doc )->appendChild($expectedIframe);
         // First test a Range that has the no-op detach() called on it, synchronously
         $this->assertTest(function () {
             $range = $this->doc->createRange();

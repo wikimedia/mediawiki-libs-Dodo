@@ -11,7 +11,7 @@ class DOMImplementationCreateHTMLDocumentWithSavedImplementationTest extends Wpt
         // Test the document location getter is null outside of browser context
         $this->assertTest(function () {
             $iframe = $this->doc->createElement('iframe');
-            $this->doc->body->appendChild($iframe);
+            $this->getDocBody( $this->doc )->appendChild($iframe);
             $implementation = $iframe->getOwnerDocument()->implementation;
             $iframe->remove();
             $this->assertNotEqualsData($implementation->createHTMLDocument(), null);
