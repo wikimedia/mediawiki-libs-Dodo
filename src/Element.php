@@ -93,8 +93,8 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return ?callable(Element,?string,?string):void
 	 */
 	public static function _attributeChangeHandlerFor( string $localName ) {
-		if ( static::$_attributeChangeHandlers === null ) {
-			static::$_attributeChangeHandlers = [
+		if ( self::$_attributeChangeHandlers === null ) {
+			self::$_attributeChangeHandlers = [
 				"id" => static function ( $elem, $old, $new ) {
 					if ( !$elem->getIsConnected() ) {
 						return;
@@ -113,7 +113,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 				},
 			];
 		}
-		return static::$_attributeChangeHandlers[$localName] ?? null;
+		return self::$_attributeChangeHandlers[$localName] ?? null;
 	}
 
 	/**
@@ -709,7 +709,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagName( string $lname ) : HTMLCollection {
-		return static::_getElementsByTagName( $this, $lname );
+		return self::_getElementsByTagName( $this, $lname );
 	}
 
 	/**
@@ -727,9 +727,9 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 				return true;
 			};
 		} elseif ( $root->_nodeDocument->_isHTMLDocument() ) {
-			$filter = static::_htmlLocalNameElementFilter( $lname );
+			$filter = self::_htmlLocalNameElementFilter( $lname );
 		} else {
-			$filter = static::_localNameElementFilter( $lname );
+			$filter = self::_localNameElementFilter( $lname );
 		}
 
 		return new FilteredElementList( $root, $filter );
@@ -750,7 +750,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 
 		return new FilteredElementList(
 			$this,
-			static::_classNamesElementFilter( $names )
+			self::_classNamesElementFilter( $names )
 		);
 	}
 
@@ -764,7 +764,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	private static function _htmlLocalNameElementFilter( string $lname ) : callable {
 		$lclname = Util::toAsciiLowercase( $lname );
 		if ( $lclname === $lname ) {
-			return static::_localNameElementFilter( $lname );
+			return self::_localNameElementFilter( $lname );
 		}
 
 		return static function ( $el ) use ( $lname, $lclname ) {
@@ -790,7 +790,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagNameNS( ?string $ns, string $lname ) : HTMLCollection {
-		return static::_getElementsByTagNameNS( $this, $ns, $lname );
+		return self::_getElementsByTagNameNS( $this, $ns, $lname );
 	}
 
 	/**
@@ -809,11 +809,11 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 				return true;
 			};
 		} elseif ( $ns === '*' ) {
-			$filter = static::_localNameElementFilter( $lname );
+			$filter = self::_localNameElementFilter( $lname );
 		} elseif ( $lname === '*' ) {
-			$filter = static::_namespaceElementFilter( $ns );
+			$filter = self::_namespaceElementFilter( $ns );
 		} else {
-			$filter = static::_namespaceLocalNameElementFilter( $ns, $lname );
+			$filter = self::_namespaceLocalNameElementFilter( $ns, $lname );
 		}
 
 		return new FilteredElementList( $root, $filter );

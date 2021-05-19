@@ -40,7 +40,7 @@ class HTMLElement extends Element implements \Wikimedia\IDLeDOM\HTMLElement {
 	 * @return HTMLElement
 	 */
 	public static function _createElement( Document $doc, string $lname, ?string $prefix = null ) {
-		$className = static::_lookupClass( $lname );
+		$className = self::_lookupClass( $lname );
 		return new $className( $doc, $lname, $prefix );
 	}
 
