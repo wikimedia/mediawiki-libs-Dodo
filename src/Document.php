@@ -1,12 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanUndeclaredMethod
-// @phan-file-suppress PhanUndeclaredProperty
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
 
 namespace Wikimedia\Dodo;
 
@@ -110,7 +104,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 	private $_mode = 'no-quirks';
 
-	/*
+	/**
 	 * DEVELOPERS NOTE:
 	 * Used to assign the document index to Nodes on ADOPTION.
 	 * @var int
@@ -165,15 +159,17 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * whenever there is mutation to the children of the Document.
 	 */
 
-	/*
+	/**
 	 * Reference to the first DocumentType child, in document order.
 	 * Null if no such child exists.
+	 * @var ?DocumentType
 	 */
 	public $_doctype = null;
 
-	/*
+	/**
 	 * Reference to the first Element child, in document order.
 	 * Null if no such child exists.
+	 * @var ?Element
 	 */
 	public $_documentElement = null;
 
@@ -194,8 +190,14 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		}
 	}
 
-	/* TODO: These three amigos. */
+	/**
+	 * @var DOMImplementation The DOMImplementation associated with this Document
+	 */
 	public $_implementation;
+
+	/**
+	 * @var string
+	 */
 	public $_readyState;
 
 	/**
@@ -246,7 +248,12 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		$this->_index_to_element[1] = $this;
 	}
 
-	/* USED EXCLUSIVELY IN htmlelts.js to make <TEMPLATE> */
+	/**
+	 * The children of a <template> element aren't part of the element's
+	 * node document; instead they are children of an "associated inert
+	 * template document".  This creates that "inert template document".
+	 * @return Document
+	 */
 	public function _templateDoc() {
 		if ( !$this->_templateDocCache ) {
 			/* "associated inert template document" */
@@ -452,11 +459,16 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		return $this->_createElementNS( $lname, $ns, $prefix );
 	}
 
-	/*
-	 * This is used directly by HTML parser, which allows it to create
-	 * elements with localNames containing ':' and non-default namespaces
+	/**
+	 * This function is used directly by HTML parser, which allows it
+	 * to create elements with localNames containing ':' and
+	 * non-default namespaces.
+	 * @param string $lname
+	 * @param ?string $ns
+	 * @param ?string $prefix
+	 * @return Element
 	 */
-	public function _createElementNS( $lname, $ns, $prefix ) {
+	public function _createElementNS( string $lname, ?string $ns, ?string $prefix ) : Element {
 		// https://dom.spec.whatwg.org/#concept-element-interface
 		// "The element interface for any name and namespace is Element,
 		// unless stated otherwise."
@@ -540,6 +552,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @inheritDoc
 	 */
 	public function adoptNode( $node ) {
+		'@phan-var Node $node'; // @var Node $node
 		if ( $node->getNodeType() === Node::DOCUMENT_NODE ) {
 			// A Document cannot adopt another Document. Throw a "NotSupported" exception.
 			Util::error( "NotSupported" );
@@ -888,7 +901,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			$handler( [
 				"type" => Mutate::VALUE,
 				"target" => $node,
-				"data" => $node->getData(),
+				"data" => $node->getNodeValue(),
 			] );
 		}
 	}
