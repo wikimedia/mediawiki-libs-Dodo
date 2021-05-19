@@ -1,16 +1,13 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 
 namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
-/******************************************************************************
- * DocumentType.php
- * ----------------
+/**
+ * DocumentType
  */
 class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 	// DOM mixins
