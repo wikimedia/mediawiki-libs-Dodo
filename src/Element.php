@@ -177,6 +177,12 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @inheritDoc
 	 */
 	final public function getNodeName() : string {
+		// NOTE that if you're tempted to cache this, keep in mind that
+		// $this->_isHTMLElement() below *can change* when this node is
+		// adopted into a different document (one document can be an
+		// "HTML document" and the other not) which would change the
+		// case of the value returned here.  You will need to add code
+		// to _resetNodeDocument() to invalidate your cache.
 		$prefix = $this->getPrefix();
 		$lname = $this->getLocalName();
 		/*

@@ -720,17 +720,15 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * @param Document $doc
 	 */
-	public function __set_owner( Document $doc ) {
+	public function _resetNodeDocument( Document $doc ) {
 		$this->_nodeDocument = $doc;
 
-		/* FIXME: Wat ? */
-		if ( method_exists( $this, "tagName" ) ) {
-			/* Element subclasses might need to change case */
-			$this->tagName = null;
-		}
+		// NOTE that the value returned by ::getNodeName() and ::getTagName()
+		// can change after this node is adopted into a new document.  If
+		// we'd cached those values we'd need to invalidate that cache here.
 
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-			$n->__set_owner( $doc );
+			$n->_resetNodeDocument( $doc );
 		}
 	}
 

@@ -571,7 +571,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			 *
 			 * (The recursion skips the above checks because they don't make sense.)
 			 */
-			$node->__set_owner( $this );
+			$node->_resetNodeDocument( $this );
 		}
 
 		/* DOM-LS requires this return $node */
