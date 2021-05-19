@@ -101,8 +101,8 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$second_p_tag = $p_tags->item( 1 );
 		$this->assertNull( $second_p_tag );
 
-		/* Test getElementsByTagNameNs  */
-		$p_tags_ns = $doc->getElementsByTagNameNs( '*', 'p' );
+		/* Test getElementsByTagNameNS  */
+		$p_tags_ns = $doc->getElementsByTagNameNS( '*', 'p' );
 		$this->assertNotNull( $p_tags_ns );
 		$this->assertInstanceOf( HTMLCollection::class, $p_tags_ns );
 		$this->assertSame( 1, $p_tags_ns->length );
