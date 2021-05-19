@@ -90,11 +90,12 @@
 		"cover": "phpunit --coverage-html coverage",
 		"fix": [
 			"minus-x fix .",
-			"phpcbf"
+			"@phpcbf"
 		],
 		"phan": "phan --allow-polyfill-parser",
 		"phpcs": "phpcs -sp",
 		"phpunit": "phpunit",
+		"phpcbf": "phpcbf",
 		"update-tests": "@robo build",
 		"update-tags": [
 			"php -r \"copy('https://doc.wikimedia.org/mediawiki-libs-IDLeDOM/main/tagfile.xml', 'tags/idledom.xml');\""
