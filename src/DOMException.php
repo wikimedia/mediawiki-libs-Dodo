@@ -2,16 +2,6 @@
 
 declare( strict_types = 1 );
 // phpcs:disable Generic.Files.LineLength.TooLong
-// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
-// phpcs:disable MediaWiki.Commenting.FunctionComment.SpacingAfter
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
-// phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
-// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 
 namespace Wikimedia\Dodo;
 
@@ -23,9 +13,9 @@ namespace Wikimedia\Dodo;
  */
 class DOMException extends \Exception implements \Wikimedia\IDLeDOM\DOMException {
 
-	const ERR_CODE_DOES_NOT_EXIST = 0;	/* [Dodo] Errors without Legacy code */
+	private const ERR_CODE_DOES_NOT_EXIST = 0;	/* [Dodo] Errors without Legacy code */
 
-	const ERROR_NAME_TO_CODE = [
+	private const ERROR_NAME_TO_CODE = [
 		'IndexSizeError' => self::INDEX_SIZE_ERR,
 		'HierarchyRequestError' => self::HIERARCHY_REQUEST_ERR,
 		'WrongDocumentError' => self::WRONG_DOCUMENT_ERR,
@@ -58,7 +48,7 @@ class DOMException extends \Exception implements \Wikimedia\IDLeDOM\DOMException
 		'OperationError' => self::ERR_CODE_DOES_NOT_EXIST
 	];
 
-	const ERROR_NAME_TO_MESSAGE = [
+	private const ERROR_NAME_TO_MESSAGE = [
 		'IndexSizeError' => 'INDEX_SIZE_ERR (1): the index is not in the allowed range',
 		'HierarchyRequestError' => 'HIERARCHY_REQUEST_ERR (3): the operation would yield an incorrect nodes model',
 		'WrongDocumentError' => 'WRONG_DOCUMENT_ERR (4): the object is in the wrong Document, a call to importNode is required',
@@ -91,13 +81,19 @@ class DOMException extends \Exception implements \Wikimedia\IDLeDOM\DOMException
 		'OperationError' => 'The operation failed for an operation-specific reason.'
 	];
 
+	/**
+	 * The name of the DOMException.
+	 * @var string
+	 */
 	private $_name;
 
-	/*
-	* [WEB-IDL-1] This is the actual constructor prototype.
-	* I think the invocation is ridiculous, so we wrap it
-	* in an error() function (see utilities.php).
-	*/
+	/**
+	 * [WEB-IDL-1] This is the actual constructor prototype.
+	 * I think the invocation is ridiculous, so we wrap it
+	 * in an error() function (see Util.php).
+	 * @param ?string $message
+	 * @param ?string $name
+	 */
 	public function __construct( ?string $message = null, ?string $name = null ) {
 		$this->_name = $name ?? "Error";
 		$err_msg  = self::ERROR_NAME_TO_MESSAGE[$this->_name] ?? "";
@@ -106,10 +102,15 @@ class DOMException extends \Exception implements \Wikimedia\IDLeDOM\DOMException
 		parent::__construct( $message ?? $err_msg, $err_code );
 	}
 
+	/** @inheritDoc */
 	public function getName(): string {
 		return $this->_name;
 	}
 
+	/**
+	 * Human-readable represetation of this exception.
+	 * @return string
+	 */
 	public function __toString(): string {
 		return __CLASS__ . ': [' . $this->_name . '] ' . $this->getMessage();
 	}
