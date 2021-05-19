@@ -5,9 +5,7 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanTypeMismatchReturnNullable
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
-// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.MethodDoubleUnderscore
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
-// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
@@ -186,7 +184,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * Called when a child is inserted or removed from the document.
 	 * Keeps the above references live.
 	 */
-	private function __rereference_doctype_and_documentElement(): void {
+	private function _updateDoctypeAndDocumentElement(): void {
 		$this->_doctype = null;
 		$this->_documentElement = null;
 
@@ -603,7 +601,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 	public function insertBefore( $node, $refChild ) {
 		$ret = parent::insertBefore( $node, $refChild );
-		$this->__rereference_doctype_and_documentElement();
+		$this->_updateDoctypeAndDocumentElement();
 		return $ret;
 	}
 
@@ -612,7 +610,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 	public function replaceChild( $node, $child ) : Node {
 		$ret = parent::replaceChild( $node, $child );
-		$this->__rereference_doctype_and_documentElement();
+		$this->_updateDoctypeAndDocumentElement();
 		return $ret;
 	}
 
@@ -621,7 +619,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 	public function removeChild( $child ) : Node {
 		$ret = parent::removeChild( $child );
-		$this->__rereference_doctype_and_documentElement();
+		$this->_updateDoctypeAndDocumentElement();
 		return $ret;
 	}
 
@@ -646,7 +644,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 
 		if ( $deep === false ) {
 			/* Return shallow clone */
-			$clone->__rereference_doctype_and_documentElement();
+			$clone->_updateDoctypeAndDocumentElement();
 			return $clone;
 		}
 
@@ -655,7 +653,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			$clone->appendChild( $clone->importNode( $n, true ) );
 		}
 
-		$clone->__rereference_doctype_and_documentElement();
+		$clone->_updateDoctypeAndDocumentElement();
 		return $clone;
 	}
 
