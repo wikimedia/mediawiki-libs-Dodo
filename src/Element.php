@@ -38,6 +38,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 
 	// Stub out methods not yet implemented.
 	use \Wikimedia\IDLeDOM\Stub\Element;
+	use \Wikimedia\IDLeDOM\Stub\InnerHTML;
 	use UnimplementedTrait;
 
 	// Helper functions from IDLeDOM
