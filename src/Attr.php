@@ -311,7 +311,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 		?Element $elem, ?string $oldValue, ?string $newValue,
 		bool $rootChange = false
 	) {
-		if ( $elem === null || !( $elem->_isRooted() ) ) {
+		if ( $elem === null || !( $elem->getIsConnected() ) ) {
 			return;
 		}
 		// Some of these mutation steps don't trigger when the only change

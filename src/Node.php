@@ -809,7 +809,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * TODO: This should be Node::isConnected(), see spec.
 	 */
-	public function _isRooted(): bool {
+	public function getIsConnected(): bool {
 		return $this->_documentIndex !== null;
 	}
 
@@ -933,7 +933,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * Node::removeChild(), since it calls Node::_modify() once.
 	 */
 	public function _removeChildren() {
-		if ( $this->_isRooted() ) {
+		if ( $this->getIsConnected() ) {
 			$root = $this->_ownerDocument;
 		} else {
 			$root = null;

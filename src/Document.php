@@ -553,9 +553,9 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			 * If the Node is currently inserted in some Document, remove it.
 			 *
 			 * TODO:
-			 * Why is this not using $node->_isRooted()?
+			 * Why is this not using $node->getIsConnected()?
 			 * Is this diagnostic for rooted-ness? Why
-			 * doesn't _isRooted() just do this?
+			 * doesn't getIsConnected() just do this?
 			 */
 			$node->getParentNode()->removeChild( $node );
 		}

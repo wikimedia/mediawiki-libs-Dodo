@@ -170,7 +170,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 			 * with its document,
 			 * if it has one.
 			 */
-			if ( $this->_isRooted() ) {
+			if ( $this->getIsConnected() ) {
 				$doc->_mutateRemove( $this );
 			}
 		}

@@ -106,7 +106,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		if ( static::$_attributeChangeHandlers === null ) {
 			static::$_attributeChangeHandlers = [
 				"id" => static function ( $elem, $old, $new ) {
-					if ( !$elem->_isRooted() ) {
+					if ( !$elem->getIsConnected() ) {
 						return;
 					}
 					if ( $old !== null ) {

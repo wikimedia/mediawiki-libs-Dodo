@@ -96,7 +96,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 */
 	public function appendData( string $data ) : void {
 		$this->_data .= strval( $data );
-		if ( $this->_isRooted() ) {
+		if ( $this->getIsConnected() ) {
 			$this->getOwnerDocument()->_mutateValue( $this );
 		}
 	}
@@ -161,7 +161,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 		$suffix = substr( $curtext, $offset + $count );
 
 		$this->_data = $prefix . $data . $suffix;
-		if ( $this->_isRooted() ) {
+		if ( $this->getIsConnected() ) {
 			$this->getOwnerDocument()->_mutateValue( $this );
 		}
 	}

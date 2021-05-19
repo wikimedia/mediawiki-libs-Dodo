@@ -82,7 +82,7 @@ class WhatWG {
 		}
 
 		/* #6 */
-		if ( $node1 === null || $node2 === null || $node1->_nodeDocument() !== $node2->_nodeDocument() || $node1->_isRooted() !== $node2->_isRooted() ) {
+		if ( $node1 === null || $node2 === null || $node1->_nodeDocument() !== $node2->_nodeDocument() || $node1->getIsConnected() !== $node2->getIsConnected() ) {
 			/* UHH, in the spec this is supposed to add DOCUMENT_POSITION_PRECEDING or DOCUMENT_POSITION_FOLLOWING
 			 * in some consistent way, usually based on pointer comparison, which we can't do here. Hmm. Domino
 			 * just straight up omits it. This is stupid, the spec shouldn't ask this. */
@@ -265,7 +265,7 @@ class WhatWG {
 
 		/******************* PRE-FLIGHT CHECKS */
 
-		if ( $child instanceof DocumentFragment && $child->_isRooted() ) {
+		if ( $child instanceof DocumentFragment && $child->getIsConnected() ) {
 			Util::error( "HierarchyRequestError" );
 		}
 
@@ -298,7 +298,7 @@ class WhatWG {
 
 		if ( $replace ) {
 			Util::assert( $before !== null );
-			if ( $before->_isRooted() ) {
+			if ( $before->getIsConnected() ) {
 				$before->_nodeDocument()->_mutateRemove( $before );
 			}
 			$before->_parentNode = null;
@@ -310,7 +310,7 @@ class WhatWG {
 		// If both the child and the parent are rooted, then we want to
 		// transplant the child without uprooting and rerooting it.
 
-		$bothWereRooted = $child->_isRooted() && $parent->_isRooted();
+		$bothWereRooted = $child->getIsConnected() && $parent->getIsConnected();
 		if ( $child instanceof DocumentFragment ) {
 			$insert = [];
 			for ( $n = $child->getFirstChild(); $n !== null; $n = $next ) {
@@ -360,7 +360,7 @@ class WhatWG {
 			// liveness guarantee requires us to clone the array so that
 			// references to the childNodes of the DocumentFragment will be empty
 			// when the insertion handlers are called.
-			if ( $parent->_isRooted() ) {
+			if ( $parent->getIsConnected() ) {
 				$parent->_modify();
 				foreach ( $insert as $i => $ni ) {
 					$parent->_nodeDocument()->mutateInsert( $ni );
@@ -405,7 +405,7 @@ class WhatWG {
 				$parent->_modify();
 				// Generate a move mutation event
 				$parent->_nodeDocument()->_mutateMove( $child );
-			} elseif ( $parent->_isRooted() ) {
+			} elseif ( $parent->getIsConnected() ) {
 				$parent->_modify();
 				// Generate an insertion mutation event
 				$parent->_nodeDocument()->_mutateInsert( $child );
@@ -443,7 +443,7 @@ class WhatWG {
 		if ( $node === $parent ) {
 			Util::error( "HierarchyRequestError" );
 		}
-		if ( $node->_nodeDocument() === $parent->_nodeDocument() && $node->_isRooted() === $parent->_isRooted() ) {
+		if ( $node->_nodeDocument() === $parent->_nodeDocument() && $node->getIsConnected() === $parent->getIsConnected() ) {
 			/*
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
@@ -629,7 +629,7 @@ class WhatWG {
 		if ( $node === $parent ) {
 			Util::error( "HierarchyRequestError" );
 		}
-		if ( $node->_nodeDocument() === $parent->_nodeDocument() && $node->_isRooted() === $parent->_isRooted() ) {
+		if ( $node->_nodeDocument() === $parent->_nodeDocument() && $node->getIsConnected() === $parent->getIsConnected() ) {
 			/*
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
