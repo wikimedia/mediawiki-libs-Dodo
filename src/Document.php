@@ -1,11 +1,8 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanParamSignatureMismatch
-// @phan-file-suppress PhanTypeMismatchReturnNullable
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
-// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 // phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
@@ -636,11 +633,13 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 *    document.
 	 * 3. We also need to call _updateDocTypeElement()
 	 *
-	 * @inheritDoc
+	 * @param bool $deep if true, clone entire document
+	 * @return Document
 	 */
-	public function cloneNode( bool $deep = false ) {
+	public function cloneNode( bool $deep = false ) : Node {
 		/* Make a shallow clone  */
 		$clone = parent::cloneNode( false );
+		'@phan-var Document $clone'; // @var Document $clone
 
 		if ( $deep === false ) {
 			/* Return shallow clone */
@@ -726,7 +725,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 *
 	 * @return Document with same invocation as $this
 	 */
-	protected function _subclass_cloneNodeShallow(): Node {
+	protected function _subclassCloneNodeShallow(): Node {
 		$shallow = new Document(
 			$this,
 			$this->_typeIsHtml ? 'html' : 'xml',
@@ -750,7 +749,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @param Node|null $other to compare
 	 * @return bool True (two Documents are always equal)
 	 */
-	protected function _subclass_isEqualNode( Node $other = null ): bool {
+	protected function _subclassIsEqualNode( Node $other = null ): bool {
 		return true;
 	}
 

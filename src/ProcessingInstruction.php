@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 
 namespace Wikimedia\Dodo;
 
@@ -52,9 +51,9 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	/**
 	 * Delegated methods from Node
 	 *
-	 * @return ?Node always ProcessingInstruction
+	 * @return ProcessingInstruction
 	 */
-	public function _subclass_cloneNodeShallow(): ?Node {
+	protected function _subclassCloneNodeShallow(): Node {
 		return new ProcessingInstruction( $this->_nodeDocument, $this->_target, $this->_data );
 	}
 
@@ -62,7 +61,7 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	 * @param Node $node
 	 * @return bool
 	 */
-	public function _subclass_isEqualNode( Node $node ): bool {
+	protected function _subclassIsEqualNode( Node $node ): bool {
 		return ( $this->_target === $node->_target && $this->_data === $node->_data );
 	}
 }

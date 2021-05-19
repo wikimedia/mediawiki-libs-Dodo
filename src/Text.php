@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 
 namespace Wikimedia\Dodo;
 
@@ -50,14 +49,14 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	 * @param Node $node
 	 * @return bool
 	 */
-	public function _subclass_isEqualNode( Node $node ): bool {
+	protected function _subclassIsEqualNode( Node $node ): bool {
 		return ( $this->_data === $node->_data );
 	}
 
 	/**
-	 * @return ?Node always Text
+	 * @return Text
 	 */
-	public function _subclass_cloneNodeShallow(): ?Node {
+	protected function _subclassCloneNodeShallow(): Node {
 		return new Text( $this->_nodeDocument, $this->_data );
 	}
 

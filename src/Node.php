@@ -46,13 +46,13 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @param Node $node
 	 * @return bool
 	 */
-	abstract protected function _subclass_isEqualNode( Node $node ): bool;
+	abstract protected function _subclassIsEqualNode( Node $node ): bool;
 
 	/**
 	 * Delegated subclass method called by Node::cloneNode()
-	 * @return ?Node
+	 * @return Node
 	 */
-	abstract protected function _subclass_cloneNodeShallow(): ?Node;
+	abstract protected function _subclassCloneNodeShallow(): Node;
 
 	/**********************************************************************
 	 * Properties that appear in DOM-LS
@@ -592,7 +592,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * NOTE:
 	 * Each subclass of Node has its own criteria for equality.
 	 * Rather than extend   Node::isEqualNode(),  subclasses
-	 * must implement   _subclass_isEqualNode(),  which is called
+	 * must implement   _subclassIsEqualNode(),  which is called
 	 * from   Node::isEqualNode()  and handles all of the equality
 	 * testing specific to the subclass.
 	 *
@@ -613,7 +613,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			return false;
 		}
 
-		if ( !$this->_subclass_isEqualNode( $node ) ) {
+		if ( !$this->_subclassIsEqualNode( $node ) ) {
 			/* Run subclass-specific equality comparison */
 			return false;
 		}
@@ -645,7 +645,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *    document until it is added using ::appendChild() or similar.
 	 * 3. Initially (DOM4)   , $deep was optional with default of 'true'.
 	 *    Currently (DOM4-LS), $deep is optional with default of 'false'.
-	 * 4. Shallow cloning is delegated to   _subclass_cloneNodeShallow(),
+	 * 4. Shallow cloning is delegated to   _subclassCloneNodeShallow(),
 	 *    which needs to be implemented by the subclass.
 	 *    For a similar pattern, see Node::isEqualNode().
 	 * 5. All "deep clones" are a shallow clone followed by recursion on
@@ -653,11 +653,11 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *    behavior.
 	 *
 	 * @param bool $deep if true, clone entire subtree
-	 * @return ?Node (clone of $this)
+	 * @return Node (clone of $this)
 	 */
-	public function cloneNode( bool $deep = false ) {
+	public function cloneNode( bool $deep = false ) : Node {
 		/* Make a shallow clone using the delegated method */
-		$clone = $this->_subclass_cloneNodeShallow();
+		$clone = $this->_subclassCloneNodeShallow();
 
 		/* If the shallow clone is all we wanted, we're done. */
 		if ( $deep === false ) {

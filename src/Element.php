@@ -8,7 +8,6 @@ declare( strict_types = 1 );
 // @phan-file-suppress PhanUndeclaredClassMethod
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredVariable
-// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
@@ -240,11 +239,12 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		}
 	}
 
-	/**********************************************************************
+	/*
 	 * METHODS DELEGATED FROM NODE
 	 */
 
-	public function _subclass_cloneNodeShallow(): ?Node {
+	/** @return Element */
+	protected function _subclassCloneNodeShallow(): Node {
 		/*
 		 * XXX:
 		 * Modify this to use the constructor directly or avoid
@@ -279,7 +279,8 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		return $clone;
 	}
 
-	public function _subclass_isEqualNode( Node $node ): bool {
+	/** @inheritDoc */
+	protected function _subclassIsEqualNode( Node $node ): bool {
 		if ( $this->getLocalName() !== $node->getLocalName()
 			 || $this->getNamespaceURI() !== $node->getNamespaceURI()
 			 || $this->getPrefix() !== $node->getPrefix()

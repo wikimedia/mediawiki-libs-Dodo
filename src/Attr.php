@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 
 namespace Wikimedia\Dodo;
 
@@ -361,9 +360,9 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	/**
 	 * Delegated from Node
 	 *
-	 * @return ?Node always Attr
+	 * @return Attr
 	 */
-	protected function _subclass_cloneNodeShallow(): ?Node {
+	protected function _subclassCloneNodeShallow(): Node {
 		return new Attr(
 			$this->_nodeDocument,
 			null,
@@ -380,7 +379,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	 * @param Node $node
 	 * @return bool
 	 */
-	protected function _subclass_isEqualNode( Node $node ): bool {
+	protected function _subclassIsEqualNode( Node $node ): bool {
 		'@phan-var Attr $node';
 		/** @var Attr $node */
 		return (

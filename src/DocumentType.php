@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 
@@ -87,11 +86,14 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 	}
 
 	/* Methods delegated in Node */
-	public function _subclass_cloneNodeShallow(): ?Node {
+
+	/** @return DocumentType */
+	protected function _subclassCloneNodeShallow(): Node {
 		return new DocumentType( $this->_nodeDocument, $this->_name, $this->_publicId, $this->_systemId );
 	}
 
-	public function _subclass_isEqualNode( Node $node ): bool {
+	/** @inheritDoc */
+	protected function _subclassIsEqualNode( Node $node ): bool {
 		'@phan-var DocumentType $node'; /** @var DocumentType $node */
 		return (
 			$this->_name === $node->_name &&

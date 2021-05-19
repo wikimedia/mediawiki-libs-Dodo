@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
 
 namespace Wikimedia\Dodo;
 
@@ -37,13 +36,13 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 		return "#comment";
 	}
 
-	/** @inheritDoc */
-	public function _subclass_cloneNodeShallow(): ?Node {
+	/** @return Comment */
+	protected function _subclassCloneNodeShallow(): Node {
 		return new Comment( $this->_nodeDocument, $this->_data );
 	}
 
 	/** @inheritDoc */
-	public function _subclass_isEqualNode( Node $node ): bool {
+	protected function _subclassIsEqualNode( Node $node ): bool {
 		'@phan-var Comment $node'; /** @var Comment $node */
 		return ( $this->_data === $node->_data );
 	}
