@@ -143,7 +143,8 @@ class LocatorTask extends BaseTask {
 			'Range-test-iframe', // Гses onload event to run test, no sence to convert
 			'DOMImplementation-createHTMLDocument-with-null-browsing-context-crash', // Pointless, tests browser
 			// context crash
-			'DOMImplementation-createDocument-with-null-browsing-context-crash' // Same as previous
+			'DOMImplementation-createDocument-with-null-browsing-context-crash', // Same as previous
+			'ParentNode-querySelector-All', // Not applicable
 		];
 
 		array_walk( $skips,

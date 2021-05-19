@@ -12,6 +12,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
+use Wikimedia\Dodo\HTMLElement;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Tests\Wpt\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Wpt\Harness\Utils\Selectors;
@@ -1118,11 +1119,11 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
-	 * Returns the <body> or <frameset> node of the current document, or null if no such element
-	 * exists.
+	 * @param Document $doc
+	 *
+	 * @return \Wikimedia\Dodo\HTMLElement
 	 */
-	private function getDocBody( $doc ) {
-		// Stub
-		return $doc;
+	private function getDocBody( Document $doc ) : HTMLElement {
+		return $doc->getBody();
 	}
 }
