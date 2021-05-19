@@ -1,14 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanParamTooFew
-// @phan-file-suppress PhanTypeMismatchArgumentReal
-// @phan-file-suppress PhanTypeMissingReturn
-// @phan-file-suppress PhanUndeclaredClassMethod
-// @phan-file-suppress PhanUndeclaredVariable
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
 
 namespace Wikimedia\Dodo;
 
@@ -30,6 +22,7 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\DocumentFragment;
 
+	/** @inheritDoc */
 	public function __construct( Document $nodeDocument ) {
 		parent::__construct( $nodeDocument );
 	}
@@ -50,45 +43,21 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 
 	/** @inheritDoc */
 	public function getTextContent() : ?string {
+		// See Element::getTextContent()
 		$text = [];
-		Algorithm::descendant_text_content( $this, $text );
+		WhatWG::descendantTextContent( $this, $text );
 		return implode( "", $text );
 	}
 
 	/** @inheritDoc */
 	public function setTextContent( ?string $value ) : void {
+		// See Element::setTextContent()
 		$value = $value ?? '';
 		$this->_removeChildren();
 		if ( $value !== "" ) {
 			/* Equivalent to Node:: appendChild without checks! */
-			WhatWG::insert_before_or_replace( $node, $this->_nodeDocument->createTextNode( $value ), null );
+			WhatWG::insert_before_or_replace( $this->_nodeDocument->createTextNode( $value ), $this, null, false );
 		}
-	}
-
-	public function querySelector( $selector ) {
-		// implement in terms of querySelectorAll
-		/* TODO stub */
-		$nodes = $this->querySelectorAll( $selector );
-		return count( $nodes ) ? $nodes[0] : null;
-	}
-
-	public function querySelectorAll( $selector ) {
-		/* TODO: Stub */
-		//// create a context
-		//var context = Object.create(this);
-		//// add some methods to the context for zest implementation, without
-		//// adding them to the public DocumentFragment API
-		//context.isHTML = true; // in HTML namespace (case-insensitive match)
-		//context.getElementsByTagName = Element.prototype.getElementsByTagName;
-		//context.nextElement =
-		//Object.getOwnPropertyDescriptor(Element.prototype, 'firstElementChild').get;
-		//// invoke zest
-		//var nodes = select(selector, context);
-		//return nodes.item ? nodes : new NodeList(nodes);
-	}
-
-	public function getElementsByTagName( $tag ) {
-		/* TODO: Stub */
 	}
 
 	/** @return DocumentFragment */
@@ -104,11 +73,14 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	}
 
 	// Non-standard, but useful (github issue #73)
-	public function innerHTML() {
+
+	/** @return string the inner HTML of this DocumentFragment */
+	public function getInnerHTML() : string {
 		return $this->_node_serialize();
 	}
 
-	public function outerHTML( ?string $value = null ) {
+	/** @return string the outer HTML of this DocumentFragment */
+	public function getOuterHTML(): string {
 		return $this->_node_serialize();
 	}
 }

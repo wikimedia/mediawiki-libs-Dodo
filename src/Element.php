@@ -2,12 +2,8 @@
 
 declare( strict_types = 1 );
 // @phan-file-suppress PhanParamSignatureMismatch
-// @phan-file-suppress PhanParamTooFew
 // @phan-file-suppress PhanTypeMismatchArgument
-// @phan-file-suppress PhanTypeMismatchArgumentReal
-// @phan-file-suppress PhanUndeclaredClassMethod
 // @phan-file-suppress PhanUndeclaredMethod
-// @phan-file-suppress PhanUndeclaredVariable
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
 // phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
@@ -224,18 +220,20 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 
 	/** @inheritDoc */
 	public function getTextContent() : ?string {
+		// See DocumentFragment::getTextContent()
 		$text = [];
-		Algorithm::descendant_text_content( $this, $text );
+		WhatWG::descendantTextContent( $this, $text );
 		return implode( "", $text );
 	}
 
 	/** @inheritDoc */
 	public function setTextContent( ?string $value ) : void {
+		// See DocumentFragment::setTextContent()
 		$value = $value ?? '';
 		$this->_removeChildren();
 		if ( $value !== "" ) {
 			/* Equivalent to Node:: appendChild without checks! */
-			WhatWG::insert_before_or_replace( $node, $this->_nodeDocument->createTextNode( $value ), null );
+			WhatWG::insert_before_or_replace( $this->_nodeDocument->createTextNode( $value ), $this, null, false );
 		}
 	}
 

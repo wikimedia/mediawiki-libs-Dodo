@@ -19,6 +19,7 @@ use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Node;
+use Wikimedia\Dodo\Text;
 
 /******************************************************************************
  * whatwg.php
@@ -750,6 +751,22 @@ class WhatWG {
 				}
 			}
 			break;
+		}
+	}
+
+	/**
+	 * Return the "descendant text content" of the given node.
+	 * @see https://dom.spec.whatwg.org/#concept-descendant-text-content
+	 * @param Node $node
+	 * @param string[] &$bits the result is returned in this array
+	 */
+	public static function descendantTextContent( Node $node, array &$bits ) : void {
+		if ( $node instanceof Text ) {
+			$bits[] = $node->_data;
+		} else {
+			for ( $kid = $node->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
+				static::descendantTextContent( $kid, $bits );
+			}
 		}
 	}
 
