@@ -609,7 +609,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @inheritDoc
 	 */
-	public function insertBefore( $node, $refChild ) {
+	public function insertBefore( $node, $refChild ) : Node {
 		$ret = parent::insertBefore( $node, $refChild );
 		$this->_updateDoctypeAndDocumentElement();
 		return $ret;

@@ -1,24 +1,15 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanCoalescingNeverUndefined
-// @phan-file-suppress PhanParamSignatureMismatch
-// @phan-file-suppress PhanTypeMismatchArgument
-// @phan-file-suppress PhanUndeclaredMethod
-// @phan-file-suppress PhanUndeclaredProperty
-// @phan-file-suppress PhanUndeclaredTypeThrowsType
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.MethodDoubleUnderscore
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
-// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPublic
-// phpcs:disable MediaWiki.Commenting.PropertyDocumentation.WrongStyle
 
 namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Internal\WhatWG;
+use Wikimedia\IDLeDOM\ChildNode as IChildNode;
 use Wikimedia\IDLeDOM\Node as INode;
 
 /**
@@ -128,7 +119,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * Properties that are for internal use by this library
 	 */
 
-	/*
+	/**
 	 * DEVELOPERS NOTE:
 	 * An index is assigned when a node is added to a Document (becomes
 	 * rooted). It uniquely identifies the Node within its owner Document.
@@ -148,7 +139,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 */
 	public $_documentIndex = null;
 
-	/*
+	/**
 	 * DEVELOPERS NOTE:
 	 * An index is assigned on INSERTION. It uniquely identifies the Node among
 	 * its siblings.
@@ -161,9 +152,14 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * indices otherwise.
 	 *
 	 * FIXME It is public because it gets used by the whatwg algorithms page.
+	 * @var ?int
 	 */
-	public $_cachedSiblingIndex;
+	public $_cachedSiblingIndex = null;
 
+	/**
+	 * Create a Node whose node document is the given $nodeDocument.
+	 * @param Document $nodeDocument
+	 */
 	public function __construct( Document $nodeDocument ) {
 		/* Our ancestors */
 		$this->_nodeDocument = $nodeDocument;
@@ -304,7 +300,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * This should be overridden in ContainerNode and Leaf.
 	 * @inheritDoc
 	 */
-	abstract public function getChildNodes() : ?NodeList;
+	abstract public function getChildNodes() : NodeList;
 
 	/**
 	 * This should be overridden in ContainerNode and Leaf.
@@ -366,10 +362,12 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * @param INode $node To be inserted
 	 * @param ?INode $refNode Child of this node before which to insert $node
-	 * @return INode Newly inserted Node or empty DocumentFragment
+	 * @return Node Newly inserted Node or empty DocumentFragment
 	 * @throws DOMException "HierarchyRequestError" or "NotFoundError"
 	 */
-	public function insertBefore( $node, $refNode ) {
+	public function insertBefore( $node, $refNode ) : Node {
+		'@phan-var Node $node'; // @var Node $node
+		'@phan-var ?Node $refNode'; // @var ?Node $refNode
 		/*
 		 * [1]
 		 * Ensure pre-insertion validity.
@@ -430,6 +428,8 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 	/** @inheritDoc */
 	public function replaceChild( $new, $old ) : Node {
+		'@phan-var Node $new'; // @var Node $new
+		'@phan-var Node $old'; // @var Node $old
 		/*
 		 * [1]
 		 * Ensure pre-replacement validity.
@@ -480,8 +480,9 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 	/** @inheritDoc */
 	public function removeChild( $node ) : Node {
-		if ( $this === $node->_parentNode ) {
+		if ( $this === $node->getParentNode() ) {
 			/* Defined on ChildNode class */
+			'@phan-var IChildNode $node'; // @var IChildNode $node
 			$node->remove();
 		} else {
 			/* That's not my child! */
@@ -518,6 +519,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			$n->normalize();
 
 			if ( $n->getNodeType() === self::TEXT_NODE ) {
+				'@phan-var Text $n'; // @var Text $n
 				if ( $n->getNodeValue() === '' ) {
 					/*
 					 * [1]
@@ -529,6 +531,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 				} else {
 					$p = $n->getPreviousSibling();
 					if ( $p && $p->getNodeType() === self::TEXT_NODE ) {
+						'@phan-var Text $p'; // @var Text $p
 						/*
 						 * [2]
 						 * If you are a text node,
@@ -543,7 +546,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 						 * previous non-empty text
 						 * node.
 						 */
-						$p->appendData( $n->getNodeValue() );
+						$p->appendData( $n->getNodeValue() ?? '' );
 						$this->removeChild( $n );
 					}
 				}
@@ -557,6 +560,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 	/** @inheritDoc */
 	final public function compareDocumentPosition( $that ): int {
+		'@phan-var Node $that'; // @var Node $that
 		/*
 		 * CAUTION
 		 * The order of these args matters
@@ -613,6 +617,11 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			return false;
 		}
 
+		if ( !( $node instanceof Node ) ) {
+			// Not even the same implementation!
+			// (This is really a hint to phan)
+			return false;
+		}
 		if ( !$this->_subclassIsEqualNode( $node ) ) {
 			/* Run subclass-specific equality comparison */
 			return false;
@@ -697,6 +706,9 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @inheritDoc
 	 */
 	public function lookupNamespaceURI( ?string $prefix ): ?string {
+		if ( $prefix === '' ) {
+			$prefix = null;
+		}
 		return WhatWG::locate_namespace( $this, $prefix );
 	}
 
@@ -706,7 +718,10 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @inheritDoc
 	 */
 	public function isDefaultNamespace( ?string $ns ): bool {
-		return ( $ns ?? null ) === $this->lookupNamespaceURI( null );
+		if ( $ns === '' ) {
+			$ns = null;
+		}
+		return $ns === $this->lookupNamespaceURI( null );
 	}
 
 	/*
@@ -754,7 +769,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * The index of this Node in its parent's childNodes list
 	 *
 	 * @return int index
-	 * @throws Something if we have no parent
+	 * @throws \Throwable if we have no parent
 	 *
 	 * NOTE
 	 * Calling Node::_getSiblingIndex() will automatically trigger a switch

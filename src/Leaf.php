@@ -38,7 +38,7 @@ abstract class Leaf /* domino helper */ extends Node {
 	/**
 	 * @inheritDoc
 	 */
-	final public function insertBefore( $node, $refChild ) {
+	final public function insertBefore( $node, $refChild ) : Node {
 		Util::error( "NotFoundError" );
 		throw new \Error( "impossible" ); // for phan
 	}
