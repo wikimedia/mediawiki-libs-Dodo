@@ -1,11 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// @phan-file-suppress PhanTypeMismatchArgument
-// @phan-file-suppress PhanUndeclaredMethod
-// @phan-file-suppress PhanUndeclaredProperty
-// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
-// phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle
 
 namespace Wikimedia\Dodo;
 
@@ -37,7 +32,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 * @param array $args
 	 * @return DocumentFragment
 	 */
-	private static function _fragment_from_arguments( $document, array $args ) {
+	private static function _fragmentFromArguments( $document, array $args ) {
 		$fragment = $document->createDocumentFragment();
 
 		foreach ( $args as $item ) {
@@ -68,6 +63,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 * @inheritDoc
 	 */
 	public function after( ...$args /* DOMStrings and/or Nodes */ ) : void {
+		'@phan-var Node $this'; // @var Node $this
 		$parentNode = $this->_parentNode;
 		$nextSibling = $this->getNextSibling();
 
@@ -93,7 +89,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * Turn the arguments into
 		 * a DocumentFragment.
 		 */
-		$frag = self::_fragment_from_arguments( $this->_nodeDocument, $args );
+		$frag = self::_fragmentFromArguments( $this->_nodeDocument, $args );
 
 		/*
 		 * Insert the DocumentFragment
@@ -113,8 +109,9 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 * @inheritDoc
 	 */
 	public function before( ...$args /* DOMStrings and/or Nodes */ ) : void {
+		'@phan-var Node $this'; // @var Node $this
 		$parentNode = $this->_parentNode;
-		$prevSibling = $this->previousSibling();
+		$prevSibling = $this->getPreviousSibling();
 
 		if ( $this->_parentNode === null ) {
 			/*
@@ -128,7 +125,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		}
 		// Find "viable prev sibling"; that is, prev one not in $args
 		while ( $prevSibling !== null && in_array( $prevSibling, $args, true ) ) {
-			$prevSibling = $prevSibling->previousSibling();
+			$prevSibling = $prevSibling->getPreviousSibling();
 		}
 		// ok, parent and sibling are saved away since this node could itself
 		// appear in $args and we're about to move $args to a document fragment.
@@ -137,9 +134,9 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * Turn the arguments into
 		 * a DocumentFragment.
 		 */
-		$frag = self::_fragment_from_arguments( $this->_nodeDocument, $args );
+		$frag = self::_fragmentFromArguments( $this->_nodeDocument, $args );
 
-		$nextSibling = $prevSibling ? $prevSibling->getNextSibling() : $parentNode->firstChild();
+		$nextSibling = $prevSibling ? $prevSibling->getNextSibling() : $parentNode->getFirstChild();
 
 		/*
 		 * Insert the DocumentFragment
@@ -148,11 +145,12 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		$parentNode->insertBefore( $frag, $nextSibling );
 	}
 
-	/*
+	/**
 	 * Remove $this from its parent.
 	 * @inheritDoc
 	 */
 	public function remove() : void {
+		'@phan-var Node $this'; // @var Node $this
 		if ( $this->_parentNode === null ) {
 			/*
 			 * If $this has no parent,
@@ -162,7 +160,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 			return;
 		}
 
-		$doc = $this->_nodeDocument();
+		$doc = $this->_nodeDocument;
 		if ( $doc ) {
 			$doc->_preremoveNodeIterators( $this );
 			/*
@@ -179,6 +177,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * Remove this node from its parents array of children
 		 * and update the structure id for all ancestors
 		 */
+		// @phan-suppress-next-line PhanUndeclaredMethod silly phan, it's in this trait!
 		$this->_remove();
 
 		/* Forget this node's parent */
@@ -190,6 +189,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 * This is like a 'soft remove' - it's used in whatwg stuff.
 	 */
 	protected function _remove() {
+		'@phan-var Node $this'; // @var Node $this
 		if ( $this->_parentNode === null ) {
 			return;
 		}
@@ -211,6 +211,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 * @inheritDoc
 	 */
 	public function replaceWith( ...$args /* Nodes or DOMStrings */ ) : void {
+		'@phan-var Node $this'; // @var Node $this
 		$parentNode = $this->getParentNode();
 		$nextSibling = $this->getNextSibling();
 
@@ -231,7 +232,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * could itself appear in $arguments and we're about to
 		 * move $arguments to a document fragment.
 		 */
-		$frag = self::_fragment_from_arguments( $this->_nodeDocument(), $args );
+		$frag = self::_fragmentFromArguments( $this->_nodeDocument, $args );
 
 		if ( $this->_parentNode === $parentNode ) {
 			$parentNode->replaceChild( $frag, $this );
