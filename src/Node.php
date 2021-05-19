@@ -58,16 +58,41 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * Properties that appear in DOM-LS
 	 */
 
-	/*
-	 * SET WHEN SOMETHING APPENDS NODE
+	/**
+	 * The document this node is associated to.
 	 *
-	 * @var Node|null should be considered read-only
+	 * spec DOM-LS
+	 *
+	 * NOTE
+	 * This is different from ownerDocument: According to DOM-LS,
+	 * Document::ownerDocument() must equal NULL, even though it's often
+	 * more convenient if a document is its own owner.
+	 *
+	 * What we're looking for is the "node document" concept, as laid
+	 * out in the DOM-LS spec:
+	 *
+	 *      -"Each node has an associated node document, set upon creation,
+	 *       that is a document."
+	 *
+	 *      -"A node's node document can be changed by the 'adopt'
+	 *       algorithm."
+	 *
+	 *      -"The node document of a document is that document itself."
+	 *
+	 *      -"All nodes have a node document at all times."
+	 *
+	 * NOTE
+	 * The DOM-LS method Node::getRootNode (and the "root" of a node) is
+	 * not the same thing: the root of a node which hasn't been added to
+	 * the document is the highest ancestor; while the node document is
+	 * always the owning document even if this node hasn't yet been
+	 * added to it.
+	 *
+	 * @var Document
 	 */
-	public $_ownerDocument;
+	public $_nodeDocument;
 
 	/**
-	 * @see $_ownerDocument
-	 *
 	 * @var Node|null should be considered read-only
 	 */
 	public $_parentNode;
@@ -110,7 +135,9 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * This index makes it simple to represent a Node as an integer.
 	 *
-	 * It exists for a single optimization. If two Elements have the same id,
+	 * This is also used to determine if a Node is currently rooted.
+	 *
+	 * It allows this optimization: If two Elements have the same id,
 	 * they will be stored in an array under their $document_index. This
 	 * means we don't have to search the array for a matching Node when
 	 * another node with the same ID is added or removed from the document;
@@ -137,9 +164,9 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 */
 	public $_cachedSiblingIndex;
 
-	public function __construct() {
+	public function __construct( Document $nodeDocument ) {
 		/* Our ancestors */
-		$this->_ownerDocument = null;
+		$this->_nodeDocument = $nodeDocument;
 		$this->_parentNode = null;
 
 		/* Our siblings */
@@ -201,14 +228,16 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	}
 
 	/**
-	 * Nodes might not have an ownerDocument. Perhaps they have not been inserted
-	 * into a DOM, or are themselves a Document. In those cases, the value of
-	 * ownerDocument will be null.
+	 * The ownerDocument getter steps are to return null, if this is a
+	 * document; otherwise this’s node document.
+	 *
+	 * We will override this implementation to return null
+	 * in the Document class.
 	 *
 	 * @inheritDoc
 	 */
-	final public function getOwnerDocument() : ?Document {
-		return $this->_ownerDocument;
+	public function getOwnerDocument() : ?Document {
+		return $this->_nodeDocument;
 	}
 
 	/**
@@ -365,7 +394,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		 * Adopt $node into the Document
 		 * to which $this is rooted.
 		 */
-		$this->_nodeDocument()->adoptNode( $node );
+		$this->_nodeDocument->adoptNode( $node );
 
 		/*
 		 * [4]
@@ -415,7 +444,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		 * Adopt $node into the Document
 		 * to which $this is rooted.
 		 */
-		if ( $new->_nodeDocument() !== $this->_nodeDocument() ) {
+		if ( $new->_nodeDocument !== $this->_nodeDocument ) {
 			/*
 			 * FIXME
 			 * adoptNode has a side-effect
@@ -432,7 +461,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			 * 'node' from its parent) here if we
 			 * need to.
 			 */
-			$this->_nodeDocument()->adoptNode( $new );
+			$this->_nodeDocument->adoptNode( $new );
 		}
 
 		/*
@@ -680,107 +709,19 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		return ( $ns ?? null ) === $this->lookupNamespaceURI( null );
 	}
 
-	/**********************************************************************
-	 * UTILITY METHODS AND DODO EXTENSIONS
-	 */
 	/*
-	 * You were sorting out ROOTEDNESS AND STUFF
-	 * At the same time, you were unravelling the
-	 * crucial function ChildNode::remove.
-	 *
-	 *
-	 * There are three distinct phases in which a Node
-	 * can exist, and the state diagram works like
-	 * this:
-	 *
-	 *                      [1] Unowned, Unrooted
-	 *                      7|
-	 *                     / Document::adoptNode()
-	 *                    /  v
-	 *      Node::remove()  [2] Owned, Unrooted
-	 *                    \  |
-	 *                     \ Document:;insertBefore()
-	 *                      \v
-	 *                      [3] Owned, Rooted
-	 *
-	 *      [1]->[2] (adoption)
-	 *              Sets:
-	 *                      ownerDocument    on Nodes of subtree rooted at Node
-	 *                      _documentIndex on Nodes of subtree rooted at Node
-	 *
-	 *      [2]->[3] (insertion)
-	 *              Sets:
-	 *                      parentNode      on Node
-	 *                      nextSibling     on Node
-	 *                      previousSibling on Node
-	 *                      _cachedSiblingIndex on Node
-	 *
-	 *              Possibly sets:
-	 *                      firstChild      on parent of Node, if Node is
-	 *                                      the first child.
-	 *
-	 *      [3]->[1] (removal)
-	 *              Unsets:
-	 *                      parentNode
-	 *                      nextSibling
-	 *                      previousSibling
-	 *                      _cachedSiblingIndex
-	 *                      parentNode->firstChild, if we were last
-	 *              ???
-	 *                      Does it unset ownerDocument?
-	 *                      Does it unset _documentIndex?
-	 *                        (remove_from_node_table does this)
-	 *
-	 * _documentIndex is being set by add_to_node_table. ugh
-	 * _documentIndex is being set by add_to_node_table. ugh
-	 *
-	 * TODO
-	 * Centralize all of this.
-	 * For instance, node->removeChild(node)
-	 * should just call node->remove()?
-	 *
-	 *      Document::importNode($node)
-	 *              $this->adoptNode($node->clone())
-	 *      Document::insertBefore()
-	 *              Node::insertBefore()
-	 *              update_document_stuff;
-	 *      Document::replaceChild()
-	 *              Node::replaceChild()
-	 *              update_document_stuff;
-	 *      Document::removeChild()
-	 *              Node::removeChild()
-	 *              update_document_stuff;
-	 *      Document::cloneNode()
-	 *              Node::cloneNode();
-	 *              (clone children)
-	 *              update_document_stuff
-	 *
-	 * FIXME: This is an antipattern right here.
-	 * These don't need to be re-defined on the
-	 * Document.
-	 *
-	 * Already, insert_before_or_replace is calling
-	 *      node->__root()
-	 *              node->mutate
-	 *
-	 * and FIXME update_document_state is just
-	 * setting whether the document has a doctype
-	 * node or a document element. it's horrible.
-	 *
-	 * And where is _documentIndex being set?
+	 * UTILITY METHODS AND DODO EXTENSIONS
 	 */
 
 	/**
 	 * Set the ownerDocument reference on a subtree rooted at $this.
-	 *
-	 * When a Node becomes part of a Document, even if it is not yet inserted.
 	 *
 	 * Called by Document::adoptNode()
 	 *
 	 * @param Document $doc
 	 */
 	public function __set_owner( Document $doc ) {
-		$this->_ownerDocument = $doc;
+		$this->_nodeDocument = $doc;
 
 		/* FIXME: Wat ? */
 		if ( method_exists( $this, "tagName" ) ) {
@@ -794,60 +735,21 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	}
 
 	/**
-	 * Determine whether this Node is rooted (belongs to a tree)
+	 * Determine whether this Node is rooted (belongs to the tree rooted
+	 * at the node document).
 	 *
 	 * @return bool
 	 *
 	 * NOTE
-	 * A Node is rooted if it belongs to a tree, in which case it will
-	 * have an ownerDocument. Document nodes maintain a list of all the
+	 * Document nodes maintain a list of all the
 	 * nodes inside their tree, assigning each an index,
 	 * Node::_documentIndex.
 	 *
 	 * Therefore if we are currently rooted, we can tell by checking that
 	 * we have one of these.
-	 *
-	 * TODO: This should be Node::isConnected(), see spec.
 	 */
 	public function getIsConnected(): bool {
 		return $this->_documentIndex !== null;
-	}
-
-	/**
-	 * The document this node is associated to.
-	 *
-	 * spec DOM-LS
-	 *
-	 * NOTE
-	 * How is this different from ownerDocument? According to DOM-LS,
-	 * Document::ownerDocument() must equal NULL, even though it's often
-	 * more convenient if a document is its own owner.
-	 *
-	 * What we're looking for is the "node document" concept, as laid
-	 * out in the DOM-LS spec:
-	 *
-	 *      -"Each node has an associated node document, set upon creation,
-	 *       that is a document."
-	 *
-	 *      -"A node's node document can be changed by the 'adopt'
-	 *       algorithm."
-	 *
-	 *      -"The node document of a document is that document itself."
-	 *
-	 *      -"All nodes have a node document at all times."
-	 *
-	 * TODO
-	 * Does the DOM-LS method Node::getRootNode (not implemented here)
-	 * in its non-shadow-tree branch, do the same thing?
-	 *
-	 * TODO
-	 * Wouldn't it fit better with all the __root* junk if it were
-	 * called __root_node?
-	 *
-	 * @return Document
-	 */
-	public function _nodeDocument(): Document {
-		return $this->_ownerDocument ?? $this;
 	}
 
 	/**
@@ -899,7 +801,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		// In domino we'd first consult the per-node counter and return that
 		// if present.  But we're saving space in our Nodes by keeping only
 		// the document-level modclock.
-		return $this->_nodeDocument()->_modclock;
+		return $this->_nodeDocument->_modclock;
 	}
 
 	/**
@@ -913,7 +815,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * _lastModTime property.]
 	 */
 	public function _modify() : void {
-		$this->_nodeDocument()->_modclock++;
+		$this->_nodeDocument->_modclock++;
 		// In domino, we keep a per-node modification counter as well,
 		// and we would now set the per-node counter to the document
 		// modclock and walk up the ancestor tree setting each parent's
@@ -934,7 +836,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 */
 	public function _removeChildren() {
 		if ( $this->getIsConnected() ) {
-			$root = $this->_ownerDocument;
+			$root = $this->_nodeDocument;
 		} else {
 			$root = null;
 		}

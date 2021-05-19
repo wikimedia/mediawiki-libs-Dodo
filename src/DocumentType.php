@@ -37,10 +37,15 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 	 */
 	private $_systemId;
 
-	public function __construct( Document $doc, string $name, string $publicId = '', string $systemId = '' ) {
-		parent::__construct();
+	/**
+	 * @param Document $nodeDocument
+	 * @param string $name
+	 * @param string $publicId
+	 * @param string $systemId
+	 */
+	public function __construct( Document $nodeDocument, string $name, string $publicId = '', string $systemId = '' ) {
+		parent::__construct( $nodeDocument );
 
-		$this->_ownerDocument = $doc;
 		$this->_name = $name;
 		$this->_publicId = $publicId;
 		$this->_systemId = $systemId;
@@ -83,7 +88,7 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 
 	/* Methods delegated in Node */
 	public function _subclass_cloneNodeShallow(): ?Node {
-		return new DocumentType( $this->_ownerDocument, $this->_name, $this->_publicId, $this->_systemId );
+		return new DocumentType( $this->_nodeDocument, $this->_name, $this->_publicId, $this->_systemId );
 	}
 
 	public function _subclass_isEqualNode( Node $node ): bool {

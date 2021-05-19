@@ -24,12 +24,11 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	use \Wikimedia\IDLeDOM\Helper\Text;
 
 	/**
-	 * @param Document $doc
+	 * @param Document $nodeDocument
 	 * @param string $data
 	 */
-	public function __construct( Document $doc, string $data ) {
-		parent::__construct();
-		$this->_ownerDocument = $doc;
+	public function __construct( Document $nodeDocument, string $data ) {
+		parent::__construct( $nodeDocument );
 		$this->_data = $data;
 	}
 
@@ -59,7 +58,7 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	 * @return ?Node always Text
 	 */
 	public function _subclass_cloneNodeShallow(): ?Node {
-		return new Text( $this->_ownerDocument, $this->_data );
+		return new Text( $this->_nodeDocument, $this->_data );
 	}
 
 	/**
@@ -72,7 +71,7 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 		}
 
 		$newdata = substr( $this->_data, $offset );
-		$newnode = $this->_ownerDocument->createTextNode( $newdata );
+		$newnode = $this->_nodeDocument->createTextNode( $newdata );
 		$this->setNodeValue( substr( $this->_data, 0, $offset ) );
 
 		$parent = $this->getParentNode();

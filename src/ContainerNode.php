@@ -26,8 +26,11 @@ abstract class ContainerNode extends Node {
 	 */
 	public $_childNodes;
 
-	public function __construct() {
-		parent::__construct();
+	/**
+	 * @param Document $nodeDocument
+	 */
+	public function __construct( Document $nodeDocument ) {
+		parent::__construct( $nodeDocument );
 		/* Our children */
 		$this->_firstChild = null;
 		$this->_childNodes = null;

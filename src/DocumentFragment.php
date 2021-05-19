@@ -2,7 +2,6 @@
 
 declare( strict_types = 1 );
 // @phan-file-suppress PhanParamTooFew
-// @phan-file-suppress PhanParamTooMany
 // @phan-file-suppress PhanTypeMismatchArgumentReal
 // @phan-file-suppress PhanTypeMissingReturn
 // @phan-file-suppress PhanUndeclaredClassMethod
@@ -32,10 +31,8 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\DocumentFragment;
 
-	public function __construct( Document $doc ) {
-		parent::__construct( $doc );
-
-		$this->_ownerDocument = $doc;
+	public function __construct( Document $nodeDocument ) {
+		parent::__construct( $nodeDocument );
 	}
 
 	/**
@@ -65,7 +62,7 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 		$this->_removeChildren();
 		if ( $value !== "" ) {
 			/* Equivalent to Node:: appendChild without checks! */
-			WhatWG::insert_before_or_replace( $node, $this->_ownerDocument->createTextNode( $value ), null );
+			WhatWG::insert_before_or_replace( $node, $this->_nodeDocument->createTextNode( $value ), null );
 		}
 	}
 
@@ -97,7 +94,7 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 
 	/* TODO DELEGATED FROM NODE */
 	public function _subclass_cloneNodeShallow(): ?Node {
-		return new DocumentFragment( $this->_ownerDocument );
+		return new DocumentFragment( $this->_nodeDocument );
 	}
 
 	public function _subclass_isEqualNode( Node $node ): bool {

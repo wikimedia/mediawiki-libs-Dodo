@@ -15,12 +15,11 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 
 	/**
 	 * Create a new Comment node.
-	 * @param Document $doc
+	 * @param Document $nodeDocument
 	 * @param string $data
 	 */
-	public function __construct( Document $doc, $data ) {
-		parent::__construct();
-		$this->_ownerDocument = $doc;
+	public function __construct( Document $nodeDocument, $data ) {
+		parent::__construct( $nodeDocument );
 		$this->_data = $data;
 	}
 
@@ -40,7 +39,7 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 
 	/** @inheritDoc */
 	public function _subclass_cloneNodeShallow(): ?Node {
-		return new Comment( $this->_ownerDocument, $this->_data );
+		return new Comment( $this->_nodeDocument, $this->_data );
 	}
 
 	/** @inheritDoc */
@@ -55,6 +54,6 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 		* TODO: Does this override directly?
 		* Or should we use _subclass_clone_shallow?
 		*/
-		return new Comment( $this->_ownerDocument, $this->_data );
+		return new Comment( $this->_nodeDocument, $this->_data );
 	}
 }

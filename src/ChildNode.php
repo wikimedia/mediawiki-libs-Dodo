@@ -93,7 +93,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * Turn the arguments into
 		 * a DocumentFragment.
 		 */
-		$frag = self::_fragment_from_arguments( $this->_nodeDocument(), $args );
+		$frag = self::_fragment_from_arguments( $this->_nodeDocument, $args );
 
 		/*
 		 * Insert the DocumentFragment
@@ -137,7 +137,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 		 * Turn the arguments into
 		 * a DocumentFragment.
 		 */
-		$frag = self::_fragment_from_arguments( $this->_nodeDocument(), $args );
+		$frag = self::_fragment_from_arguments( $this->_nodeDocument, $args );
 
 		$nextSibling = $prevSibling ? $prevSibling->getNextSibling() : $parentNode->firstChild();
 

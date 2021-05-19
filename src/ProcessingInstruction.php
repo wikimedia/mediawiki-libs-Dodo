@@ -25,13 +25,12 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	private $_target;
 
 	/**
-	 * @param Document $doc
+	 * @param Document $nodeDocument
 	 * @param string $target
 	 * @param string $data
 	 */
-	public function __construct( Document $doc, string $target, string $data ) {
-		parent::__construct();
-		$this->_ownerDocument = $doc;
+	public function __construct( Document $nodeDocument, string $target, string $data ) {
+		parent::__construct( $nodeDocument );
 		$this->_target = $target;
 		$this->_data = $data;
 	}
@@ -56,7 +55,7 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	 * @return ?Node always ProcessingInstruction
 	 */
 	public function _subclass_cloneNodeShallow(): ?Node {
-		return new ProcessingInstruction( $this->_ownerDocument, $this->_target, $this->_data );
+		return new ProcessingInstruction( $this->_nodeDocument, $this->_target, $this->_data );
 	}
 
 	/**

@@ -223,7 +223,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		string $type = "xml",
 		?string $url = null
 	) {
-		parent::__construct();
+		parent::__construct( $this );
 
 		/** DOM-LS */
 		$this->_origin = $originDoc ? $originDoc->_origin : null; // default
@@ -371,6 +371,11 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		return $this->_documentElement;
 	}
 
+	/** @inheritDoc */
+	public function getOwnerDocument(): ?Document {
+		return null;
+	}
+
 	/*
 	 * NODE CREATION
 	 */
@@ -406,7 +411,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		if ( $this->_isHTMLDocument() ) {
 			$localName = Util::toAsciiLowercase( $localName );
 		}
-		return new Attr( null, $localName, null, null, '' );
+		return new Attr( $this, null, $localName, null, null, '' );
 	}
 
 	/** @inheritDoc */
@@ -420,7 +425,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 
 		WhatWG::validate_and_extract( $ns, $qname, $prefix, $lname );
 
-		return new Attr( null, $lname, $prefix, $ns, '' );
+		return new Attr( $this, null, $lname, $prefix, $ns, '' );
 	}
 
 	/** @inheritDoc */
@@ -559,7 +564,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			 */
 			$node->getParentNode()->removeChild( $node );
 		}
-		if ( $node->_ownerDocument !== $this ) {
+		if ( $node->_nodeDocument !== $this ) {
 			/*
 			 * If the Node is not currently connected to this Document,
 			 * then recursively set the ownerDocument.
@@ -775,7 +780,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @param Node $n
 	 */
 	private function _root( Node $n ): void {
-		Util::assert( $n->getOwnerDocument() === $this, "bad doc" );
+		Util::assert( $n->_nodeDocument === $this, "bad doc" );
 		/* Manage index to node mapping */
 		$n->_documentIndex = $this->_nextDocumentIndex++;
 		$this->_index_to_element[$n->_documentIndex] = $n;
@@ -800,7 +805,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @param Node $n
 	 */
 	private function _uproot( Node $n ): void {
-		Util::assert( $n->getOwnerDocument() === $this, "bad doc" );
+		Util::assert( $n->_nodeDocument === $this, "bad doc" );
 		/* Manage id to element mapping */
 		if ( $n instanceof Element ) {
 			// (only Elements have attributes)

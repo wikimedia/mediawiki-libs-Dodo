@@ -110,10 +110,10 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 						return;
 					}
 					if ( $old !== null ) {
-						$elem->_ownerDocument->_removeFromIdTable( $old, $elem );
+						$elem->_nodeDocument->_removeFromIdTable( $old, $elem );
 					}
 					if ( $new !== null ) {
-						$elem->_ownerDocument->_addToIdTable( $new, $elem );
+						$elem->_nodeDocument->_addToIdTable( $new, $elem );
 					}
 				},
 				"class" => static function ( $elem, $old, $new ) {
@@ -134,14 +134,14 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	/**
 	 * Element constructor
 	 *
-	 * @param Document $doc
+	 * @param Document $nodeDocument
 	 * @param string $lname
 	 * @param ?string $ns
 	 * @param ?string $prefix
 	 * @return void
 	 */
-	public function __construct( Document $doc, string $lname, ?string $ns, ?string $prefix = null ) {
-		parent::__construct();
+	public function __construct( Document $nodeDocument, string $lname, ?string $ns, ?string $prefix = null ) {
+		parent::__construct( $nodeDocument );
 
 		/*
 		 * DOM-LS: "Elements have an associated namespace, namespace
@@ -152,7 +152,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$this->_namespaceURI  = $ns;
 		$this->_prefix        = $prefix;
 		$this->_localName     = $lname;
-		$this->_ownerDocument = $doc;
 
 		/*
 		 * DOM-LS: "Elements also have an attribute list, which is
@@ -231,7 +230,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$this->_removeChildren();
 		if ( $value !== "" ) {
 			/* Equivalent to Node:: appendChild without checks! */
-			WhatWG::insert_before_or_replace( $node, $this->_ownerDocument->createTextNode( $value ), null );
+			WhatWG::insert_before_or_replace( $node, $this->_nodeDocument->createTextNode( $value ), null );
 		}
 	}
 
@@ -248,18 +247,18 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		 */
 		if ( $this->getNamespaceURI() !== Util::NAMESPACE_HTML
 			 || $this->getPrefix()
-			 || !$this->getOwnerDocument()->_isHTMLDocument() ) {
+			 || !$this->_nodeDocument->_isHTMLDocument() ) {
 			if ( $this->getPrefix() === null ) {
 				$name = $this->getLocalName();
 			} else {
 				$name = $this->getPrefix() . ':' . $this->getLocalName();
 			}
-			$clone = $this->getOwnerDocument()->createElementNS(
+			$clone = $this->_nodeDocument->createElementNS(
 				$this->getNamespaceURI(),
 				$name
 			);
 		} else {
-			$clone = $this->getOwnerDocument()->createElement(
+			$clone = $this->_nodeDocument->createElement(
 				$this->getLocalName()
 			);
 		}
@@ -340,7 +339,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$attributes = $this->getAttributes();
 		$attr = $attributes->getNamedItem( $qname );
 		if ( $attr === null ) {
-			$attr = new Attr( $this, $qname, null, null, $value );
+			$attr = new Attr( $this->_nodeDocument, $this, $qname, null, null, $value );
 			$attributes->setNamedItem( $attr );
 		} else {
 			$attr->setValue( $value ); /* Triggers _handleAttributeChanges */
@@ -450,7 +449,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$attributes = $this->getAttributes();
 		$attr = $attributes->getNamedItemNS( $ns, $qname );
 		if ( $attr === null ) {
-			$attr = new Attr( $this, $lname, $prefix, $ns, $value );
+			$attr = new Attr( $this->_nodeDocument, $this, $lname, $prefix, $ns, $value );
 			$attributes->setNamedItemNS( $attr );
 		} else {
 			$attr->setValue( $value );
@@ -641,8 +640,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	/* Calls isHTMLDocument() on ownerDocument */
 	public function _isHTMLElement() {
 		if ( $this->getNamespaceURI() === Util::NAMESPACE_HTML
-			 && $this->_ownerDocument
-			 && $this->_ownerDocument->_isHTMLDocument() ) {
+			 && $this->_nodeDocument->_isHTMLDocument() ) {
 			return true;
 		}
 		return false;
@@ -659,7 +657,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 */
 	public function _nextElement( $root ) {
 		if ( !$root ) {
-			$root = $this->getOwnerDocument()->getDocumentElement();
+			$root = $this->_nodeDocument->getDocumentElement();
 		}
 		$next = $this->firstElementChild();
 		if ( !$next ) {

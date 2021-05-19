@@ -174,6 +174,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	protected $_specified = true; /* readonly const true */
 
 	/**
+	 * @param Document $nodeDocument
 	 * @param ?Element $ownerElement
 	 * @param string $localName
 	 * @param ?string $prefix
@@ -181,12 +182,14 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	 * @param string $value
 	 */
 	public function __construct(
+		Document $nodeDocument,
 		?Element $ownerElement,
 		string $localName,
 		?string $prefix = null,
 		?string $namespaceURI = null,
 		string $value = ""
 	) {
+		parent::__construct( $nodeDocument );
 		if ( $localName === '' ) {
 			throw new Exception( "Attr local name must be non-empty" );
 		}
@@ -319,9 +322,9 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 		if ( !$rootChange ) {
 			// "Queue a mutation record"
 			if ( $newValue !== null ) {
-				$elem->_nodeDocument()->_mutateAttr( $this, $oldValue );
+				$elem->_nodeDocument->_mutateAttr( $this, $oldValue );
 			} else {
-				$elem->_nodeDocument()->_mutateRemoveAttr( $this );
+				$elem->_nodeDocument->_mutateRemoveAttr( $this );
 			}
 			// "If element is custom..." (not implemented)
 			// "Run the attribute change steps" (not implemented)
@@ -362,6 +365,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	 */
 	protected function _subclass_cloneNodeShallow(): ?Node {
 		return new Attr(
+			$this->_nodeDocument,
 			null,
 			$this->_localName,
 			$this->_prefix,

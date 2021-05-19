@@ -51,7 +51,7 @@ class NodeIterator implements \Wikimedia\IDLeDOM\NodeIterator {
 		$this->_active = false;
 		// Record active node iterators in the document, in order to perform
 		// "node iterator pre-removal steps"
-		$root->_nodeDocument()->_attachNodeIterator( $this );
+		$root->_nodeDocument->_attachNodeIterator( $this );
 	}
 
 	/**

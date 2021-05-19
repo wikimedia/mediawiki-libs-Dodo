@@ -82,7 +82,7 @@ class WhatWG {
 		}
 
 		/* #6 */
-		if ( $node1 === null || $node2 === null || $node1->_nodeDocument() !== $node2->_nodeDocument() || $node1->getIsConnected() !== $node2->getIsConnected() ) {
+		if ( $node1 === null || $node2 === null || $node1->_nodeDocument !== $node2->_nodeDocument || $node1->getIsConnected() !== $node2->getIsConnected() ) {
 			/* UHH, in the spec this is supposed to add DOCUMENT_POSITION_PRECEDING or DOCUMENT_POSITION_FOLLOWING
 			 * in some consistent way, usually based on pointer comparison, which we can't do here. Hmm. Domino
 			 * just straight up omits it. This is stupid, the spec shouldn't ask this. */
@@ -299,7 +299,7 @@ class WhatWG {
 		if ( $replace ) {
 			Util::assert( $before !== null );
 			if ( $before->getIsConnected() ) {
-				$before->_nodeDocument()->_mutateRemove( $before );
+				$before->_nodeDocument->_mutateRemove( $before );
 			}
 			$before->_parentNode = null;
 		}
@@ -363,7 +363,7 @@ class WhatWG {
 			if ( $parent->getIsConnected() ) {
 				$parent->_modify();
 				foreach ( $insert as $i => $ni ) {
-					$parent->_nodeDocument()->mutateInsert( $ni );
+					$parent->_nodeDocument->mutateInsert( $ni );
 				}
 			}
 		} else { // Not a DocumentFragment
@@ -404,11 +404,11 @@ class WhatWG {
 			if ( $bothWereRooted ) {
 				$parent->_modify();
 				// Generate a move mutation event
-				$parent->_nodeDocument()->_mutateMove( $child );
+				$parent->_nodeDocument->_mutateMove( $child );
 			} elseif ( $parent->getIsConnected() ) {
 				$parent->_modify();
 				// Generate an insertion mutation event
-				$parent->_nodeDocument()->_mutateInsert( $child );
+				$parent->_nodeDocument->_mutateInsert( $child );
 			}
 		}
 	}
@@ -443,7 +443,7 @@ class WhatWG {
 		if ( $node === $parent ) {
 			Util::error( "HierarchyRequestError" );
 		}
-		if ( $node->_nodeDocument() === $parent->_nodeDocument() && $node->getIsConnected() === $parent->getIsConnected() ) {
+		if ( $node->_nodeDocument === $parent->_nodeDocument && $node->getIsConnected() === $parent->getIsConnected() ) {
 			/*
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
@@ -629,7 +629,7 @@ class WhatWG {
 		if ( $node === $parent ) {
 			Util::error( "HierarchyRequestError" );
 		}
-		if ( $node->_nodeDocument() === $parent->_nodeDocument() && $node->getIsConnected() === $parent->getIsConnected() ) {
+		if ( $node->_nodeDocument === $parent->_nodeDocument && $node->getIsConnected() === $parent->getIsConnected() ) {
 			/*
 			 * If the conditions didn't figure it out, then check
 			 * by traversing parentNode chain.
@@ -929,7 +929,7 @@ class WhatWG {
 				$parenttag = '';
 			}
 
-			if ( isset( self::$hasRawContent[$parenttag] ) || ( $parenttag === 'NOSCRIPT' && $parent->getOwnerDocument()->_scripting_enabled ) ) {
+			if ( isset( self::$hasRawContent[$parenttag] ) || ( $parenttag === 'NOSCRIPT' && $parent->_nodeDocument->_scripting_enabled ) ) {
 				$s .= $child->getData();
 			} else {
 				$s .= self::_helper_escape( $child->getData() );
