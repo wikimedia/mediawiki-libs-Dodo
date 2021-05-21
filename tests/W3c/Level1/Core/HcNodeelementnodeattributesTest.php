@@ -44,7 +44,7 @@ class HcNodeelementnodeattributesTest extends W3cTestHarness
             $attrList[count($attrList)] = $attrName;
         }
         if ($builder->contentType == 'text/html') {
-            $this->assertEqualsCollectionData('attrNames_html', toLowerArray($htmlExpected), toLowerArray($attrList));
+            $this->assertEqualsCollectionData('attrNames_html', array_map('strtolower', $htmlExpected), array_map('strtolower', $attrList));
         } else {
             $this->assertEqualsCollectionData('attrNames', $expected, $attrList);
         }

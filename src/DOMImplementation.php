@@ -52,10 +52,11 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	/**
 	 * hasFeature()
 	 * @param string $feature a string corresponding to a key in $supportedFeatures
-	 * @param string $version [optional] a string corresponding to a version in $supportedFeatures
+	 * @param string|null $version [optional] a string corresponding to a version in $supportedFeatures
+	 *
 	 * @return bool Always returns true.
 	 */
-	public function hasFeature( string $feature = "", string $version = "" ) : bool {
+	public function hasFeature( string $feature = "", ?string $version = "" ) : bool {
 		// hasFeature() originally would report whether the user agent
 		// claimed to support a given DOM feature, but experience
 		// proved it was not nearly as reliable or granular as simply

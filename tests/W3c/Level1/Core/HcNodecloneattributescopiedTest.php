@@ -45,7 +45,7 @@ class HcNodecloneattributescopiedTest extends W3cTestHarness
             $result[count($result)] = $attributeName;
         }
         if ($builder->contentType == 'text/html') {
-            $this->assertEqualsCollectionData('nodeNames_html', toLowerArray($htmlExpected), toLowerArray($result));
+            $this->assertEqualsCollectionData('nodeNames_html', array_map('strtolower', $htmlExpected), array_map('strtolower', $result));
         } else {
             $this->assertEqualsCollectionData('nodeNames', $expected, $result);
         }

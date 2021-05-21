@@ -798,7 +798,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @param mixed $expected
 	 * @param string $message
 	 */
-	protected function assertEqualsData( $actual, $expected, string $message = null ) {
+	protected function assertEqualsData( $actual, $expected, string $message = '' ) {
 		$this->assertEquals( $expected,
 			$actual,
 			$message );

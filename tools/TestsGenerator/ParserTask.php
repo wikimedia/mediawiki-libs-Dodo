@@ -876,7 +876,8 @@ class ParserTask extends BaseTask {
 			'$doc->open()' => '// $doc->open()',
 			'$doc->close()' => '// $doc->close()',
 			'count( $childValue )' => 'strlen($childValue)',
-			'count( $child )' => 'strlen($childData)' ];
+			'count( $child )' => 'strlen($childData)',
+			'toLowerArray(' => 'array_map(\'strtolower\',', ];
 
 		$this->test = strtr( $this->test,
 			$find_replace );

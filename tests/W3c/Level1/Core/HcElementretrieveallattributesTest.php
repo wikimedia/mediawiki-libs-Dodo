@@ -41,9 +41,9 @@ class HcElementretrieveallattributesTest extends W3cTestHarness
             $actual[count($actual)] = $attributeName;
         }
         if ($builder->contentType == 'text/html') {
-            $this->assertEqualsCollectionData('htmlAttributeNames', toLowerArray($htmlExpected), toLowerArray($actual));
+            $this->assertEqualsCollectionData('htmlAttributeNames', array_map('strtolower', $htmlExpected), array_map('strtolower', $actual));
         } else {
-            $this->assertEqualsCollectionData('attributeNames', toLowerArray($expected), toLowerArray($actual));
+            $this->assertEqualsCollectionData('attributeNames', array_map('strtolower', $expected), array_map('strtolower', $actual));
         }
     }
 }
