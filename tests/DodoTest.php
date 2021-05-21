@@ -12,6 +12,7 @@ use RemexHtml\TreeBuilder\TreeBuilder;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\FilteredElementList;
 use Wikimedia\Dodo\HTMLBodyElement;
 use Wikimedia\Dodo\HTMLCollection;
 use Wikimedia\Dodo\HTMLImageElement;
@@ -63,20 +64,19 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$img->setAttribute( 'width', '1337px' );
 		$img->classList->add( 'foo' );
 		$img->setAttribute( 'class', 'abc foo def' );
+		$img->setWidth( 100 );
+		$img->setHeight( 200 );
 		$img->classList->add( 'bar' );
 		$img->classList->add( 'bat' );
 		$img->classList->replace( 'bat', 'foo' );
 
+		$this->assertEquals( 100, $img->getWidth() );
+		$this->assertEquals( 200, $img->getHeight() );
+
 		/* Print the tree again (<img> should have attributes now) */
 		$this->assertEquals(
-			'<html><body><!--Hello, world!--><img id="foo" alt="Incredible Vision" width="1337px" class="abc foo def bar"><p>Lorem ipsum</p></body></html>',
+			'<html><body><!--Hello, world!--><img id="foo" alt="Incredible Vision" width="100" class="abc foo def bar" height="200"><p>Lorem ipsum</p></body></html>',
 			$doc->_node_serialize()
-		);
-
-		/* Print the width, the value should be an integer */
-		$this->assertEquals(
-			'IMG width: 0', // This doesn't work yet
-			"IMG width: " . $img->width
 		);
 
 		$img3 = $doc->getElementById( 'foo' );
@@ -130,6 +130,16 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNotNull( $second_p_tag );
 		$this->assertInstanceOf( Element::class, $second_p_tag );
 		$this->assertEqualsIgnoringCase( 'P', $second_p_tag->tagName );
+
+		// Test getElementsByClass name
+		$els_by_class = $doc->getElementsByClassName( 'abc foo def' );
+		$this->assertNotNull( $els_by_class );
+		$this->assertInstanceOf( FilteredElementList::class, $els_by_class );
+		$this->assertSame( 1, $els_by_class->length );
+
+		$first_el = $els_by_class->item( 0 );
+		$this->assertInstanceOf( HTMLImageElement::class, $first_el );
+		$this->assertEqualsIgnoringCase( 'IMG', $first_p_tag->tagName );
 	}
 
 	/** @dataProvider provideFixture */

@@ -715,6 +715,15 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		return Element::_getElementsByTagNameNS( $this, $ns, $lname );
 	}
 
+	/**
+	 * @param string $names
+	 *
+	 * @return HTMLCollection|FilteredElementList
+	 */
+	public function getElementsByClassName( string $names ) {
+		return Element::_getElementsByClassName( $this, $names );
+	}
+
 	/*
 	 * Utility methods extending normal DOM behavior
 	 */

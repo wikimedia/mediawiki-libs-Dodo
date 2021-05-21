@@ -738,9 +738,19 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	/**
 	 * @param string $names
 	 *
-	 * @return HTMLCollection
+	 * @return HTMLCollection|FilteredElementList
 	 */
 	public function getElementsByClassName( string $names ) {
+		return self::_getElementsByClassName( $this, $names );
+	}
+
+	/**
+	 * @param Document|Element $root
+	 * @param string $names
+	 *
+	 * @return HTMLCollection|FilteredElementList
+	 */
+	public static function _getElementsByClassName( $root, string $names ) {
 		if ( empty( $names ) ) {
 			return new HTMLCollection();
 		}
@@ -749,14 +759,12 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$names ); // Split on ASCII whitespace
 
 		return new FilteredElementList(
-			$this,
+			$root,
 			self::_classNamesElementFilter( $names )
 		);
 	}
 
 	/**
-	 * TODO refactor this
-	 *
 	 * @param string $lname
 	 *
 	 * @return callable(Element):bool

@@ -18,14 +18,12 @@ class HTMLImageElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLIma
 
 	/** @inheritDoc */
 	public function getWidth() : int {
-		// "image is not available"
-		return 0;
+		return (int)$this->getAttribute( 'width' );
 	}
 
 	/** @inheritDoc */
 	public function getHeight() : int {
-		// "image is not available"
-		return 0;
+		return (int)$this->getAttribute( 'height' );
 	}
 
 	/** @inheritDoc */
@@ -42,11 +40,13 @@ class HTMLImageElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLIma
 
 	/** @inheritDoc */
 	public function setWidth( int $w ) : void {
-		$this->setAttribute( 'width', strval( $w ) );
+		$this->setAttribute( 'width',
+			(string)$w );
 	}
 
 	/** @inheritDoc */
 	public function setHeight( int $h ) : void {
-		$this->setAttribute( 'height', strval( $h ) );
+		$this->setAttribute( 'height',
+			(string)$h );
 	}
 }
