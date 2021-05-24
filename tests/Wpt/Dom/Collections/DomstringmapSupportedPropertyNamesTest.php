@@ -10,25 +10,25 @@ class DomstringmapSupportedPropertyNamesTest extends WptTestHarness
         $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/collections/domstringmap-supported-property-names.html');
         $this->assertTest(function () {
             $element = $this->doc->querySelector('#edge1');
-            $this->assertArrayEqualsData(get_object_vars($element->dataset), ['']);
+            $this->assertArrayEqualsData($this->getOwnPropertyNames($element->dataset), ['']);
         }, 'Object.getOwnPropertyNames on DOMStringMap, empty data attribute');
         $this->assertTest(function () {
             $element = $this->doc->querySelector('#edge2');
-            $this->assertArrayEqualsData(get_object_vars($element->dataset), ['id-']);
+            $this->assertArrayEqualsData($this->getOwnPropertyNames($element->dataset), ['id-']);
         }, 'Object.getOwnPropertyNames on DOMStringMap, data attribute trailing hyphen');
         $this->assertTest(function () {
             $element = $this->doc->querySelector('#user');
-            $this->assertArrayEqualsData(get_object_vars($element->dataset), ['id', 'user', 'dateOfBirth']);
+            $this->assertArrayEqualsData($this->getOwnPropertyNames($element->dataset), ['id', 'user', 'dateOfBirth']);
         }, 'Object.getOwnPropertyNames on DOMStringMap, multiple data attributes');
         $this->assertTest(function () {
             $element = $this->doc->querySelector('#user2');
             $element->dataset->middleName = 'mark';
-            $this->assertArrayEqualsData(get_object_vars($element->dataset), ['uniqueId', 'middleName']);
+            $this->assertArrayEqualsData($this->getOwnPropertyNames($element->dataset), ['uniqueId', 'middleName']);
         }, 'Object.getOwnPropertyNames on DOMStringMap, attribute set on dataset in JS');
         $this->assertTest(function () {
             $element = $this->doc->querySelector('#user3');
             $element->setAttribute('data-age', 30);
-            $this->assertArrayEqualsData(get_object_vars($element->dataset), ['uniqueId', 'age']);
+            $this->assertArrayEqualsData($this->getOwnPropertyNames($element->dataset), ['uniqueId', 'age']);
         }, 'Object.getOwnPropertyNames on DOMStringMap, attribute set on element in JS');
     }
 }

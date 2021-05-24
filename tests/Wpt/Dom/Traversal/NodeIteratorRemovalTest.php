@@ -49,7 +49,7 @@ class NodeIteratorRemovalTest extends WptTestHarness
                             // the referenceNode attribute to the first node preceding the node
                             // that is being removed, and terminate these steps."
                             if (!$iter->pointerBeforeReferenceNode) {
-                                $expectedReferenceNodes[$idx] = previousNode($node);
+                                $expectedReferenceNodes[$idx] = $this->previousNode($node);
                                 continue;
                             }
                             // "If there is a node following the last inclusive descendant of the
@@ -63,7 +63,7 @@ class NodeIteratorRemovalTest extends WptTestHarness
                             // "Set the referenceNode attribute to the first node preceding the
                             // node that is being removed and set the pointerBeforeReferenceNode
                             // attribute to false."
-                            $expectedReferenceNodes[$idx] = previousNode($node);
+                            $expectedReferenceNodes[$idx] = $this->previousNode($node);
                             $expectedPointers[$idx] = false;
                         }
                     }

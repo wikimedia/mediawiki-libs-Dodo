@@ -3,6 +3,7 @@ namespace Wikimedia\Dodo\Tests\Wpt\Dom;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\DocumentType;
+use Wikimedia\IDLeDOM\Range;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-insertNode.html.
 class RangeInsertNodeTest extends WptTestHarness
@@ -29,7 +30,7 @@ class RangeInsertNodeTest extends WptTestHarness
         }
         $iframe->getOwnerDocument()->appendChild($referenceDoc->documentElement->cloneNode(true));
         $iframe->contentWindow->setupRangeTests();
-        $iframe->contentWindow->testRangeInput = $testRangesShort[$i];
+        $iframe->contentWindow->testRangeInput = $this->testRangesShort[$i];
         $iframe->contentWindow->testNodeInput = $this->testNodesShort[$j];
         $iframe->contentWindow->run();
     }
@@ -74,14 +75,14 @@ class RangeInsertNodeTest extends WptTestHarness
                 $actualRoots[] = $actualIframe->getOwnerDocument();
                 $expectedRoots[] = $expectedIframe->getOwnerDocument();
             } else {
-                $actualRoots[] = furthestAncestor($actualRange->startContainer);
-                $expectedRoots[] = furthestAncestor($expectedRange->startContainer);
+                $actualRoots[] = $this->furthestAncestor($actualRange->startContainer);
+                $expectedRoots[] = $this->furthestAncestor($expectedRange->startContainer);
             }
-            if (furthestAncestor($actualNode) != $actualRoots[0]) {
-                $actualRoots[] = furthestAncestor($actualNode);
+            if ($this->furthestAncestor($actualNode) != $actualRoots[0]) {
+                $actualRoots[] = $this->furthestAncestor($actualNode);
             }
-            if (furthestAncestor($expectedNode) != $expectedRoots[0]) {
-                $expectedRoots[] = furthestAncestor($expectedNode);
+            if ($this->furthestAncestor($expectedNode) != $expectedRoots[0]) {
+                $expectedRoots[] = $this->furthestAncestor($expectedNode);
             }
             $this->assertEqualsData(count($actualRoots), count($expectedRoots), 'Either the actual node and actual range are in the same tree but the expected are in different trees, or vice versa');
             // This doctype stuff is to work around the fact that Opera 11.00 will
@@ -186,15 +187,15 @@ class RangeInsertNodeTest extends WptTestHarness
         $testDiv->parentNode->removeChild($testDiv);
         array_unshift($testRanges, '"detached"');
         $iStart = 0;
-        $iStop = count($testRangesShort);
+        $iStop = count($this->testRangesShort);
         $jStart = 0;
         $jStop = count($this->testNodesShort);
         if (preg_match('/subtest=[0-9]+,[0-9]+/', $location->search)) {
             $matches = preg_match('/subtest=([0-9]+),([0-9]+)/', $location->search, $FIXME);
-            $iStart = Number($matches[1]);
-            $iStop = Number($matches[1]) + 1;
-            $jStart = Number($matches[2]) + 0;
-            $jStop = Number($matches[2]) + 1;
+            $iStart = intval($matches[1]);
+            $iStop = intval($matches[1]) + 1;
+            $jStart = intval($matches[2]) + 0;
+            $jStop = intval($matches[2]) + 1;
         }
         $domTests = [];
         $positionTests = [];
@@ -202,8 +203,8 @@ class RangeInsertNodeTest extends WptTestHarness
             $domTests[$i] = [];
             $positionTests[$i] = [];
             for ($j = $jStart; $j < $jStop; $j++) {
-                $domTests[$i][$j] = $this->asyncTest($i . ',' . $j . ': resulting DOM for range ' . $testRangesShort[$i] . ', node ' . $this->testNodesShort[$j]);
-                $positionTests[$i][$j] = $this->asyncTest($i . ',' . $j . ': resulting range position for range ' . $testRangesShort[$i] . ', node ' . $this->testNodesShort[$j]);
+                $domTests[$i][$j] = $this->asyncTest($i . ',' . $j . ': resulting DOM for range ' . $this->testRangesShort[$i] . ', node ' . $this->testNodesShort[$j]);
+                $positionTests[$i][$j] = $this->asyncTest($i . ',' . $j . ': resulting range position for range ' . $this->testRangesShort[$i] . ', node ' . $this->testNodesShort[$j]);
             }
         }
         $actualIframe = $this->doc->createElement('iframe');

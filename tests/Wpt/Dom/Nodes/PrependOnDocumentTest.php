@@ -8,6 +8,7 @@ class PrependOnDocumentTest extends WptTestHarness
 {
     public function testPrependOnDocument()
     {
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/prepend-on-Document.html');
         $node = $this->doc->implementation->createDocument(null, null);
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();

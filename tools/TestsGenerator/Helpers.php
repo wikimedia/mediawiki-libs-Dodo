@@ -11,7 +11,6 @@ use RemexHtml\DOM\DOMBuilder;
 use RemexHtml\Tokenizer\Tokenizer;
 use RemexHtml\TreeBuilder\Dispatcher;
 use RemexHtml\TreeBuilder\TreeBuilder;
-use Symfony\Component\Finder\Finder;
 use Throwable;
 use Wikimedia\Dodo\Document as DodoDOMDocument;
 use Wikimedia\Dodo\DOMException as DodoDOMException;
@@ -74,20 +73,60 @@ trait Helpers {
 	}
 
 	/**
-	 * Loads html document.
+	 * @param string $file_path
 	 *
-	 * @param mixed $docRef
-	 * @param string|null $name
-	 * @param string|null $href
-	 *
-	 * @return DodoDOMDocument|null
+	 * @return DOMNode
 	 */
-	protected function load( $docRef = null, ?string $name = null, ?string $href = null ) : ?DOMNode {
-		$realpath = realpath( '.' );
-		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/W3c' )
-			->files()->sortByName() );
+	protected function parseHtmlToDom( string $file_path ) : DOMNode {
+		$html = file_get_contents( $file_path );
+		// This code will move into DOMParser::parseFromString eventually
+		$domBuilder = new class( [ 'suppressHtmlNamespace' => true,
+			'suppressIdAttribute' => true,
+			'domExceptionClass' => DodoDOMException::class, ] ) extends DOMBuilder {
+			/** @var DodoDOMDocument */
+			private $doc;
 
-		return $this->parseHtmlToDom( array_key_first( $file_path ) );
+			/** @inheritDoc */
+			protected function createDocument( string $doctypeName = null,
+				string $public = null, string $system = null ) {
+				// Force this to be an HTML document (not an XML document)
+				$this->doc = new DodoDOMDocument( null,
+					'html' );
+
+				return $this->doc;
+			}
+
+			/** @inheritDoc */
+			public function doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength ) {
+				parent::doctype( $name,
+					$public,
+					$system,
+					$quirks,
+					$sourceStart,
+					$sourceLength );
+				// Set quirks mode on our document.
+				switch ( $quirks ) {
+					case TreeBuilder::NO_QUIRKS:
+						$this->doc->_setQuirksMode( 'no-quirks' );
+						break;
+					case TreeBuilder::LIMITED_QUIRKS:
+						$this->doc->_setQuirksMode( 'limited-quirks' );
+						break;
+					case TreeBuilder::QUIRKS:
+						$this->doc->_setQuirksMode( 'quirks' );
+						break;
+				}
+			}
+		};
+		$treeBuilder = new TreeBuilder( $domBuilder,
+			[ 'ignoreErrors' => true ] );
+		$dispatcher = new Dispatcher( $treeBuilder );
+		$tokenizer = new Tokenizer( $dispatcher,
+			$html,
+			[ 'ignoreErrors' => true ] );
+		$tokenizer->execute( [] );
+
+		return $domBuilder->getFragment();
 	}
 
 	/**
@@ -99,61 +138,5 @@ trait Helpers {
 	 */
 	protected function loadWptHtmlFile( $docRef ) : ?DOMNode {
 		return $this->parseHtmlToDom( realpath( '.' ) . '/' . $docRef );
-	}
-
-	/**
-	 * @param string $file_path
-	 *
-	 * @return DOMNode
-	 */
-	protected function parseHtmlToDom( string $file_path ) : DOMNode {
-		$html = file_get_contents( $file_path );
-		// This code will move into DOMParser::parseFromString eventually
-		$domBuilder = new class( [
-			'suppressHtmlNamespace' => true,
-			'suppressIdAttribute' => true,
-			'domExceptionClass' => DodoDOMException::class,
-		] ) extends DOMBuilder {
-				/** @var DodoDOMDocument */
-				private $doc;
-
-				/** @inheritDoc */
-				protected function createDocument(
-					string $doctypeName = null,
-					string $public = null,
-					string $system = null
-				) {
-					// Force this to be an HTML document (not an XML document)
-					$this->doc = new DodoDOMDocument( null, 'html' );
-					return $this->doc;
-				}
-
-				/** @inheritDoc */
-				public function doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength ) {
-					parent::doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength );
-					// Set quirks mode on our document.
-					switch ( $quirks ) {
-					case TreeBuilder::NO_QUIRKS:
-						$this->doc->_setQuirksMode( 'no-quirks' );
-						break;
-					case TreeBuilder::LIMITED_QUIRKS:
-						$this->doc->_setQuirksMode( 'limited-quirks' );
-						break;
-					case TreeBuilder::QUIRKS:
-						$this->doc->_setQuirksMode( 'quirks' );
-						break;
-					}
-				}
-		};
-		$treeBuilder = new TreeBuilder( $domBuilder, [
-			'ignoreErrors' => true
-		] );
-		$dispatcher = new Dispatcher( $treeBuilder );
-		$tokenizer = new Tokenizer( $dispatcher, $html, [
-				'ignoreErrors' => true ]
-		);
-		$tokenizer->execute( [] );
-
-		return $domBuilder->getFragment();
 	}
 }

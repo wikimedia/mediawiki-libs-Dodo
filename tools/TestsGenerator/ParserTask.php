@@ -610,7 +610,9 @@ class ParserTask extends BaseTask {
 						'runMatchesTest',
 						'init',
 						'isDefaultNamespace',
-						'array_map' ];
+						'array_map',
+						'furthestAncestor',
+						'previousNode' ];
 
 					if ( preg_match( '(' . implode( '|',
 								$functions_calls ) . ')',
@@ -718,7 +720,10 @@ class ParserTask extends BaseTask {
 			'DocumentType' => 'Wikimedia\Dodo\DocumentType',
 			'URL' => 'Wikimedia\Dodo\URL',
 			'DomException' => 'Wikimedia\Dodo\DomException',
-			'DOMImplementation' => 'Wikimedia\Dodo\DOMImplementation' ];
+			'DOMImplementation' => 'Wikimedia\Dodo\DOMImplementation',
+			'Range' => 'Wikimedia\IDLeDOM\Range',
+			'AbstractRange' => 'Wikimedia\IDLeDOM\AbstractRange',
+			'StaticRange' => 'Wikimedia\IDLeDOM\StaticRange', ];
 
 		foreach ( $list_ns as $use => $namespace ) {
 			if ( strpos( $this->test,
@@ -742,7 +747,7 @@ class ParserTask extends BaseTask {
 			'(new \ReflectionClass(Node::class))->hasMethod( "insertBefore" )',
 			'Node::prototype::replaceChild' =>
 				'(new \ReflectionClass(Node::class))->hasMethod( "replaceChild" )',
-			'Object::getOwnPropertyNames' => 'get_object_vars',
+			'Object::getOwnPropertyNames' => '$this->getOwnPropertyNames',
 			'$this->assertTrueData(isset($paragraphs[Symbol::iterator]));' =>
 				'// $this->assertTrueData(isset($paragraphs[Symbol::iterator]));',
 			'$this->assertTrueData(isset($elementClasses[Symbol::iterator]));' =>
@@ -763,7 +768,12 @@ class ParserTask extends BaseTask {
 			'(new DOMParser())->parseFromString' => '$this->parseFromString',
 			'Node::class::insertBefore' => '\'insertBefore\'',
 			'$new_el[$pair[\'attr\']]' => '$new_el->{$pair[\'attr\']}',
-			'$this->doc->body' => '$this->getDocBody( $this->doc )' ];
+			'$this->doc->body' => '$this->getDocBody( $this->doc )',
+			'[$method]' => '->{$method}',
+			// 'new Range()' => '$this->doc->createRange()',
+			// '$testDiv' => '$this->testDiv',
+			'Number(' => 'intval(',
+			'$testRangesShort' => '$this->testRangesShort' ];
 
 		// convert $_x to $this->_x.
 		$convert_list = $this->convertVarToClassVar( [ '$i2',
@@ -906,7 +916,6 @@ class ParserTask extends BaseTask {
 
 		$additional_stmts = [];
 
-		// @see AriaElementReflectionTentativeTest
 		if ( $this->test_type === 'Wpt' ) {
 			$source_file = $this->parser->parse( '<?php $this->doc = $this->loadWptHtmlFile (\'' . $this->test_path .
 				'\');' );
@@ -968,7 +977,14 @@ class ParserTask extends BaseTask {
 				[ $node ] );
 		}
 
-		if ( $main_method === 'testAppendOnDocument' || $main_method === 'testPrependOnDocument' ) {
+		if ( in_array( $main_method,
+			[ 'testAppendOnDocument',
+				'testPrependOnDocument' ] ) ) {
+			if ( isset( $functions[0] ) ) {
+				$functions[0]->stmts = array_merge( $additional_stmts,
+					$functions[0]->stmts );
+			}
+
 			$stmts = $functions;
 		}
 

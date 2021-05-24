@@ -114,13 +114,53 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
+	 * @param Document $doc
+	 *
+	 * @return HTMLElement
+	 */
+	public function getDocBody( Document $doc ) : HTMLElement {
+		return $doc->getBody();
+	}
+
+	/**
+	 * TODO implement this
+	 */
+	public function step_func_done( $func = null, $this_obj = null ) : void {
+	}
+
+	/**
+	 * @param mixed $elt
+	 *
+	 * @return mixed
+	 */
+	public function getOwnPropertyNames( $elt ) {
+		try {
+			if ( is_iterable( $elt ) ) {
+				$names = [];
+				foreach ( $elt as $el ) {
+					if ( isset( $el->name ) ) {
+						$names[] = $el->name;
+					}
+				}
+
+				return array_merge( array_keys( $names ),
+					array_flip( $names ) );
+			}
+		} catch ( Exception $e ) {
+			Util::error( $e->getMessage() );
+		}
+
+		return get_object_vars( $elt );
+	}
+
+	/**
 	 * @param $constructor
 	 * @param $func
-	 * @param $description
+	 * @param string $description
 	 *
 	 * @throws Exception
 	 */
-	protected function assertThrowsJsData( $constructor, $func, $description = '' ) : void {
+	protected function assertThrowsJsData( $constructor, $func, string $description = '' ) : void {
 		$this->assertThrowsJsImpl( $constructor,
 			$func,
 			$description,
@@ -138,7 +178,7 @@ abstract class WptTestHarness extends TestCase {
 	 *
 	 * @throws Exception
 	 */
-	protected function assertThrowsJsImpl( $constructor, $func, $description, $assertion_type ) {
+	protected function assertThrowsJsImpl( $constructor, $func, $description, $assertion_type ) : void {
 		/*
 		try {
 			$this->assertData( false,
@@ -292,26 +332,55 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
+	 *
+	 * Assert a DOMException with the expected type is thrown.
+	 *
+	 * @param {number|string} type The expected exception name or code.  See the
+	 *        table of names and codes at
+	 *        https://heycam.github.io/webidl/#dfn-error-names-table
+	 *        If a number is passed it should be one of the numeric code values
+	 *        in that table (e.g. 3, 4, etc).  If a string is passed it can
+	 *        either be an exception name (e.g. "HierarchyRequestError",
+	 *        "WrongDocumentError") or the name of the corresponding error code
+	 *        (e.g. "HIERARCHY_REQUEST_ERR", "WRONG_DOCUMENT_ERR").
+	 *
+	 * For the remaining arguments, there are two ways of calling
+	 * promise_rejects_dom:
+	 *
+	 * 1) If the DOMException is expected to come from the current global, the
+	 * second argument should be the function expected to throw and a third,
+	 * optional, argument is the assertion description.
+	 *
+	 * 2) If the DOMException is expected to come from some other global, the
+	 * second argument should be the DOMException constructor from that global,
+	 * the third argument the function expected to throw, and the fourth, optional,
+	 * argument the assertion description.
+	 *
 	 * @param $expected
-	 * @param $actual
-	 * @param $closure
+	 * @param null $actual
+	 * @param null $closure
 	 */
 	protected function assertThrowsDomData( $type, $funcOrConstructor, $descriptionOrFunc = null, $maybeDescription = null ) : void {
 		$constructor = null;
 		$func = null;
 		$description = null;
-		if ( $funcOrConstructor->name === 'DOMException' ) {
-			$constructor = $funcOrConstructor;
-			$func = $descriptionOrFunc;
-			$description = $maybeDescription;
-		} else {
-			$constructor = new DOMException( '',
-				'' );
-			$func = $funcOrConstructor;
-			$description = $descriptionOrFunc;
-			assert( $maybeDescription === null,
-				'Too many args pased to no-constructor version of assert_throws_dom' );
+		try {
+			$funcOrConstructor();
+		} catch ( Exception $exception ) {
+			if ( $exception instanceof DOMException ) {
+				$constructor = $exception;
+				$func = $funcOrConstructor;
+				$description = $descriptionOrFunc ?? $maybeDescription;
+			} else {
+				$constructor = new DOMException( '',
+					'' );
+				$func = $funcOrConstructor;
+				$description = $descriptionOrFunc ?? $maybeDescription;
+				$this->assertData( $maybeDescription === null,
+					'Too many args pased to no-constructor version of assert_throws_dom' );
+			}
 		}
+
 		$this->assertThrowsDomImpl( $type,
 			$func,
 			$description,
@@ -320,7 +389,144 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
+	 * @param $expected_true
+	 * @param $function_name
+	 * @param $description
+	 * @param $error
+	 * @param $substitutions
+	 */
+	protected function assertData( $expected_true, $function_name, $description, $error, $substitutions ) : void {
+		$msg = $this->makeMessage( $function_name,
+			$description,
+			$error,
+			$substitutions );
+
+		$this->assertTrue( $expected_true,
+			$msg );
+	}
+
+	/**
+	 * @param $function_name
+	 * @param $description
+	 * @param $error
+	 * @param $substitutions
 	 *
+	 * @return string
+	 */
+	protected function makeMessage( $function_name, $description, $error, $substitutions ) {
+		foreach ( $substitutions as $p => $___ ) {
+			if ( is_array( $substitutions[$p] ) ) {
+				$substitutions[$p] = implode( ',',
+					$substitutions[$p] );
+			} else {
+				$substitutions[$p] = '${' . $this->formatValue( $substitutions[$p] ) . '}';
+			}
+		}
+
+		return strtr( '${function_name}: ${description} ' . $error,
+			[ '${function_name}' => $function_name,
+				'${description}' => ( ( $description ) ? $description . ' ' : '' ),
+				$substitutions ] );
+	}
+
+	/**
+	 * TODO implement check if possible to implement
+	 *
+	 * @param $value
+	 *
+	 * @return mixed
+	 */
+	protected function formatValue( $value ) {
+		return $value;
+
+// if ( !$seen ) {
+//			$seen = [];
+//		}
+//		if ( gettype( $val ) === 'object' && $val !== null ) {
+//			if ( array_search( $val, $seen ) >= 0 ) {
+//				return '[...]';
+//			}
+//			$seen[] = $val;
+//		}
+//		if ( is_array( $val ) ) {
+//			$output = '[';
+//			if ( $val->beginEllipsis !== null ) {
+//				$output += "…, ";
+//			}
+//			$output += implode( ', ', array_map( $val, function ( $x ) { return format_value( $x, $seen );  } ) );
+//			if ( $val->endEllipsis !== null ) {
+//				$output += ", …";
+//			}
+//			return $output . ']';
+//		}
+//
+//		switch ( gettype( $val ) ) {
+//			case 'string':
+//				$val = preg_replace( '/\\\/', '\\\\', $val );
+//				foreach ( $replacements as $p => $___ ) {
+//					$replace = '\\' . $replacements[ $p ];
+//					$val = str_replace( RegExp( String::fromCharCode( $p ), 'g' ), $replace, $val );
+//				}
+//				return '"' . preg_replace( '/"/', '\"', $val ) . '"';
+//			case 'boolean':
+//
+//			case NULL:
+//				return String( $val );
+//			case 'number':
+//				// In JavaScript, -0 === 0 and String(-0) == "0", so we have to
+//				// special-case.
+//				if ( $val === -0 && 1 / $val === -$Infinity ) {
+//					return '-0';
+//				}
+//				return String( $val );
+//			case 'object':
+//				if ( $val === null ) {
+//					return 'null';
+//				}
+//
+//				// Special-case Node objects, since those come up a lot in my tests.  I
+//				// ignore namespaces.
+//				if ( is_node( $val ) ) {
+//					switch ( $val->nodeType ) {
+//						case Node\ELEMENT_NODE:
+//							$ret = '<' . $val->localName;
+//							for ( $i = 0;  $i < count( $val->attributes );  $i++ ) {
+//								$ret += ' ' . $val->attributes[ $i ]->name . '="' . $val->attributes[ $i ]->value . '"';
+//							}
+//							$ret += '>' . $val->innerHTML . '</' . $val->localName . '>';
+//							return 'Element node ' . truncate( $ret, 60 );
+//						case Node\TEXT_NODE:
+//							return 'Text node "' . truncate( $val->data, 60 ) . '"';
+//						case Node\PROCESSING_INSTRUCTION_NODE:
+//							return 'ProcessingInstruction node with target ' . format_value( truncate( $val->target, 60 ) ) . ' and data ' . format_value( truncate( $val->data, 60 ) );
+//						case Node\COMMENT_NODE:
+//							return 'Comment node <!--' . truncate( $val->data, 60 ) . '-->';
+//						case Node\DOCUMENT_NODE:
+//							return 'Document node with ' . count( $val->childNodes ) . ( ( count( $val->childNodes ) == 1 ) ? ' child' : ' children' );
+//						case Node\DOCUMENT_TYPE_NODE:
+//							return 'DocumentType node';
+//						case Node\DOCUMENT_FRAGMENT_NODE:
+//							return 'DocumentFragment node with ' . count( $val->childNodes ) . ( ( count( $val->childNodes ) == 1 ) ? ' child' : ' children' );
+//						default:
+//							return 'Node object of unknown type';
+//					}
+//				}
+//
+//			/* falls through */
+//			default:
+//				try {
+//					return gettype( $val ) . ' "' . truncate( String( $val ), 1000 ) . '"';
+//				} catch ( Exception $e ) {
+//					return ( '[stringifying object threw ' . String( $e )
+//						.				' with type ' . String( gettype( $e ) ) . ']' );
+//				}
+//		}
+	}
+
+	/**
+	 * TODO Refactor this
+	 *
+	 * from DominoJS:
 	 * Similar to assert_throws_dom but allows specifying the assertion type
 	 * (assert_throws_dom or promise_rejects_dom, in practice).  The
 	 * "constructor" argument must be the DOMException constructor from the
@@ -341,10 +547,6 @@ abstract class WptTestHarness extends TestCase {
 				'${func} did not throw',
 				[ 'func' => $func ] );
 		} catch ( Exception $e ) {
-//			if ( $e instanceof $AssertionError ) {
-//				throw $e;
-//			}
-
 			// Basic sanity-checks on the thrown exception.
 			$this->assertData( is_object( $e ),
 				$assertion_type,
@@ -424,13 +626,7 @@ abstract class WptTestHarness extends TestCase {
 				'OperationError' => 0,
 				'NotAllowedError' => 0 ];
 
-			$code_name_map = [];
-			foreach ( $name_code_map as $key => $___ ) {
-				if ( $name_code_map[$key] > 0 ) {
-					$code_name_map[$name_code_map[$key]] = $key;
-				}
-			}
-
+			$code_name_map = array_flip( $name_code_map );
 			$required_props = [];
 			$name = null;
 
@@ -443,86 +639,35 @@ abstract class WptTestHarness extends TestCase {
 						'Test bug: unrecognized DOMException code "' . $type . '" passed to assert_throws_dom()' );
 				}
 				$name = $code_name_map[$type];
-				$required_props->code = $type;
+				$required_props['code'] = $type;
 			} elseif ( is_string( $type ) ) {
-				$name = ( isset( $codename_name_map[$type] ) ) ? $codename_name_map[$type] : $type;
+				$name = $codename_name_map[$type] ?? $type;
 				if ( !( isset( $name_code_map[$name] ) ) ) {
 					Util::error( 'AssertionError',
 						'Test bug: unrecognized DOMException code name or name "' . $type . '" passed to assert_throws_dom()' );
 				}
 
-				$required_props->code = $name_code_map[$name];
+				$required_props['code'] = $name_code_map[$name];
 			}
 
-			if ( $required_props->code === 0 || ( isset( $e['name'] ) && $e->name !== strtoupper( $e->name ) && $e->name !== 'DOMException' ) ) {
+			if ( $required_props['code'] === 0 || ( $e->name !== strtoupper( $e->getName() ) && $e->getName() !== 'DOMException' ) ) {
 				// New style exception: also test the name property.
-				$required_props->name = $name;
+				$required_props['name'] = $name;
 			}
 
 			foreach ( $required_props as $prop => $___ ) {
-				$this->assertData( isset( $e[$prop] ) && $e[$prop] == $required_props[$prop],
+				$proper_name = 'get' . ucfirst( $prop );
+				$this->assertData( $e->{$proper_name}() === $required_props[$prop],
 					$assertion_type,
 					$description,
 					'${func} threw ${e} that is not a DOMException ' . $type . ': property ${prop} is equal to ${actual}, expected ${expected}',
-					[ 'func' => $func,
-						'e' => $e,
-						'prop' => $prop,
-						'actual' => $e[$prop],
-						'expected' => $required_props[$prop] ] );
+					[ '${func}' => 'Closure',
+						'${e}' => $e->getName(),
+						'${prop}' => $prop,
+						'${actual}' => $e->{$prop},
+						'${expected}' => $required_props[$prop] ] );
 			}
-
-			// Check that the exception is from the right global.  This check is last
-			// so more specific, and more informative, checks on the properties can
-			// happen in case a totally incorrect exception is thrown.
-			$this->assertData( $e->constructor === $constructor,
-				$assertion_type,
-				$description,
-				'${func} threw an exception from the wrong global',
-				[ 'func' => $func ] );
 		}
-	}
-
-	/**
-	 * @param $expected_true
-	 * @param $function_name
-	 * @param $description
-	 * @param $error
-	 * @param $substitutions
-	 */
-	protected function assertData( $expected_true, $function_name, $description, $error, $substitutions ) : void {
-		if ( $expected_true !== true ) {
-			$msg = $this->makeMessage( $function_name,
-				$description,
-				$error,
-				$substitutions );
-			Util::error( 'AssertionError',
-				$msg );
-		}
-	}
-
-	/**
-	 * @param $function_name
-	 * @param $description
-	 * @param $error
-	 * @param $substitutions
-	 *
-	 * @return string
-	 */
-	protected function makeMessage( $function_name, $description, $error, $substitutions ) {
-//		foreach ( $substitutions as $p => $___ ) {
-//			if ( $substitutions->hasOwnProperty( $p ) ) {
-//				$substitutions[$p] = $this->format_value( $substitutions[$p] );
-//			}
-//		}
-//		$node_form = substitute( [ '{text}',
-//			'${function_name}: ${description}' . $error ],
-//			array_merge ( [ 'function_name' => $function_name,
-//				'description' => ( ( $description ) ? $description . ' ' : '' ) ],
-//				$substitutions ) );
-//
-//		return implode( '',
-//			array_slice( $node_form,
-//				1 ) );
 	}
 
 	/**
@@ -536,16 +681,21 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
+	 * TODO stub
+	 *
 	 * @param $actual
 	 * @param $expected
 	 * @param null $message
 	 */
 	protected function assertEqualNodeData( $actual, $expected, $message = null ) : void {
-
 	}
 
+	/**
+	 * TODO stub
+	 *
+	 * @param ...$arg
+	 */
 	protected function runMutationTest( ...$arg ) {
-
 	}
 
 	/**
@@ -632,10 +782,6 @@ abstract class WptTestHarness extends TestCase {
 			$message );
 	}
 
-	protected function formatValue( $value ) {
-		return $value;
-	}
-
 	/**
 	 * Returns the first Node that's after node in tree order, or null if node is
 	 * the last Node.
@@ -651,7 +797,7 @@ abstract class WptTestHarness extends TestCase {
 	/**
 	 * @param mixed ...$arg
 	 */
-	protected function assertUnreached( $description ) {
+	protected function assertUnreached( $description ) : void {
 		$this->assertData( false,
 			"assert_unreached",
 			$description,
@@ -682,7 +828,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @todo rewrite this
 	 *
 	 */
-	protected function assertClassStringData( $object, $class_string, $description = '' ) {
+	protected function assertClassStringData( $object, $class_string, $description = '' ) : void {
 		$actual = call_user_func( [ [],
 			'toString' ] );
 		$expected = '[object ' . $class_string . ']';
@@ -701,13 +847,9 @@ abstract class WptTestHarness extends TestCase {
 	 *
 	 * @return bool
 	 */
-	protected function sameValue( $x, $y ) {
-		if ( $y !== $y ) {
-			//NaN case
-			return $x !== $x;
-		}
+	protected function sameValue( $x, $y ) : bool {
 		if ( $x === 0 && $y === 0 ) {
-			//Distinguish +0 and -0
+			// Distinguish +0 and -0
 			return 1 / $x === 1 / $y;
 		}
 
@@ -722,12 +864,12 @@ abstract class WptTestHarness extends TestCase {
 	 * @todo rewrite this
 	 *
 	 */
-	protected function assertReadonlyData( $object, $property_name, $description = '' ) {
+	protected function assertReadonlyData( $object, $property_name, $description = '' ) : void {
 		$initial_value = $object[$property_name];
 		try {
-			//Note that this can have side effects in the case where
+			// Note that this can have side effects in the case where
 			//the property has PutForwards
-			$object[$property_name] = $initial_value . 'a'; //XXX use some other value here?
+			$object[$property_name] = $initial_value . 'a'; // XXX use some other value here?
 			$this->assertData( $this->sameValue( $object[$property_name],
 				$initial_value ),
 				'assert_readonly',
@@ -742,24 +884,23 @@ abstract class WptTestHarness extends TestCase {
 	/**
 	 * @todo implement this
 	 */
-	protected function checkRecords( ...$arg ) {
-
+	protected function checkRecords( ...$arg ) : void {
 	}
 
 	/**
 	 * STUB
 	 */
-	protected function done() {
-
+	protected function done() : void {
 	}
 
 	/**
-	 * @TODO rewrite this
-	 *
 	 * @param $func_or_properties
 	 * @param $maybe_properties
+	 *
+	 * @todo rewrite this
+	 *
 	 */
-	protected function setupData( $func_or_properties, $maybe_properties ) {
+	protected function setupData( $func_or_properties, $maybe_properties ) : void {
 		$func = null;
 		$properties = [];
 		if ( count( $arguments ) === 2 ) {
@@ -779,8 +920,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @param $actual
 	 * @param $expected
 	 */
-	protected function assertNodeData( $actual, $expected ) {
-
+	protected function assertNodeData( $actual, $expected ) : void {
 		$this->assertTrueData( $actual instanceof $expected->type,
 			'Node type mismatch: actual = ' . $actual->nodeType . ', expected = ' . $expected->nodeType );
 		if ( gettype( $expected->id ) !== null ) {
@@ -798,7 +938,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @param mixed $expected
 	 * @param string $message
 	 */
-	protected function assertEqualsData( $actual, $expected, string $message = '' ) {
+	protected function assertEqualsData( $actual, $expected, string $message = '' ) : void {
 		$this->assertEquals( $expected,
 			$actual,
 			$message );
@@ -876,7 +1016,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @param $expected
 	 * @param $description
 	 */
-	protected function assertArrayEqualsData( $actual, $expected, $description = '' ) {
+	protected function assertArrayEqualsData( $actual, $expected, $description = '' ) : void {
 		$max_array_length = 20;
 
 		$this->assertData( gettype( $actual ) === 'object' && $actual !== null && isset( $actual['length'] ),
@@ -925,7 +1065,7 @@ abstract class WptTestHarness extends TestCase {
 	/**
 	 * @param $arr
 	 * @param int $offset
-	 * @param $max_array_length
+	 * @param &$max_array_length
 	 *
 	 * @return array
 	 */
@@ -936,9 +1076,6 @@ abstract class WptTestHarness extends TestCase {
 			return $arr;
 		}
 
-// By default we want half the elements after the offset and half before
-// But if that takes us past the end of the array, we have more before, and
-// if it takes us before the start we have more after.
 		$length_after_offset = floor( $max_array_length / 2 );
 		$upper_bound = min( $length_after_offset + $offset,
 			count( $arr ) );
@@ -963,7 +1100,9 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
-	 *
+	 * @param $exception
+	 * @param $func
+	 * @param $description
 	 */
 	protected function assertThrowsExactlyData( $exception, $func, $description ) {
 		$this->assertThrowsExactlyImpl( $exception,
@@ -976,7 +1115,7 @@ abstract class WptTestHarness extends TestCase {
 	 * Like assert_throws_exactly but allows specifying the assertion type
 	 * (assert_throws_exactly or promise_rejects_exactly, in practice).
 	 */
-	protected function assertThrowsExactlyImpl( $exception, $func, $description, $assertion_type ) {
+	protected function assertThrowsExactlyImpl( $exception, $func, $description, $assertion_type ) : void {
 		try {
 			$func();
 			$this->assertData( false,
@@ -1027,6 +1166,14 @@ abstract class WptTestHarness extends TestCase {
 		}
 	}
 
+	/**
+	 * @param $attr
+	 * @param $v
+	 * @param $ln
+	 * @param $ns
+	 * @param $p
+	 * @param $n
+	 */
 	protected function attrIs( $attr, $v, $ln, $ns, $p, $n ) {
 		$this->assertEqualsData( $attr->value,
 			$v );
@@ -1053,12 +1200,12 @@ abstract class WptTestHarness extends TestCase {
 	 *
 	 * @param $func
 	 * @param $args
-	 * @param $properties
+	 * @param &$properties
 	 */
-	protected function generateTests( $func, $args, &$properties ) {
+	protected function generateTests( $func, $args, &$properties ) : void {
 		foreach ( $args as $x => $i ) {
 			$name = $x[0];
-			$this->assertTest( function () use ( $x ) {
+			$this->assertTest( static function () use ( $x ) {
 				array_slice( $x,
 					1 );
 			},
@@ -1091,8 +1238,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @param $method
 	 * @param $type
 	 */
-	protected function assertIdlAttributeData( $obj, $method, $type ) {
-
+	protected function assertIdlAttributeData( $obj, $method, $type ) : void {
 	}
 
 	/**
@@ -1100,10 +1246,10 @@ abstract class WptTestHarness extends TestCase {
 	 * @param $expected
 	 * @param string|null $description
 	 */
-	protected function assertInArrayData( $actual, $expected, ?string $description = null ) {
-		$this->assertData( array_search( $actual,
-				$expected,
-				true ) != false,
+	protected function assertInArrayData( $actual, $expected, ?string $description = null ) : void {
+		$this->assertData( in_array( $actual,
+			$expected,
+			true ),
 			'assertInArrayData',
 			$description,
 			'value ${actual} not in array ${expected}',
@@ -1115,15 +1261,5 @@ abstract class WptTestHarness extends TestCase {
 	 * @param mixed ...$arg
 	 */
 	protected function parseFromString( ...$arg ) : void {
-
-	}
-
-	/**
-	 * @param Document $doc
-	 *
-	 * @return \Wikimedia\Dodo\HTMLElement
-	 */
-	private function getDocBody( Document $doc ) : HTMLElement {
-		return $doc->getBody();
 	}
 }

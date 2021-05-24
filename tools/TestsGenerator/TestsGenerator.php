@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace Wikimedia\Dodo\Tools\TestsGenerator;
 
 use Exception;
+use Robo\Common\IO;
 use Robo\Exception\TaskException;
 use Robo\Result;
 use Robo\Tasks;
@@ -23,7 +24,7 @@ class TestsGenerator extends Tasks {
 	use \Robo\Task\Filesystem\Tasks;
 	use \Robo\Task\Base\Tasks;
 	use \Robo\Task\Npm\Tasks;
-	use \Robo\Common\IO;
+	use IO;
 	use Helpers;
 
 	public const W3C = "W3c";
@@ -106,7 +107,7 @@ class TestsGenerator extends Tasks {
 			}
 
 			foreach ( $result->getData() as $test_type => $tests ) {
-				if ( $test_type === 'time' ) {
+				if ( $test_type === 'time' || $test_type == 'w3c' ) {
 					continue;
 				}
 
@@ -131,7 +132,8 @@ class TestsGenerator extends Tasks {
 						$file->getPath() );
 
 					// eg. /level1/core -> /Level1/Core
-					$test_path = ucwords( $test_path, '/' );
+					$test_path = ucwords( $test_path,
+						'/' );
 					$test_path = "{$this->root_folder}/tests/{$test_type}{$test_path}/{$new_test_name}Test.php";
 					/**
 					 * skip test if it's already generated and there is no --rewrite arg provided,
@@ -393,7 +395,7 @@ class TestsGenerator extends Tasks {
 	/**
 	 * Converts file paths to relative.
 	 */
-	public function processLog(): void {
+	public function processLog() : void {
 		$log_exits = $this->filesystem->exists( [ 'tests/log.xml' ] );
 		if ( $log_exits ) {
 			$log_file = file_get_contents( $this->root_folder . '/tests/log.xml' );
@@ -405,15 +407,36 @@ class TestsGenerator extends Tasks {
 				$log_file );
 
 			$this->taskWriteToFile( $this->root_folder . '/tests/log.xml' )->text( $log_file )->run();
+			$this->getStatistics( $log_file );
+			$this->generateFailureList();
 		}
 	}
 
 	/**
-	 * Deletes test files after they have been executed.
+	 * @param string $log
 	 */
-	protected function cleanUp() {
-		$this->filesystem->remove( $this->root_folder . '/tests/wpt' );
-		$this->filesystem->remove( $this->root_folder . '/tests/w3c' );
+	public function getStatistics( string $log ) : void {
+		$xml = simplexml_load_string( $log );
+
+		$xml->registerXPathNamespace( 'fn',
+			'http://www.w3.org/2005/xpath-functions' );
+
+		$errors = $xml->xpath( '//*[@type="Error"]' );
+		$this->writeln( "There are " . count( $errors ) . " errors." );
+		$errors_cause = [];
+		foreach ( $errors as $error ) {
+			preg_match( "/(\nError: )(.*)(\n\n)/",
+				(string)$error,
+				$matches );
+			if ( !empty( $matches ) && isset( $matches[2] ) ) {
+				$errors_cause[] = $matches[2];
+			}
+		}
+		$errors_cause = array_count_values( $errors_cause );
+		$errors_cause = var_export( $errors_cause,
+			true );
+		$this->writeln( $errors_cause );
+		$this->taskWriteToFile( $this->root_folder . '/tests/errors.txt' )->text( $errors_cause )->run();
 	}
 
 	/**
@@ -448,13 +471,21 @@ class TestsGenerator extends Tasks {
 		foreach ( $distinct_errors as &$error ) {
 			$tests = $xml->xpath( "//error[@type='$error']/parent::*" );
 			$error = [ 'error' => $error,
-				'tests' => $tests,
-				'total' => count( $tests ) ];
+				'total' => count( $tests ),
+				'tests' => $tests, ];
 		}
 
 		$json = json_encode( $distinct_errors,
 			JSON_PRETTY_PRINT );
 		$this->taskWriteToFile( $this->root_folder . '/tests/log.json' )->text( $json )->run();
+	}
+
+	/**
+	 * Deletes test files after they have been executed.
+	 */
+	protected function cleanUp() {
+		$this->filesystem->remove( $this->root_folder . '/tests/wpt' );
+		$this->filesystem->remove( $this->root_folder . '/tests/w3c' );
 	}
 
 	/**

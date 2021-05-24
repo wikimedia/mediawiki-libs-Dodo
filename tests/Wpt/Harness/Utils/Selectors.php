@@ -1625,7 +1625,7 @@ trait Selectors {
 
 	 */
 
-	public $scopedSelectors = [//{name: "", selector: "", ctx: "", ref: "", expect: [], level: 1, testType: TEST_FIND |
+	public $scopedSelectors = [ // {name: "", selector: "", ctx: "", ref: "", expect: [], level: 1, testType: TEST_FIND |
 // TEST_MATCH},
 
 		// Attribute Selectors

@@ -5,9 +5,10 @@ namespace Wikimedia\Dodo\Tests\W3c\Harness;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Symfony\Component\Finder\Finder;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\DOMImplementation;
-use Wikimedia\Dodo\Node;
+use Wikimedia\Dodo\Node as DOMNode;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
 use Wikimedia\Dodo\Document as DodoDOMDocument;
 
@@ -511,5 +512,23 @@ abstract class W3cTestHarness extends TestCase {
 	 */
 	protected function getImplementation() : DOMImplementation {
 		return $this->doc->getImplementation();
+	}
+
+	/**
+	 * Loads html document.
+	 *
+	 * @param mixed $docRef
+	 * @param string|null $name
+	 * @param string|null $href
+	 *
+	 * @return DodoDOMDocument|null
+	 */
+	protected function load( $docRef = null, ?string $name = null, ?string $href = null ) : ?DOMNode {
+		$this->contentType = 'text/html';
+		$realpath = realpath( '.' );
+		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/W3c' )
+			->files()->sortByName() );
+
+		return $this->parseHtmlToDom( array_key_first( $file_path ) );
 	}
 }

@@ -1,6 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\Wpt\Dom;
 use Wikimedia\Dodo\Node;
+use Wikimedia\IDLeDOM\Range;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-set.html.
 class RangeSetTest extends WptTestHarness
@@ -25,7 +26,7 @@ class RangeSetTest extends WptTestHarness
         $this->assertEqualsData($newRange->startOffset, $offset, 'setStart() must change startOffset to the new offset');
         // FIXME: I'm assuming comparePoint() is correct, but the tests for that
         // will depend on setStart()/setEnd().
-        if (furthestAncestor($node) != furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) > 0) {
+        if ($this->furthestAncestor($node) != $this->furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) > 0) {
             $this->assertEqualsData($newRange->endContainer, $node, 'setStart(node, offset) where node is after current end or in different document must set the end node to node too');
             $this->assertEqualsData($newRange->endOffset, $offset, 'setStart(node, offset) where node is after current end or in different document must set the end offset to offset too');
         } else {
@@ -51,7 +52,7 @@ class RangeSetTest extends WptTestHarness
         $newRange->setEnd($node, $offset);
         // FIXME: I'm assuming comparePoint() is correct, but the tests for that
         // will depend on setStart()/setEnd().
-        if (furthestAncestor($node) != furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) < 0) {
+        if ($this->furthestAncestor($node) != $this->furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) < 0) {
             $this->assertEqualsData($newRange->startContainer, $node, 'setEnd(node, offset) where node is before current start or in different document must set the end node to node too');
             $this->assertEqualsData($newRange->startOffset, $offset, 'setEnd(node, offset) where node is before current start or in different document must set the end offset to offset too');
         } else {
@@ -133,23 +134,23 @@ class RangeSetTest extends WptTestHarness
         // Don't want to eval() each point a bazillion times
         $testPointsCached = $this->arrayMap($testPoints, $eval);
         $this->testNodesCached = $this->arrayMap($this->testNodesShort, $eval);
-        for ($i = 0; $i < count($testRangesShort); $i++) {
-            $endpoints = eval($testRangesShort[$i]);
+        for ($i = 0; $i < count($this->testRangesShort); $i++) {
+            $endpoints = eval($this->testRangesShort[$i]);
             $range = null;
             $this->assertTest(function () use(&$endpoints) {
                 $range = ownerDocument($endpoints[0])->createRange();
                 $range->setStart($endpoints[0], $endpoints[1]);
                 $range->setEnd($endpoints[2], $endpoints[3]);
-            }, 'Set up range ' . $i . ' ' . $testRangesShort[$i]);
+            }, 'Set up range ' . $i . ' ' . $this->testRangesShort[$i]);
             for ($j = 0; $j < count($testPoints); $j++) {
-                $startTests[] = ['setStart() with range ' . $i . ' ' . $testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
-                $endTests[] = ['setEnd() with range ' . $i . ' ' . $testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
+                $startTests[] = ['setStart() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
+                $endTests[] = ['setEnd() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
             }
             for ($j = 0; $j < count($this->testNodesShort); $j++) {
-                $startBeforeTests[] = ['setStartBefore() with range ' . $i . ' ' . $testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
-                $startAfterTests[] = ['setStartAfter() with range ' . $i . ' ' . $testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
-                $endBeforeTests[] = ['setEndBefore() with range ' . $i . ' ' . $testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
-                $endAfterTests[] = ['setEndAfter() with range ' . $i . ' ' . $testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
+                $startBeforeTests[] = ['setStartBefore() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
+                $startAfterTests[] = ['setStartAfter() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
+                $endBeforeTests[] = ['setEndBefore() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
+                $endAfterTests[] = ['setEndAfter() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
             }
         }
         $this->generateTests($testSetStart, $startTests);

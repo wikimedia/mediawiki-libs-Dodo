@@ -1,6 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\Wpt\Dom;
 use Wikimedia\Dodo\Node;
+use Wikimedia\IDLeDOM\Range;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode.html.
 class RangeIntersectsNodeTest extends WptTestHarness
@@ -25,7 +26,7 @@ class RangeIntersectsNodeTest extends WptTestHarness
                     $range = $testRangesCached[$j]->cloneRange();
                     // "If node's root is different from the context object's root,
                     // return false and terminate these steps."
-                    if (furthestAncestor($node) !== furthestAncestor($range->startContainer)) {
+                    if ($this->furthestAncestor($node) !== $this->furthestAncestor($range->startContainer)) {
                         $this->assertEqualsData($range->intersectsNode($node), false, 'Must return false if node and range have different roots');
                         return;
                     }

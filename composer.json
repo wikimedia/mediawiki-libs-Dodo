@@ -94,7 +94,10 @@
 		],
 		"phan": "phan --allow-polyfill-parser",
 		"phpcs": "phpcs -sp",
-		"phpunit": "phpunit",
+		"phpunit": [
+            "phpunit",
+            "@robo process:log"
+        ],
 		"phpcbf": "phpcbf",
 		"update-tests": "@robo build",
 		"update-tags": [

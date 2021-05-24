@@ -6,6 +6,7 @@ use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
+use Wikimedia\IDLeDOM\Range;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-textContent.html.
 class NodeTextContentTest extends WptTestHarness

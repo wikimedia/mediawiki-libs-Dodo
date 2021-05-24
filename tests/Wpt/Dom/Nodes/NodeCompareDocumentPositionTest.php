@@ -26,7 +26,7 @@ class NodeCompareDocumentPositionTest extends WptTestHarness
                     // DOCUMENT_POSITION_PRECEDING or DOCUMENT_POSITION_FOLLOWING, with the
                     // constraint that this is to be consistent, together and terminate these
                     // steps."
-                    if (furthestAncestor($reference) !== furthestAncestor($other)) {
+                    if ($this->furthestAncestor($reference) !== $this->furthestAncestor($other)) {
                         // TODO: Test that it's consistent.
                         $this->assertInArrayData($result, [Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_PRECEDING, Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_FOLLOWING]);
                         return;
@@ -55,9 +55,9 @@ class NodeCompareDocumentPositionTest extends WptTestHarness
                     }
                     // "If other is preceding reference return DOCUMENT_POSITION_PRECEDING
                     // and terminate these steps."
-                    $prev = previousNode($reference);
+                    $prev = $this->previousNode($reference);
                     while ($prev && $prev !== $other) {
-                        $prev = previousNode($prev);
+                        $prev = $this->previousNode($prev);
                     }
                     if ($prev === $other) {
                         $this->assertEqualsData($result, Node::DOCUMENT_POSITION_PRECEDING);

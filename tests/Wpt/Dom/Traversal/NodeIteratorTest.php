@@ -88,7 +88,7 @@ class NodeIteratorTest extends WptTestHarness
                 if ($beforeNode) {
                     // "If before node is true, let node be the first node preceding node
                     // in the iterator collection. If there is no such node return null."
-                    $node = previousNode($node);
+                    $node = $this->previousNode($node);
                     if (!isInclusiveDescendant($node, $root)) {
                         $node = null;
                         break;

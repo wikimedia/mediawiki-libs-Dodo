@@ -34,7 +34,7 @@ class ElementChildrenTest extends WptTestHarness
                 }
             }
             $this->assertArrayEqualsData($result, ['0', '1', '2', '3', '4', '5']);
-            $result = get_object_vars($list);
+            $result = $this->getOwnPropertyNames($list);
             $this->assertArrayEqualsData($result, ['0', '1', '2', '3', '4', '5', 'foo', 'bar', 'baz']);
             // Mapping of exposed names to their indices in the list.
             $exposedNames = ['foo' => 1, 'bar' => 3, 'baz' => 4];

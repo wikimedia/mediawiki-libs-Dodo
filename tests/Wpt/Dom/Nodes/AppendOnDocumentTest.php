@@ -8,6 +8,7 @@ class AppendOnDocumentTest extends WptTestHarness
 {
     public function testAppendOnDocument()
     {
+        $this->doc = $this->loadWptHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/append-on-Document.html');
         $node = $this->doc->implementation->createDocument(null, null);
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();

@@ -11,7 +11,7 @@ class DocumentCreateTextNodeTest extends WptTestHarness
     {
         foreach (["\\u000b", 'a -- b', 'a-', '-b', null, null] as $value) {
             $this->assertTest(function () use(&$method, &$value, &$iface, &$nodeType, &$nodeName) {
-                $c = $this->doc[$method]($value);
+                $c = $this->doc->{$method}($value);
                 $expected = strval($value);
                 $this->assertTrueData($c instanceof $iface);
                 $this->assertTrueData($c instanceof CharacterData);

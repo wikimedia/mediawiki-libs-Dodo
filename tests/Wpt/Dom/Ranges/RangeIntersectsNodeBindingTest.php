@@ -1,6 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\Wpt\Dom;
 use Wikimedia\Dodo\Node;
+use Wikimedia\IDLeDOM\Range;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode-binding.html.
 class RangeIntersectsNodeBindingTest extends WptTestHarness

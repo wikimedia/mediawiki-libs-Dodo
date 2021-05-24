@@ -5,6 +5,7 @@ use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
+use Wikimedia\IDLeDOM\Range;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-deleteContents.html.
 class RangeDeleteContentsTest extends WptTestHarness
@@ -140,12 +141,12 @@ class RangeDeleteContentsTest extends WptTestHarness
             // tested for isEqualNode() and checking the children would be
             // redundant.
             $actualAllNodes = [];
-            $node = furthestAncestor($actualRange->startContainer);
+            $node = $this->furthestAncestor($actualRange->startContainer);
             do {
                 $actualAllNodes[] = $node;
             } while ($node = nextNode($node));
             $expectedAllNodes = [];
-            $node = furthestAncestor($expectedRange->startContainer);
+            $node = $this->furthestAncestor($expectedRange->startContainer);
             do {
                 $expectedAllNodes[] = $node;
             } while ($node = nextNode($node));
@@ -242,8 +243,8 @@ class RangeDeleteContentsTest extends WptTestHarness
         $iStop = count($testRanges);
         if (preg_match('/subtest=[0-9]+/', $location->search)) {
             $matches = preg_match('/subtest=([0-9]+)/', $location->search, $FIXME);
-            $iStart = Number($matches[1]);
-            $iStop = Number($matches[1]) + 1;
+            $iStart = intval($matches[1]);
+            $iStop = intval($matches[1]) + 1;
         }
         $domTests = [];
         $positionTests = [];

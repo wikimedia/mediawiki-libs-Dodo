@@ -1,6 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\Wpt\Dom;
 use Wikimedia\Dodo\Element;
+use Wikimedia\IDLeDOM\Range;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-compareBoundaryPoints.html.
 class RangeCompareBoundaryPointsTest extends WptTestHarness
@@ -11,9 +12,9 @@ class RangeCompareBoundaryPointsTest extends WptTestHarness
         $testRangesCached = [];
         $testRangesCached[] = $this->doc->createRange();
         $testRangesCached[0]->detach();
-        for ($i = 0; $i < count($testRangesShort); $i++) {
+        for ($i = 0; $i < count($this->testRangesShort); $i++) {
             try {
-                $testRangesCached[] = rangeFromEndpoints(eval($testRangesShort[$i]));
+                $testRangesCached[] = rangeFromEndpoints(eval($this->testRangesShort[$i]));
             } catch (Exception $e) {
                 $testRangesCached[] = null;
             }
@@ -74,7 +75,7 @@ class RangeCompareBoundaryPointsTest extends WptTestHarness
                         // utility function to do this work.
                         // "Let number be the result of calling ToNumber on the input
                         // argument."
-                        $convertedHow = Number($how);
+                        $convertedHow = intval($how);
                         // "If number is NaN, +0, −0, +∞, or −∞, return +0."
                         if (isNaN($convertedHow) || $convertedHow == 0 || $convertedHow == $Infinity || $convertedHow == -$Infinity) {
                             $convertedHow = 0;
@@ -110,7 +111,7 @@ class RangeCompareBoundaryPointsTest extends WptTestHarness
                         // "If context object's root is not the same as sourceRange's
                         // root, throw a "WrongDocumentError" exception and terminate
                         // these steps."
-                        if (furthestAncestor($range1->startContainer) != furthestAncestor($range2->startContainer)) {
+                        if ($this->furthestAncestor($range1->startContainer) != $this->furthestAncestor($range2->startContainer)) {
                             $this->assertThrowsDomData('WRONG_DOCUMENT_ERR', function () use(&$range1, &$how, &$range2) {
                                 $range1->compareBoundaryPoints($how, $range2);
                             }, "WrongDocumentError required if the ranges don't share a root");
