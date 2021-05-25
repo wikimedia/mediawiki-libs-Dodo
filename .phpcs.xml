@@ -13,12 +13,9 @@
 	<file>.</file>
 	<arg name="encoding" value="UTF-8"/>
 	<arg name="extensions" value="php"/>
-	<exclude-pattern>coverage</exclude-pattern>
-	<exclude-pattern>vendor</exclude-pattern>
-	<exclude-pattern>doc/html</exclude-pattern>
-	<exclude-pattern>.phan/stubs</exclude-pattern>
-	<exclude-pattern>tests/w3c</exclude-pattern>
-	<exclude-pattern>tests/wpt</exclude-pattern>
+	<exclude-pattern type="relative">^doc/html/*</exclude-pattern>
+	<exclude-pattern type="relative">^.phan/stubs/*</exclude-pattern>
+	<exclude-pattern type="relative">^tests/(W3c|Wpt)/*</exclude-pattern>
 
 	<rule ref="MediaWiki.Commenting.FunctionAnnotations">
 		<properties>
@@ -52,13 +49,13 @@
 		and other code shouldn't need to use underscore prefixes.
 	-->
 	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
-		<exclude-pattern>src</exclude-pattern>
+		<exclude-pattern>src/*</exclude-pattern>
 	</rule>
 	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
-		<exclude-pattern>src</exclude-pattern>
+		<exclude-pattern>src/*</exclude-pattern>
 	</rule>
 	<rule ref="MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName">
-		<exclude-pattern>src</exclude-pattern>
+		<exclude-pattern>src/*</exclude-pattern>
 	</rule>
 	<!-- re-add a version of LowerCamelFunctionsName which is
 	     tolerant of leading underscores -->
