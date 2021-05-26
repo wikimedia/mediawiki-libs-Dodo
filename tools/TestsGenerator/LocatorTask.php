@@ -24,6 +24,57 @@ class LocatorTask extends BaseTask {
 	private const WPT_TESTS = "/vendor/web-platform-tests/wpt/dom";
 
 	/**
+	 * @var string[]
+	 */
+	public static $skips = [ 'DOMImplementation-createDocument' => 'js2php or parsing issue',
+		'Document-createProcessingInstruction' => 'js2php or parsing issue',
+		'Element-classlist' => 'js2php or parsing issue',
+		'MutationObserver-document' => 'js2php or parsing issue',
+		'Node-baseURI' => 'js2php or parsing issue',
+		'Node-childNodes' => 'js2php or parsing issue',
+		'Node-cloneNode-document-with-doctype' => 'js2php or parsing issue',
+		'Node-parentNode-iframe' => 'js2php or parsing issue',
+		'Node-properties' => 'js2php or parsing issue',
+		'attributes-namednodemap' => 'js2php or parsing issue',
+		'HTMLCollection-supported-property-indices' => 'js2php or parsing issue',
+		'DOMTokenList-iteration' => 'js2php or parsing issue',
+		'Range-comparePoint' => 'js2php or parsing issue',
+		'Range-isPointInRange' => 'js2php or parsing issue',
+		'TreeWalker' => 'js2php or parsing issue',
+		'HTMLCollection-supported-property-names' => 'js2php or parsing issue',
+		'Node-cloneNode' => 'js2php or parsing issue',
+		'ParentNode-querySelectorAll-removed-elements' => 'js2php or parsing issue',
+		'case' => 'Syntax error, unexpected T_USE, expecting \'{\' on line 57.',
+		'remove-unscopable' => 'uses window & dispatchEvent',
+		'remove-from-shadow-host-and-adopt-into-iframe.html' => 'TakeScreenshot.',
+		'remove-and-adopt-thcrash' => 'uses window, tests a Chrome to crash.',
+		'query-target-in-load-event' => 'uses addEventListener.',
+		'remove-from-shadow-host-and-adopt-into-iframe' => 'takeScreenshot.',
+		'ParentNode-replaceChildren' => 'MutationObserver.',
+		'MutationObserver*' => 'MutationObserver.',
+		'Range-mutations-*' => 'difficult to parse and convert to PHP.',
+		'Comment-constructor' => 'CommentConstructorTest - Object::getPrototypeOf(Object::getPrototypeOf($object))',
+		'Document-characterSet-normalization' => 'async test',
+		'DocumentCreateElementTest' => 'Window and addEventListener',
+		'DocumentCreateElementNSTest' => 'Window and addEventListener, could be transformed',
+		'attributes' => 'uses asyncTest.',
+		'comment-constructor.html' => 'Object::getPrototypeOf(Object::getPrototypeOf($object)',
+		'Document-characterSet-normalization' => 'asyncTest',
+		'Document-createElementNS' => 'addEventListener',
+		'Document-createElement' => 'asyncTest and addEventListener',
+		'Document-getElementsByTagName' => 'HTMLCollection::prototype::namedItem',
+		'Document-URL' => '$iframe->onload = $this->step_func_done(function () use(&$iframe) {',
+		'Text-constructor' => 'Object::getPrototypeOf(Object::getPrototypeOf($object)',
+		'aria-element-reflection.tentative' => 'hard to make valid',
+		'Element-getElementsByTagName' => 'HTMLCollection::prototype::item',
+		'Node-replaceChild' => 'Node::class::replaceChild',
+		'Range-test-iframe' => 'Uses onload event to run test, no sence to convert',
+		'DOMImplementation-createHTMLDocument-with-null-browsing-context-crash' => 'Pointless, tests browser',
+		'DOMImplementation-createDocument-with-null-browsing-context-crash' => 'Same as previous',
+		'ParentNode-querySelector-All' => 'Not applicable at the moment'
+	];
+
+	/**
 	 * @var Finder
 	 */
 	private $w3c_tests;
@@ -97,57 +148,7 @@ class LocatorTask extends BaseTask {
 		$this->w3c_tests = ( new Finder() )->name( '*.js' )->exclude( $exclude_dirs )->in( $w3c_tests_path )
 			->ignoreUnreadableDirs()->files()->sortByName();
 
-		$skips = [ 'DOMImplementation-createDocument', // js2php or parsing issue
-			'Document-createProcessingInstruction', // js2php or parsing issue
-			'Element-classlist', // js2php or parsing issue
-			'MutationObserver-document', // js2php or parsing issue
-			'Node-baseURI', // js2php or parsing issue
-			'Node-childNodes', // js2php or parsing issue
-			'Node-cloneNode-document-with-doctype', // js2php or parsing issue
-			'Node-parentNode-iframe', // js2php or parsing issue
-			'Node-properties', // js2php or parsing issue
-			'attributes-namednodemap', // js2php or parsing issue
-			'HTMLCollection-supported-property-indices', // js2php or parsing issue
-			'DOMTokenList-iteration', // js2php or parsing issue
-			'Range-comparePoint', // js2php or parsing issue
-			'Range-isPointInRange', // js2php or parsing issue
-			'TreeWalker', // js2php or parsing issue
-			'HTMLCollection-supported-property-names', // js2php or parsing issue
-			'Node-cloneNode', // js2php or parsing issue
-			'ParentNode-querySelectorAll-removed-elements', // js2php or parsing issue
-			'case', // Syntax error, unexpected T_USE, expecting '{' on line 57.
-			'remove-unscopable', // uses window & dispatchEvent
-			'remove-from-shadow-host-and-adopt-into-iframe.html', // TakeScreenshot.
-			'remove-and-adopt-thcrash', // uses window, tests a Chrome to crash.
-			'query-target-in-load-event', // uses addEventListener.
-			'remove-from-shadow-host-and-adopt-into-iframe', // takeScreenshot.
-			'ParentNode-replaceChildren', // MutationObserver.
-			'MutationObserver*', // MutationObserver.
-			'Range-mutations-*', // difficult to parse and convert to PHP.
-			'Comment-constructor', // CommentConstructorTest - Object::getPrototypeOf(Object::getPrototypeOf($object))
-			'Document-characterSet-normalization', // async test
-			'DocumentCreateElementTest', // Window and addEventListener
-			'DocumentCreateElementNSTest', // Window and addEventListener, could be transformed
-			'attributes', // uses asyncTest.
-			'comment-constructor.html', // Object::getPrototypeOf(Object::getPrototypeOf($object)
-			'Document-characterSet-normalization', // asyncTest
-			'Document-createElementNS', // addEventListener
-			'Document-createElement', // asyncTest and addEventListener
-			'Document-getElementsByTagName', // HTMLCollection::prototype::namedItem
-			'Document-URL', // $iframe->onload = $this->step_func_done(function () use(&$iframe) {
-			'Text-constructor', // Object::getPrototypeOf(Object::getPrototypeOf($object)
-			'aria-element-reflection.tentative', // hard to make valid
-			//'Node-isEqualNode', // testDeepEquality function and class context
-			'Element-getElementsByTagName', // HTMLCollection::prototype::item
-			'Node-replaceChild', // Node::class::replaceChild
-			'Range-test-iframe', // Гses onload event to run test, no sence to convert
-			'DOMImplementation-createHTMLDocument-with-null-browsing-context-crash', // Pointless, tests browser
-			// context crash
-			'DOMImplementation-createDocument-with-null-browsing-context-crash', // Same as previous
-			'ParentNode-querySelector-All', // Not applicable
-		];
-
-		array_walk( $skips,
+		array_walk( self::$skips,
 			static function ( &$item, $key ) {
 				$item .= '.*';
 			} );
@@ -171,7 +172,7 @@ class LocatorTask extends BaseTask {
 			$subfolders );
 
 		$this->wpt_tests = ( new Finder() )->name( [ "*.html",
-			/*"*.js"*/ ] )->notName( $skips )->in( $subfolders )->exclude( $exclude_dirs )->ignoreUnreadableDirs()
+			/*"*.js"*/ ] )->notName( self::$skips )->in( $subfolders )->exclude( $exclude_dirs )->ignoreUnreadableDirs()
 			->files()->sortByName();
 	}
 

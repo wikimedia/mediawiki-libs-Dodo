@@ -4,6 +4,9 @@ declare( strict_types=1 );
 
 namespace Wikimedia\Dodo\Tools\TestsGenerator;
 
+use DOMDocument;
+use DOMNodeList;
+use DOMXPath;
 use Exception;
 use Robo\Common\IO;
 use Robo\Exception\TaskException;
@@ -12,6 +15,7 @@ use Robo\Tasks;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class TestsGenerator
@@ -77,14 +81,12 @@ class TestsGenerator extends Tasks {
 	 * - rewrite
 	 * - phpcbf
 	 * - run
-	 * - cleanup
 	 * - compact = generates all tests in one file
 	 */
 	public function build( array $opts = [ 'rewrite' => true,
 		'limit' => -1,
 		'phpcbf' => true,
 		'run' => false,
-		'cleanup' => false,
 		'compact' => false ] ) {
 		try {
 			$compact_tests = '';
@@ -107,7 +109,7 @@ class TestsGenerator extends Tasks {
 			}
 
 			foreach ( $result->getData() as $test_type => $tests ) {
-				if ( $test_type === 'time' || $test_type == 'w3c' ) {
+				if ( $test_type === 'time' ) {
 					continue;
 				}
 
@@ -126,8 +128,8 @@ class TestsGenerator extends Tasks {
 					$new_test_name = $this->snakeToPascal( $test_name );
 
 					// TODO comment
-					$test_path = str_replace( strtolower( $this->root_folder .
-						( $test_type === self::W3C ? self::W3C_TESTS : self::WPT_TESTS ) ),
+					$test_path = $this->root_folder . ( $test_type === self::W3C ? self::W3C_TESTS : self::WPT_TESTS );
+					$test_path = str_replace( strtolower( $test_path ),
 						'',
 						$file->getPath() );
 
@@ -135,6 +137,7 @@ class TestsGenerator extends Tasks {
 					$test_path = ucwords( $test_path,
 						'/' );
 					$test_path = "{$this->root_folder}/tests/{$test_type}{$test_path}/{$new_test_name}Test.php";
+
 					/**
 					 * skip test if it's already generated and there is no --rewrite arg provided,
 					 * also skip hard to parse tests
@@ -216,11 +219,7 @@ class TestsGenerator extends Tasks {
 					throw new Exception( $result->getMessage() );
 				}
 
-				$this->processLog();
-			}
-
-			if ( $opts['cleanup'] ) {
-				$this->cleanUp();
+				$this->logProcess();
 			}
 		} catch ( TaskException | Exception $e ) {
 			$this->yell( $e->getFile() . ':' . $e->getMessage(),
@@ -395,109 +394,183 @@ class TestsGenerator extends Tasks {
 	/**
 	 * Converts file paths to relative.
 	 */
-	public function processLog() : void {
-		$log_exits = $this->filesystem->exists( [ 'tests/log.xml' ] );
-		if ( $log_exits ) {
-			$log_file = file_get_contents( $this->root_folder . '/tests/log.xml' );
-			if ( empty( $log_file ) ) {
-				$this->yell( 'No log file found.' );
+	public function logProcess() : void {
+		$log_folder = $this->root_folder . '/tests/logs/';
+		$log_file_original = $log_folder . 'log.xml';
+		$log_file_proc = $log_folder . 'log.yml';
+
+		/** Remove environment specific path from log entries. */
+		if ( !$this->filesystem->exists( [ $log_file_original ] ) ) {
+			$this->yell( 'No PHPUnit log found.',
+				40,
+				'red' );
+
+			return;
+		}
+
+		$log_content = file_get_contents( $log_file_original );
+		$log_content = str_replace( $this->root_folder,
+			'',
+			$log_content );
+
+		$this->taskWriteToFile( $log_file_original )->text( $log_content )->run();
+
+		/** Generate readable errors list */
+		$error_list_file = $log_folder . 'errors.yaml';
+		$errors_cause = $this->filesystem->exists( $error_list_file ) ? Yaml::parseFile( $error_list_file ) : [];
+
+		// Parsing log.xml
+		$document = new DOMDocument;
+		$document->loadxml( $log_content );
+		$xpath = new DOMXPath( $document );
+
+		// Extracting errors
+		$test_suites = $xpath->evaluate( '//error/..' );
+		$errors_list = $this->extractSuites( $test_suites,
+			"/\R(.*)\R\R/U" );
+
+		$this->taskWriteToFile( $error_list_file )->text( Yaml::dump( $errors_list,
+			2,
+			4,
+			Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK | Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE ) )->run();
+
+		// remove processed items
+		$this->removeSuites( $test_suites );
+
+		// Extracting failures
+		$failures = $xpath->evaluate( '//failure/../..' );
+
+		foreach ( $failures as $failure ) {
+			$textContent = trim( $failure->textContent );
+
+			if ( strpos( $textContent,
+					"---" ) !== false ) {
+				$textContent = substr_replace( $textContent,
+					'',
+					strpos( $textContent,
+						'---' ) );
 			}
-			$log_file = str_replace( $this->root_folder,
+
+			$textContent = preg_replace( '/Wikimedia(.*)\R/U',
 				'',
-				$log_file );
+				$textContent );
 
-			$this->taskWriteToFile( $this->root_folder . '/tests/log.xml' )->text( $log_file )->run();
-			$this->getStatistics( $log_file );
-			$this->generateFailureList();
-		}
-	}
-
-	/**
-	 * @param string $log
-	 */
-	public function getStatistics( string $log ) : void {
-		$xml = simplexml_load_string( $log );
-
-		$xml->registerXPathNamespace( 'fn',
-			'http://www.w3.org/2005/xpath-functions' );
-
-		$errors = $xml->xpath( '//*[@type="Error"]' );
-		$this->writeln( "There are " . count( $errors ) . " errors." );
-		$errors_cause = [];
-		foreach ( $errors as $error ) {
-			preg_match( "/(\nError: )(.*)(\n\n)/",
-				(string)$error,
-				$matches );
-			if ( !empty( $matches ) && isset( $matches[2] ) ) {
-				$errors_cause[] = $matches[2];
+			if ( strpos( $textContent,
+					"\n\n" ) !== false ) {
+				$textContent = substr_replace( $textContent,
+					'',
+					strpos( $textContent,
+						"\n\n" ) );
 			}
+
+			$textContent = trim( $textContent );
+			$textContent = str_replace( "\n", "-", $textContent );
+			$textContent = preg_replace( '/\s+/', ' ', $textContent );
+			$failure->textContent = $textContent;
 		}
-		$errors_cause = array_count_values( $errors_cause );
-		$errors_cause = var_export( $errors_cause,
-			true );
-		$this->writeln( $errors_cause );
-		$this->taskWriteToFile( $this->root_folder . '/tests/errors.txt' )->text( $errors_cause )->run();
+
+		$failures_list = $this->extractSuites( $failures,
+			"/(.*)/" );
+
+		$this->taskWriteToFile( $log_folder . 'failures.yml' )->text( Yaml::dump( $failures_list,
+			2,
+			4,
+			Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK | Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE ) )->run();
+
+		/** Skips */
+		$skipped = array_flip( LocatorTask::$skips );
+
+		foreach ( $skipped as $reason => $file ) {
+			$_ = array_keys( LocatorTask::$skips,
+				$reason );
+			$skipped[$reason] = [ '_total' => count( $_ ),
+				'suites' => implode( PHP_EOL,
+					$_ ), ];
+		}
+		$skipped_file = $this->root_folder . '/tests/logs/skipped.yaml';
+
+		$this->taskWriteToFile( $skipped_file )->text( Yaml::dump( $skipped,
+			2,
+			4,
+			Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK | Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE ) )->run();
+
+		// remove processed items from log.xml
+		$this->taskWriteToFile( $log_folder . '_log.xml' )->text( $document->saveXml() )->run();
 	}
 
 	/**
-	 * Generates a list by tests error category.
-	 */
-	public function generateFailureList() {
-		$log_file = file_get_contents( $this->root_folder . '/tests/log.xml' );
-		if ( empty( $log_file ) ) {
-			$this->yell( 'No log file found.' );
-		}
-
-		$xml = simplexml_load_string( $log_file );
-		$xml->registerXPathNamespace( 'fn',
-			'http://www.w3.org/2005/xpath-functions' );
-		// TODO fn:distinct-values
-		$errors = $xml->xpath( '//error' );
-
-		$distinct_errors = [];
-
-		foreach ( $errors as $error ) {
-			$type = (string)$error->attributes()->type;
-			if ( !in_array( $type,
-				$distinct_errors ) ) {
-				$distinct_errors[] = $type;
-			}
-		}
-
-		if ( empty( $distinct_errors ) ) {
-			$this->say( 'No errors found' );
-		}
-
-		foreach ( $distinct_errors as &$error ) {
-			$tests = $xml->xpath( "//error[@type='$error']/parent::*" );
-			$error = [ 'error' => $error,
-				'total' => count( $tests ),
-				'tests' => $tests, ];
-		}
-
-		$json = json_encode( $distinct_errors,
-			JSON_PRETTY_PRINT );
-		$this->taskWriteToFile( $this->root_folder . '/tests/log.json' )->text( $json )->run();
-	}
-
-	/**
-	 * Deletes test files after they have been executed.
-	 */
-	protected function cleanUp() {
-		$this->filesystem->remove( $this->root_folder . '/tests/wpt' );
-		$this->filesystem->remove( $this->root_folder . '/tests/w3c' );
-	}
-
-	/**
-	 * @param string $test
-	 * @param ?string $method
+	 * @param DOMNodeList|null $test_cases
+	 * @param string $pattern
 	 *
-	 * @return Result
+	 * @return array|void|null
 	 */
-	public function runTestFromFile( string $test, ?string $method = null ) : Result {
-		$method = $method === null ? $test : $method;
+	private function extractSuites( ?DOMNodeList $test_cases, string $pattern ) {
+		$errors_cause = [];
 
-		return $this->taskPhpUnit()->filter( $method )->file( '/tests/' . $test . '.php' )->run();
+		if ( !$test_cases ) {
+			$this->yell( 'No test suites are provided.',
+				40,
+				'red' );
+
+			return;
+		}
+
+		foreach ( $test_cases as $test_case ) {
+			preg_match( $pattern,
+				$test_case->textContent,
+				$matches );
+			if ( !empty( $matches ) && isset( $matches[0] ) ) {
+				$matches[0] = trim( $matches[0] );
+				$files = $errors_cause[$matches[0]]['files'] ?? [];
+				$cases = $errors_cause[$matches[0]]['testcases'] ?? [];
+
+				$case = $test_case->getAttribute( 'name' );
+				$file = $test_case->getAttribute( 'file' );
+
+				if ( !in_array( $file,
+					$files,
+					false ) ) {
+					$files[] = $file;
+				}
+
+				if ( !in_array( $case,
+					$cases,
+					false ) ) {
+					$cases[] = $case;
+				}
+
+				$errors_cause[$matches[0]] = [ '_total' => -1,
+					'_comment' => '',
+					'testcases' => $cases,
+					'files' => $files ];
+			}
+		}
+
+		/** Count totals and impload */
+		foreach ( $errors_cause as &$cause ) {
+			$cause['_total'] = count( $cause['testcases'] );
+			$cause['testcases'] = implode( PHP_EOL,
+				$cause['testcases'] );
+			$cause['files'] = implode( PHP_EOL,
+				$cause['files'] );
+		}
+
+		return $errors_cause;
+	}
+
+	/**
+	 * @param DOMNodeList $test_suites
+	 */
+	protected function removeSuites( DOMNodeList $test_suites ) : void {
+		foreach ( $test_suites as $suite ) {
+			$parent = $suite->parentNode;
+
+			if ( $parent->parentNode ) {
+				$parent->parentNode->removeChild( $parent );
+			} else {
+				$parent->removeChild( $suite );
+			}
+		}
 	}
 
 	/**
