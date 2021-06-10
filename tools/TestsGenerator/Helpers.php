@@ -17,7 +17,7 @@ use Wikimedia\Dodo\DOMException as DodoDOMException;
 use Wikimedia\Dodo\Node as DOMNode;
 
 /**
- * Trait Helpers
+ * Containes general helpful methods.
  *
  * @package Wikimedia\Dodo\Tools\TestsGenerator
  */
@@ -59,6 +59,8 @@ trait Helpers {
 	}
 
 	/**
+	 * Adds expression to AST
+	 *
 	 * @param string $type
 	 * @param array $args
 	 * @param array $attributes
@@ -73,16 +75,20 @@ trait Helpers {
 	}
 
 	/**
+	 * Parses HTML file using RemexHTML.
+	 *
 	 * @param string $file_path
+	 * @param string $type
 	 *
 	 * @return DOMNode
 	 */
-	protected function parseHtmlToDom( string $file_path ) : DOMNode {
+	protected function parseHtmlToDom( string $file_path, string $type = 'html' ) : DOMNode {
 		$html = file_get_contents( $file_path );
 		// This code will move into DOMParser::parseFromString eventually
 		$domBuilder = new class( [ 'suppressHtmlNamespace' => true,
 			'suppressIdAttribute' => true,
-			'domExceptionClass' => DodoDOMException::class, ] ) extends DOMBuilder {
+			'domExceptionClass' => DodoDOMException::class,
+			] ) extends DOMBuilder {
 			/** @var DodoDOMDocument */
 			private $doc;
 
@@ -130,64 +136,19 @@ trait Helpers {
 	}
 
 	/**
+	 * TODO test this
+	 * Parses HTML file using RemexHTML.
+	 *
 	 * @param string $file_path
 	 *
 	 * @return DOMNode
 	 */
 	protected function parseXMLToDom( string $file_path ) : DOMNode {
-		$html = file_get_contents( $file_path );
-		// This code will move into DOMParser::parseFromString eventually
-		$domBuilder = new class( [ 'suppressHtmlNamespace' => true,
-			'suppressIdAttribute' => true,
-			'domExceptionClass' => DodoDOMException::class, ] ) extends DOMBuilder {
-			/** @var DodoDOMDocument */
-			private $doc;
-
-			/** @inheritDoc */
-			protected function createDocument( string $doctypeName = null,
-				string $public = null, string $system = null ) {
-				// Force this to be an HTML document (not an XML document)
-				$this->doc = new DodoDOMDocument( null,
-					'xml' );
-
-				return $this->doc;
-			}
-
-			/** @inheritDoc */
-			public function doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength ) {
-				parent::doctype( $name,
-					$public,
-					$system,
-					$quirks,
-					$sourceStart,
-					$sourceLength );
-				// Set quirks mode on our document.
-				switch ( $quirks ) {
-					case TreeBuilder::NO_QUIRKS:
-						$this->doc->_setQuirksMode( 'no-quirks' );
-						break;
-					case TreeBuilder::LIMITED_QUIRKS:
-						$this->doc->_setQuirksMode( 'limited-quirks' );
-						break;
-					case TreeBuilder::QUIRKS:
-						$this->doc->_setQuirksMode( 'quirks' );
-						break;
-				}
-			}
-		};
-		$treeBuilder = new TreeBuilder( $domBuilder,
-			[ 'ignoreErrors' => true ] );
-		$dispatcher = new Dispatcher( $treeBuilder );
-		$tokenizer = new Tokenizer( $dispatcher,
-			$html,
-			[ 'ignoreErrors' => true ] );
-		$tokenizer->execute( [] );
-
-		return $domBuilder->getFragment();
+		return $this->parseHtmlToDom( $file_path, 'xml' );
 	}
 
 	/**
-	 * Loads html document.
+	 * Loads html document. Used by WPT tests.
 	 *
 	 * @param mixed $docRef
 	 *

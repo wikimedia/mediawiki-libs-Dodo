@@ -76,7 +76,7 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\Wpt\Dom\DocumentFragmentGetElementByIdTest
     files: /tests/Wpt/Dom/Nodes/DocumentFragmentGetElementByIdTest.php
-'/tests/Wpt/Harness/WptTestHarness.php:832- /tests/Wpt/Dom/Nodes/DocumentGetElementByIdTest.php:16- /tests/Wpt/Harness/WptTestHarness.php:1105- /tests/Wpt/Dom/Nodes/DocumentGetElementByIdTest.php:17':
+'Wikimedia\Dodo\HTMLDivElement Object (...) does not match expected type "NULL".':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\Wpt\Dom\DocumentGetElementByIdTest

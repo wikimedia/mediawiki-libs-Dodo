@@ -427,7 +427,8 @@ class TestsGenerator extends Tasks {
 		// Extracting errors
 		$test_suites = $xpath->evaluate( '//error/..' );
 		$errors_list = $this->extractSuites( $test_suites,
-			"/\R(.*)\R\R/U" );
+			"/\R(.*)\R\R/U",
+			$errors_cause );
 
 		$this->taskWriteToFile( $error_list_file )->text( Yaml::dump( $errors_list,
 			2,
@@ -438,6 +439,8 @@ class TestsGenerator extends Tasks {
 		$this->removeSuites( $test_suites );
 
 		// Extracting failures
+		$failure_list_file = $log_folder . 'failures.yml';
+		$failures_cause = $this->filesystem->exists( $failure_list_file ) ? Yaml::parseFile( $failure_list_file ) : [];
 		$failures = $xpath->evaluate( '//failure/../..' );
 
 		foreach ( $failures as $failure ) {
@@ -451,8 +454,9 @@ class TestsGenerator extends Tasks {
 						'---' ) );
 			}
 
-			$textContent = preg_replace( '/Wikimedia(.*)\R/U',
-				'',
+			$textContent = preg_replace( '/' .
+				preg_quote( 'Wikimedia\\Dodo\\Tests\\', '' ) .
+				'(.*)\R/', '',
 				$textContent );
 
 			if ( strpos( $textContent,
@@ -464,13 +468,17 @@ class TestsGenerator extends Tasks {
 			}
 
 			$textContent = trim( $textContent );
-			$textContent = str_replace( "\n", "-", $textContent );
-			$textContent = preg_replace( '/\s+/', ' ', $textContent );
+			$textContent = str_replace( "\n",
+				"-",
+				$textContent );
+			$textContent = preg_replace( '/\s+/',
+				' ',
+				$textContent );
 			$failure->textContent = $textContent;
 		}
 
 		$failures_list = $this->extractSuites( $failures,
-			"/(.*)/" );
+			"/(.*)/", $failures_cause );
 
 		$this->taskWriteToFile( $log_folder . 'failures.yml' )->text( Yaml::dump( $failures_list,
 			2,
@@ -478,16 +486,19 @@ class TestsGenerator extends Tasks {
 			Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK | Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE ) )->run();
 
 		/** Skips */
+		$skips_list_file = $log_folder . 'skipped.yaml';
+		$skips_causes = $this->filesystem->exists( $skips_list_file ) ? Yaml::parseFile( $skips_list_file ) : [];
 		$skipped = array_flip( LocatorTask::$skips );
 
 		foreach ( $skipped as $reason => $file ) {
 			$_ = array_keys( LocatorTask::$skips,
 				$reason );
 			$skipped[$reason] = [ '_total' => count( $_ ),
+				'_comment' => $skips_causes[$reason]['_comment'] ?? '',
 				'suites' => implode( PHP_EOL,
 					$_ ), ];
 		}
-		$skipped_file = $this->root_folder . '/tests/logs/skipped.yaml';
+		$skipped_file = $log_folder . 'skipped.yaml';
 
 		$this->taskWriteToFile( $skipped_file )->text( Yaml::dump( $skipped,
 			2,
@@ -501,10 +512,11 @@ class TestsGenerator extends Tasks {
 	/**
 	 * @param DOMNodeList|null $test_cases
 	 * @param string $pattern
+	 * @param mixed $existing_log
 	 *
 	 * @return array|void|null
 	 */
-	private function extractSuites( ?DOMNodeList $test_cases, string $pattern ) {
+	private function extractSuites( ?DOMNodeList $test_cases, string $pattern, $existing_log ) {
 		$errors_cause = [];
 
 		if ( !$test_cases ) {
@@ -521,6 +533,7 @@ class TestsGenerator extends Tasks {
 				$matches );
 			if ( !empty( $matches ) && isset( $matches[0] ) ) {
 				$matches[0] = trim( $matches[0] );
+				$existing_entry = $existing_log[$matches[0]] ?? [];
 				$files = $errors_cause[$matches[0]]['files'] ?? [];
 				$cases = $errors_cause[$matches[0]]['testcases'] ?? [];
 
@@ -540,7 +553,7 @@ class TestsGenerator extends Tasks {
 				}
 
 				$errors_cause[$matches[0]] = [ '_total' => -1,
-					'_comment' => '',
+					'_comment' => $existing_entry['_comment'] ?? '',
 					'testcases' => $cases,
 					'files' => $files ];
 			}

@@ -8,7 +8,7 @@ use Robo\Collection\CollectionBuilder;
 use Robo\TaskAccessor;
 
 /**
- * Load DodoTestsGenerator Robo tasks.
+ * Loads TestsGenerator Robo tasks.
  */
 trait LoadTasks {
 	use TaskAccessor;
