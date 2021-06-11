@@ -2,9 +2,11 @@
 
 declare( strict_types=1 );
 
-namespace Wikimedia\Dodo;
+namespace Wikimedia\Dodo\Internal;
 
-use Wikimedia\Dodo\Internal\UnimplementedTrait;
+use Wikimedia\Dodo\Document;
+use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\HTMLCollection;
 
 /******************************************************************************
  * FilteredElementList.php

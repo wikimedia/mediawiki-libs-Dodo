@@ -12,7 +12,6 @@ use RemexHtml\TreeBuilder\TreeBuilder;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\FilteredElementList;
 use Wikimedia\Dodo\HTMLBodyElement;
 use Wikimedia\Dodo\HTMLCollection;
 use Wikimedia\Dodo\HTMLImageElement;
@@ -134,7 +133,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		// Test getElementsByClass name
 		$els_by_class = $doc->getElementsByClassName( 'abc foo def' );
 		$this->assertNotNull( $els_by_class );
-		$this->assertInstanceOf( FilteredElementList::class, $els_by_class );
+		$this->assertInstanceOf( HTMLCollection::class, $els_by_class );
 		$this->assertSame( 1, $els_by_class->length );
 
 		$first_el = $els_by_class->item( 0 );

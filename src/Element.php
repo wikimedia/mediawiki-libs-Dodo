@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\FilteredElementList;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Internal\WhatWG;
@@ -713,6 +714,9 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	}
 
 	/**
+	 * Root can be either a Document or an Element; in order to avoid
+	 * code duplication this helper method is a static method on Element
+	 * which is invoked by virtual methods on both Document and Element.
 	 * @param Document|Element $root
 	 * @param string $lname
 	 * @return HTMLCollection
@@ -738,7 +742,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	/**
 	 * @param string $names
 	 *
-	 * @return HTMLCollection|FilteredElementList
+	 * @return HTMLCollection
 	 */
 	public function getElementsByClassName( string $names ) {
 		return self::_getElementsByClassName( $this, $names );
@@ -748,7 +752,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @param Document|Element $root
 	 * @param string $names
 	 *
-	 * @return HTMLCollection|FilteredElementList
+	 * @return HTMLCollection
 	 */
 	public static function _getElementsByClassName( $root, string $names ) {
 		if ( empty( $names ) ) {
