@@ -5,12 +5,8 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo\Tests;
 
-use RemexHtml\DOM\DOMBuilder;
-use RemexHtml\Tokenizer\Tokenizer;
-use RemexHtml\TreeBuilder\Dispatcher;
-use RemexHtml\TreeBuilder\TreeBuilder;
 use Wikimedia\Dodo\Document;
-use Wikimedia\Dodo\DOMException;
+use Wikimedia\Dodo\DOMParser;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\HTMLBodyElement;
 use Wikimedia\Dodo\HTMLCollection;
@@ -210,66 +206,17 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	 * @return Document
 	 */
 	private function parse( $html ) {
-		// This code will move into DOMParser::parseFromString eventually
-		$domBuilder = new class( [
-			'suppressHtmlNamespace' => true,
-			'suppressIdAttribute' => true,
-			'domExceptionClass' => DOMException::class,
-		] ) extends DOMBuilder {
-				/** @var Document */
-				private $doc;
-
-				/** @inheritDoc */
-				protected function createDocument(
-					string $doctypeName = null,
-					string $public = null,
-					string $system = null
-				) {
-					// Force this to be an HTML document (not an XML document)
-					$this->doc = new Document( null, 'html' );
-					return $this->doc;
-				}
-
-				/** @inheritDoc */
-				public function doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength ) {
-					parent::doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength );
-					// Set quirks mode on our document.
-					switch ( $quirks ) {
-					case TreeBuilder::NO_QUIRKS:
-						$this->doc->_setQuirksMode( 'no-quirks' );
-						break;
-					case TreeBuilder::LIMITED_QUIRKS:
-						$this->doc->_setQuirksMode( 'limited-quirks' );
-						break;
-					case TreeBuilder::QUIRKS:
-						$this->doc->_setQuirksMode( 'quirks' );
-						break;
-					}
-				}
-		};
-		$treeBuilder = new TreeBuilder( $domBuilder, [
-			'ignoreErrors' => true
-		] );
-		$dispatcher = new Dispatcher( $treeBuilder );
-		$tokenizer = new Tokenizer( $dispatcher, $html, [
-			'ignoreErrors' => true ]
-		);
-		$tokenizer->execute( [] );
-
-		$this->assertTrue( !$domBuilder->isCoerced() );
-
-		$result = $domBuilder->getFragment();
-		$this->assertInstanceOf( Document::class, $result );
-		return $result;
+		$parser = new DOMParser();
+		return $parser->parseFromString( $html, "text/html" );
 	}
 
-	/** @dataProvider provideRemex */
-	public function testRemex( $html, $expected ) {
+	/** @dataProvider provideHtml */
+	public function testDOMParser( $html, $expected ) {
 		$result = $this->parse( $html );
 		$this->assertEquals( $expected, $result->_node_serialize() );
 	}
 
-	public function provideRemex() {
+	public function provideHtml() {
 		return [
 			[
 				'<p>hello</p>',
