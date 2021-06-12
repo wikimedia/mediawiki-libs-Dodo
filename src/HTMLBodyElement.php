@@ -7,6 +7,9 @@ namespace Wikimedia\Dodo;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
 class HTMLBodyElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLBodyElement {
+	// DOM mixins
+	use WindowEventHandlers;
+
 	// Stub out methods not yet implemented.
 	use \Wikimedia\IDLeDOM\Stub\HTMLBodyElement;
 	use UnimplementedTrait;

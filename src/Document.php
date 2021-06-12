@@ -37,7 +37,9 @@ use Wikimedia\Dodo\Internal\WhatWG;
  */
 class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	// DOM mixins
+	use DocumentAndElementEventHandlers;
 	use DocumentOrShadowRoot;
+	use GlobalEventHandlers;
 	use NonElementParentNode;
 	use ParentNode;
 	use XPathEvaluatorBase;

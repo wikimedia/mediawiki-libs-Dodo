@@ -9,7 +9,9 @@ use Wikimedia\Dodo\Internal\Util;
 
 class HTMLElement extends Element implements \Wikimedia\IDLeDOM\HTMLElement {
 	// DOM mixins
+	use DocumentAndElementEventHandlers;
 	use ElementContentEditable;
+	use GlobalEventHandlers;
 	use HTMLOrSVGElement;
 
 	// Stub out methods not yet implemented.
