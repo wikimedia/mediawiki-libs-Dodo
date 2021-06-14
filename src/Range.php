@@ -1,82 +1,208 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Wikimedia\Dodo;
 
-use Wikimedia\IDLeDOM\DocumentFragment;
-use Wikimedia\IDLeDOM\Node;
+use Wikimedia\Dodo\Internal\BoundaryPoint;
+use Wikimedia\Dodo\Internal\UnimplementedTrait;
+use Wikimedia\Dodo\Internal\Util;
+use Wikimedia\IDLeDOM\Node as INode;
 
+/**
+ * A live range.
+ * @see https://dom.spec.whatwg.org/#concept-live-range
+ */
 class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 
+	// Stub out methods not yet implemented.
+	use \Wikimedia\IDLeDOM\Stub\Range;
+	use UnimplementedTrait;
+
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\Range;
+
 	/**
-	 * @return void|Node
+	 * Constructor, used by Document::createRange()
+	 * @see https://dom.spec.whatwg.org/#dom-document-createrange
+	 * @param Document $doc The document associated with this Range
 	 */
-	public function getCommonAncestorContainer() {
-		return $this->commonAncestorContainer;
+	public function __construct( Document $doc ) {
+		parent::__construct( $doc, 0, $doc, 0 );
 	}
 
 	/**
-	 * @param Node $node
+	 * @return Node
+	 */
+	public function getCommonAncestorContainer() {
+		$endNode = $this->getEndContainer();
+		$endAncestors = [];
+		while ( $endNode !== null ) {
+			$endAncestors[] = $endNode;
+			$endNode = $endNode->getParentNode();
+		}
+		$container = $this->getStartContainer();
+		while ( !in_array( $container, $endAncestors, true ) ) {
+			$container = $container->getParentNode();
+		}
+		'@phan-var Node $container'; // @var Node $container
+		return $container;
+	}
+
+	/**
+	 * @param INode $node
 	 * @param int $offset
 	 */
 	public function setStart( $node, int $offset ) : void {
-		// TODO: Implement setStart() method.
+		'@phan-var Node $node'; // @var Node $node
+		if ( $node instanceof \Wikimedia\IDLeDOM\DocumentType ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		if ( $offset > $node->_length() ) {
+			throw Util::error( 'IndexSizeError' );
+		}
+		$bp = new BoundaryPoint( $node, $offset );
+		if (
+			$this->_root() !== self::_nodeRoot( $node ) ||
+			$bp->compare( $this->_end ) > 0
+		) {
+			$this->_end = $bp;
+		}
+		$this->_start = $bp;
 	}
 
 	/**
-	 * @param Node $node
+	 * @param INode $node
 	 * @param int $offset
 	 */
 	public function setEnd( $node, int $offset ) : void {
-		// TODO: Implement setEnd() method.
+		'@phan-var Node $node'; // @var Node $node
+		if ( $node instanceof \Wikimedia\IDLeDOM\DocumentType ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		if ( $offset > $node->_length() ) {
+			throw Util::error( 'IndexSizeError' );
+		}
+		$bp = new BoundaryPoint( $node, $offset );
+		if (
+			$this->_root() !== self::_nodeRoot( $node ) ||
+			$bp->compare( $this->_start ) < 0
+		) {
+			$this->_start = $bp;
+		}
+		$this->_end = $bp;
 	}
 
 	/**
-	 * @param Node $node
+	 * Return the root of this range.
+	 * @see https://dom.spec.whatwg.org/#concept-range-root
+	 * @return Node
+	 */
+	private function _root(): Node {
+		return self::_nodeRoot( $this->getStartContainer() );
+	}
+
+	/**
+	 * Return the root of a node.
+	 * @see https://dom.spec.whatwg.org/#concept-tree-root
+	 * @param Node $n the node
+	 * @return Node
+	 */
+	private static function _nodeRoot( Node $n ): Node {
+		while ( true ) {
+			$parent = $n->getParentNode();
+			if ( $parent === null ) {
+				break;
+			}
+			$n = $parent;
+		}
+		return $n;
+	}
+
+	/**
+	 * @param INode $node
 	 */
 	public function setStartBefore( $node ) : void {
-		// TODO: Implement setStartBefore() method.
+		'@phan-var Node $node'; // @var Node $node
+		$parent = $node->getParentNode();
+		if ( $parent === null ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		$this->setStart( $parent, $node->_getSiblingIndex() );
 	}
 
 	/**
-	 * @param Node $node
+	 * @param INode $node
 	 */
 	public function setStartAfter( $node ) : void {
-		// TODO: Implement setStartAfter() method.
+		'@phan-var Node $node'; // @var Node $node
+		$parent = $node->getParentNode();
+		if ( $parent === null ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		$this->setStart( $parent, $node->_getSiblingIndex() + 1 );
 	}
 
 	/**
-	 * @param Node $node
+	 * @param INode $node
 	 */
 	public function setEndBefore( $node ) : void {
-		// TODO: Implement setEndBefore() method.
+		'@phan-var Node $node'; // @var Node $node
+		$parent = $node->getParentNode();
+		if ( $parent === null ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		$this->setEnd( $parent, $node->_getSiblingIndex() );
 	}
 
 	/**
-	 * @param Node $node
+	 * @param INode $node
 	 */
 	public function setEndAfter( $node ) : void {
-		// TODO: Implement setEndAfter() method.
+		'@phan-var Node $node'; // @var Node $node
+		$parent = $node->getParentNode();
+		if ( $parent === null ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		$this->setEnd( $parent, $node->_getSiblingIndex() + 1 );
 	}
 
 	/**
 	 * @param bool $toStart
 	 */
 	public function collapse( bool $toStart = false ) : void {
-		// TODO: Implement collapse() method.
+		if ( $toStart ) {
+			$this->_end = $this->_start;
+		} else {
+			$this->_start = $this->_end;
+		}
 	}
 
 	/**
-	 * @param Node $node
+	 * @param INode $node
 	 */
 	public function selectNode( $node ) : void {
-		// TODO: Implement selectNode() method.
+		'@phan-var Node $node'; // @var Node $node
+		$parent = $node->getParentNode();
+		if ( $parent === null ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		$index = $node->_getSiblingIndex();
+		$this->_start = new BoundaryPoint( $parent, $index );
+		$this->_end = new BoundaryPoint( $parent, $index + 1 );
 	}
 
 	/**
-	 * @param Node $node
+	 * @param INode $node
 	 */
 	public function selectNodeContents( $node ) : void {
-		// TODO: Implement selectNodeContents() method.
+		'@phan-var Node $node'; // @var Node $node
+		if ( $node instanceof \Wikimedia\IDLeDOM\DocumentType ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		$length = $node->_length();
+		$this->_start = new BoundaryPoint( $node, 0 );
+		$this->_end = new BoundaryPoint( $node, $length );
 	}
 
 	/**
@@ -86,107 +212,127 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	 * @return int
 	 */
 	public function compareBoundaryPoints( int $how, $sourceRange ) : int {
-		return 0;
+		'@phan-var Range $sourceRange'; // @var Range $sourceRange
+		$thisPoint = null;
+		$otherPoint = null;
+		switch ( $how ) {
+		case self::START_TO_START:
+		case self::END_TO_START:
+			$thisPoint = $this->_start;
+			break;
+		case self::START_TO_END:
+		case self::END_TO_END:
+			$thisPoint = $this->_end;
+			break;
+		default:
+			throw Util::error( 'NotSupportedError' );
+		}
+		if ( $this->_root() !== $sourceRange->_root() ) {
+			throw Util::error( 'WrongDocumentError' );
+		}
+		switch ( $how ) {
+		case self::START_TO_START:
+		case self::START_TO_END:
+			$otherPoint = $sourceRange->_start;
+			break;
+		case self::END_TO_END:
+		case self::END_TO_START:
+			$otherPoint = $sourceRange->_end;
+			break;
+		default:
+			throw Util::error( 'NotSupportedError' );
+		}
+		return $thisPoint->compare( $otherPoint );
 	}
 
 	/**
-	 *
-	 */
-	public function deleteContents() : void {
-		// TODO: Implement deleteContents() method.
-	}
-
-	/**
-	 * @return void|DocumentFragment
-	 */
-	public function extractContents() {
-		// TODO: Implement extractContents() method.
-	}
-
-	/**
-	 * @return void|DocumentFragment
-	 */
-	public function cloneContents() {
-		// TODO: Implement cloneContents() method.
-	}
-
-	/**
-	 * @param Node $node
-	 */
-	public function insertNode( $node ) : void {
-		// TODO: Implement insertNode() method.
-	}
-
-	/**
-	 * @param Node $newParent
-	 */
-	public function surroundContents( $newParent ) : void {
-		// TODO: Implement surroundContents() method.
-	}
-
-	/**
-	 * @return void|\Wikimedia\IDLeDOM\Range
-	 */
-	public function cloneRange() {
-		// TODO: Implement cloneRange() method.
-	}
-
-	/**
-	 *
+	 * @inheritDoc
 	 */
 	public function detach() : void {
-		// TODO: Implement detach() method.
+		/* do nothing */
 	}
 
 	/**
-	 * @param Node $node
+	 * @param INode $node
 	 * @param int $offset
 	 *
 	 * @return bool
 	 */
 	public function isPointInRange( $node, int $offset ) : bool {
+		'@phan-var Node $node'; // @var Node $node
+		if ( self::_nodeRoot( $node ) !== $this->_root() ) {
+			return false;
+		}
+		if ( $node instanceof \Wikimedia\IDLeDOM\DocumentType ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		if ( $offset > $node->_length() ) {
+			throw Util::error( 'IndexSizeError' );
+		}
+		$bp = new BoundaryPoint( $node, $offset );
+		if ( $bp->compare( $this->_start ) < 0 ) {
+			return false; // (node,offset) is before start
+		}
+		if ( $bp->compare( $this->_end ) > 0 ) {
+			return false; // (node, offset) is after end
+		}
 		return true;
 	}
 
 	/**
-	 * @param Node $node
+	 * @param INode $node
 	 * @param int $offset
 	 *
 	 * @return int
 	 */
 	public function comparePoint( $node, int $offset ) : int {
+		'@phan-var Node $node'; // @var Node $node
+		if ( self::_nodeRoot( $node ) !== $this->_root() ) {
+			throw Util::error( 'WrongDocumentError' );
+		}
+		if ( $node instanceof \Wikimedia\IDLeDOM\DocumentType ) {
+			throw Util::error( 'InvalidNodeTypeError' );
+		}
+		if ( $offset > $node->_length() ) {
+			throw Util::error( 'IndexSizeError' );
+		}
+		$bp = new BoundaryPoint( $node, $offset );
+		if ( $bp->compare( $this->_start ) < 0 ) {
+			return -1; // (node,offset) is before start
+		}
+		if ( $bp->compare( $this->_end ) > 0 ) {
+			return +1; // (node, offset) is after end
+		}
 		return 0;
 	}
 
 	/**
-	 * @param Node $node
+	 * @param INode $node
 	 *
 	 * @return bool
 	 */
 	public function intersectsNode( $node ) : bool {
-		return true;
+		'@phan-var Node $node'; // @var Node $node
+		if ( self::_nodeRoot( $node ) !== $this->_root() ) {
+			return false;
+		}
+		$parent = $node->getParentNode();
+		if ( $parent === null ) {
+			return true;
+		}
+		$offset = $node->_getSiblingIndex();
+		$bp1 = new BoundaryPoint( $parent, $offset );
+		$bp2 = new BoundaryPoint( $parent, $offset + 1 );
+		if ( $bp1->compare( $this->_end ) < 0 && $bp2->compare( $this->start ) > 0 ) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function toString() : string {
-		return '';
-	}
-
-	/**
-	 * @return string
-	 */
-	public function __toString() : string {
-		return $this->toString();
-	}
-
-	/**
-	 * @param string $fragment
-	 *
-	 * @return void|DocumentFragment
-	 */
-	public function createContextualFragment( string $fragment ) {
-		// TODO: Implement createContextualFragment() method.
+		return $this->extractContents()->getTextContent() ?? '';
 	}
 }

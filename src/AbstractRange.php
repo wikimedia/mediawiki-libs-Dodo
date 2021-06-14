@@ -1,65 +1,77 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Wikimedia\Dodo;
 
-use Wikimedia\IDLeDOM\Node;
+use Wikimedia\Dodo\Internal\BoundaryPoint;
 
+/**
+ * An abstract range.
+ * @see https://dom.spec.whatwg.org/#concept-range
+ */
 class AbstractRange implements \Wikimedia\IDLeDOM\AbstractRange {
+
+	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\AbstractRange;
 
 	/**
-	 * @var Node
+	 * @var BoundaryPoint
 	 */
-	private $_startContainer;
+	private $_start;
+
 	/**
-	 * @var int
+	 * @var BoundaryPoint
 	 */
-	private $_startOffset;
+	private $_end;
+
 	/**
-	 * @var int
+	 * Create a new AbstractRange object. For subclass use only.
+	 * @param Node $startContainer
+	 * @param int $startOffset
+	 * @param Node $endContainer
+	 * @param int $endOffset
 	 */
-	private $_endOffset;
-	/**
-	 * @var Node
-	 */
-	private $_endContainer;
-	/**
-	 * @var bool
-	 */
-	private $_collapsed;
+	protected function __construct(
+		Node $startContainer, int $startOffset,
+		Node $endContainer, int $endOffset
+	) {
+		$this->_start = new BoundaryPoint( $startContainer, $startOffset );
+		$this->_end = new BoundaryPoint( $endContainer, $endOffset );
+	}
 
 	/**
 	 * @return Node
 	 */
-	public function getStartContainer() : Node {
-		return $this->_startContainer;
+	public function getStartContainer() {
+		return $this->_start->getNode();
 	}
 
 	/**
 	 * @return int
 	 */
 	public function getStartOffset() : int {
-		return $this->_startOffset;
+		return $this->_start->getOffset();
 	}
 
 	/**
 	 * @return Node
 	 */
-	public function getEndContainer() : Node {
-		return $this->_endContainer;
+	public function getEndContainer() {
+		return $this->_end->getNode();
 	}
 
 	/**
 	 * @return int
 	 */
 	public function getEndOffset() : int {
-		return $this->_endOffset;
+		return $this->_end->getOffset();
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function getCollapsed() : bool {
-		return $this->_collapsed;
+		return $this->_start->equals( $this->_end );
 	}
 }

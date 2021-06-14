@@ -54,6 +54,16 @@ abstract class ContainerNode extends Node {
 		}
 	}
 
+	/** @inheritDoc */
+	public function _length(): int {
+		return $this->getChildNodes()->getLength();
+	}
+
+	/** @inheritDoc */
+	public function _empty(): bool {
+		return !$this->hasChildNodes();
+	}
+
 	/**
 	 * Keeping child nodes as an array makes insertion/removal of nodes
 	 * quite expensive.  So we try *never* to create this array, if

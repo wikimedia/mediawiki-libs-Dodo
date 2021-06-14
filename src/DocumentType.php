@@ -84,6 +84,16 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 
 	/* Methods delegated in Node */
 
+	/** @inheritDoc */
+	public function _length(): int {
+		return 0;
+	}
+
+	/** @inheritDoc */
+	public function _empty(): bool {
+		return true;
+	}
+
 	/** @return DocumentType */
 	protected function _subclassCloneNodeShallow(): Node {
 		return new DocumentType( $this->_nodeDocument, $this->_name, $this->_publicId, $this->_systemId );

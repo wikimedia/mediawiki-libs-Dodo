@@ -488,6 +488,14 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/**
+	 * @see  https://dom.spec.whatwg.org/#dom-document-createrange
+	 * @return Range
+	 */
+	public function createRange() {
+		return new Range( $this );
+	}
+
+	/**
 	 * @see http://www.w3.org/TR/dom/#dom-document-createnodeiterator
 	 * @param \Wikimedia\IDLeDOM\Node $root
 	 * @param int $whatToShow

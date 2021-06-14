@@ -241,7 +241,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * into a DOM, or are a Document node, which is the root of a DOM tree and
 	 * thus has no parent. In those cases, the value of parentNode is null.
 	 *
-	 * @inheritDoc
+	 * @return ?Node
 	 */
 	final public function getParentNode() {
 		return $this->_parentNode;
@@ -767,6 +767,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 	/**
 	 * The index of this Node in its parent's childNodes list
+	 * @see https://dom.spec.whatwg.org/#concept-tree-index
 	 *
 	 * @return int index
 	 * @throws \Throwable if we have no parent
@@ -890,4 +891,16 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 		return $s;
 	}
+
+	/**
+	 * @see https://dom.spec.whatwg.org/#concept-node-length
+	 * @return int The length of this node.
+	 */
+	abstract public function _length(): int;
+
+	/**
+	 * @see https://dom.spec.whatwg.org/#concept-node-empty
+	 * @return bool Whether this node is considered empty.
+	 */
+	abstract public function _empty(): bool;
 }

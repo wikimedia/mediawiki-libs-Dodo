@@ -148,6 +148,7 @@ class NodeIterator implements \Wikimedia\IDLeDOM\NodeIterator {
 		}
 		$prevSibling = $toBeRemovedNode->getPreviousSibling();
 		if ( $prevSibling === null ) {
+			// @phan-suppress-next-line PhanPossiblyNullTypeMismatchProperty
 			$this->_referenceNode = $toBeRemovedNode->getParentNode();
 		} else {
 			$this->_referenceNode = $prevSibling;

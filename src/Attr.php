@@ -357,6 +357,16 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 		$this->setValue( $val ?? '' );
 	}
 
+	/** @inheritDoc */
+	public function _length(): int {
+		return 0;
+	}
+
+	/** @inheritDoc */
+	public function _empty(): bool {
+		return true;
+	}
+
 	/**
 	 * Delegated from Node
 	 *

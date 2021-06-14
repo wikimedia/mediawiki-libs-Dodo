@@ -198,4 +198,13 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 		$this->replaceData( 0, $this->getLength(), $value ?? '' );
 	}
 
+	/** @inheritDoc */
+	public function _length(): int {
+		return $this->getLength();
+	}
+
+	/** @inheritDoc */
+	public function _empty(): bool {
+		return $this->_length() === 0;
+	}
 }
