@@ -14,6 +14,6 @@
 		</whitelist>
 	</filter>
 	<logging>
-		<log type="junit" target="tests/log.xml"/>
+		<log type="junit" target="tests/logs/log.xml"/>
 	</logging>
 </phpunit>

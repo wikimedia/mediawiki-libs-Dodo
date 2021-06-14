@@ -518,33 +518,25 @@
     _comment: ''
     testcases: testHTMLCollectionDelete
     files: /tests/Wpt/Dom/Collections/HTMLCollectionDeleteTest.php
-'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\FilteredElementList::namedItem':
-    _total: 4
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Internal\FilteredElementList::namedItem':
+    _total: 2
     _comment: ''
     testcases: |-
         testHTMLCollectionEmptyName
         testHTMLCollectionIterator
-        testElementGetElementsByClassName
-        testGetElementsByClassName32
     files: |-
         /tests/Wpt/Dom/Collections/HTMLCollectionEmptyNameTest.php
         /tests/Wpt/Dom/Collections/HTMLCollectionIteratorTest.php
-        /tests/Wpt/Dom/Nodes/ElementGetElementsByClassNameTest.php
-        /tests/Wpt/Dom/Nodes/GetElementsByClassName32Test.php
 'Error: Object of class Wikimedia\Dodo\Tests\Wpt\Dom\HTMLCollectionOwnPropsTest could not be converted to string':
     _total: 1
     _comment: ''
     testcases: testHTMLCollectionOwnProps
     files: /tests/Wpt/Dom/Collections/HTMLCollectionOwnPropsTest.php
-'Wikimedia\Dodo\DOMException:':
-    _total: 2
+'Error: Call to a member function hasOwnProperty() on array':
+    _total: 1
     _comment: ''
-    testcases: |-
-        testNamednodemapSupportedPropertyNames
-        testGetElementsByClassNameEmptySet
-    files: |-
-        /tests/Wpt/Dom/Collections/NamednodemapSupportedPropertyNamesTest.php
-        /tests/Wpt/Dom/Nodes/GetElementsByClassNameEmptySetTest.php
+    testcases: testNamednodemapSupportedPropertyNames
+    files: /tests/Wpt/Dom/Collections/NamednodemapSupportedPropertyNamesTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\DOMTokenListCoverageForAttributesTest::testAttr(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1526 and exactly 2 expected':
     _total: 1
     _comment: ''
@@ -571,7 +563,7 @@
     _comment: ''
     testcases: testAppendOnDocument
     files: /tests/Wpt/Dom/Nodes/AppendOnDocumentTest.php
-'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\AriaAttributeReflectionTentativeTest::Wikimedia\Dodo\Tests\Wpt\Dom\{closure}(), 0 passed in /tests/Wpt/Harness/WptTestHarness.php on line 1105 and exactly 1 expected':
+'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\AriaAttributeReflectionTentativeTest::Wikimedia\Dodo\Tests\Wpt\Dom\{closure}(), 0 passed in /tests/Wpt/Harness/WptTestHarness.php on line 1220 and exactly 1 expected':
     _total: 1
     _comment: ''
     testcases: testAriaAttributeReflectionTentative
@@ -581,11 +573,29 @@
     _comment: ''
     testcases: testNode
     files: /tests/Wpt/Dom/Nodes/CharacterDataAppendChildTest.php
-'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness::assertThrowsDomImpl() must be callable, string given, called in /tests/Wpt/Harness/WptTestHarness.php on line 345':
-    _total: 1
+'Error: Object of class Closure could not be converted to string':
+    _total: 9
     _comment: ''
-    testcases: testCharacterDataAppendChild
-    files: /tests/Wpt/Dom/Nodes/CharacterDataAppendChildTest.php
+    testcases: |-
+        testCharacterDataAppendChild
+        testCharacterDataDeleteData
+        testCharacterDataInsertData
+        testCharacterDataReplaceData
+        testCharacterDataSubstringData
+        testDOMImplementationCreateDocumentType
+        testDocumentCreateAttribute
+        testNodeAppendChild
+        testTextSplitText
+    files: |-
+        /tests/Wpt/Dom/Nodes/CharacterDataAppendChildTest.php
+        /tests/Wpt/Dom/Nodes/CharacterDataDeleteDataTest.php
+        /tests/Wpt/Dom/Nodes/CharacterDataInsertDataTest.php
+        /tests/Wpt/Dom/Nodes/CharacterDataReplaceDataTest.php
+        /tests/Wpt/Dom/Nodes/CharacterDataSubstringDataTest.php
+        /tests/Wpt/Dom/Nodes/DOMImplementationCreateDocumentTypeTest.php
+        /tests/Wpt/Dom/Nodes/DocumentCreateAttributeTest.php
+        /tests/Wpt/Dom/Nodes/NodeAppendChildTest.php
+        /tests/Wpt/Dom/Nodes/TextSplitTextTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\CharacterDataAppendDataTest::testNode(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1526 and exactly 2 expected':
     _total: 1
     _comment: ''
@@ -618,27 +628,6 @@
     _comment: ''
     testcases: testNode
     files: /tests/Wpt/Dom/Nodes/CharacterDataDeleteDataTest.php
-'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness::assertThrowsDomImpl() must be callable, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 345':
-    _total: 8
-    _comment: ''
-    testcases: |-
-        testCharacterDataDeleteData
-        testCharacterDataInsertData
-        testCharacterDataReplaceData
-        testCharacterDataSubstringData
-        testDOMImplementationCreateDocumentType
-        testDocumentCreateAttribute
-        testNodeAppendChild
-        testTextSplitText
-    files: |-
-        /tests/Wpt/Dom/Nodes/CharacterDataDeleteDataTest.php
-        /tests/Wpt/Dom/Nodes/CharacterDataInsertDataTest.php
-        /tests/Wpt/Dom/Nodes/CharacterDataReplaceDataTest.php
-        /tests/Wpt/Dom/Nodes/CharacterDataSubstringDataTest.php
-        /tests/Wpt/Dom/Nodes/DOMImplementationCreateDocumentTypeTest.php
-        /tests/Wpt/Dom/Nodes/DocumentCreateAttributeTest.php
-        /tests/Wpt/Dom/Nodes/NodeAppendChildTest.php
-        /tests/Wpt/Dom/Nodes/TextSplitTextTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\CharacterDataInsertDataTest::testNode(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1526 and exactly 2 expected':
     _total: 1
     _comment: ''
@@ -695,12 +684,12 @@
     _comment: ''
     testcases: testDOMImplementationHasFeature
     files: /tests/Wpt/Dom/Nodes/DOMImplementationHasFeatureTest.php
-'Undefined property via offsetGet(): length in /vendor/wikimedia/idle-dom/src/Helper/NodeList.php on line 64':
+'Error: Object of class Wikimedia\Dodo\NodeList could not be converted to string':
     _total: 1
     _comment: ''
     testcases: testDocumentConstructor
     files: /tests/Wpt/Dom/Nodes/DocumentConstructorTest.php
-'Attempt to assign property ''code'' of non-object':
+'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness::assertData(), 2 passed in /tests/Wpt/Harness/WptTestHarness.php on line 380 and exactly 5 expected':
     _total: 3
     _comment: ''
     testcases: |-
@@ -808,7 +797,7 @@
     _comment: ''
     testcases: testDocumentImportNode
     files: /tests/Wpt/Dom/Nodes/DocumentImportNodeTest.php
-'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertTrue() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 661':
+'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertTrue() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 783':
     _total: 9
     _comment: ''
     testcases: |-
@@ -856,6 +845,15 @@
     files: |-
         /tests/Wpt/Dom/Nodes/ElementChildrenTest.php
         /tests/Wpt/Dom/Nodes/ParentNodeChildrenTest.php
+'Error: Object of class Wikimedia\Dodo\Internal\FilteredElementList could not be converted to string':
+    _total: 2
+    _comment: ''
+    testcases: |-
+        testElementGetElementsByClassName
+        testGetElementsByClassName32
+    files: |-
+        /tests/Wpt/Dom/Nodes/ElementGetElementsByClassNameTest.php
+        /tests/Wpt/Dom/Nodes/GetElementsByClassName32Test.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\ElementGetElementsByTagNameNSTest::testGetElementsByTagNameNS(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1526 and exactly 2 expected':
     _total: 1
     _comment: ''
@@ -875,6 +873,11 @@
     files: |-
         /tests/Wpt/Dom/Nodes/ElementMatchesTest.php
         /tests/Wpt/Dom/Nodes/ElementWebkitMatchesSelectorTest.php
+'Error: Object of class Wikimedia\Dodo\HTMLCollection could not be converted to string':
+    _total: 1
+    _comment: ''
+    testcases: testGetElementsByClassNameEmptySet
+    files: /tests/Wpt/Dom/Nodes/GetElementsByClassNameEmptySetTest.php
 'Error: Cannot access private property Wikimedia\Dodo\NodeList::$_list':
     _total: 4
     _comment: ''
@@ -942,7 +945,7 @@
     files: |-
         /tests/Wpt/Dom/Nodes/NodeIsConnectedShadowDomTest.php
         /tests/Wpt/Dom/Nodes/RootNodeTest.php
-'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertFalse() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 290':
+'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertFalse() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 330':
     _total: 2
     _comment: ''
     testcases: |-

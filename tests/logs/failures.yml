@@ -3,7 +3,7 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\DodoTest
     files: /tests/DodoTest.php
-'throw_NOT_SUPPORTED_ERR- Failed asserting that false is true.':
+'throw_NOT_SUPPORTED_ERR-Failed asserting that false is true.':
     _total: 2
     _comment: ''
     testcases: |-
@@ -12,12 +12,12 @@
     files: |-
         /tests/W3c/Level1/Core/Documentinvalidcharacterexceptioncreatepi1Test.php
         /tests/W3c/Level1/Core/DocumentinvalidcharacterexceptioncreatepiTest.php
-'elementNormalizeAssert- Failed asserting that two strings are equal.':
+'elementNormalizeAssert-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HcElementnormalizeTest
     files: /tests/W3c/Level1/Core/HcElementnormalizeTest.php
-'throw_WRONG_DOCUMENT_ERR- Failed asserting that false is true.':
+'throw_WRONG_DOCUMENT_ERR-Failed asserting that false is true.':
     _total: 3
     _comment: ''
     testcases: |-
@@ -28,12 +28,12 @@
         /tests/W3c/Level1/Core/HcNodeappendchildnewchilddiffdocumentTest.php
         /tests/W3c/Level1/Core/HcNodeinsertbeforenewchilddiffdocumentTest.php
         /tests/W3c/Level1/Core/HcNodereplacechildnewchilddiffdocumentTest.php
-'hasChild- Failed asserting that true is false.':
+'hasChild-Failed asserting that true is false.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HcNodehaschildnodesfalseTest
     files: /tests/W3c/Level1/Core/HcNodehaschildnodesfalseTest.php
-'noHrefLink- Failed asserting that true is false.':
+'noHrefLink-Failed asserting that true is false.':
     _total: 2
     _comment: ''
     testcases: |-
@@ -42,17 +42,17 @@
     files: |-
         /tests/W3c/Level1/Html/Area02Test.php
         /tests/W3c/Level1/Html/HTMLAreaElement05Test.php
-'isMapLink- Failed asserting that true is false.':
+'isMapLink-Failed asserting that true is false.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HTMLImageElement07Test
     files: /tests/W3c/Level1/Html/HTMLImageElement07Test.php
-'valueLink- Failed asserting that two strings are equal.':
+'valueLink-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HTMLParamElement02Test
     files: /tests/W3c/Level1/Html/HTMLParamElement02Test.php
-'Should be a Document- Failed asserting that false is true.':
+'Should be a Document-Failed asserting that false is true.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\Wpt\Dom\DOMImplementationCreateHTMLDocumentTest
@@ -66,7 +66,7 @@
     files: |-
         /tests/Wpt/Dom/Nodes/DocumentAdoptNodeTest.php
         /tests/Wpt/Dom/Nodes/ParentNodeQuerySelectorScopeTest.php
-'Doctype should be a DocumentType- Failed asserting that false is true.':
+'Doctype should be a DocumentType-Failed asserting that false is true.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\Wpt\Dom\DocumentDoctypeTest
@@ -81,7 +81,7 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\Wpt\Dom\DocumentGetElementByIdTest
     files: /tests/Wpt/Dom/Nodes/DocumentGetElementByIdTest.php
-'[default]- Failed asserting that two strings are equal.':
+'[default]-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\Wpt\Dom\ElementClosestTest

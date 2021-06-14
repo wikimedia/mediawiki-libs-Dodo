@@ -414,19 +414,21 @@ abstract class WptTestHarness extends TestCase {
 	 * @return string
 	 */
 	protected function makeMessage( $function_name, $description, $error, $substitutions ) {
+		$_substitutions = [];
 		foreach ( $substitutions as $p => $___ ) {
 			if ( is_array( $substitutions[$p] ) ) {
-				$substitutions[$p] = implode( ',',
-					$substitutions[$p] );
+				$_substitutions [ '${' . $p . '}'] = implode( ',',
+					array_keys( $substitutions[$p] ) );
 			} else {
-				$substitutions[$p] = '${' . $this->formatValue( $substitutions[$p] ) . '}';
+				$_substitutions[ '${' . $p . '}'] = $this->formatValue( $substitutions[$p] );
 			}
 		}
 
 		return strtr( '${function_name}: ${description} ' . $error,
+			array_merge(
 			[ '${function_name}' => $function_name,
 				'${description}' => ( ( $description ) ? $description . ' ' : '' ),
-				$substitutions ] );
+			], $_substitutions ) );
 	}
 
 	/**
@@ -1019,7 +1021,7 @@ abstract class WptTestHarness extends TestCase {
 	protected function assertArrayEqualsData( $actual, $expected, $description = '' ) : void {
 		$max_array_length = 20;
 
-		$this->assertData( gettype( $actual ) === 'object' && $actual !== null && isset( $actual['length'] ),
+		$this->assertData( is_array( $actual ),
 			'assertArrayEquals',
 			$description,
 			'value is ${actual}, expected array',
@@ -1124,10 +1126,6 @@ abstract class WptTestHarness extends TestCase {
 				'${func} did not throw',
 				[ 'func' => $func ] );
 		} catch ( Exception $e ) {
-			if ( $e instanceof AssertionError ) {
-				throw $e;
-			}
-
 			$this->assertData( $this->sameValue( $e,
 				$exception ),
 				$assertion_type,
