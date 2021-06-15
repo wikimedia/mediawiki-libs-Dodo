@@ -138,7 +138,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 
 		$first_el = $els_by_class->item( 0 );
 		$this->assertInstanceOf( HTMLImageElement::class, $first_el );
-		$this->assertEqualsIgnoringCase( 'IMG', $first_p_tag->tagName );
+		$this->assertEqualsIgnoringCase( 'IMG', $first_el->tagName );
 	}
 
 	/** @dataProvider provideFixture */
