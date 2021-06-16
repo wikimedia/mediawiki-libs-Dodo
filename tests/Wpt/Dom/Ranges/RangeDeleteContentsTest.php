@@ -5,7 +5,7 @@ use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
-use Wikimedia\IDLeDOM\Range;
+use Wikimedia\Dodo\Range;
 use Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-deleteContents.html.
 class RangeDeleteContentsTest extends WptTestHarness

@@ -80,12 +80,12 @@
 	},
 	"scripts": {
 		"test": [
-			"parallel-lint . --exclude vendor",
+			"parallel-lint . --exclude vendor --exclude .docksal",
 			"@phan",
-			"echo covers-validator",
+			"covers-validator",
 			"@phpcs",
 			"minus-x check .",
-			"echo phpunit"
+			"@phpunit"
 		],
 		"cover": "phpunit --coverage-html coverage",
 		"fix": [

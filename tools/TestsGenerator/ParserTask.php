@@ -721,9 +721,9 @@ class ParserTask extends BaseTask {
 			'URL' => 'Wikimedia\Dodo\URL',
 			'DomException' => 'Wikimedia\Dodo\DomException',
 			'DOMImplementation' => 'Wikimedia\Dodo\DOMImplementation',
-			'Range' => 'Wikimedia\IDLeDOM\Range',
-			'AbstractRange' => 'Wikimedia\IDLeDOM\AbstractRange',
-			'StaticRange' => 'Wikimedia\IDLeDOM\StaticRange', ];
+			'Range' => 'Wikimedia\Dodo\Range',
+			'AbstractRange' => 'Wikimedia\Dodo\AbstractRange',
+			'StaticRange' => 'Wikimedia\Dodo\StaticRange', ];
 
 		foreach ( $list_ns as $use => $namespace ) {
 			if ( strpos( $this->test,

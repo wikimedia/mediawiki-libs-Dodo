@@ -426,9 +426,9 @@ abstract class WptTestHarness extends TestCase {
 
 		return strtr( '${function_name}: ${description} ' . $error,
 			array_merge(
-			[ '${function_name}' => $function_name,
-				'${description}' => ( ( $description ) ? $description . ' ' : '' ),
-			], $_substitutions ) );
+				[ '${function_name}' => $function_name,
+					'${description}' => ( ( $description ) ? $description . ' ' : '' ),
+				], $_substitutions ) );
 	}
 
 	/**

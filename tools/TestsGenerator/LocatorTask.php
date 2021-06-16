@@ -110,8 +110,42 @@ class LocatorTask extends BaseTask {
 	 * @return Result
 	 */
 	public function run() : Result {
-		$this->initTests();
-		// $this->locateHarnesses();
+		$exclude_dirs = [ 'obsolete',
+			'nyi' ];
+		$w3c_tests_path = $this->folder . self::W3C_TESTS;
+		$this->w3c_tests = ( new Finder() )->name( '*.js' )->exclude( $exclude_dirs )->in( $w3c_tests_path )
+			->ignoreUnreadableDirs()->files()->sortByName();
+
+		self::$skips = array_keys( self::$skips );
+
+		array_walk( self::$skips,
+			static function ( &$item, $key ) {
+				$item .= '.*';
+			} );
+
+		/**
+		 * For now only load .html's
+		 */
+		$exclude_dirs = [ 'Document-createElement-namespace-tests',
+			'unfinished',
+			'support',
+			'Document-contentType' ];
+		$wpt_tests_path = $this->folder . self::WPT_TESTS;
+
+		$subfolders = [ '/nodes',
+			'/collections',
+			'/traversal',
+			'/ranges',
+			'/lists' ];
+
+		$subfolders = preg_filter( '/^/',
+			$wpt_tests_path,
+			$subfolders );
+
+		$this->wpt_tests = ( new Finder() )->name( [ "*.html" ] )->notName( self::$skips )->in(
+			$subfolders )
+			->exclude( $exclude_dirs )->ignoreUnreadableDirs()
+			->files()->sortByName();
 
 		if ( !$this->w3c_tests->hasResults() ) {
 			return Result::error( $this,
@@ -136,56 +170,5 @@ class LocatorTask extends BaseTask {
 		return Result::success( $this,
 			'All good.',
 			$tests );
-	}
-
-	/**
-	 * @return void
-	 */
-	protected function initTests() : void {
-		$exclude_dirs = [ 'obsolete',
-			'nyi' ];
-		$w3c_tests_path = $this->folder . self::W3C_TESTS;
-		$this->w3c_tests = ( new Finder() )->name( '*.js' )->exclude( $exclude_dirs )->in( $w3c_tests_path )
-			->ignoreUnreadableDirs()->files()->sortByName();
-
-		array_walk( self::$skips,
-			static function ( &$item, $key ) {
-				$item .= '.*';
-			} );
-		/**
-		 * For now only load .html's
-		 */
-		$exclude_dirs = [ 'Document-createElement-namespace-tests',
-			'unfinished',
-			'support',
-			'Document-contentType' ];
-		$wpt_tests_path = $this->folder . self::WPT_TESTS;
-
-		$subfolders = [ '/nodes',
-			'/collections',
-			'/traversal',
-			'/ranges',
-			'/lists' ];
-
-		$subfolders = preg_filter( '/^/',
-			$wpt_tests_path,
-			$subfolders );
-
-		$this->wpt_tests = ( new Finder() )->name( [ "*.html",
-			/*"*.js"*/ ] )->notName( self::$skips )->in( $subfolders )->exclude( $exclude_dirs )->ignoreUnreadableDirs()
-			->files()->sortByName();
-	}
-
-	/**
-	 * Locates w3c and wpt harnesses
-	 */
-	protected function locateHarnesses() {
-		$w3c_tests_path = realpath( $this->folder . self::W3C_TESTS . '/../harness' );
-		$this->w3c_harness = ( new Finder() )->name( '*.js' )->in( $w3c_tests_path )->ignoreUnreadableDirs()->files()
-			->sortByName();
-
-		$wpt_tests_path = realpath( $this->folder . self::WPT_TESTS . '/../../resources' );
-		$this->wpt_harness = ( new Finder() )->name( "*harness.js" )->in( $wpt_tests_path )->ignoreUnreadableDirs()
-			->files()->sortByName();
 	}
 }

@@ -87,10 +87,10 @@ class TestsGenerator extends Tasks {
 		'limit' => -1,
 		'phpcbf' => true,
 		'run' => false,
-		'compact' => false ] ) {
+		'compact' => false ] ) : void {
 		try {
 			$compact_tests = '';
-			// init and check for dependencies
+			// Init and check for dependencies.
 			$this->initDependencies( $opts['rewrite'] );
 
 			$this->stopOnFail( false );
@@ -99,13 +99,13 @@ class TestsGenerator extends Tasks {
 			$result = $this->taskTestsLocator( $this->root_folder )->run();
 
 			if ( !$result->wasSuccessful() || $result->wasCancelled() ) {
-				throw new Exception( $result->getMessage() );
+				throw new TaskException( $this, $result->getMessage() );
 			}
 
 			$files = $result->getData();
 
 			if ( empty( $files ) ) {
-				throw new Exception( 'No tests were loaded.' );
+				throw new TaskException( $this, 'No tests were loaded.' );
 			}
 
 			foreach ( $result->getData() as $test_type => $tests ) {
@@ -139,7 +139,7 @@ class TestsGenerator extends Tasks {
 					$test_path = "{$this->root_folder}/tests/{$test_type}{$test_path}/{$new_test_name}Test.php";
 
 					/**
-					 * skip test if it's already generated and there is no --rewrite arg provided,
+					 * Skip test if it's already generated and there is no --rewrite arg provided,
 					 * also skip hard to parse tests
 					 */
 					if ( !$opts['rewrite'] && $this->filesystem->exists( $test_path ) ) {
@@ -162,7 +162,7 @@ class TestsGenerator extends Tasks {
 						$file->getRealPath() )->run();
 
 					if ( !$actual_test->wasSuccessful() ) {
-						throw new Exception( $actual_test->getMessage() );
+						throw new TaskException( $this, $actual_test->getMessage() );
 					}
 
 					if ( $opts['compact'] ) {
@@ -183,7 +183,7 @@ class TestsGenerator extends Tasks {
 						true )->run();
 
 					if ( !$actual_test->wasSuccessful() ) {
-						throw new Exception( $actual_test->getMessage() );
+						throw new TaskException( $this, $actual_test->getMessage() );
 					}
 					$phpUnitTest = $actual_test->getData()[0];
 					$test_path = "{$this->root_folder}/tests/{$this->snakeToPascal($test_type)}Test.php";
@@ -201,7 +201,7 @@ class TestsGenerator extends Tasks {
 			// Copy html files for tests.
 			$result = $this->copyFiles();
 			if ( !$result->wasSuccessful() || $result->wasCancelled() ) {
-				throw new Exception( $result->getMessage() );
+				throw new TaskException( $this, $result->getMessage() );
 			}
 
 			// Run phpunit.
@@ -210,13 +210,13 @@ class TestsGenerator extends Tasks {
 				$result = $this->taskExec( 'composer dump' )->run();
 
 				if ( !$result->wasSuccessful() || $result->wasCancelled() ) {
-					throw new Exception( $result->getMessage() );
+					throw new TaskException( $this, $result->getMessage() );
 				}
 
 				// Run tests.
 				$result = $this->taskExec( 'composer phpunit' )->run();
 				if ( !$result->wasSuccessful() || $result->wasCancelled() ) {
-					throw new Exception( $result->getMessage() );
+					throw new TaskException( $this, $result->getMessage() );
 				}
 
 				$this->logProcess();
@@ -232,25 +232,26 @@ class TestsGenerator extends Tasks {
 	}
 
 	/**
-	 * Checks for node dependencies.
+	 * Checks for if everything neccesary for test generation was installed.
+	 * If not - run npm install, composer install or throw an exception
 	 *
 	 * @param bool $rewrite
 	 *
 	 * @throws TaskException
 	 */
-	public function initDependencies( bool $rewrite = false ) {
+	public function initDependencies( bool $rewrite = false ) : void {
 		$result = $this->_copyDir( $this->folder . '/Harness/Wpt',
 			$this->root_folder . '/tests/Wpt/Harness' );
 
 		if ( !$result->wasSuccessful() ) {
-			throw new Exception( 'No WPT harness.' );
+			throw new TaskException( $this, 'No WPT harness.' );
 		}
 
 		$result = $this->_copyDir( $this->folder . '/Harness/W3c',
 			$this->root_folder . '/tests/W3c/Harness' );
 
 		if ( !$result->wasSuccessful() ) {
-			throw new Exception( 'No W3C harness.' );
+			throw new TaskException( $this, 'No W3C harness.' );
 		}
 
 		$harnesses_skels = ( new Finder() )->name( "*.skel" )->in( $this->root_folder . '/tests' )->files()
@@ -268,28 +269,30 @@ class TestsGenerator extends Tasks {
 			}
 		}
 
-		// check if js2php is installed
+		// Check if js2php was installed.
 		if ( !$this->taskExecStack()->stopOnFail()->dir( $this->root_folder )->exec( 'npm list | grep js2php' )
 			->printOutput( false )->run()->getMessage() ) {
 
 			$this->taskNpmInstall()->run();
 		}
 
+		// Check if Domino was installed.
 		if ( !$this->filesystem->exists( $this->root_folder . '/tests/W3c' ) ) {
 			$domino_path = $this->root_folder . '/vendor/fgnass/domino';
 			if ( !$this->filesystem->exists( $domino_path ) ) {
 				if ( !$this->taskComposerInstall()->dev( true )->run()->wasSuccessful() ) {
-					throw new Exception( 'No DominoJS found.' );
+					throw new TaskException( $this, 'No DominoJS found.' );
 				}
 			}
 		}
 
+		// Check if web-platform-tests was installed.
 		if ( !$this->filesystem->exists( $this->root_folder . '/tests/Wpt' ) ) {
 			$wpt_path = $this->root_folder . '/vendor/web-platform-tests/wpt';
-			if ( !$this->filesystem->exists( $wpt_path ) ) {
-				if ( !$this->taskComposerInstall()->dev( true )->run()->wasSuccessful() ) {
-					throw new Exception( 'No WPT tests found.' );
-				}
+			if ( !$this->filesystem->exists( $wpt_path ) && !$this->taskComposerInstall()->dev( true )->run()
+					->wasSuccessful() ) {
+				throw new TaskException( $this,
+					'No WPT tests found.' );
 			}
 		}
 	}

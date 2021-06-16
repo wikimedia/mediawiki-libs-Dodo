@@ -1,18 +1,13 @@
 # dodo-test-generator
 Test generator for Dodo library
 
-## How to install it
-```bash
-$ composer install
-$ npm install
-```
-
-## How to run
+## Usage
+Basic usage is following:
 ```bash
 $ composer robo build
 ```
 
-Arguments:
+Takes arguments:
 * rewrite => false
 * limit => -1
 * phpcbf => false
@@ -27,3 +22,5 @@ TODO
 ## Developer Notes
 
 TODO
+
+### Potential bugs in test generator

@@ -13,7 +13,7 @@ use Wikimedia\Dodo\DOMParser;
 use Wikimedia\Dodo\Node as DOMNode;
 
 /**
- * Containes general helpful methods.
+ * Contains some helpful methods.
  *
  * @package Wikimedia\Dodo\Tools\TestsGenerator
  */
@@ -63,7 +63,7 @@ trait Helpers {
 	 *
 	 * @return Expression
 	 */
-	protected function addExpectation( string $type, $args = [], $attributes = [] ) : Expression {
+	protected function addExpectation( string $type, array $args = [], array $attributes = [] ) : Expression {
 		return new Expression( new MethodCall( new Variable( 'this' ),
 			$type,
 			[ new Arg( new String_( Throwable::class ) ) ],
@@ -80,12 +80,11 @@ trait Helpers {
 	protected function parseHtmlToDom( string $file_path ) : DOMNode {
 		$html = file_get_contents( $file_path );
 		$parser = new DOMParser();
-		$doc = $parser->parseFromString( $html, "text/html" );
-		return $doc;
+
+		return $parser->parseFromString( $html, "text/html" );
 	}
 
 	/**
-	 * TODO test this
 	 * Parses HTML file using RemexHTML.
 	 *
 	 * @param string $file_path
@@ -95,8 +94,8 @@ trait Helpers {
 	protected function parseXMLToDom( string $file_path ) : DOMNode {
 		$html = file_get_contents( $file_path );
 		$parser = new DOMParser();
-		$doc = $parser->parseFromString( $html, "text/xml" );
-		return $doc;
+
+		return $parser->parseFromString( $html, "text/xml" );
 	}
 
 	/**

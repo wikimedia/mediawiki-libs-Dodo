@@ -288,7 +288,7 @@ mutated.
 
 ### Performance tips
 
-- Make sure your Element ids stay unique. The spec requries that you
+- Make sure your Element ids stay unique. The spec requires that you
   return the first Element with that id, in document order, and it is
   not very performant to compute the document order.
 
