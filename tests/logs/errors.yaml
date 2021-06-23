@@ -542,29 +542,6 @@
     _comment: ''
     testcases: testNode
     files: /tests/Wpt/Dom/Nodes/CharacterDataAppendChildTest.php
-'Undefined property: Wikimedia\Dodo\DOMException::$name':
-    _total: 9
-    _comment: ''
-    testcases: |-
-        testCharacterDataAppendChild
-        testCharacterDataDeleteData
-        testCharacterDataInsertData
-        testCharacterDataReplaceData
-        testCharacterDataSubstringData
-        testDOMImplementationCreateDocumentType
-        testDocumentCreateAttribute
-        testNodeAppendChild
-        testTextSplitText
-    files: |-
-        /tests/Wpt/Dom/Nodes/CharacterDataAppendChildTest.php
-        /tests/Wpt/Dom/Nodes/CharacterDataDeleteDataTest.php
-        /tests/Wpt/Dom/Nodes/CharacterDataInsertDataTest.php
-        /tests/Wpt/Dom/Nodes/CharacterDataReplaceDataTest.php
-        /tests/Wpt/Dom/Nodes/CharacterDataSubstringDataTest.php
-        /tests/Wpt/Dom/Nodes/DOMImplementationCreateDocumentTypeTest.php
-        /tests/Wpt/Dom/Nodes/DocumentCreateAttributeTest.php
-        /tests/Wpt/Dom/Nodes/NodeAppendChildTest.php
-        /tests/Wpt/Dom/Nodes/TextSplitTextTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\CharacterDataAppendDataTest::testNode(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1527 and exactly 2 expected':
     _total: 1
     _comment: ''
@@ -599,6 +576,11 @@
     _total: 1
     _comment: ''
     testcases: testNode
+    files: /tests/Wpt/Dom/Nodes/CharacterDataInsertDataTest.php
+'Wikimedia\Dodo\DOMException: INDEX_SIZE_ERR (1): the index is not in the allowed range':
+    _total: 1
+    _comment: ''
+    testcases: testCharacterDataInsertData
     files: /tests/Wpt/Dom/Nodes/CharacterDataInsertDataTest.php
 'Error: Cannot use object of type Wikimedia\Dodo\Text as array':
     _total: 1
@@ -665,6 +647,11 @@
     _comment: ''
     testcases: testDocumentAdoptNode
     files: /tests/Wpt/Dom/Nodes/DocumentAdoptNodeTest.php
+'TypeError: Argument 1 passed to Wikimedia\Dodo\Document::createAttribute() must be of the type string, null given, called in /tests/Wpt/Dom/Nodes/DocumentCreateAttributeTest.php on line 40':
+    _total: 1
+    _comment: ''
+    testcases: testDocumentCreateAttribute
+    files: /tests/Wpt/Dom/Nodes/DocumentCreateAttributeTest.php
 'Undefined property: Wikimedia\Dodo\Internal\UnimplementedException::$name':
     _total: 3
     _comment: ''

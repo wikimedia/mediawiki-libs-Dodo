@@ -13,6 +13,9 @@ namespace Wikimedia\Dodo;
  */
 class DOMException extends \Exception implements \Wikimedia\IDLeDOM\DOMException {
 
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\DOMException;
+
 	private const ERR_CODE_DOES_NOT_EXIST = 0;	/* [Dodo] Errors without Legacy code */
 
 	private const ERROR_NAME_TO_CODE = [
