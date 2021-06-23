@@ -48,51 +48,16 @@
         /tests/Wpt/Dom/Nodes/ElementGetElementsByTagNameChangeDocumentHTMLNessTest.php
         /tests/Wpt/Dom/Ranges/RangeDetachTest.php
         /tests/Wpt/Dom/Ranges/RangeIntersectsNodeBindingTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcDocumentgetelementsbytagnametotallengthTest.php on line 124':
+'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodeappendchildnewchilddiffdocumentTest::$doc1':
     _total: 1
     _comment: ''
-    testcases: testHcDocumentgetelementsbytagnametotallength
-    files: /tests/W3c/Level1/Core/HcDocumentgetelementsbytagnametotallengthTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcElementgetelementsbytagnamespecialvalueTest.php on line 45':
-    _total: 1
-    _comment: ''
-    testcases: testHcElementgetelementsbytagnamespecialvalue
-    files: /tests/W3c/Level1/Core/HcElementgetelementsbytagnamespecialvalueTest.php
-'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsCollectionData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcElementretrieveallattributesTest.php on line 44':
-    _total: 1
-    _comment: ''
-    testcases: testHcElementretrieveallattributes
-    files: /tests/W3c/Level1/Core/HcElementretrieveallattributesTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNodeappendchildchildexistsTest.php on line 51':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodeappendchildchildexists
-    files: /tests/W3c/Level1/Core/HcNodeappendchildchildexistsTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNodeappendchilddocfragmentTest.php on line 63':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodeappendchilddocfragment
-    files: /tests/W3c/Level1/Core/HcNodeappendchilddocfragmentTest.php
+    testcases: testHcNodeappendchildnewchilddiffdocument
+    files: /tests/W3c/Level1/Core/HcNodeappendchildnewchilddiffdocumentTest.php
 'Undefined property via __get(): attributes in /tests/W3c/Level1/Core/HcNodeattributenodeattributeTest.php on line 34':
     _total: 1
     _comment: ''
     testcases: testHcNodeattributenodeattribute
     files: /tests/W3c/Level1/Core/HcNodeattributenodeattributeTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNodechildnodesTest.php on line 51':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodechildnodes
-    files: /tests/W3c/Level1/Core/HcNodechildnodesTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNodechildnodesappendchildTest.php on line 56':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodechildnodesappendchild
-    files: /tests/W3c/Level1/Core/HcNodechildnodesappendchildTest.php
-'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsCollectionData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNodecloneattributescopiedTest.php on line 48':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodecloneattributescopied
-    files: /tests/W3c/Level1/Core/HcNodecloneattributescopiedTest.php
 'Undefined property via __get(): _childNodes in /src/Internal/WhatWG.php on line 282':
     _total: 2
     _comment: ''
@@ -117,31 +82,16 @@
     _comment: ''
     testcases: testHcNodedocumentnodeattribute
     files: /tests/W3c/Level1/Core/HcNodedocumentnodeattributeTest.php
-'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsCollectionData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNodeelementnodeattributesTest.php on line 47':
+'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodeinsertbeforenewchilddiffdocumentTest::$doc1':
     _total: 1
     _comment: ''
-    testcases: testHcNodeelementnodeattributes
-    files: /tests/W3c/Level1/Core/HcNodeelementnodeattributesTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNodeinsertbeforeTest.php on line 56':
+    testcases: testHcNodeinsertbeforenewchilddiffdocument
+    files: /tests/W3c/Level1/Core/HcNodeinsertbeforenewchilddiffdocumentTest.php
+'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodereplacechildnewchilddiffdocumentTest::$doc1':
     _total: 1
     _comment: ''
-    testcases: testHcNodeinsertbefore
-    files: /tests/W3c/Level1/Core/HcNodeinsertbeforeTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNodeinsertbeforenewchildexistsTest.php on line 55':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodeinsertbeforenewchildexists
-    files: /tests/W3c/Level1/Core/HcNodeinsertbeforenewchildexistsTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNodelisttraverselistTest.php on line 52':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodelisttraverselist
-    files: /tests/W3c/Level1/Core/HcNodelisttraverselistTest.php
-'TypeError: Argument 3 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListAutoCaseData() must be of the type string, array given, called in /tests/W3c/Level1/Core/HcNoderemovechildnodeTest.php on line 61':
-    _total: 1
-    _comment: ''
-    testcases: testHcNoderemovechildnode
-    files: /tests/W3c/Level1/Core/HcNoderemovechildnodeTest.php
+    testcases: testHcNodereplacechildnewchilddiffdocument
+    files: /tests/W3c/Level1/Core/HcNodereplacechildnewchilddiffdocumentTest.php
 'Error: Call to protected method Wikimedia\Dodo\Element::_remove() from context ''Wikimedia\Dodo\Internal\WhatWG''':
     _total: 1
     _comment: ''
@@ -152,11 +102,11 @@
     _comment: ''
     testcases: testHcNodetextnodeattribute
     files: /tests/W3c/Level1/Core/HcNodetextnodeattributeTest.php
-'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertEqualsListData() must be of the type string or null, array given, called in /tests/W3c/Level1/Core/HcTextparseintolistofelementsTest.php on line 57':
+'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodevalue06Test::$newNode':
     _total: 1
     _comment: ''
-    testcases: testHcTextparseintolistofelements
-    files: /tests/W3c/Level1/Core/HcTextparseintolistofelementsTest.php
+    testcases: testHcNodevalue06
+    files: /tests/W3c/Level1/Core/HcNodevalue06Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLAnchorElement::getHref':
     _total: 2
     _comment: ''
@@ -527,7 +477,7 @@
     _comment: ''
     testcases: testDomstringmapSupportedPropertyNames
     files: /tests/Wpt/Dom/Collections/DomstringmapSupportedPropertyNamesTest.php
-'Error: Object of class Wikimedia\Dodo\Tests\Wpt\Dom\HTMLCollectionAsPrototypeTest could not be converted to string':
+'Object of class Wikimedia\Dodo\Tests\Wpt\Dom\HTMLCollectionAsPrototypeTest could not be converted to string':
     _total: 1
     _comment: ''
     testcases: testHTMLCollectionAsPrototype
@@ -546,12 +496,12 @@
     files: |-
         /tests/Wpt/Dom/Collections/HTMLCollectionEmptyNameTest.php
         /tests/Wpt/Dom/Collections/HTMLCollectionIteratorTest.php
-'Error: Object of class Wikimedia\Dodo\Tests\Wpt\Dom\HTMLCollectionOwnPropsTest could not be converted to string':
+'Object of class Wikimedia\Dodo\Tests\Wpt\Dom\HTMLCollectionOwnPropsTest could not be converted to string':
     _total: 1
     _comment: ''
     testcases: testHTMLCollectionOwnProps
     files: /tests/Wpt/Dom/Collections/HTMLCollectionOwnPropsTest.php
-'Error: Call to a member function hasOwnProperty() on array':
+'Undefined offset: 2':
     _total: 1
     _comment: ''
     testcases: testNamednodemapSupportedPropertyNames
@@ -582,7 +532,7 @@
     _comment: ''
     testcases: testAppendOnDocument
     files: /tests/Wpt/Dom/Nodes/AppendOnDocumentTest.php
-'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\AriaAttributeReflectionTentativeTest::Wikimedia\Dodo\Tests\Wpt\Dom\{closure}(), 0 passed in /tests/Wpt/Harness/WptTestHarness.php on line 1220 and exactly 1 expected':
+'Undefined property via __get(): role in /tests/Wpt/Dom/Nodes/AriaAttributeReflectionTentativeTest.php on line 15':
     _total: 1
     _comment: ''
     testcases: testAriaAttributeReflectionTentative
@@ -592,7 +542,7 @@
     _comment: ''
     testcases: testNode
     files: /tests/Wpt/Dom/Nodes/CharacterDataAppendChildTest.php
-'Error: Object of class Closure could not be converted to string':
+'Undefined property: Wikimedia\Dodo\DOMException::$name':
     _total: 9
     _comment: ''
     testcases: |-
@@ -621,21 +571,17 @@
     testcases: testNode
     files: /tests/Wpt/Dom/Nodes/CharacterDataAppendDataTest.php
 'count(): Parameter must be an array or an object that implements Countable':
-    _total: 7
+    _total: 5
     _comment: ''
     testcases: |-
         testCharacterDataAppendData
         testCharacterDataData
-        testRangeCloneRange
-        testRangeCollapse
         testRangeCompareBoundaryPoints
         testRangeIntersectsNode
         testNodeIteratorRemoval
     files: |-
         /tests/Wpt/Dom/Nodes/CharacterDataAppendDataTest.php
         /tests/Wpt/Dom/Nodes/CharacterDataDataTest.php
-        /tests/Wpt/Dom/Ranges/RangeCloneRangeTest.php
-        /tests/Wpt/Dom/Ranges/RangeCollapseTest.php
         /tests/Wpt/Dom/Ranges/RangeCompareBoundaryPointsTest.php
         /tests/Wpt/Dom/Ranges/RangeIntersectsNodeTest.php
         /tests/Wpt/Dom/Traversal/NodeIteratorRemovalTest.php
@@ -700,17 +646,26 @@
     _comment: ''
     testcases: testReplaceWith
     files: /tests/Wpt/Dom/Nodes/ChildNodeReplaceWithTest.php
-'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness::arrayMap() must be callable, null given, called in /tests/Wpt/Dom/Nodes/DOMImplementationHasFeatureTest.php on line 15':
+'Undefined variable: i':
+    _total: 2
+    _comment: ''
+    testcases: |-
+        testDOMImplementationCreateHTMLDocument
+        testNodeCloneNodeOnInactiveDocumentCrash
+    files: |-
+        /tests/Wpt/Dom/Nodes/DOMImplementationCreateHTMLDocumentTest.php
+        /tests/Wpt/Dom/Nodes/NodeCloneNodeOnInactiveDocumentCrashTest.php
+'Undefined variable: format_value':
     _total: 1
     _comment: ''
     testcases: testDOMImplementationHasFeature
     files: /tests/Wpt/Dom/Nodes/DOMImplementationHasFeatureTest.php
-'Error: Object of class Wikimedia\Dodo\NodeList could not be converted to string':
+'Trying to get property ''firstChild'' of non-object':
     _total: 1
     _comment: ''
-    testcases: testDocumentConstructor
-    files: /tests/Wpt/Dom/Nodes/DocumentConstructorTest.php
-'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness::assertData(), 2 passed in /tests/Wpt/Harness/WptTestHarness.php on line 380 and exactly 5 expected':
+    testcases: testDocumentAdoptNode
+    files: /tests/Wpt/Dom/Nodes/DocumentAdoptNodeTest.php
+'Undefined property: Wikimedia\Dodo\Internal\UnimplementedException::$name':
     _total: 3
     _comment: ''
     testcases: |-
@@ -753,47 +708,31 @@
     _comment: ''
     testcases: testAlias
     files: /tests/Wpt/Dom/Nodes/DocumentCreateEventHttpsTest.php
-'Invalid argument supplied for foreach()':
-    _total: 5
+'Undefined variable: aliases':
+    _total: 1
     _comment: ''
-    testcases: |-
-        testDocumentCreateEventHttps
-        testInsertAdjacent
-        testNodeCompareDocumentPosition
-        testNodeContains
-        testNodeRemoveChild
-    files: |-
-        /tests/Wpt/Dom/Nodes/DocumentCreateEventHttpsTest.php
-        /tests/Wpt/Dom/Nodes/InsertAdjacentTest.php
-        /tests/Wpt/Dom/Nodes/NodeCompareDocumentPositionTest.php
-        /tests/Wpt/Dom/Nodes/NodeContainsTest.php
-        /tests/Wpt/Dom/Nodes/NodeRemoveChildTest.php
+    testcases: testDocumentCreateEventHttps
+    files: /tests/Wpt/Dom/Nodes/DocumentCreateEventHttpsTest.php
 'Use of undefined constant Text - assumed ''Text'' (this will throw an Error in a future version of PHP)':
     _total: 1
     _comment: ''
     testcases: testDocumentCreateTextNode
     files: /tests/Wpt/Dom/Nodes/DocumentCreateTextNodeTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::createTreeWalker':
-    _total: 10
+    _total: 7
     _comment: ''
     testcases: |-
         testDocumentCreateTreeWalker
-        testTreeWalkerAcceptNodeFilter
         testTreeWalkerBasic
         testTreeWalkerCurrentNode
-        testTreeWalkerPreviousNodeLastChildReject
-        testTreeWalkerPreviousSiblingLastChildSkip
         testTreeWalkerTraversalReject
         testTreeWalkerTraversalSkipMost
         testTreeWalkerTraversalSkip
         testTreeWalkerWalkingOutsideATree
     files: |-
         /tests/Wpt/Dom/Nodes/DocumentCreateTreeWalkerTest.php
-        /tests/Wpt/Dom/Traversal/TreeWalkerAcceptNodeFilterTest.php
         /tests/Wpt/Dom/Traversal/TreeWalkerBasicTest.php
         /tests/Wpt/Dom/Traversal/TreeWalkerCurrentNodeTest.php
-        /tests/Wpt/Dom/Traversal/TreeWalkerPreviousNodeLastChildRejectTest.php
-        /tests/Wpt/Dom/Traversal/TreeWalkerPreviousSiblingLastChildSkipTest.php
         /tests/Wpt/Dom/Traversal/TreeWalkerTraversalRejectTest.php
         /tests/Wpt/Dom/Traversal/TreeWalkerTraversalSkipMostTest.php
         /tests/Wpt/Dom/Traversal/TreeWalkerTraversalSkipTest.php
@@ -803,7 +742,7 @@
     _comment: ''
     testcases: testDocumentFragmentQuerySelectorAllAfterModification
     files: /tests/Wpt/Dom/Nodes/DocumentFragmentQuerySelectorAllAfterModificationTest.php
-'Error: Object of class Wikimedia\Dodo\Tests\Wpt\Dom\DocumentGetElementsByClassNameTest could not be converted to string':
+'Object of class Wikimedia\Dodo\Tests\Wpt\Dom\DocumentGetElementsByClassNameTest could not be converted to string':
     _total: 1
     _comment: ''
     testcases: testDocumentGetElementsByClassName
@@ -868,15 +807,6 @@
     files: |-
         /tests/Wpt/Dom/Nodes/ElementChildrenTest.php
         /tests/Wpt/Dom/Nodes/ParentNodeChildrenTest.php
-'Error: Object of class Wikimedia\Dodo\Internal\FilteredElementList could not be converted to string':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testElementGetElementsByClassName
-        testGetElementsByClassName32
-    files: |-
-        /tests/Wpt/Dom/Nodes/ElementGetElementsByClassNameTest.php
-        /tests/Wpt/Dom/Nodes/GetElementsByClassName32Test.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\ElementGetElementsByTagNameNSTest::testGetElementsByTagNameNS(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1527 and exactly 2 expected':
     _total: 1
     _comment: ''
@@ -896,11 +826,6 @@
     files: |-
         /tests/Wpt/Dom/Nodes/ElementMatchesTest.php
         /tests/Wpt/Dom/Nodes/ElementWebkitMatchesSelectorTest.php
-'Error: Object of class Wikimedia\Dodo\HTMLCollection could not be converted to string':
-    _total: 1
-    _comment: ''
-    testcases: testGetElementsByClassNameEmptySet
-    files: /tests/Wpt/Dom/Nodes/GetElementsByClassNameEmptySetTest.php
 'Error: Cannot access private property Wikimedia\Dodo\NodeList::$_list':
     _total: 4
     _comment: ''
@@ -914,26 +839,35 @@
         /tests/Wpt/Dom/Nodes/NodeListIterableTest.php
         /tests/Wpt/Dom/Nodes/ParentNodeQuerySelectorCaseInsensitiveTest.php
         /tests/Wpt/Dom/Nodes/ParentNodeQuerySelectorsExclusiveTest.php
+'Undefined variable: get_object_vars':
+    _total: 1
+    _comment: ''
+    testcases: testInsertAdjacent
+    files: /tests/Wpt/Dom/Nodes/InsertAdjacentTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\NodeAppendChildTest::testLeaf(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1527 and exactly 2 expected':
     _total: 1
     _comment: ''
     testcases: testLeaf
     files: /tests/Wpt/Dom/Nodes/NodeAppendChildTest.php
-'Error: Object of class Wikimedia\Dodo\URL could not be converted to string':
+'Undefined variable: location':
     _total: 1
     _comment: ''
     testcases: testNodeCloneNodeExternalStylesheetNoBcSub
     files: /tests/Wpt/Dom/Nodes/NodeCloneNodeExternalStylesheetNoBcSubTest.php
-'Error: Call to a member function getOwnerDocument() on null':
-    _total: 1
-    _comment: ''
-    testcases: testNodeCloneNodeOnInactiveDocumentCrash
-    files: /tests/Wpt/Dom/Nodes/NodeCloneNodeOnInactiveDocumentCrashTest.php
 'Undefined property via __get(): constructor in /tests/Wpt/Dom/Nodes/NodeCloneNodeXMLDocumentTest.php on line 14':
     _total: 1
     _comment: ''
     testcases: testNodeCloneNodeXMLDocument
     files: /tests/Wpt/Dom/Nodes/NodeCloneNodeXMLDocumentTest.php
+'Invalid argument supplied for foreach()':
+    _total: 2
+    _comment: ''
+    testcases: |-
+        testNodeCompareDocumentPosition
+        testNodeContains
+    files: |-
+        /tests/Wpt/Dom/Nodes/NodeCompareDocumentPositionTest.php
+        /tests/Wpt/Dom/Nodes/NodeContainsTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\NodeConstantsTest::testConstants(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1527 and exactly 3 expected':
     _total: 1
     _comment: ''
@@ -968,7 +902,7 @@
     files: |-
         /tests/Wpt/Dom/Nodes/NodeIsConnectedShadowDomTest.php
         /tests/Wpt/Dom/Nodes/RootNodeTest.php
-'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertFalse() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 330':
+'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertFalse() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 331':
     _total: 2
     _comment: ''
     testcases: |-
@@ -987,7 +921,7 @@
     _comment: ''
     testcases: testNodeLookupNamespaceURI
     files: /tests/Wpt/Dom/Nodes/NodeLookupNamespaceURITest.php
-'Creating default object from empty value':
+'Trying to get property ''nodeValue'' of non-object':
     _total: 1
     _comment: ''
     testcases: testNodeNodeValue
@@ -1001,11 +935,26 @@
     files: |-
         /tests/Wpt/Dom/Nodes/NodeNormalizeTest.php
         /tests/Wpt/Dom/Nodes/NodeTextContentTest.php
+'Trying to get property ''parentElement'' of non-object':
+    _total: 1
+    _comment: ''
+    testcases: testNodeParentElement
+    files: /tests/Wpt/Dom/Nodes/NodeParentElementTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\NodeParentNodeTest::testIframe(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1527 and exactly 1 expected':
     _total: 1
     _comment: ''
     testcases: testIframe
     files: /tests/Wpt/Dom/Nodes/NodeParentNodeTest.php
+'Trying to get property ''parentNode'' of non-object':
+    _total: 1
+    _comment: ''
+    testcases: testNodeParentNode
+    files: /tests/Wpt/Dom/Nodes/NodeParentNodeTest.php
+'Undefined variable: docs':
+    _total: 1
+    _comment: ''
+    testcases: testNodeRemoveChild
+    files: /tests/Wpt/Dom/Nodes/NodeRemoveChildTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\ParentNodeAppendTest::testAppend(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1527 and exactly 2 expected':
     _total: 1
     _comment: ''
@@ -1056,7 +1005,7 @@
     _comment: ''
     testcases: testCloneContents
     files: /tests/Wpt/Dom/Ranges/RangeCloneContentsTest.php
-'Error: Call to a member function removeChild() on null':
+'Undefined variable: testDiv':
     _total: 5
     _comment: ''
     testcases: |-
@@ -1076,6 +1025,15 @@
     _comment: ''
     testcases: testCloneRange
     files: /tests/Wpt/Dom/Ranges/RangeCloneRangeTest.php
+'Undefined variable: testRanges':
+    _total: 2
+    _comment: ''
+    testcases: |-
+        testRangeCloneRange
+        testRangeCollapse
+    files: |-
+        /tests/Wpt/Dom/Ranges/RangeCloneRangeTest.php
+        /tests/Wpt/Dom/Ranges/RangeCollapseTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\Wpt\Dom\RangeCollapseTest::testCollapse(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1527 and exactly 2 expected':
     _total: 1
     _comment: ''
@@ -1126,7 +1084,7 @@
     _comment: ''
     testcases: testTree
     files: /tests/Wpt/Dom/Ranges/RangeSelectNodeTest.php
-'Error: Call to a member function createRange() on null':
+'Undefined variable: foreignDoc':
     _total: 1
     _comment: ''
     testcases: testRangeSelectNode
@@ -1161,7 +1119,7 @@
     _comment: ''
     testcases: testSetEndAfter
     files: /tests/Wpt/Dom/Ranges/RangeSetTest.php
-'TypeError: Argument 1 passed to Wikimedia\Dodo\Tests\Wpt\Harness\WptTestHarness::arrayMap() must be of the type array, null given, called in /tests/Wpt/Dom/Ranges/RangeSetTest.php on line 135':
+'Undefined variable: testPoints':
     _total: 1
     _comment: ''
     testcases: testRangeSet
@@ -1201,3 +1159,14 @@
     _comment: ''
     testcases: testNodeIterator
     files: /tests/Wpt/Dom/Traversal/NodeIteratorTest.php
+'Undefined variable: filter':
+    _total: 3
+    _comment: ''
+    testcases: |-
+        testTreeWalkerAcceptNodeFilter
+        testTreeWalkerPreviousNodeLastChildReject
+        testTreeWalkerPreviousSiblingLastChildSkip
+    files: |-
+        /tests/Wpt/Dom/Traversal/TreeWalkerAcceptNodeFilterTest.php
+        /tests/Wpt/Dom/Traversal/TreeWalkerPreviousNodeLastChildRejectTest.php
+        /tests/Wpt/Dom/Traversal/TreeWalkerPreviousSiblingLastChildSkipTest.php

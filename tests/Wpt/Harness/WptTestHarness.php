@@ -9,6 +9,7 @@
 namespace Wikimedia\Dodo\Tests\Wpt\Harness;
 
 use Exception;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
@@ -356,11 +357,11 @@ abstract class WptTestHarness extends TestCase {
 	 * the third argument the function expected to throw, and the fourth, optional,
 	 * argument the assertion description.
 	 *
-	 * @param $expected
-	 * @param null $actual
-	 * @param null $closure
+	 * @param callable $funcOrConstructor
+	 * @param ?string $descriptionOrFunc
+	 * @param ?string $maybeDescription
 	 */
-	protected function assertThrowsDomData( $type, $funcOrConstructor, $descriptionOrFunc = null, $maybeDescription = null ) : void {
+	protected function assertThrowsDomData( $type, callable $funcOrConstructor, ?string $descriptionOrFunc = null, ?string $maybeDescription = null ) : void {
 		$constructor = null;
 		$func = null;
 		$description = null;
@@ -376,8 +377,9 @@ abstract class WptTestHarness extends TestCase {
 					'' );
 				$func = $funcOrConstructor;
 				$description = $descriptionOrFunc ?? $maybeDescription;
-				$this->assertData( $maybeDescription === null,
-					'Too many args pased to no-constructor version of assert_throws_dom' );
+				Assert::assertTrue( $maybeDescription === null,
+					'Too many args pased to no-constructor version of assert_throws_dom'
+				);
 			}
 		}
 
@@ -389,57 +391,55 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param $expected_true
-	 * @param $function_name
-	 * @param $description
-	 * @param $error
-	 * @param $substitutions
+	 * @param bool $expected_true
+	 * @param string $function_name
+	 * @param ?string $description
+	 * @param string $error
+	 * @param array<string, mixed> $substitutions
 	 */
-	protected function assertData( $expected_true, $function_name, $description, $error, $substitutions ) : void {
+	protected function assertData( bool $expected_true, string $function_name, ?string $description, string $error, array $substitutions ) : void {
 		$msg = $this->makeMessage( $function_name,
 			$description,
 			$error,
 			$substitutions );
 
-		$this->assertTrue( $expected_true,
-			$msg );
+		Assert::assertTrue( $expected_true, $msg );
 	}
 
 	/**
-	 * @param $function_name
-	 * @param $description
-	 * @param $error
-	 * @param $substitutions
+	 * @param string $function_name
+	 * @param ?string $description
+	 * @param string $error
+	 * @param array<string,mixed> $substitutions
 	 *
 	 * @return string
 	 */
-	protected function makeMessage( $function_name, $description, $error, $substitutions ) {
+	protected function makeMessage( string $function_name, ?string $description, string $error, array $substitutions ): string {
 		$_substitutions = [];
-		foreach ( $substitutions as $p => $___ ) {
-			if ( is_array( $substitutions[$p] ) ) {
-				$_substitutions [ '${' . $p . '}'] = implode( ',',
-					array_keys( $substitutions[$p] ) );
+		foreach ( $substitutions as $p => $v ) {
+			if ( is_array( $v ) ) {
+				$_substitutions[ '${' . $p . '}'] = implode( ',',
+					array_keys( $v ) );
 			} else {
-				$_substitutions[ '${' . $p . '}'] = $this->formatValue( $substitutions[$p] );
+				$_substitutions[ '${' . $p . '}'] = $this->formatValue( $v );
 			}
 		}
-
 		return strtr( '${function_name}: ${description} ' . $error,
 			array_merge(
 				[ '${function_name}' => $function_name,
-					'${description}' => ( ( $description ) ? $description . ' ' : '' ),
+					'${description}' => ( $description ? $description . ' ' : '' ),
 				], $_substitutions ) );
 	}
 
 	/**
 	 * TODO implement check if possible to implement
 	 *
-	 * @param $value
+	 * @param mixed $value
 	 *
-	 * @return mixed
+	 * @return string
 	 */
-	protected function formatValue( $value ) {
-		return $value;
+	protected function formatValue( $value ): string {
+		return json_encode( $value );
 
 // if ( !$seen ) {
 //			$seen = [];
@@ -536,11 +536,11 @@ abstract class WptTestHarness extends TestCase {
 	 *
 	 * @param $type
 	 * @param callable $func
-	 * @param $description
+	 * @param ?string $description
 	 * @param $assertion_type
 	 * @param $constructor
 	 */
-	protected function assertThrowsDomImpl( $type, callable $func, $description, $assertion_type, $constructor ) : void {
+	protected function assertThrowsDomImpl( $type, callable $func, ?string $description, $assertion_type, $constructor ) : void {
 		try {
 			$func();
 			$this->assertData( false,
@@ -941,9 +941,7 @@ abstract class WptTestHarness extends TestCase {
 	 * @param string $message
 	 */
 	protected function assertEqualsData( $actual, $expected, string $message = '' ) : void {
-		$this->assertEquals( $expected,
-			$actual,
-			$message );
+		Assert::assertEquals( $expected, $actual, $message );
 	}
 
 	/**
@@ -1014,91 +1012,17 @@ abstract class WptTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param $actual
-	 * @param $expected
-	 * @param $description
+	 * @param array $actual
+	 * @param array $expected
+	 * @param string $description
 	 */
-	protected function assertArrayEqualsData( $actual, $expected, $description = '' ) : void {
-		$max_array_length = 20;
+	protected function assertArrayEqualsData( $actual, array $expected, string $description = '' ) : void {
+		Assert::assertIsArray( $actual, $description );
+		Assert::assertCount( count( $expected ), $actual, $description );
 
-		$this->assertData( is_array( $actual ),
-			'assertArrayEquals',
-			$description,
-			'value is ${actual}, expected array',
-			[ 'actual' => $actual ] );
-		$this->assertData( count( $actual ) === count( $expected ),
-			'assertArrayEquals',
-			$description,
-			'lengths differ, expected array ${expected} length ${expectedLength}, got ${actual} length ${actualLength}',
-			[ 'expected' => $this->shortenArray( $expected,
-				count( $expected ) - 1 ),
-				'expectedLength' => count( $expected ),
-				'actual' => $this->shortenArray( $actual,
-					count( $actual ) - 1 ),
-				'actualLength' => count( $actual ) ] );
-
-		for ( $i = 0, $iMax = count( $actual ); $i < $iMax; $i++ ) {
-			$this->assertData( $actual->hasOwnProperty( $i ) === $expected->hasOwnProperty( $i ),
-				'assertArrayEquals',
-				$description,
-				'expected property ${i} to be ${expected} but was ${actual} (expected array ${arrayExpected} got ${arrayActual})',
-				[ 'i' => $i,
-					'expected' => ( $expected->hasOwnProperty( $i ) ) ? 'present' : 'missing',
-					'actual' => ( $actual->hasOwnProperty( $i ) ) ? 'present' : 'missing',
-					'arrayExpected' => $this->shortenArray( $expected,
-						$i ),
-					'arrayActual' => $this->shortenArray( $actual,
-						$i ) ] );
-			$this->assertData( $this->sameValue( $expected[$i],
-				$actual[$i] ),
-				'assertArrayEquals',
-				$description,
-				'expected property ${i} to be ${expected} but got ${actual} (expected array ${arrayExpected} got ${arrayActual})',
-				[ 'i' => $i,
-					'expected' => $expected[$i],
-					'actual' => $actual[$i],
-					'arrayExpected' => $this->shortenArray( $expected,
-						$i ),
-					'arrayActual' => $this->shortenArray( $actual,
-						$i ) ] );
+		for ( $i = 0; $i < count( $expected ); $i++ ) {
+			Assert::assertEquals( $expected[$i], $actual[$i], $description );
 		}
-	}
-
-	/**
-	 * @param $arr
-	 * @param int $offset
-	 * @param &$max_array_length
-	 *
-	 * @return array
-	 */
-	protected function shortenArray( $arr, $offset = 0, &$max_array_length = 20 ) {
-		// Make ", …" only show up when it would likely reduce the length, not accounting for
-		// fonts.
-		if ( count( $arr ) < $max_array_length + 2 ) {
-			return $arr;
-		}
-
-		$length_after_offset = floor( $max_array_length / 2 );
-		$upper_bound = min( $length_after_offset + $offset,
-			count( $arr ) );
-		$lower_bound = max( $upper_bound - $max_array_length,
-			0 );
-
-		if ( $lower_bound === 0 ) {
-			$upper_bound = $max_array_length;
-		}
-
-		$output = array_slice( $arr,
-			$lower_bound,
-			$upper_bound/*CHECK THIS*/ );
-		if ( $lower_bound > 0 ) {
-			$output->beginEllipsis = true;
-		}
-		if ( $upper_bound < count( $arr ) ) {
-			$output->endEllipsis = true;
-		}
-
-		return $output;
 	}
 
 	/**
@@ -1214,10 +1138,10 @@ abstract class WptTestHarness extends TestCase {
 
 	/**
 	 * @param callable $closure
-	 * @param mixed $type
+	 * @param string|null $message
 	 */
-	protected function assertTest( callable $closure, $type = null ) : void {
-		$closure();
+	protected function assertTest( callable $closure, string $message = null ) : void {
+		$closure( null );
 	}
 
 	/**

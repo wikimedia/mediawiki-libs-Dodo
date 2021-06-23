@@ -3,14 +3,15 @@
 namespace Wikimedia\Dodo\Tests\W3c\Harness;
 
 use Mockery;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Finder\Finder;
+use Wikimedia\Dodo\Document as DodoDOMDocument;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\DOMImplementation;
 use Wikimedia\Dodo\Node as DOMNode;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
-use Wikimedia\Dodo\Document as DodoDOMDocument;
 
 /**
  * W3cTestHarness.php
@@ -109,11 +110,9 @@ abstract class W3cTestHarness extends TestCase {
 		string $expected, string $actual ) : void {
 		//
 		// if they aren't the same size, they aren't equal
-		$this->assertEqualsData( $descr,
-			count( $expected ),
-			count( $actual ) );
+		Assert::assertCount( count( $expected ), $actual, $descr );
 
-		// if there length is the same, then every entry in the expected list
+		// if their length is the same, then every entry in the expected list
 		// must appear once and only once in the actual list
 		$expectedValue = null;
 		$i = null;
@@ -153,62 +152,31 @@ abstract class W3cTestHarness extends TestCase {
 	 * @todo replace assert
 	 *
 	 * @param string $descr
-	 * @param string $expected
-	 * @param string $actual
+	 * @param array $expected
+	 * @param array $actual
 	 */
-	public function assertEqualsCollectionData( string $descr, string $expected, string $actual ) : void {
-		//
-		// if they aren't the same size, they aren't equal
-		$this->assertEqualsData( $descr,
-			count( $expected ),
-			count( $actual ) );
-		//
-		// if there length is the same, then every entry in the expected list
-		// must appear once and only once in the actual list
-		$expectedValue = null;
-		$i = null;
-		$j = null;
-		$matches = null;
-		foreach ( $expected as $iValue ) {
-			$matches = 0;
-			$expectedValue = $iValue;
-			foreach ( $actual as $jValue ) {
-				if ( $expectedValue == $jValue ) {
-					$matches++;
-				}
-			}
-			if ( $matches == 0 ) {
-				// assert( $descr . ': No match found for ' . $expectedValue, false );
-			}
-			if ( $matches > 1 ) {
-				// assert( $descr . ': Multiple matches found for ' . $expectedValue, false );
-			}
-		}
+	public function assertEqualsCollectionData( string $descr, array $expected, array $actual ) : void {
+		Assert::assertEquals( $expected, $actual, $descr );
 	}
 
 	/**
 	 * @param string $context
 	 * @param string $descr
-	 * @param string $expected
-	 * @param string $actual
+	 * @param array $expected
+	 * @param array $actual
 	 */
-	public function assertEqualsListAutoCaseData( string $context, string $descr, string $expected, string $actual ) : void {
+	public function assertEqualsListAutoCaseData( string $context, string $descr, array $expected, array $actual ) : void {
 		$minLength = count( $expected );
 		if ( count( $actual ) < $minLength ) {
 			$minLength = count( $actual );
 		}
-		//
 		for ( $i = 0; $i < $minLength; $i++ ) {
 			$this->assertEqualsAutoCaseData( $context,
 				$descr,
 				$expected[$i],
 				$actual[$i] );
 		}
-		//
-		// if they aren't the same size, they aren't equal
-		$this->assertEqualsData( $descr,
-			count( $expected ),
-			count( $actual ) );
+		Assert::assertCount( count( $expected ), $actual, $descr );
 	}
 
 	/**
@@ -220,27 +188,21 @@ abstract class W3cTestHarness extends TestCase {
 	public function assertEqualsAutoCaseData( ?string $context, ?string $descr, ?string $expected, ?string $actual ) : void {
 		if ( $this->contentType === 'text/html' ) {
 			if ( $context === 'attribute' ) {
-				$this->assertEqualsData( $descr,
-					strtolower( $expected ),
-					strtolower( $actual ) );
+				Assert::assertEqualsIgnoringCase( $expected, $actual, $descr );
 			} else {
-				$this->assertEqualsData( $descr,
-					strtoupper( $expected ),
-					$actual );
+				Assert::assertEquals( strtoupper( $expected ), $actual, $descr );
 			}
 		} else {
-			$this->assertEqualsData( $descr,
-				$expected,
-				$actual );
+			Assert::assertEquals( $expected, $actual, $descr );
 		}
 	}
 
 	/**
 	 * @param string|null $descr
-	 * @param string|null $expected
-	 * @param string|null $actual
+	 * @param array $expected
+	 * @param array $actual
 	 */
-	public function assertEqualsListData( ?string $descr, ?string $expected, ?string $actual ) : void {
+	public function assertEqualsListData( ?string $descr, array $expected, $actual ) : void {
 		$minLength = count( $expected );
 		if ( count( $actual ) < $minLength ) {
 			$minLength = count( $actual );
@@ -479,7 +441,7 @@ abstract class W3cTestHarness extends TestCase {
 		}
 	}
 
-	/* @inheritDoc */
+	/** @inheritDoc */
 	protected function tearDown() : void {
 		parent::tearDown();
 		Mockery::close();
