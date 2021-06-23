@@ -1,8 +1,3 @@
-'Undefined property via __get(): attributes in /tests/W3c/Level1/Core/HcCommentgetcommentTest.php on line 40':
-    _total: 1
-    _comment: ''
-    testcases: testHcCommentgetcomment
-    files: /tests/W3c/Level1/Core/HcCommentgetcommentTest.php
 'This test did not perform any assertions':
     _total: 20
     _comment: ''
@@ -53,26 +48,6 @@
     _comment: ''
     testcases: testHcNodeappendchildnewchilddiffdocument
     files: /tests/W3c/Level1/Core/HcNodeappendchildnewchilddiffdocumentTest.php
-'Undefined property via __get(): attributes in /tests/W3c/Level1/Core/HcNodeattributenodeattributeTest.php on line 34':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodeattributenodeattribute
-    files: /tests/W3c/Level1/Core/HcNodeattributenodeattributeTest.php
-'Undefined property via __get(): attributes in /tests/W3c/Level1/Core/HcNodecommentnodeattributesTest.php on line 34':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodecommentnodeattributes
-    files: /tests/W3c/Level1/Core/HcNodecommentnodeattributesTest.php
-'Undefined property via __get(): attributes in /tests/W3c/Level1/Core/HcNodedocumentfragmentnodevalueTest.php on line 28':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodedocumentfragmentnodevalue
-    files: /tests/W3c/Level1/Core/HcNodedocumentfragmentnodevalueTest.php
-'Undefined property via __get(): attributes in /tests/W3c/Level1/Core/HcNodedocumentnodeattributeTest.php on line 25':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodedocumentnodeattribute
-    files: /tests/W3c/Level1/Core/HcNodedocumentnodeattributeTest.php
 'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodeinsertbeforenewchilddiffdocumentTest::$doc1':
     _total: 1
     _comment: ''
@@ -88,11 +63,6 @@
     _comment: ''
     testcases: testHcNodereplacechildnewchildexists
     files: /tests/W3c/Level1/Core/HcNodereplacechildnewchildexistsTest.php
-'Undefined property via __get(): attributes in /tests/W3c/Level1/Core/HcNodetextnodeattributeTest.php on line 33':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodetextnodeattribute
-    files: /tests/W3c/Level1/Core/HcNodetextnodeattributeTest.php
 'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodevalue06Test::$newNode':
     _total: 1
     _comment: ''
@@ -904,7 +874,7 @@
     _comment: ''
     testcases: testNodeNodeValue
     files: /tests/Wpt/Dom/Nodes/NodeNodeValueTest.php
-'Undefined property via __get(): _data in /src/Internal/WhatWG.php on line 771':
+'Undefined property via __get(): _data in /src/Text.php on line 37':
     _total: 2
     _comment: ''
     testcases: |-

@@ -49,7 +49,22 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	use UnimplementedTrait;
 
 	// Helper functions from IDLeDOM
-	use \Wikimedia\IDLeDOM\Helper\Document;
+	use \Wikimedia\IDLeDOM\Helper\Document {
+		__get as protected _getHelper;
+	}
+
+	/**
+	 * HACK! For compatibilty with W3C test suite, which assumes that an
+	 * access to 'attributes' will return null.
+	 * @param string $name
+	 * @return mixed
+	 */
+	public function __get( string $name ) {
+		if ( $name === 'attributes' ) {
+			return null;
+		}
+		return $this->_getHelper( $name );
+	}
 
 	/**********************************************************************
 	 * Properties that are for internal use by this library
