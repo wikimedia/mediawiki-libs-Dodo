@@ -58,15 +58,6 @@
     _comment: ''
     testcases: testHcNodeattributenodeattribute
     files: /tests/W3c/Level1/Core/HcNodeattributenodeattributeTest.php
-'Undefined property via __get(): _childNodes in /src/Internal/WhatWG.php on line 282':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testHcNodeclonenodetrue
-        testHcNodeclonetruecopytext
-    files: |-
-        /tests/W3c/Level1/Core/HcNodeclonenodetrueTest.php
-        /tests/W3c/Level1/Core/HcNodeclonetruecopytextTest.php
 'Undefined property via __get(): attributes in /tests/W3c/Level1/Core/HcNodecommentnodeattributesTest.php on line 34':
     _total: 1
     _comment: ''

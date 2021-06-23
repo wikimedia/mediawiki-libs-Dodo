@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
-use Wikimedia\Dodo\Internal\WhatWG;
 
 /**
  * DocumentFragment
@@ -39,25 +38,6 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	 */
 	final public function getNodeName() : string {
 		return "#document-fragment";
-	}
-
-	/** @inheritDoc */
-	public function getTextContent() : ?string {
-		// See Element::getTextContent()
-		$text = [];
-		WhatWG::descendantTextContent( $this, $text );
-		return implode( "", $text );
-	}
-
-	/** @inheritDoc */
-	public function setTextContent( ?string $value ) : void {
-		// See Element::setTextContent()
-		$value = $value ?? '';
-		$this->_removeChildren();
-		if ( $value !== "" ) {
-			/* Equivalent to Node:: appendChild without checks! */
-			WhatWG::insert_before_or_replace( $this->_nodeDocument->createTextNode( $value ), $this, null, false );
-		}
 	}
 
 	/** @return DocumentFragment */

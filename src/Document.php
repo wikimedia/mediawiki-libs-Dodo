@@ -380,6 +380,20 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		return null;
 	}
 
+	// The textContent methods use to the 'any other node' definition from Node,
+	// not the implementation in ContainerNode which is only for Element
+	// and DocumentFragment
+
+	/** @inheritDoc */
+	public function getTextContent() : ?string {
+		return null;
+	}
+
+	/** @inheritDoc */
+	public function setTextContent( ?string $value ) : void {
+		/* do nothing */
+	}
+
 	/*
 	 * NODE CREATION
 	 */
@@ -604,7 +618,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 *
 	 * @inheritDoc
 	 */
-	public function importNode( $node, bool $deep = false ) {
+	public function importNode( $node, bool $deep = false ): Node {
 		return $this->adoptNode( $node->cloneNode( $deep ) );
 	}
 
@@ -650,11 +664,10 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * spec DOM-LS
 	 *
 	 * NOTE:
-	 * 1. What a tangled web we weave
-	 * 2. With Document nodes, we need to take the additional step of
+	 * 1. With Document nodes, we need to take the additional step of
 	 *    calling importNode() to bring copies of child nodes into this
 	 *    document.
-	 * 3. We also need to call _updateDocTypeElement()
+	 * 2. We also need to call _updateDocTypeElement()
 	 *
 	 * @param bool $deep if true, clone entire document
 	 * @return Document
@@ -672,7 +685,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 
 		/* Clone children too */
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-			$clone->appendChild( $clone->importNode( $n, true ) );
+			$clone->_unsafeAppendChild( $clone->importNode( $n, true ) );
 		}
 
 		$clone->_updateDoctypeAndDocumentElement();

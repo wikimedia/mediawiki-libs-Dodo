@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\WhatWG;
+
 /**
  * The ContainerNode class defines common functionality for node subtypes
  * that can have children.  We factor this out so that leaf nodes can
@@ -134,4 +136,38 @@ abstract class ContainerNode extends Node {
 		// because this is a circularly linked list.
 		return $this->_firstChild->_previousSibling;
 	}
+
+	// These next methods are defined on Element and DocumentFragment with
+	// identical behavior.  Note that they are defined differently on Document,
+	// however, so we need to override this definition in that class.
+
+	/**
+	 * Generic implementation of ::getTextContent to be used by Element
+	 * and DocumentFragment (but not Document!).
+	 * @see https://dom.spec.whatwg.org/#dom-node-textcontent
+	 * @return ?string
+	 */
+	public function getTextContent() : ?string {
+		$text = [];
+		WhatWG::descendantTextContent( $this, $text );
+		return implode( "", $text );
+	}
+
+	/**
+	 * Generic implementation of ::setTextContent to be used by Element
+	 * and DocumentFragment (but not Document!).
+	 * @see https://dom.spec.whatwg.org/#dom-node-textcontent
+	 * @param ?string $value
+	 */
+	public function setTextContent( ?string $value ) : void {
+		$value = $value ?? '';
+		$this->_removeChildren();
+		if ( $value !== "" ) {
+			/* Equivalent to Node:: appendChild without checks! */
+			$this->_unsafeAppendChild(
+				$this->_nodeDocument->createTextNode( $value )
+			);
+		}
+	}
+
 }

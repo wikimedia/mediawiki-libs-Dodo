@@ -218,25 +218,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		return $this->getNodeName();
 	}
 
-	/** @inheritDoc */
-	public function getTextContent() : ?string {
-		// See DocumentFragment::getTextContent()
-		$text = [];
-		WhatWG::descendantTextContent( $this, $text );
-		return implode( "", $text );
-	}
-
-	/** @inheritDoc */
-	public function setTextContent( ?string $value ) : void {
-		// See DocumentFragment::setTextContent()
-		$value = $value ?? '';
-		$this->_removeChildren();
-		if ( $value !== "" ) {
-			/* Equivalent to Node:: appendChild without checks! */
-			WhatWG::insert_before_or_replace( $this->_nodeDocument->createTextNode( $value ), $this, null, false );
-		}
-	}
-
 	/*
 	 * METHODS DELEGATED FROM NODE
 	 */

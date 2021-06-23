@@ -421,7 +421,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @param Node $node
 	 * @return Node
 	 */
-	final public function __unsafe_appendChild( Node $node ): Node {
+	final public function _unsafeAppendChild( Node $node ): Node {
 		WhatWG::insert_before_or_replace( $node, $this, null, false );
 		return $node;
 	}
@@ -675,8 +675,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 		/* Otherwise, recurse on the children */
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-			/* APPEND DIRECTLY; NO CHECKINSERTVALID */
-			WhatWG::insert_before_or_replace( $clone, $n->cloneNode( true ), null, false );
+			$clone->_unsafeAppendChild( $n->cloneNode( true ) );
 		}
 
 		return $clone;
