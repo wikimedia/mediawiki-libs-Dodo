@@ -6,3 +6,5 @@
 /.phpunit.result.cache
 /node_modules
 /.docksal
+/tests/logs/log.xml
+/tests/logs/_log.xml
