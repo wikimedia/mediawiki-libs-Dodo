@@ -4,7 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\Range;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-stringifier.html.
 class RangeStringifierTest extends WPTTestHarness
 {

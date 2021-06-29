@@ -733,8 +733,10 @@ class ParserTask extends BaseTask {
 		}
 
 		// harness namespace.
-		$stmts[] = $this->factory->use( "Wikimedia\\Dodo\\Tests\\" . $this->test_type .
-			"\\Harness\\" . $this->test_type . "TestHarness" );
+		$stmts[] = $this->factory->use(
+			"Wikimedia\\Dodo\\Tests\\Harness\\" .
+			$this->test_type . "TestHarness"
+		);
 
 		return $stmts;
 	}

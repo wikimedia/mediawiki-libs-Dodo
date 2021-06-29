@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Attr;
 use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\DOMImplementation;
-use Wikimedia\Dodo\Tests\W3C\Harness\W3CTestHarness;
+use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_domimplementationfeaturenull.js.
 class HcDomimplementationfeaturenullTest extends W3CTestHarness
 {

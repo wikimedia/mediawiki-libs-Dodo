@@ -4,7 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\HTMLAnchorElement;
 use Wikimedia\Dodo\DomException;
-use Wikimedia\Dodo\Tests\W3C\Harness\W3CTestHarness;
+use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLAnchorElement14.js.
 class HTMLAnchorElement14Test extends W3CTestHarness
 {

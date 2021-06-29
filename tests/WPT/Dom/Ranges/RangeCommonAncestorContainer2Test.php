@@ -6,7 +6,7 @@ use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\Range;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-commonAncestorContainer-2.html.
 class RangeCommonAncestorContainer2Test extends WPTTestHarness
 {

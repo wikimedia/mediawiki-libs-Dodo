@@ -1,7 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\DocumentType;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/DOMImplementation-createDocumentType.html.
 class DOMImplementationCreateDocumentTypeTest extends WPTTestHarness
 {

@@ -5,7 +5,7 @@ use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\DomException;
-use Wikimedia\Dodo\Tests\W3C\Harness\W3CTestHarness;
+use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeappendchilddocfragment.js.
 class HcNodeappendchilddocfragmentTest extends W3CTestHarness
 {

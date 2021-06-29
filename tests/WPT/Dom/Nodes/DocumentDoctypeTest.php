@@ -4,7 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\DocumentType;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-doctype.html.
 class DocumentDoctypeTest extends WPTTestHarness
 {

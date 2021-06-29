@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Node;
 use Wikimedia\IDLeDOM\XMLDocument;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-cloneNode-XMLDocument.html.
 class NodeCloneNodeXMLDocumentTest extends WPTTestHarness
 {

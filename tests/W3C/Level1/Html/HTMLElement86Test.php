@@ -4,7 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\HTMLElement;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\DomException;
-use Wikimedia\Dodo\Tests\W3C\Harness\W3CTestHarness;
+use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLElement86.js.
 class HTMLElement86Test extends W3CTestHarness
 {

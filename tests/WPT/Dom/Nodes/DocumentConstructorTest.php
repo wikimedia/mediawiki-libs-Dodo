@@ -6,7 +6,7 @@ use Wikimedia\IDLeDOM\XMLDocument;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\HTMLAnchorElement;
 use Wikimedia\Dodo\URL;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-constructor.html.
 class DocumentConstructorTest extends WPTTestHarness
 {

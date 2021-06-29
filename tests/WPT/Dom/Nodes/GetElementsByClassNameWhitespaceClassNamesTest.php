@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/getElementsByClassName-whitespace-class-names.html.
 class GetElementsByClassNameWhitespaceClassNamesTest extends WPTTestHarness
 {

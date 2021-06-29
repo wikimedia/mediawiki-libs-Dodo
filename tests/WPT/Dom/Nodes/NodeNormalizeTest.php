@@ -5,7 +5,7 @@ use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-normalize.html.
 class NodeNormalizeTest extends WPTTestHarness
 {

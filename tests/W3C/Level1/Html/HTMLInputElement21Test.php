@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\DomException;
-use Wikimedia\Dodo\Tests\W3C\Harness\W3CTestHarness;
+use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLInputElement21.js.
 class HTMLInputElement21Test extends W3CTestHarness
 {

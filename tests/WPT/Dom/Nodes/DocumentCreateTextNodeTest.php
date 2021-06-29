@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\CharacterData;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-createTextNode.html.
 class DocumentCreateTextNodeTest extends WPTTestHarness
 {

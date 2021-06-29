@@ -9,7 +9,7 @@ use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\Range;
 use Wikimedia\Dodo\StaticRange;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/StaticRange-constructor.html.
 class StaticRangeConstructorTest extends WPTTestHarness
 {

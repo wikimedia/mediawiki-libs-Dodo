@@ -7,7 +7,7 @@ use Wikimedia\Dodo\HTMLBodyElement;
 use Wikimedia\Dodo\HTMLHeadElement;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\URL;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/DOMImplementation-createHTMLDocument.html.
 class DOMImplementationCreateHTMLDocumentTest extends WPTTestHarness
 {

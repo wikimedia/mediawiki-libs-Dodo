@@ -5,7 +5,7 @@ use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\DocumentType;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-lookupNamespaceURI.html.
 class NodeLookupNamespaceURITest extends WPTTestHarness
 {

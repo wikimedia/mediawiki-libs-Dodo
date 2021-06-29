@@ -5,7 +5,7 @@ use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DomException;
-use Wikimedia\Dodo\Tests\W3C\Harness\W3CTestHarness;
+use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_textindexsizeerrnegativeoffset.js.
 class HcTextindexsizeerrnegativeoffsetTest extends W3CTestHarness
 {

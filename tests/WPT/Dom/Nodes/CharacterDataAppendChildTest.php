@@ -4,7 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\CharacterData;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/CharacterData-appendChild.html.
 class CharacterDataAppendChildTest extends WPTTestHarness
 {

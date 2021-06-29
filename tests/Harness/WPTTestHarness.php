@@ -1,12 +1,33 @@
 <?php
+// @phan-file-suppress PhanCommentParamWithoutRealParam
+// @phan-file-suppress PhanDivisionByZero
+// @phan-file-suppress PhanNonClassMethodCall
+// @phan-file-suppress PhanParamTooFew
+// @phan-file-suppress PhanParamTooMany
+// @phan-file-suppress PhanTypeInvalidCallableObjectOfMethod
+// @phan-file-suppress PhanTypeInvalidInstanceof
+// @phan-file-suppress PhanTypeMismatchArgument
+// @phan-file-suppress PhanTypeMismatchArgumentInternalProbablyReal
+// @phan-file-suppress PhanTypeMismatchArgumentProbablyReal
+// @phan-file-suppress PhanTypeMismatchReturnNullable
+// @phan-file-suppress PhanTypePossiblyInvalidDimOffset
+// @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
-// @phan-file-suppress PhanTypeMismatchDimFetch
-// @phan-file-suppress PhanTypeMismatchArgumentInternal
-// @phan-file-suppress PhanTypeExpectedObjectPropAccess
-// @phan-file-suppress PhanImpossibleCondition
-// @phan-file-suppress PhanTypeExpectedObjectPropAccess
+// @phan-file-suppress PhanUndeclaredStaticMethod
+// @phan-file-suppress PhanUndeclaredVariable
+// @phan-file-suppress PhanUnextractableAnnotation
+// phpcs:disable Generic.Files.LineLength.TooLong
+// phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamName
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingParamTag
+// phpcs:disable MediaWiki.Commenting.FunctionComment.MissingReturn
+// phpcs:disable MediaWiki.Commenting.FunctionComment.NoParamType
+// phpcs:disable MediaWiki.Commenting.FunctionComment.ParamNameNoMatch
+// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
+// phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
+// phpcs:disable Squiz.Scope.MethodScope.Missing
 
-namespace Wikimedia\Dodo\Tests\WPT\Harness;
+namespace Wikimedia\Dodo\Tests\Harness;
 
 use Exception;
 use PHPUnit\Framework\Assert;
@@ -15,15 +36,12 @@ use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\HTMLElement;
 use Wikimedia\Dodo\Internal\Util;
-use Wikimedia\Dodo\Tests\WPT\Harness\Utils\Common;
-use Wikimedia\Dodo\Tests\WPT\Harness\Utils\Selectors;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
+use Wikimedia\Dodo\Tests\Harness\Utils\Selectors;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
 
 /**
- * WPTTestHarness.php
- * --------
- *
- * @package Wikimedia\Dodo\Tests
+ * WPTTestHarness
  */
 abstract class WPTTestHarness extends TestCase {
 	use Helpers;

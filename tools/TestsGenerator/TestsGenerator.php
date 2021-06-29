@@ -13,7 +13,6 @@ use Robo\Exception\TaskException;
 use Robo\Result;
 use Robo\Tasks;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Yaml;
 
@@ -243,35 +242,6 @@ class TestsGenerator extends Tasks {
 	 * @throws TaskException
 	 */
 	public function initDependencies( bool $rewrite = false ) : void {
-		$result = $this->_copyDir( $this->folder . '/Harness/WPT',
-			$this->root_folder . '/tests/WPT/Harness' );
-
-		if ( !$result->wasSuccessful() ) {
-			throw new TaskException( $this, 'No WPT harness.' );
-		}
-
-		$result = $this->_copyDir( $this->folder . '/Harness/W3C',
-			$this->root_folder . '/tests/W3C/Harness' );
-
-		if ( !$result->wasSuccessful() ) {
-			throw new TaskException( $this, 'No W3C harness.' );
-		}
-
-		$harnesses_skels = ( new Finder() )->name( "*.skel" )->in( $this->root_folder . '/tests' )->files()
-			->sortByName();
-
-		if ( $harnesses_skels->count() ) {
-			foreach ( $harnesses_skels as $file ) {
-				$proper_file_name = $file->getPath() . '/' . $file->getFilenameWithoutExtension();
-				if ( $this->filesystem->exists( $proper_file_name ) ) {
-					$this->filesystem->remove( $proper_file_name );
-				}
-
-				$this->filesystem->rename( $file->getRealPath(),
-					$proper_file_name );
-			}
-		}
-
 		// Check if js2php was installed.
 		if ( !$this->taskExecStack()->stopOnFail()->dir( $this->root_folder )->exec( 'npm list | grep js2php' )
 			->printOutput( false )->run()->getMessage() ) {

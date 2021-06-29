@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Range;
-use Wikimedia\Dodo\Tests\WPT\Harness\WPTTestHarness;
+use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-surroundContents.html.
 class RangeSurroundContentsTest extends WPTTestHarness
 {

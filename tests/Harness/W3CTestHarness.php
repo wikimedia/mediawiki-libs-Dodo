@@ -1,6 +1,17 @@
 <?php
+// @phan-file-suppress PhanTypeExpectedObjectPropAccess
+// @phan-file-suppress PhanTypeMismatchArgument
+// @phan-file-suppress PhanTypeMismatchArgumentInternalProbablyReal
+// @phan-file-suppress PhanTypeMismatchArgumentNullableInternal
+// @phan-file-suppress PhanTypeMismatchArgumentProbablyReal
+// @phan-file-suppress PhanTypeMismatchForeach
+// @phan-file-suppress PhanUndeclaredClassMethod
+// @phan-file-suppress PhanUndeclaredClassProperty
+// @phan-file-suppress PhanUndeclaredStaticMethod
+// @phan-file-suppress PhanUndeclaredTypeParameter
+// phpcs:disable Generic.Files.LineLength.TooLong
 
-namespace Wikimedia\Dodo\Tests\W3C\Harness;
+namespace Wikimedia\Dodo\Tests\Harness;
 
 use Mockery;
 use PHPUnit\Framework\Assert;
@@ -14,12 +25,11 @@ use Wikimedia\Dodo\Node as DOMNode;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
 
 /**
- * W3CTestHarness.php
- * --------
+ * W3CTestHarness
+ *
  * Derived from DomTestCase.js
  *
  * @see vendor/fgnass/domino/test/w3c/harness/DomTestCase.js
- * @package Wikimedia\Dodo\Tests
  */
 abstract class W3CTestHarness extends TestCase {
 	use Helpers;
