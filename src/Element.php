@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\FilteredElementList;
+use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Internal\WhatWG;
@@ -220,6 +221,40 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		return $this->getNodeName();
 	}
 
+	/**
+	 * @see https://w3c.github.io/DOM-Parsing/#the-innerhtml-mixin
+	 * @return string
+	 */
+	public function getInnerHTML(): string {
+		$result = [];
+		if ( $this->_nodeDocument->_isHTMLDocument() ) {
+			// "HTML fragment serialization algorithm"
+			$this->_htmlSerialize( $result );
+		} else {
+			// see https://github.com/w3c/DOM-Parsing/issues/28
+			for ( $node = $this->getFirstChild(); $node !== null; $node = $node->getNextSibling() ) {
+				WhatWG::xmlSerialize( $node, true, $result );
+			}
+		}
+		return implode( '', $result );
+	}
+
+	/**
+	 * @see https://w3c.github.io/DOM-Parsing/#dom-element-outerhtml
+	 * @return string
+	 */
+	public function getOuterHTML(): string {
+		$result = [];
+		if ( $this->_nodeDocument->_isHTMLDocument() ) {
+			// "HTML fragment serialization algorithm"
+			WhatWG::htmlSerialize( $this, null, $result );
+		} else {
+			// see https://github.com/w3c/DOM-Parsing/issues/28
+			WhatWG::xmlSerialize( $this, true, $result );
+		}
+		return implode( '', $result );
+	}
+
 	/*
 	 * METHODS DELEGATED FROM NODE
 	 */
@@ -283,6 +318,19 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			}
 		}
 		return true;
+	}
+
+	/** @inheritDoc */
+	public function _xmlSerialize(
+		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
+		bool $requireWellFormed, array &$markup
+	) : void {
+		// Relocated to WhatWG::xmlSerializeElement because this method
+		// was huge!
+		WhatWG::xmlSerializeElement(
+			$this, $namespace, $prefixMap, $prefixIndex,
+			$requireWellFormed, $markup
+		);
 	}
 
 	/*

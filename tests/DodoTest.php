@@ -12,6 +12,8 @@ use Wikimedia\Dodo\HTMLBodyElement;
 use Wikimedia\Dodo\HTMLCollection;
 use Wikimedia\Dodo\HTMLImageElement;
 use Wikimedia\Dodo\NodeFilter;
+use Wikimedia\Dodo\XMLDocument;
+use Wikimedia\Dodo\XMLSerializer;
 
 /**
  * @coversDefaultClass \Wikimedia\Dodo\Document
@@ -49,8 +51,8 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 
 		/* Print the tree */
 		$this->assertEquals(
-			'<html><body><!--Hello, world!--><img id="foo"><p>Lorem ipsum</p></body></html>',
-			$doc->_node_serialize()
+			'<body><!--Hello, world!--><img id="foo"><p>Lorem ipsum</p></body>',
+			$doc->body->outerHTML
 		);
 
 		/* Update the attributes on the <img> node */
@@ -69,9 +71,11 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( 200, $img->getHeight() );
 
 		/* Print the tree again (<img> should have attributes now) */
+		$result = [];
+		$doc->_htmlSerialize( $result );
 		$this->assertEquals(
 			'<html><body><!--Hello, world!--><img id="foo" alt="Incredible Vision" width="100" class="abc foo def bar" height="200"><p>Lorem ipsum</p></body></html>',
-			$doc->_node_serialize()
+			implode( '', $result )
 		);
 
 		$img3 = $doc->getElementById( 'foo' );
@@ -212,8 +216,10 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 
 	/** @dataProvider provideHtml */
 	public function testDOMParser( $html, $expected ) {
-		$result = $this->parse( $html );
-		$this->assertEquals( $expected, $result->_node_serialize() );
+		$node = $this->parse( $html );
+		$result = [];
+		$node->_htmlSerialize( $result );
+		$this->assertEquals( $expected, implode( '', $result ) );
 	}
 
 	public function provideHtml() {
@@ -248,4 +254,31 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 HTML;
 		return $this->parse( $html );
 	}
+
+	public function testXmlSerialization() {
+		// Since we don't have an XML parser yet, manually construct an
+		// XML document for these tests
+		$doc = new XMLDocument( null, 'text/xml' );
+		$root = $doc->createElement( 'root' );
+		$doc->appendChild( $root );
+		$child1 = $doc->createElement( 'child1' );
+		$root->appendChild( $child1 );
+		$text = $doc->createTextNode( 'value1' );
+		$child1->appendChild( $text );
+
+		/*
+		$child2 = $doc->createElementNS( Util::NAMESPACE_SVG, 'svg' );
+		$root->appendChild($child2);
+		*/
+
+		$this->assertEquals(
+			'<root><child1>value1</child1></root>',
+			$root->outerHTML
+		);
+		$this->assertEquals(
+			'<root><child1>value1</child1></root>',
+			( new XMLSerializer() )->serializeToString( $doc )
+		);
+	}
+
 }

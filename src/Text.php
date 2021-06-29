@@ -4,12 +4,14 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\BadXMLException;
+use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
+use Wikimedia\Dodo\Internal\WhatWG;
 
-/******************************************************************************
- * Text.php
- * --------
+/**
+ * Text node
  */
 class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	// DOM mixins
@@ -72,6 +74,27 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	 */
 	protected function _subclassCloneNodeShallow(): Node {
 		return new Text( $this->_nodeDocument, $this->_data );
+	}
+
+	/** @inheritDoc */
+	public function _xmlSerialize(
+		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
+		bool $requireWellFormed, array &$markup
+	) : void {
+		$data = $this->getData();
+		if ( $requireWellFormed ) {
+			if ( !WhatWG::is_valid_xml_chars( $data ) ) {
+				throw new BadXMLException();
+			}
+		}
+		$markup[] = strtr(
+			$data,
+			[
+				'&' => '&amp;',
+				'<' => '&lt;',
+				'>' => '&gt;',
+			]
+		);
 	}
 
 	/**

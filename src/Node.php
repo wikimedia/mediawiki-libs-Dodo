@@ -6,6 +6,7 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Internal\WhatWG;
@@ -880,18 +881,36 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 	/**
 	 * Convert the children of a node to an HTML string.
-	 * This is used by the innerHTML getter
+	 * This is effectively 'innerHTML' for nodes in HTML documents.
+	 * This is overridden in specific children, in particular
+	 * HTMLTemplateElement.
 	 *
-	 * @return string
+	 * @see https://html.spec.whatwg.org/#html-fragment-serialisation-algorithm
+	 * @param string[] &$result The result is accumulated here
 	 */
-	public function _node_serialize(): string {
-		$s = "";
-
+	public function _htmlSerialize( array &$result ) : void {
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-			$s .= WhatWG::serialize_node( $n, $this );
+			WhatWG::htmlSerialize( $n, $this, $result );
 		}
+	}
 
-		return $s;
+	/**
+	 * XML serialize the given node.  This is overridden in subclasses.
+	 * Note that this is effectively "outerHTML", due to a spec
+	 * inconsistency: https://github.com/w3c/DOM-Parsing/issues/28 .
+	 *
+	 * @see https://w3c.github.io/DOM-Parsing/#dfn-xml-serialization
+	 * @param ?string $namespace
+	 * @param NamespacePrefixMap $prefixMap
+	 * @param int &$prefixIndex
+	 * @param bool $requireWellFormed
+	 * @param string[] &$markup accumulator for the result
+	 */
+	public function _xmlSerialize(
+		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
+		bool $requireWellFormed, array &$markup
+	) : void {
+		throw new TypeError( "can't serialize to XML" );
 	}
 
 	/**

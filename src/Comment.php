@@ -4,9 +4,12 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
-/******************************************************************************
- * Comment.php
- * -----------
+use Wikimedia\Dodo\Internal\BadXMLException;
+use Wikimedia\Dodo\Internal\NamespacePrefixMap;
+use Wikimedia\Dodo\Internal\WhatWG;
+
+/**
+ * Comment node
  */
 class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 	// Helper functions from IDLeDOM
@@ -59,6 +62,24 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 	protected function _subclassIsEqualNode( Node $node ): bool {
 		'@phan-var Comment $node'; /** @var Comment $node */
 		return ( $this->_data === $node->_data );
+	}
+
+	/** @inheritDoc */
+	public function _xmlSerialize(
+		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
+		bool $requireWellFormed, array &$markup
+	) : void {
+		$data = $this->getData();
+		if ( $requireWellFormed ) {
+			if (
+				!WhatWG::is_valid_xml_chars( $data ) ||
+				strpos( $data, '--' ) !== false ||
+				substr( $data, -1 ) === '-'
+			) {
+				throw new BadXMLException();
+			}
+		}
+		$markup[] = '<!--' . $data . '-->';
 	}
 
 	/** @inheritDoc */

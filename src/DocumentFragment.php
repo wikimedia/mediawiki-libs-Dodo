@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
 /**
@@ -67,15 +68,30 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 		return true;
 	}
 
+	/** @inheritDoc */
+	public function _xmlSerialize(
+		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
+		bool $requireWellFormed, array &$markup
+	) : void {
+		for ( $child = $this->getFirstChild(); $child !== null; $child = $child->getNextSibling() ) {
+			$child->_xmlSerialize(
+				$namespace, $prefixMap, $prefixIndex, $requireWellFormed,
+				$markup
+			);
+		}
+	}
+
 	// Non-standard, but useful (github issue #73)
 
 	/** @return string the inner HTML of this DocumentFragment */
 	public function getInnerHTML() : string {
-		return $this->_node_serialize();
+		$result = [];
+		$this->_htmlSerialize( $result );
+		return implode( '', $result );
 	}
 
 	/** @return string the outer HTML of this DocumentFragment */
 	public function getOuterHTML(): string {
-		return $this->_node_serialize();
+		return $this->getInnerHTML();
 	}
 }

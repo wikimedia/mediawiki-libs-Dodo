@@ -414,7 +414,7 @@
     _comment: ''
     testcases: testHTMLStyleElement01
     files: /tests/W3C/Level1/Html/HTMLStyleElement01Test.php
-'Undefined property via __get(): location in /src/Document.php on line 67':
+'Undefined property via __get(): location in /src/Document.php on line 69':
     _total: 1
     _comment: ''
     testcases: testDocumentConstructor
@@ -688,17 +688,6 @@
     files: |-
         /tests/WPT/Dom/Nodes/ElementChildrenTest.php
         /tests/WPT/Dom/Nodes/ParentNodeChildrenTest.php
-'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Element::getInnerHTML':
-    _total: 3
-    _comment: ''
-    testcases: |-
-        testChildNodeAfter
-        testChildNodeBefore
-        testChildNodeReplaceWith
-    files: |-
-        /tests/WPT/Dom/Nodes/ChildNodeAfterTest.php
-        /tests/WPT/Dom/Nodes/ChildNodeBeforeTest.php
-        /tests/WPT/Dom/Nodes/ChildNodeReplaceWithTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Element::insertAdjacentElement':
     _total: 1
     _comment: ''

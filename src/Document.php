@@ -4,9 +4,11 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\BadXMLException;
 use Wikimedia\Dodo\Internal\FilteredElementList;
 use Wikimedia\Dodo\Internal\MultiId;
 use Wikimedia\Dodo\Internal\Mutate;
+use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Internal\WhatWG;
@@ -272,7 +274,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * template document".  This creates that "inert template document".
 	 * @return Document
 	 */
-	public function _templateDoc() {
+	public function _getTemplateDoc() {
 		if ( !$this->_templateDocCache ) {
 			/* "associated inert template document" */
 			$newDoc = new Document(
@@ -856,6 +858,24 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 	protected function _subclassIsEqualNode( Node $other = null ): bool {
 		return true;
+	}
+
+	/** @inheritDoc */
+	public function _xmlSerialize(
+		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
+		bool $requireWellFormed, array &$markup
+	) : void {
+		if ( $requireWellFormed ) {
+			if ( $this->getDocumentElement() === null ) {
+				throw new BadXMLException();
+			}
+		}
+		for ( $child = $this->getFirstChild(); $child !== null; $child = $child->getNextSibling() ) {
+			$child->_xmlSerialize(
+				$namespace, $prefixMap, $prefixIndex, $requireWellFormed,
+				$markup
+			);
+		}
 	}
 
 	/**

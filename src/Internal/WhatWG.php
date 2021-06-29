@@ -13,6 +13,8 @@ use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\HTMLTemplateElement;
+use Wikimedia\Dodo\NamedNodeMap;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\ProcessingInstruction;
 use Wikimedia\Dodo\Text;
@@ -821,6 +823,7 @@ class WhatWG {
 		"input" => true,
 		"keygen" => true,
 		"link" => true,
+		"menuitem" => true,
 		"meta" => true,
 		"param" => true,
 		"source" => true,
@@ -898,13 +901,314 @@ class WhatWG {
 	}
 
 	/**
-	 * @param Node $child
-	 * @param Node $parent
-	 * @return string
+	 * The "XML serialization" algorithm.
+	 * @see https://w3c.github.io/DOM-Parsing/#dfn-xml-serialization
+	 * @param Node $node
+	 * @param bool $requireWellFormed
+	 * @param string[] &$markup
 	 */
-	public static function serialize_node( Node $child, Node $parent ) {
-		$s = "";
+	public static function xmlSerialize(
+		Node $node, bool $requireWellFormed, array &$markup
+	) : void {
+		$contextNamespace = null;
+		$prefixMap = new NamespacePrefixMap();
+		$prefixMap->add( Util::NAMESPACE_XML, 'xml' );
+		$prefixIndex = 1;
+		try {
+				$node->_xmlSerialize(
+					$contextNamespace, $prefixMap, $prefixIndex,
+					$requireWellFormed, $markup
+				);
+		} catch ( \Throwable $t ) {
+			Util::error( 'InvalidStateError' );
+		}
+	}
 
+	/**
+	 * XML serializing an Element node.
+	 * Moved here from Element::_xmlSerialize because it's huge!
+	 * @see https://w3c.github.io/DOM-Parsing/#dfn-xml-serializing-an-element-node
+	 * @param Element $el
+	 * @param ?string $namespace
+	 * @param NamespacePrefixMap $prefixMap
+	 * @param int &$prefixIndex
+	 * @param bool $requireWellFormed
+	 * @param string[] &$markup accumulator for the result
+	 */
+	public static function xmlSerializeElement(
+		Element $el, ?string $namespace,
+		NamespacePrefixMap $prefixMap, int &$prefixIndex,
+		bool $requireWellFormed, array &$markup
+	) {
+		if ( $requireWellFormed ) {
+			if (
+				strpos( $el->getLocalName(), ':' ) !== false ||
+				!self::is_valid_xml_name( $el->getLocalName() )
+			) {
+				throw new BadXMLException();
+			}
+		}
+		$markup[] = '<';
+		$qualifiedName = '';
+		$ignoreNamespaceDefinitionAttribute = false;
+		$map = $prefixMap->clone(); // new copy
+		$localPrefixesMap = [];
+		$localDefaultNamespace =
+			$map->recordNamespaceInformation( $el, $localPrefixesMap );
+		$inheritedNs = $namespace;
+		$ns = $el->getNamespaceURI();
+		if ( $inheritedNs === $ns ) {
+			if ( $localDefaultNamespace !== null ) {
+				$ignoreNamespaceDefinitionAttribute = true;
+			}
+			if ( $ns === Util::NAMESPACE_XML ) {
+				$qualifiedName .= 'xml:';
+			}
+			$qualifiedName .= $el->getLocalName();
+			$markup[] = $qualifiedName;
+		} else {
+			$prefix = $el->getPrefix();
+			$candidatePrefix = $map->retrievePreferredPrefix( $ns, $prefix );
+			if ( $prefix === 'xmlns' ) {
+				if ( $requireWellFormed ) {
+					throw new BadXMLException();
+				}
+				$candidatePrefix = $prefix;
+			}
+			// We've found a suitable namespace prefix
+			if ( $candidatePrefix !== null ) {
+				$qualifiedName .= $candidatePrefix . ':' . $el->getLocalName();
+				if (
+					$localDefaultNamespace !== null &&
+					$localDefaultNamespace !== Util::NAMESPACE_XML
+				) {
+					$inheritedNs = $localDefaultNamespace;
+					if ( $inheritedNs === '' ) {
+						$inheritedNs = null;
+					}
+				}
+				$markup[] = $qualifiedName;
+			} elseif ( $prefix !== null ) {
+				// Create a new namespace prefix declaration
+				if ( array_key_exists( $prefix, $localPrefixesMap ) ) {
+					$prefix = $map->generatePrefix( $ns, $prefixIndex );
+				}
+				$map->add( $ns, $prefix );
+				$qualifiedName .= $prefix . ':' . $el->getLocalName();
+				$markup[] = $qualifiedName;
+				$markup[] = ' xmlns:' . $prefix . '="';
+				self::xmlSerializeAttrValue( $ns, $requireWellFormed, $markup );
+				$markup[] = '"';
+				if ( $localDefaultNamespace !== null ) {
+					$inheritedNs = $localDefaultNamespace;
+					if ( $inheritedNs === '' ) {
+						$inheritedNs = null;
+					}
+				}
+			} elseif (
+				$localDefaultNamespace === null ||
+				$localDefaultNamespace !== $ns
+			) {
+				// The namespace still needs to be serialized, but there's
+				// no prefix or candidate prefix available.  Use the default
+				// namespace declaration to define the namespace.
+				$ignoreNamespaceDefinitionAttribute = true;
+				$qualifiedName .= $el->getLocalName();
+				$inheritedNs = $ns;
+				$markup[] = $qualifiedName;
+				$markup[] = ' xmlns="';
+				self::xmlSerializeAttrValue( $ns, $requireWellFormed, $markup );
+				$markup[] = '"';
+			} else {
+				// The node has a local default namespace that matches ns
+				$qualifiedName .= $el->getLocalName();
+				$inheritedNs = $ns;
+				$markup[] = $qualifiedName;
+			}
+		}
+		// Serialize the attributes
+		self::xmlSerializeAttributes(
+			$el->getAttributes(), $map, $prefixIndex, $localPrefixesMap,
+			$ignoreNamespaceDefinitionAttribute, $requireWellFormed,
+			$markup
+		);
+
+		if (
+			$ns === Util::NAMESPACE_HTML &&
+			( !$el->hasChildNodes() ) &&
+			( self::$emptyElements[$el->getLocalName()] ?? false )
+		) {
+			$markup[] = ' />';
+			return;
+		}
+		if (
+			$ns !== Util::NAMESPACE_HTML &&
+			( !$el->hasChildNodes() )
+		) {
+			$markup[] = '/>';
+			return;
+		}
+		$markup[] = '>';
+		// handle the template element specially
+		if (
+			$ns === Util::NAMESPACE_HTML &&
+			$el->getLocalName() === 'template'
+		) {
+			$templateContents = ( $el instanceof HTMLTemplateElement ) ?
+				$el->getContent() :
+				$el->getOwnerDocument()->createDocumentFragment();
+			$templateContents->_xmlSerialize(
+				$inheritedNs, $map, $prefixIndex, $requireWellFormed,
+				$markup
+			);
+		} else {
+			// handle element contents
+			for ( $child = $el->getFirstChild(); $child !== null; $child = $child->getNextSibling() ) {
+				$child->_xmlSerialize(
+					$inheritedNs, $map, $prefixIndex, $requireWellFormed,
+					$markup
+				);
+			}
+		}
+		// close the tag
+		$markup[] = '</' . $qualifiedName . '>';
+	}
+
+	/**
+	 * XML serialization of the attributes of an element.
+	 * @see https://w3c.github.io/DOM-Parsing/#serializing-an-element-s-attributes
+	 * @param NamedNodeMap $attributes
+	 * @param NamespacePrefixMap $map
+	 * @param int &$prefixIndex
+	 * @param array<string,string> &$localPrefixesMap
+	 * @param bool $ignoreNamespaceDefinitionAttribute
+	 * @param bool $requireWellFormed
+	 * @param string[] &$markup accumulator for the result
+	 */
+	public static function xmlSerializeAttributes(
+		NamedNodeMap $attributes, NamespacePrefixMap $map, int &$prefixIndex,
+		array &$localPrefixesMap, bool $ignoreNamespaceDefinitionAttribute,
+		bool $requireWellFormed,
+		array &$markup
+	) {
+		$localnameSet = [];
+		foreach ( $attributes as $attr ) {
+			if ( $requireWellFormed ) {
+				$key = var_export(
+					[ $attr->getNamespaceURI(), $attr->getLocalName() ],
+					true
+				);
+				if ( $localnameSet[$key] ?? false ) {
+					throw new BadXMLException();
+				}
+				$localnameSet[$key] = true;
+			}
+			$attrNs = $attr->getNamespaceURI();
+			$candidatePrefix = null;
+			if ( $attrNs !== null ) {
+				$candidatePrefix = $map->retrievePreferredPrefix(
+					$attrNs, $attr->getPrefix()
+				);
+				if ( $attrNs === Util::NAMESPACE_XMLNS ) {
+					if ( $attr->getValue() === Util::NAMESPACE_XML ) {
+						continue;
+					}
+					if ( $attr->getPrefix() === null ) {
+						if ( $ignoreNamespaceDefinitionAttribute ) {
+							continue;
+						}
+					} elseif (
+						( !array_key_exists( $attr->getLocalName(), $localPrefixesMap ) ) ||
+						$localPrefixesMap[$attr->getLocalName()] !== $attr->getValue()
+					) {
+						if ( $map->found( $attr->getValue(), $attr->getLocalName() ) ) {
+							// the current namespace prefix definition was
+							// exactly defined previously on an ancestor
+							continue;
+						}
+					}
+					if ( $requireWellFormed ) {
+						if ( $attr->getValue() === Util::NAMESPACE_XMLNS ) {
+							throw new BadXMLException();
+						}
+						if ( $attr->getValue() === '' ) {
+							throw new BadXMLException();
+						}
+					}
+					if ( $attr->getPrefix() === 'xmlns' ) {
+						$candidatePrefix = 'xmlns';
+					}
+				} else {
+					// attribute namespace is not the XMLNS namespace
+					$candidatePrefix = $map->generatePrefix(
+						$attrNs, $prefixIndex
+					);
+					$markup[] = ' xmlns:' . $candidatePrefix . '="';
+					self::xmlSerializeAttrValue(
+						$attrNs, $requireWellFormed, $markup
+					);
+					$markup[] = '"';
+				}
+			}
+			$markup[] = ' ';
+			if ( $candidatePrefix !== null ) {
+				$markup[] = $candidatePrefix . ':';
+			}
+			if ( $requireWellFormed ) {
+				if (
+					strpos( $attr->getLocalName(), ':' ) !== false ||
+					( !self::is_valid_xml_name( $attr->getLocalName() ) ) ||
+					( $attrNs === null && $attr->getLocalName() === 'xmlns' )
+				) {
+					throw new BadXMLException();
+				}
+			}
+			$markup[] = $attr->getLocalName();
+			$markup[] = '="';
+			self::xmlSerializeAttrValue(
+				$attr->getValue(), $requireWellFormed, $markup
+			);
+			$markup[] = '"';
+		}
+	}
+
+	/**
+	 * Serialize an attribute value (for XML).
+	 * @see https://w3c.github.io/DOM-Parsing/#dfn-serializing-an-attribute-value
+	 * @param ?string $value
+	 * @param bool $requireWellFormed
+	 * @param string[] &$markup
+	 */
+	public static function xmlSerializeAttrValue(
+		?string $value, bool $requireWellFormed, array &$markup
+	) : void {
+		if ( $value === null ) {
+			return; // "The empty string"
+		}
+		if ( $requireWellFormed ) {
+			if ( !self::is_valid_xml_chars( $value ) ) {
+				throw new BadXMLException();
+			}
+		}
+		$markup[] = strtr(
+			$value,
+			[
+				'&' => '&amp;',
+				'"' => '&quot;',
+				'<' => '&lt;',
+				'>' => '&gt;',
+			]
+		);
+	}
+
+	/**
+	 * This is part of the "HTML fragment serialization algorithm".
+	 * @see https://html.spec.whatwg.org/#html-fragment-serialisation-algorithm
+	 * @param Node $child
+	 * @param ?Node $parent This is null when evaluating outerHtml
+	 * @param array<string> &$result
+	 */
+	public static function htmlSerialize( Node $child, ?Node $parent, array &$result ) : void {
 		switch ( $child->getNodeType() ) {
 		case Node::ELEMENT_NODE:
 			'@phan-var Element $child'; // @var Element $child
@@ -917,58 +1221,70 @@ class WhatWG {
 				$tagname = $child->getTagName();
 			}
 
-			$s .= '<' . $tagname;
+			$result[] = '<' . $tagname;
 
 			foreach ( $child->attributes as $a ) {
-				$s .= ' ' . self::_helper_attrname( $a );
+				$result[] = ' ' . self::_helper_attrname( $a );
 
 				/*
 				 * PORT: TODO: Need to ensure this value is NULL
 				 * rather than undefined?
 				 */
 				if ( $a->getValue() !== null ) {
-					$s .= '="' . self::_helper_escapeAttr( $a->getValue() ) . '"';
+					$result[] = '="' . self::_helper_escapeAttr( $a->getValue() ) . '"';
 				}
 			}
 
-			$s .= '>';
+			$result[] = '>';
 
 			if ( !( $html && isset( self::$emptyElements[$tagname] ) ) ) {
-				/* PORT: TODO: Check this serialize function */
-				$ss = $child->_node_serialize();
-				if ( $html && isset( self::$extraNewLine[$tagname] ) && $ss[0] === '\n' ) {
-					$s .= '\n';
+				$i = count( $result );
+				$result[] = ''; // save a space
+				$child->_htmlSerialize( $result );
+				if ( $html && isset( self::$extraNewLine[$tagname] ) &&
+					 ( $result[$i + 1][0] ?? '' ) === "\n" ) {
+					$result[$i] = "\n"; // insert a newline
 				}
 				/* Serialize children and add end tag for all others */
-				$s .= $ss;
-				$s .= '</' . $tagname . '>';
+				$result[] = '</' . $tagname . '>';
 			}
 			break;
 
 		case Node::TEXT_NODE:
 		case Node::CDATA_SECTION_NODE:
 			'@phan-var Text $child'; // @var Text $child
-			if ( $parent->getNodeType() === Node::ELEMENT_NODE && $parent instanceof Element && $parent->getNamespaceURI() === Util::NAMESPACE_HTML ) {
+			if (
+				$parent &&
+				$parent->getNodeType() === Node::ELEMENT_NODE &&
+				$parent instanceof Element &&
+				$parent->getNamespaceURI() === Util::NAMESPACE_HTML
+			) {
 				$parenttag = $parent->getTagName();
 			} else {
 				$parenttag = '';
 			}
 
-			if ( isset( self::$hasRawContent[$parenttag] ) || ( $parenttag === 'NOSCRIPT' && $parent->_nodeDocument->_scripting_enabled ) ) {
-				$s .= $child->getData();
+			if (
+				( self::$hasRawContent[$parenttag] ?? false ) ||
+				(
+					$parenttag === 'NOSCRIPT' &&
+					$parent->_nodeDocument->_scripting_enabled
+				)
+			) {
+				$result[] = $child->getData();
 			} else {
-				$s .= self::_helper_escape( $child->getData() );
+				$result[] = self::_helper_escape( $child->getData() );
 			}
 			break;
 
 		case Node::COMMENT_NODE:
 			'@phan-var Comment $child'; // @var Comment $child
-			$s .= '<!--' . $child->getData() . '-->';
+			$result[] = '<!--' . $child->getData() . '-->';
 			break;
 
 		case Node::PROCESSING_INSTRUCTION_NODE:
 			'@phan-var ProcessingInstruction $child'; // @var ProcessingInstruction $child
-			$s .= '<?' . $child->getTarget() . ' ' . $child->getData() . '?>';
+			$result[] = '<?' . $child->getTarget() . ' ' . $child->getData() . '?>';
 			break;
 
 		case Node::DOCUMENT_TYPE_NODE:
@@ -978,24 +1294,22 @@ class WhatWG {
 			// https://html.spec.whatwg.org/multipage/parsing.html#serialising-html-fragments
 			// omits the public/system ID.
 			'@phan-var DocumentType $child'; // @var DocumentType $child
-			$s .= '<!DOCTYPE ' . $child->getName();
+			$result[] = '<!DOCTYPE ' . $child->getName();
 
 			// Latest HTML serialization spec omits the public/system ID
 			// if ( $child->getPublicID() !== '' ) {
-			//	$s .= ' PUBLIC "' . $child->getPublicId() . '"';
+			//	$result[] = ' PUBLIC "' . $child->getPublicId() . '"';
 			// }
 
 			// if ( $child->getSystemId() !== '' ) {
-			//	$s .= ' "' . $child->getSystemId() . '"';
+			//	$result[] = ' "' . $child->getSystemId() . '"';
 			// }
 
-			$s .= '>';
+			$result[] = '>';
 			break;
 		default:
 			Util::error( "InvalidStateError" );
 		}
-
-		return $s;
 	}
 
 	/*
@@ -1057,12 +1371,12 @@ class WhatWG {
 	 * QName
 	 * @see https://www.w3.org/TR/xml-names/#NT-QName
 	 */
-	private const QNAME = '/^' . self::NCNAME . '(:' . self::NCNAME . ')?$/u';
+	private const QNAME = '/^' . self::NCNAME . '(:' . self::NCNAME . ')?$/Du';
 
 	/**
 	 * Fast case QNAME, non-unicode.
 	 */
-	private const QNAME_ASCII = '/^[A-Za-z_][-A-Za-z_.0-9]*(:[A-Za-z_][-A-Za-z_.0-9]*)?$/';
+	private const QNAME_ASCII = '/^[A-Za-z_][-A-Za-z_.0-9]*(:[A-Za-z_][-A-Za-z_.0-9]*)?$/D';
 
 	/**
 	 * NameStartChar including the :
@@ -1080,12 +1394,37 @@ class WhatWG {
 	 * Name
 	 * @see https://www.w3.org/TR/REC-xml/#NT-Name
 	 */
-	private const NAME = '/^[' . self::NAME_START_CHAR . '][' . self::NAME_CHAR . ']*$/u';
+	private const NAME = '/^[' . self::NAME_START_CHAR . '][' . self::NAME_CHAR . ']*$/Du';
 
 	/**
 	 * Fast case NAME, ASCII-only.
 	 */
-	private const NAME_ASCII = '/^[A-Za-z_:][-A-Za-z_.0-9:]*$/';
+	private const NAME_ASCII = '/^[A-Za-z_:][-A-Za-z_.0-9:]*$/D';
+
+	/**
+	 * Char*
+	 * @see https://www.w3.org/TR/xml/#NT-Char
+	 */
+	private const CHARS = '/^[\x{09}\x{0A}\x{0D}\x{20}-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]*$/Du';
+
+	/**
+	 * Fast case XML char
+	 */
+	private const CHARS_ASCII = '/^[\x{09}\x{0A}\x{0D}\x{20}-\x{7F}]*$/D';
+
+	/**
+	 * @param string $s
+	 * @return bool
+	 */
+	public static function is_valid_xml_chars( $s ) {
+		if ( preg_match( self::CHARS_ASCII, $s ) === 1 ) {
+			return true; // Plain ASCII
+		}
+		if ( preg_match( self::CHARS, $s ) === 1 ) {
+			return true; // Unicode BMP
+		}
+		return false;
+	}
 
 	/**
 	 * @param string $s

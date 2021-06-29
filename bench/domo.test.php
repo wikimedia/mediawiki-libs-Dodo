@@ -65,4 +65,6 @@ prof_flag( "done" );
 echo prof_print();
 
 /* Print the tree */
-echo $dom->_node_serialize();
+$result = [];
+$dom->_serialize( $result );
+echo implode( '', $result );

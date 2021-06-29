@@ -5,11 +5,10 @@ declare( strict_types = 1 );
 namespace Wikimedia\Dodo;
 
 use Exception;
+use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
 /**
- * Attr.php
- * --------
  * The Attr class represents a single attribute node.
  *
  * NOTE
@@ -412,5 +411,13 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 			&& $this->_localName === $node->_localName
 			&& $this->_value === $node->_value
 		);
+	}
+
+	/** @inheritDoc */
+	public function _xmlSerialize(
+		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
+		bool $requireWellFormed, array &$markup
+	) : void {
+		return; // Serialization is the empty string
 	}
 }
