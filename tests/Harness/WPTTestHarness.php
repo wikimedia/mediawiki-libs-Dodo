@@ -97,30 +97,6 @@ abstract class WPTTestHarness extends TestCase {
 	protected $invalid_qnames;
 
 	/**
-	 * @param string $name
-	 *
-	 * @return mixed
-	 */
-	public function __get( string $name ) {
-		if ( $name == 'title' ) {
-			return $this->getTitle();
-		}
-	}
-
-	/**
-	 * @return mixed
-	 */
-	protected function getTitle() {
-		return $this->doc->_documentElement->getFirstChild()->getNodeValue();
-	}
-
-	/**
-	 *
-	 */
-	public function hasFeature() {
-	}
-
-	/**
 	 * @param mixed $expected
 	 * @param mixed $actual
 	 *
@@ -1024,7 +1000,15 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param string $description
 	 */
 	protected function assertArrayEqualsData( $actual, array $expected, string $description = '' ) : void {
-		Assert::assertIsArray( $actual, $description );
+		// $actual may be a collection, not a literal array
+		Assert::assertThat(
+			$actual,
+			$this->logicalOr(
+				$this->isType( 'array' ),
+				$this->isInstanceOf( '\ArrayAccess' )
+			),
+			$description
+		);
 		Assert::assertCount( count( $expected ), $actual, $description );
 
 		for ( $i = 0; $i < count( $expected ); $i++ ) {

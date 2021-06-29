@@ -121,4 +121,16 @@ class Util {
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 		);
 	}
+
+	/**
+	 * "Strip and collapse ASCII whitespace"
+	 * @see https://infra.spec.whatwg.org/#strip-and-collapse-ascii-whitespace
+	 * @param string $s
+	 * @return string
+	 */
+	public static function stripAndCollapseWhitespace( string $s ): string {
+		$s = preg_replace( '/[ \t\n\r\f]+/', ' ', $s );
+		$s = preg_replace( '/(^ )|( $)/', '', $s );
+		return $s;
+	}
 }

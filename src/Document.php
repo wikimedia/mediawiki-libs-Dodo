@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\FilteredElementList;
 use Wikimedia\Dodo\Internal\MultiId;
 use Wikimedia\Dodo\Internal\Mutate;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
@@ -393,6 +394,50 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/** @inheritDoc */
 	public function getOwnerDocument(): ?Document {
 		return null;
+	}
+
+	/**
+	 * @see https://html.spec.whatwg.org/#document.title
+	 * @return string
+	 */
+	public function getTitle(): string {
+		// XXX this doesn't handle the "if the document element is SVG" case.
+		$elt = $this->_getTitleElement();
+		// The child text content of the title element, or '' if null.
+		$value = $elt ? $elt->getTextContent() : '';
+		// Strip and collapse ASCII whitespace in value
+		return Util::stripAndCollapseWhitespace( $value );
+	}
+
+	/**
+	 * The title element of a document is the first title element in the
+	 * document in tree order, if there is one, or null otherwise.
+	 * @see https://html.spec.whatwg.org/#the-title-element-2
+	 * @return ?HTMLTitleElement
+	 */
+	private function _getTitleElement() : ?Element {
+		$els = $this->getElementsByTagName( 'title' );
+		'@phan-var FilteredElementList $els'; // @var FilteredElementList $els
+		$els->_traverse( 0 ); // performance hack, halt after finding first title
+		return $els->item( 0 );
+	}
+
+	/**
+	 * @see https://html.spec.whatwg.org/#document.title
+	 * @param string $val
+	 */
+	public function setTitle( string $val ) : void {
+		// XXX This doesn't handle the case where the document element is SVG
+		$elt = $this->_getTitleElement();
+		$head = $this->getHead();
+		if ( $elt === null && $head === null ) {
+			return; // according to spec
+		}
+		if ( $elt === null ) {
+			$elt = $this->createElement( 'title' );
+			$head->appendChild( $elt );
+		}
+		$elt->setTextContent( $val );
 	}
 
 	// The textContent methods use to the 'any other node' definition from Node,

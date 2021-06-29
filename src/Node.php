@@ -509,7 +509,10 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @inheritDoc
 	 */
 	final public function normalize() : void {
-		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
+		for ( $n = $this->getFirstChild(); $n !== null; $n = $next ) {
+			// $n might get removed, so save the next sibling that we'll visit
+			$next = $n->getNextSibling();
+
 			/*
 			 * [0]
 			 * Proceed to traverse the

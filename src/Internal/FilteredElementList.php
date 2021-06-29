@@ -54,7 +54,7 @@ class FilteredElementList extends HTMLCollection {
 		$this->lastModTime = $root->_lastModTime();
 		$this->done = false;
 		$this->cache = [];
-		$this->traverse();
+		$this->_traverse();
 	}
 
 	/**
@@ -64,7 +64,7 @@ class FilteredElementList extends HTMLCollection {
 	 *
 	 * @param int|null $n
 	 */
-	public function traverse( int $n = null ) {
+	public function _traverse( int $n = null ) {
 		if ( $n !== null ) {
 			$n++;
 		}
@@ -118,7 +118,7 @@ class FilteredElementList extends HTMLCollection {
 	public function getLength() : int {
 		$this->checkcache();
 		if ( !$this->done ) {
-			$this->traverse();
+			$this->_traverse();
 		}
 
 		return count( $this->cache );
@@ -146,7 +146,7 @@ class FilteredElementList extends HTMLCollection {
 			// This can lead to O(N^2) behavior if we stop when we get to n
 			// and the caller is iterating through the items in order; so
 			// be sure to do the full traverse here.
-			$this->traverse();
+			$this->_traverse();
 		}
 
 		return $this->cache[$n] ?? null;

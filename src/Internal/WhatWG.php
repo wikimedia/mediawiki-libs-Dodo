@@ -767,8 +767,8 @@ class WhatWG {
 	 * @param string[] &$bits the result is returned in this array
 	 */
 	public static function descendantTextContent( Node $node, array &$bits ) : void {
-		if ( $node instanceof Text ) {
-			$bits[] = $node->_data;
+		if ( $node instanceof \Wikimedia\IDLeDOM\Text ) {
+			$bits[] = $node->getData();
 		} else {
 			for ( $kid = $node->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
 				self::descendantTextContent( $kid, $bits );
