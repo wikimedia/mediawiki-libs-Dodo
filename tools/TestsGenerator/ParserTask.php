@@ -160,7 +160,7 @@ class ParserTask extends BaseTask {
 			if ( $this->test_type === TestsGenerator::WPT ) {
 				$this->preProcessWPTTest();
 				$ast = $this->parser->parse( '<?php ' . $this->test );
-				$this->parseWptTest( $ast );
+				$this->parseWPTTest( $ast );
 				$this->postProcessWPTTest();
 			}
 		} catch ( Error $error ) {
@@ -190,7 +190,7 @@ class ParserTask extends BaseTask {
 	protected function wrapInClass( array $stmts ) {
 		$stmts = $stmts[0]->stmts;
 
-		if ( $this->test_type === 'w3c' ) {
+		if ( $this->test_type === TestsGenerator::W3C ) {
 			$class = $this->factory->class( $this->snakeToCamel( $this->test_name ) . 'Test' )->extend( 'DomTestCase' )
 				->addStmts( $stmts )->getNode();
 			$stmts = $this->factory->namespace( 'Wikimedia\Dodo\Tests' )
@@ -374,7 +374,7 @@ class ParserTask extends BaseTask {
 		if ( !is_array( $stmts ) ) {
 			$stmts = [ $stmts ];
 		}
-		if ( $this->compact && $this->test_type === 'w3c' ) {
+		if ( $this->compact && $this->test_type === TestsGenerator::W3C ) {
 			$this->test = $prettyPrinter->prettyPrint( $stmts );
 		} else {
 			$this->test = "<?php \n" . $prettyPrinter->prettyPrint( $stmts ) . "\n";
@@ -490,7 +490,7 @@ class ParserTask extends BaseTask {
 	 *
 	 * @param array $ast
 	 */
-	protected function parseWptTest( array $ast ) : void {
+	protected function parseWPTTest( array $ast ) : void {
 		$stmts = $this->prepareAst( $ast );
 
 		$traverser = new NodeTraverser;
@@ -676,11 +676,11 @@ class ParserTask extends BaseTask {
 				$this->test_name .= 'Test';
 			}
 
-			$class = $this->factory->class( $this->snakeToPascal( $this->test_name ) )->extend( 'WptTestHarness' )
+			$class = $this->factory->class( $this->snakeToPascal( $this->test_name ) )->extend( 'WPTTestHarness' )
 				->addStmts( $stmts )->setDocComment( '// @see ' . $this->test_path .
 					'.' )->getNode();
 			$use_stmts = $this->getUseStmts();
-			$stmts = $this->factory->namespace( 'Wikimedia\Dodo\Tests\Wpt\Dom' )->addStmts( $use_stmts )->addStmts( [
+			$stmts = $this->factory->namespace( 'Wikimedia\Dodo\Tests\WPT\Dom' )->addStmts( $use_stmts )->addStmts( [
 				$class ] )
 				->getNode();
 		}
@@ -916,8 +916,8 @@ class ParserTask extends BaseTask {
 
 		$additional_stmts = [];
 
-		if ( $this->test_type === 'Wpt' ) {
-			$source_file = $this->parser->parse( '<?php $this->doc = $this->loadWptHtmlFile (\'' . $this->test_path .
+		if ( $this->test_type === TestsGenerator::WPT ) {
+			$source_file = $this->parser->parse( '<?php $this->doc = $this->loadHtmlFile (\'' . $this->test_path .
 				'\');' );
 			$additional_stmts[] = reset( $source_file );
 			$additional_elements = [ 'i1',
@@ -959,7 +959,7 @@ class ParserTask extends BaseTask {
 
 		$ast = $traverser->traverse( $ast );
 
-		if ( $this->test_type === 'W3C' ) {
+		if ( $this->test_type === TestsGenerator::W3C ) {
 			$stmts = array_filter( $functions, function ( &$node ) use ( $ast ) {
 				if ( $node->name->name === $this->test_name ) {
 					$node->stmts = array_merge( $ast, $node->stmts );

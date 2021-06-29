@@ -15,7 +15,7 @@
 	<arg name="extensions" value="php"/>
 	<exclude-pattern type="relative">^doc/html/*</exclude-pattern>
 	<exclude-pattern type="relative">^.phan/stubs/*</exclude-pattern>
-	<exclude-pattern type="relative">^tests/(W3C|Wpt)/*</exclude-pattern>
+	<exclude-pattern type="relative">^tests/(W3C|WPT)/*</exclude-pattern>
 
 	<rule ref="MediaWiki.Commenting.FunctionAnnotations">
 		<properties>

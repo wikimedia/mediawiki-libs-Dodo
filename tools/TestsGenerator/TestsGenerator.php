@@ -32,7 +32,7 @@ class TestsGenerator extends Tasks {
 	use Helpers;
 
 	public const W3C = "W3C";
-	public const WPT = "Wpt";
+	public const WPT = "WPT";
 
 	private const W3C_TESTS = "/vendor/fgnass/domino/test/w3c";
 
@@ -83,11 +83,13 @@ class TestsGenerator extends Tasks {
 	 * - run
 	 * - compact = generates all tests in one file
 	 */
-	public function build( array $opts = [ 'rewrite' => true,
-		'limit' => -1,
-		'phpcbf' => true,
-		'run' => false,
-		'compact' => false ] ) : void {
+	public function build( array $opts = [
+			'rewrite' => true,
+			'limit' => -1,
+			'phpcbf' => true,
+			'run' => false,
+			'compact' => false,
+	] ) : void {
 		try {
 			$compact_tests = '';
 			// Init and check for dependencies.
@@ -241,8 +243,8 @@ class TestsGenerator extends Tasks {
 	 * @throws TaskException
 	 */
 	public function initDependencies( bool $rewrite = false ) : void {
-		$result = $this->_copyDir( $this->folder . '/Harness/Wpt',
-			$this->root_folder . '/tests/Wpt/Harness' );
+		$result = $this->_copyDir( $this->folder . '/Harness/WPT',
+			$this->root_folder . '/tests/WPT/Harness' );
 
 		if ( !$result->wasSuccessful() ) {
 			throw new TaskException( $this, 'No WPT harness.' );
@@ -288,7 +290,7 @@ class TestsGenerator extends Tasks {
 		}
 
 		// Check if web-platform-tests was installed.
-		if ( !$this->filesystem->exists( $this->root_folder . '/tests/Wpt' ) ) {
+		if ( !$this->filesystem->exists( $this->root_folder . '/tests/WPT' ) ) {
 			$wpt_path = $this->root_folder . '/vendor/web-platform-tests/wpt';
 			if ( !$this->filesystem->exists( $wpt_path ) && !$this->taskComposerInstall()->dev( true )->run()
 					->wasSuccessful() ) {

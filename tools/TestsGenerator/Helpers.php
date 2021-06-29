@@ -105,7 +105,7 @@ trait Helpers {
 	 *
 	 * @return DodoDOMDocument|null
 	 */
-	protected function loadWptHtmlFile( $docRef ) : ?DOMNode {
+	protected function loadHtmlFile( $docRef ) : ?DOMNode {
 		return $this->parseHtmlToDom( realpath( '.' ) . '/' . $docRef );
 	}
 }

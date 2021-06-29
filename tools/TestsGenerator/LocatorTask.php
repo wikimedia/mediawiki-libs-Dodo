@@ -159,11 +159,11 @@ class LocatorTask extends BaseTask {
 
 		$tests = [
 			'W3C' => iterator_to_array( $this->w3c_tests ),
-			'Wpt' => iterator_to_array( $this->wpt_tests )
+			'WPT' => iterator_to_array( $this->wpt_tests )
 		];
 
 		$w3c_count = count( $tests['W3C'] );
-		$wpt_count = count( $tests['Wpt'] );
+		$wpt_count = count( $tests['WPT'] );
 
 		$this->printTaskInfo( 'W3C tests: ' . $w3c_count );
 		$this->printTaskInfo( 'WPT tests: ' . $wpt_count );
