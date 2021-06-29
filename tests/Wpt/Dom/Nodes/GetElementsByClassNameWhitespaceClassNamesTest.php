@@ -16,7 +16,7 @@ class GetElementsByClassNameWhitespaceClassNamesTest extends WptTestHarness
                 $this->assertEqualsData(count($className), 1, 'Sanity check: the class name was retrieved and is a single character');
                 $shouldBeSpan = $this->doc->getElementsByClassName($className);
                 $this->assertArrayEqualsData($shouldBeSpan, [$span]);
-            }, "Passing a  to getElementsByClassName still finds the span{$span->textContent}");
+            }, "Passing a {$span->textContent} to getElementsByClassName still finds the span");
         }
     }
 }

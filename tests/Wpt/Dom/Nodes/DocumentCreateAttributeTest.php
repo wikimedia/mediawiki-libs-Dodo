@@ -28,11 +28,11 @@ class DocumentCreateAttributeTest extends WptTestHarness
             $this->assertTest(function () use(&$name) {
                 $attr = $this->doc->createAttribute($name);
                 $this->attrIs($attr, '', strtolower($name), null, null, strtolower($name));
-            }, "HTML document.createAttribute(){format_value( {$name} )}");
+            }, "HTML document.createAttribute({format_value( {$name} )})");
             $this->assertTest(function () use(&$xml_document, &$name) {
                 $attr = $xml_document->createAttribute($name);
                 $this->attrIs($attr, '', $name, null, null, $name);
-            }, "XML document.createAttribute(){format_value( {$name} )}");
+            }, "XML document.createAttribute({format_value( {$name} )})");
         }
         $tests = ['title', 'TITLE', null, null];
         foreach ($tests as $name) {

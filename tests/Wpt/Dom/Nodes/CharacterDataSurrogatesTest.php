@@ -13,19 +13,19 @@ class CharacterDataSurrogatesTest extends WptTestHarness
             $node = $create();
             $this->assertEqualsData($node->data, 'test');
             $node->data = "🌠 test 🌠 TEST";
-            $this->assertEqualsData($node->substringData(1, 8), "\\udf20 test \\ud83c");
+            $this->assertEqualsData($node->substringData(1, 8), "� test �");
         }, $type . '.substringData() splitting surrogate pairs');
         $this->assertTest(function () use(&$create) {
             $node = $create();
             $this->assertEqualsData($node->data, 'test');
             $node->data = "🌠 test 🌠 TEST";
             $node->replaceData(1, 4, '--');
-            $this->assertEqualsData($node->data, "\\ud83c--st 🌠 TEST");
-            $node->replaceData(1, 2, "\\udf1f ");
+            $this->assertEqualsData($node->data, "�--st 🌠 TEST");
+            $node->replaceData(1, 2, "� ");
             $this->assertEqualsData($node->data, "🌟 st 🌠 TEST");
             $node->replaceData(5, 2, '---');
-            $this->assertEqualsData($node->data, "🌟 st---\\udf20 TEST");
-            $node->replaceData(6, 2, " \\ud83d");
+            $this->assertEqualsData($node->data, "🌟 st---� TEST");
+            $node->replaceData(6, 2, " �");
             $this->assertEqualsData($node->data, "🌟 st- 🜠 TEST");
         }, $type . '.replaceData() splitting and creating surrogate pairs');
         $this->assertTest(function () use(&$create) {
@@ -33,7 +33,7 @@ class CharacterDataSurrogatesTest extends WptTestHarness
             $this->assertEqualsData($node->data, 'test');
             $node->data = "🌠 test 🌠 TEST";
             $node->deleteData(1, 4);
-            $this->assertEqualsData($node->data, "\\ud83cst 🌠 TEST");
+            $this->assertEqualsData($node->data, "�st 🌠 TEST");
             $node->deleteData(1, 4);
             $this->assertEqualsData($node->data, "🌠 TEST");
         }, $type . '.deleteData() splitting and creating surrogate pairs');
@@ -42,10 +42,10 @@ class CharacterDataSurrogatesTest extends WptTestHarness
             $this->assertEqualsData($node->data, 'test');
             $node->data = "🌠 test 🌠 TEST";
             $node->insertData(1, '--');
-            $this->assertEqualsData($node->data, "\\ud83c--\\udf20 test 🌠 TEST");
-            $node->insertData(1, "\\udf1f ");
-            $this->assertEqualsData($node->data, "🌟 --\\udf20 test 🌠 TEST");
-            $node->insertData(5, " \\ud83d");
+            $this->assertEqualsData($node->data, "�--� test 🌠 TEST");
+            $node->insertData(1, "� ");
+            $this->assertEqualsData($node->data, "🌟 --� test 🌠 TEST");
+            $node->insertData(5, " �");
             $this->assertEqualsData($node->data, "🌟 -- 🜠 test 🌠 TEST");
         }, $type . '.insertData() splitting and creating surrogate pairs');
     }

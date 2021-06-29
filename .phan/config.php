@@ -17,7 +17,7 @@ $cfg['directory_list'] = [
 ];
 $cfg['suppress_issue_types'] = [];
 $cfg['exclude_analysis_directory_list'][] = 'vendor/';
-$cfg['exclude_analysis_directory_list'][] = 'tests/W3c/';
+$cfg['exclude_analysis_directory_list'][] = 'tests/W3C/';
 $cfg['exclude_analysis_directory_list'][] = 'tests/Wpt/';
 
 return $cfg;

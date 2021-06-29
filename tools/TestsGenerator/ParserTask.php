@@ -153,7 +153,7 @@ class ParserTask extends BaseTask {
 			if ( $this->test_type === TestsGenerator::W3C ) {
 				$this->preProcessW3CTest();
 				$ast = $this->parser->parse( '<?php ' . $this->test );
-				$this->parseW3cTest( $ast );
+				$this->parseW3CTest( $ast );
 				$this->removeW3CDisparity();
 			}
 
@@ -212,7 +212,7 @@ class ParserTask extends BaseTask {
 	/**
 	 * @param array $ast
 	 */
-	protected function parseW3cTest( array $ast ) : void {
+	protected function parseW3CTest( array $ast ) : void {
 		$ast = $this->prepareAst( $ast );
 
 		$traverser = new NodeTraverser;
@@ -352,7 +352,7 @@ class ParserTask extends BaseTask {
 
 		if ( !$this->compact ) {
 			$class = $this->factory->class( $this->snakeToPascal( $this->test_name ) . 'Test' )
-				->extend( 'W3cTestHarness' )->addStmts( $stmts )->setDocComment( '// @see ' . $this->test_path . '.' )
+				->extend( 'W3CTestHarness' )->addStmts( $stmts )->setDocComment( '// @see ' . $this->test_path . '.' )
 				->getNode();
 			$use_stmts = $this->getUseStmts();
 
@@ -959,7 +959,7 @@ class ParserTask extends BaseTask {
 
 		$ast = $traverser->traverse( $ast );
 
-		if ( $this->test_type === 'W3c' ) {
+		if ( $this->test_type === 'W3C' ) {
 			$stmts = array_filter( $functions, function ( &$node ) use ( $ast ) {
 				if ( $node->name->name === $this->test_name ) {
 					$node->stmts = array_merge( $ast, $node->stmts );

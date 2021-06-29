@@ -5,28 +5,28 @@
         Wikimedia\Dodo\Tests\W3C\Documentinvalidcharacterexceptioncreatepi1Test
         Wikimedia\Dodo\Tests\W3C\DocumentinvalidcharacterexceptioncreatepiTest
     files: |-
-        /tests/W3c/Level1/Core/Documentinvalidcharacterexceptioncreatepi1Test.php
-        /tests/W3c/Level1/Core/DocumentinvalidcharacterexceptioncreatepiTest.php
+        /tests/W3C/Level1/Core/Documentinvalidcharacterexceptioncreatepi1Test.php
+        /tests/W3C/Level1/Core/DocumentinvalidcharacterexceptioncreatepiTest.php
 'tagNames-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HcDocumentgetelementsbytagnametotallengthTest
-    files: /tests/W3c/Level1/Core/HcDocumentgetelementsbytagnametotallengthTest.php
+    files: /tests/W3C/Level1/Core/HcDocumentgetelementsbytagnametotallengthTest.php
 'elementNormalizeAssert-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HcElementnormalizeTest
-    files: /tests/W3c/Level1/Core/HcElementnormalizeTest.php
+    files: /tests/W3C/Level1/Core/HcElementnormalizeTest.php
 'nodeNames_html-Failed asserting that two arrays are equal.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HcNodecloneattributescopiedTest
-    files: /tests/W3c/Level1/Core/HcNodecloneattributescopiedTest.php
+    files: /tests/W3C/Level1/Core/HcNodecloneattributescopiedTest.php
 'hasChild-Failed asserting that true is false.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HcNodehaschildnodesfalseTest
-    files: /tests/W3c/Level1/Core/HcNodehaschildnodesfalseTest.php
+    files: /tests/W3C/Level1/Core/HcNodehaschildnodesfalseTest.php
 'noHrefLink-Failed asserting that true is false.':
     _total: 2
     _comment: ''
@@ -34,18 +34,18 @@
         Wikimedia\Dodo\Tests\W3C\Area02Test
         Wikimedia\Dodo\Tests\W3C\HTMLAreaElement05Test
     files: |-
-        /tests/W3c/Level1/Html/Area02Test.php
-        /tests/W3c/Level1/Html/HTMLAreaElement05Test.php
+        /tests/W3C/Level1/Html/Area02Test.php
+        /tests/W3C/Level1/Html/HTMLAreaElement05Test.php
 'isMapLink-Failed asserting that true is false.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HTMLImageElement07Test
-    files: /tests/W3c/Level1/Html/HTMLImageElement07Test.php
+    files: /tests/W3C/Level1/Html/HTMLImageElement07Test.php
 'valueLink-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HTMLParamElement02Test
-    files: /tests/W3c/Level1/Html/HTMLParamElement02Test.php
+    files: /tests/W3C/Level1/Html/HTMLParamElement02Test.php
 'assert_throws_dom: ${func} threw ${e} that is not a DOMException INVALID_CHARACTER_ERR: property ${prop} is equal to ${actual}, expected ${expected}-Failed asserting that false is true.':
     _total: 1
     _comment: ''

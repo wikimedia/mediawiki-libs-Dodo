@@ -23,23 +23,23 @@
         testRangeDetach
         testRangeIntersectsNodeBinding
     files: |-
-        /tests/W3c/Level1/Core/HcDocumentgetdoctypeTest.php
-        /tests/W3c/Level1/Core/HcEntitiesremovenameditem1Test.php
-        /tests/W3c/Level1/Core/HcEntitiessetnameditem1Test.php
-        /tests/W3c/Level1/Core/HcNodevalue07Test.php
-        /tests/W3c/Level1/Core/HcNodevalue08Test.php
-        /tests/W3c/Level1/Core/HcNotationsremovenameditem1Test.php
-        /tests/W3c/Level1/Core/HcNotationssetnameditem1Test.php
-        /tests/W3c/Level1/Html/HTMLDocument18Test.php
-        /tests/W3c/Level1/Html/HTMLImageElement05Test.php
-        /tests/W3c/Level1/Html/HTMLImageElement06Test.php
-        /tests/W3c/Level1/Html/HTMLImageElement11Test.php
-        /tests/W3c/Level1/Html/HTMLImageElement12Test.php
-        /tests/W3c/Level1/Html/HTMLInputElement13Test.php
-        /tests/W3c/Level1/Html/HTMLObjectElement11Test.php
-        /tests/W3c/Level1/Html/HTMLObjectElement16Test.php
-        /tests/W3c/Level1/Html/Object08Test.php
-        /tests/W3c/Level1/Html/Object13Test.php
+        /tests/W3C/Level1/Core/HcDocumentgetdoctypeTest.php
+        /tests/W3C/Level1/Core/HcEntitiesremovenameditem1Test.php
+        /tests/W3C/Level1/Core/HcEntitiessetnameditem1Test.php
+        /tests/W3C/Level1/Core/HcNodevalue07Test.php
+        /tests/W3C/Level1/Core/HcNodevalue08Test.php
+        /tests/W3C/Level1/Core/HcNotationsremovenameditem1Test.php
+        /tests/W3C/Level1/Core/HcNotationssetnameditem1Test.php
+        /tests/W3C/Level1/Html/HTMLDocument18Test.php
+        /tests/W3C/Level1/Html/HTMLImageElement05Test.php
+        /tests/W3C/Level1/Html/HTMLImageElement06Test.php
+        /tests/W3C/Level1/Html/HTMLImageElement11Test.php
+        /tests/W3C/Level1/Html/HTMLImageElement12Test.php
+        /tests/W3C/Level1/Html/HTMLInputElement13Test.php
+        /tests/W3C/Level1/Html/HTMLObjectElement11Test.php
+        /tests/W3C/Level1/Html/HTMLObjectElement16Test.php
+        /tests/W3C/Level1/Html/Object08Test.php
+        /tests/W3C/Level1/Html/Object13Test.php
         /tests/Wpt/Dom/Nodes/ElementGetElementsByTagNameChangeDocumentHTMLNessTest.php
         /tests/Wpt/Dom/Ranges/RangeDetachTest.php
         /tests/Wpt/Dom/Ranges/RangeIntersectsNodeBindingTest.php
@@ -47,27 +47,27 @@
     _total: 1
     _comment: ''
     testcases: testHcNodeappendchildnewchilddiffdocument
-    files: /tests/W3c/Level1/Core/HcNodeappendchildnewchilddiffdocumentTest.php
+    files: /tests/W3C/Level1/Core/HcNodeappendchildnewchilddiffdocumentTest.php
 'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodeinsertbeforenewchilddiffdocumentTest::$doc1':
     _total: 1
     _comment: ''
     testcases: testHcNodeinsertbeforenewchilddiffdocument
-    files: /tests/W3c/Level1/Core/HcNodeinsertbeforenewchilddiffdocumentTest.php
+    files: /tests/W3C/Level1/Core/HcNodeinsertbeforenewchilddiffdocumentTest.php
 'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodereplacechildnewchilddiffdocumentTest::$doc1':
     _total: 1
     _comment: ''
     testcases: testHcNodereplacechildnewchilddiffdocument
-    files: /tests/W3c/Level1/Core/HcNodereplacechildnewchilddiffdocumentTest.php
+    files: /tests/W3C/Level1/Core/HcNodereplacechildnewchilddiffdocumentTest.php
 'Error: Call to protected method Wikimedia\Dodo\Element::_remove() from context ''Wikimedia\Dodo\Internal\WhatWG''':
     _total: 1
     _comment: ''
     testcases: testHcNodereplacechildnewchildexists
-    files: /tests/W3c/Level1/Core/HcNodereplacechildnewchildexistsTest.php
+    files: /tests/W3C/Level1/Core/HcNodereplacechildnewchildexistsTest.php
 'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodevalue06Test::$newNode':
     _total: 1
     _comment: ''
     testcases: testHcNodevalue06
-    files: /tests/W3c/Level1/Core/HcNodevalue06Test.php
+    files: /tests/W3C/Level1/Core/HcNodevalue06Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLAnchorElement::getHref':
     _total: 2
     _comment: ''
@@ -75,8 +75,8 @@
         testAnchor04
         testHTMLAnchorElement04
     files: |-
-        /tests/W3c/Level1/Html/Anchor04Test.php
-        /tests/W3c/Level1/Html/HTMLAnchorElement04Test.php
+        /tests/W3C/Level1/Html/Anchor04Test.php
+        /tests/W3C/Level1/Html/HTMLAnchorElement04Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLElement::getTabIndex':
     _total: 10
     _comment: ''
@@ -92,16 +92,16 @@
         testHTMLTextAreaElement10
         testObject10
     files: |-
-        /tests/W3c/Level1/Html/Area03Test.php
-        /tests/W3c/Level1/Html/Button06Test.php
-        /tests/W3c/Level1/Html/HTMLAnchorElement10Test.php
-        /tests/W3c/Level1/Html/HTMLAreaElement07Test.php
-        /tests/W3c/Level1/Html/HTMLButtonElement06Test.php
-        /tests/W3c/Level1/Html/HTMLInputElement15Test.php
-        /tests/W3c/Level1/Html/HTMLObjectElement13Test.php
-        /tests/W3c/Level1/Html/HTMLSelectElement13Test.php
-        /tests/W3c/Level1/Html/HTMLTextAreaElement10Test.php
-        /tests/W3c/Level1/Html/Object10Test.php
+        /tests/W3C/Level1/Html/Area03Test.php
+        /tests/W3C/Level1/Html/Button06Test.php
+        /tests/W3C/Level1/Html/HTMLAnchorElement10Test.php
+        /tests/W3C/Level1/Html/HTMLAreaElement07Test.php
+        /tests/W3C/Level1/Html/HTMLButtonElement06Test.php
+        /tests/W3C/Level1/Html/HTMLInputElement15Test.php
+        /tests/W3C/Level1/Html/HTMLObjectElement13Test.php
+        /tests/W3C/Level1/Html/HTMLSelectElement13Test.php
+        /tests/W3C/Level1/Html/HTMLTextAreaElement10Test.php
+        /tests/W3C/Level1/Html/Object10Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLButtonElement::getForm':
     _total: 6
     _comment: ''
@@ -113,12 +113,12 @@
         testHTMLButtonElement01
         testHTMLButtonElement02
     files: |-
-        /tests/W3c/Level1/Html/Button01Test.php
-        /tests/W3c/Level1/Html/Button02Test.php
-        /tests/W3c/Level1/Html/Button03Test.php
-        /tests/W3c/Level1/Html/Button04Test.php
-        /tests/W3c/Level1/Html/HTMLButtonElement01Test.php
-        /tests/W3c/Level1/Html/HTMLButtonElement02Test.php
+        /tests/W3C/Level1/Html/Button01Test.php
+        /tests/W3C/Level1/Html/Button02Test.php
+        /tests/W3C/Level1/Html/Button03Test.php
+        /tests/W3C/Level1/Html/Button04Test.php
+        /tests/W3C/Level1/Html/HTMLButtonElement01Test.php
+        /tests/W3C/Level1/Html/HTMLButtonElement02Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::getTitle':
     _total: 2
     _comment: ''
@@ -126,33 +126,33 @@
         testDoc01
         testHTMLDocument01
     files: |-
-        /tests/W3c/Level1/Html/Doc01Test.php
-        /tests/W3c/Level1/Html/HTMLDocument01Test.php
+        /tests/W3C/Level1/Html/Doc01Test.php
+        /tests/W3C/Level1/Html/HTMLDocument01Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLElement::blur':
     _total: 1
     _comment: ''
     testcases: testHTMLAnchorElement13
-    files: /tests/W3c/Level1/Html/HTMLAnchorElement13Test.php
+    files: /tests/W3C/Level1/Html/HTMLAnchorElement13Test.php
 'Error: Call to undefined method Wikimedia\Dodo\HTMLAnchorElement::focus()':
     _total: 1
     _comment: ''
     testcases: testHTMLAnchorElement14
-    files: /tests/W3c/Level1/Html/HTMLAnchorElement14Test.php
+    files: /tests/W3C/Level1/Html/HTMLAnchorElement14Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLAreaElement::getHref':
     _total: 1
     _comment: ''
     testcases: testHTMLAreaElement04
-    files: /tests/W3c/Level1/Html/HTMLAreaElement04Test.php
-'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\W3c\Harness\W3cTestHarness::assertNullData() must be of the type string or null, object given, called in /tests/W3c/Level1/Html/HTMLDocument17Test.php on line 29':
+    files: /tests/W3C/Level1/Html/HTMLAreaElement04Test.php
+'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\W3C\Harness\W3CTestHarness::assertNullData() must be of the type string or null, object given, called in /tests/W3C/Level1/Html/HTMLDocument17Test.php on line 29':
     _total: 1
     _comment: ''
     testcases: testHTMLDocument17
-    files: /tests/W3c/Level1/Html/HTMLDocument17Test.php
+    files: /tests/W3C/Level1/Html/HTMLDocument17Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::write':
     _total: 1
     _comment: ''
     testcases: testHTMLDocument19
-    files: /tests/W3c/Level1/Html/HTMLDocument19Test.php
+    files: /tests/W3C/Level1/Html/HTMLDocument19Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::writeln':
     _total: 2
     _comment: ''
@@ -160,8 +160,8 @@
         testHTMLDocument20
         testHTMLDocument21
     files: |-
-        /tests/W3c/Level1/Html/HTMLDocument20Test.php
-        /tests/W3c/Level1/Html/HTMLDocument21Test.php
+        /tests/W3C/Level1/Html/HTMLDocument20Test.php
+        /tests/W3C/Level1/Html/HTMLDocument21Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLFieldSetElement::getForm':
     _total: 2
     _comment: ''
@@ -169,28 +169,28 @@
         testHTMLFieldSetElement01
         testHTMLFieldSetElement02
     files: |-
-        /tests/W3c/Level1/Html/HTMLFieldSetElement01Test.php
-        /tests/W3c/Level1/Html/HTMLFieldSetElement02Test.php
+        /tests/W3C/Level1/Html/HTMLFieldSetElement01Test.php
+        /tests/W3C/Level1/Html/HTMLFieldSetElement02Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLFormElement::getAction':
     _total: 1
     _comment: ''
     testcases: testHTMLFormElement05
-    files: /tests/W3c/Level1/Html/HTMLFormElement05Test.php
+    files: /tests/W3C/Level1/Html/HTMLFormElement05Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLIFrameElement::getSrc':
     _total: 1
     _comment: ''
     testcases: testHTMLIFrameElement09
-    files: /tests/W3c/Level1/Html/HTMLIFrameElement09Test.php
+    files: /tests/W3C/Level1/Html/HTMLIFrameElement09Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLImageElement::getSrc':
     _total: 1
     _comment: ''
     testcases: testHTMLImageElement09
-    files: /tests/W3c/Level1/Html/HTMLImageElement09Test.php
+    files: /tests/W3C/Level1/Html/HTMLImageElement09Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLInputElement::getForm':
     _total: 1
     _comment: ''
     testcases: testHTMLInputElement03
-    files: /tests/W3c/Level1/Html/HTMLInputElement03Test.php
+    files: /tests/W3C/Level1/Html/HTMLInputElement03Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLInputElement::getChecked':
     _total: 2
     _comment: ''
@@ -198,43 +198,43 @@
         testHTMLInputElement08
         testHTMLInputElement21
     files: |-
-        /tests/W3c/Level1/Html/HTMLInputElement08Test.php
-        /tests/W3c/Level1/Html/HTMLInputElement21Test.php
+        /tests/W3C/Level1/Html/HTMLInputElement08Test.php
+        /tests/W3C/Level1/Html/HTMLInputElement21Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLInputElement::getMaxLength':
     _total: 1
     _comment: ''
     testcases: testHTMLInputElement10
-    files: /tests/W3c/Level1/Html/HTMLInputElement10Test.php
+    files: /tests/W3C/Level1/Html/HTMLInputElement10Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLInputElement::getSrc':
     _total: 1
     _comment: ''
     testcases: testHTMLInputElement14
-    files: /tests/W3c/Level1/Html/HTMLInputElement14Test.php
+    files: /tests/W3C/Level1/Html/HTMLInputElement14Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLInputElement::getValue':
     _total: 1
     _comment: ''
     testcases: testHTMLInputElement18
-    files: /tests/W3c/Level1/Html/HTMLInputElement18Test.php
+    files: /tests/W3C/Level1/Html/HTMLInputElement18Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLLIElement::getValue':
     _total: 1
     _comment: ''
     testcases: testHTMLLIElement02
-    files: /tests/W3c/Level1/Html/HTMLLIElement02Test.php
+    files: /tests/W3C/Level1/Html/HTMLLIElement02Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLLabelElement::getForm':
     _total: 1
     _comment: ''
     testcases: testHTMLLabelElement02
-    files: /tests/W3c/Level1/Html/HTMLLabelElement02Test.php
-'Undefined property via __get(): disabled in /tests/W3c/Level1/Html/HTMLLinkElement01Test.php on line 30':
+    files: /tests/W3C/Level1/Html/HTMLLabelElement02Test.php
+'Undefined property via __get(): disabled in /tests/W3C/Level1/Html/HTMLLinkElement01Test.php on line 30':
     _total: 1
     _comment: ''
     testcases: testHTMLLinkElement01
-    files: /tests/W3c/Level1/Html/HTMLLinkElement01Test.php
+    files: /tests/W3C/Level1/Html/HTMLLinkElement01Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLLinkElement::getHref':
     _total: 1
     _comment: ''
     testcases: testHTMLLinkElement03
-    files: /tests/W3c/Level1/Html/HTMLLinkElement03Test.php
+    files: /tests/W3C/Level1/Html/HTMLLinkElement03Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLModElement::getCite':
     _total: 2
     _comment: ''
@@ -242,13 +242,13 @@
         testHTMLModElement01
         testHTMLModElement03
     files: |-
-        /tests/W3c/Level1/Html/HTMLModElement01Test.php
-        /tests/W3c/Level1/Html/HTMLModElement03Test.php
+        /tests/W3C/Level1/Html/HTMLModElement01Test.php
+        /tests/W3C/Level1/Html/HTMLModElement03Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLOListElement::getStart':
     _total: 1
     _comment: ''
     testcases: testHTMLOListElement02
-    files: /tests/W3c/Level1/Html/HTMLOListElement02Test.php
+    files: /tests/W3C/Level1/Html/HTMLOListElement02Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLObjectElement::getForm':
     _total: 3
     _comment: ''
@@ -257,9 +257,9 @@
         testHTMLObjectElement19
         testObject01
     files: |-
-        /tests/W3c/Level1/Html/HTMLObjectElement01Test.php
-        /tests/W3c/Level1/Html/HTMLObjectElement19Test.php
-        /tests/W3c/Level1/Html/Object01Test.php
+        /tests/W3C/Level1/Html/HTMLObjectElement01Test.php
+        /tests/W3C/Level1/Html/HTMLObjectElement19Test.php
+        /tests/W3C/Level1/Html/Object01Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLObjectElement::getData':
     _total: 2
     _comment: ''
@@ -267,8 +267,8 @@
         testHTMLObjectElement08
         testObject06
     files: |-
-        /tests/W3c/Level1/Html/HTMLObjectElement08Test.php
-        /tests/W3c/Level1/Html/Object06Test.php
+        /tests/W3C/Level1/Html/HTMLObjectElement08Test.php
+        /tests/W3C/Level1/Html/Object06Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLOptionElement::getForm':
     _total: 2
     _comment: ''
@@ -276,13 +276,13 @@
         testHTMLOptionElement01
         testHTMLOptionElement02
     files: |-
-        /tests/W3c/Level1/Html/HTMLOptionElement01Test.php
-        /tests/W3c/Level1/Html/HTMLOptionElement02Test.php
+        /tests/W3C/Level1/Html/HTMLOptionElement01Test.php
+        /tests/W3C/Level1/Html/HTMLOptionElement02Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLOptionElement::getLabel':
     _total: 1
     _comment: ''
     testcases: testHTMLOptionElement07
-    files: /tests/W3c/Level1/Html/HTMLOptionElement07Test.php
+    files: /tests/W3C/Level1/Html/HTMLOptionElement07Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLQuoteElement::getCite':
     _total: 2
     _comment: ''
@@ -290,23 +290,23 @@
         testHTMLQuoteElement01
         testHTMLQuoteElement02
     files: |-
-        /tests/W3c/Level1/Html/HTMLQuoteElement01Test.php
-        /tests/W3c/Level1/Html/HTMLQuoteElement02Test.php
+        /tests/W3C/Level1/Html/HTMLQuoteElement01Test.php
+        /tests/W3C/Level1/Html/HTMLQuoteElement02Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLScriptElement::getText':
     _total: 1
     _comment: ''
     testcases: testHTMLScriptElement01
-    files: /tests/W3c/Level1/Html/HTMLScriptElement01Test.php
+    files: /tests/W3C/Level1/Html/HTMLScriptElement01Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLScriptElement::getSrc':
     _total: 1
     _comment: ''
     testcases: testHTMLScriptElement04
-    files: /tests/W3c/Level1/Html/HTMLScriptElement04Test.php
+    files: /tests/W3C/Level1/Html/HTMLScriptElement04Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLSelectElement::getSelectedIndex':
     _total: 1
     _comment: ''
     testcases: testHTMLSelectElement03
-    files: /tests/W3c/Level1/Html/HTMLSelectElement03Test.php
+    files: /tests/W3C/Level1/Html/HTMLSelectElement03Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLSelectElement::getForm':
     _total: 2
     _comment: ''
@@ -314,23 +314,23 @@
         testHTMLSelectElement06
         testHTMLSelectElement07
     files: |-
-        /tests/W3c/Level1/Html/HTMLSelectElement06Test.php
-        /tests/W3c/Level1/Html/HTMLSelectElement07Test.php
+        /tests/W3C/Level1/Html/HTMLSelectElement06Test.php
+        /tests/W3C/Level1/Html/HTMLSelectElement07Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLSelectElement::getOptions':
     _total: 1
     _comment: ''
     testcases: testHTMLSelectElement08
-    files: /tests/W3c/Level1/Html/HTMLSelectElement08Test.php
+    files: /tests/W3C/Level1/Html/HTMLSelectElement08Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLSelectElement::getSize':
     _total: 1
     _comment: ''
     testcases: testHTMLSelectElement12
-    files: /tests/W3c/Level1/Html/HTMLSelectElement12Test.php
-'Undefined property via __get(): disabled in /tests/W3c/Level1/Html/HTMLStyleElement01Test.php on line 30':
+    files: /tests/W3C/Level1/Html/HTMLSelectElement12Test.php
+'Undefined property via __get(): disabled in /tests/W3C/Level1/Html/HTMLStyleElement01Test.php on line 30':
     _total: 1
     _comment: ''
     testcases: testHTMLStyleElement01
-    files: /tests/W3c/Level1/Html/HTMLStyleElement01Test.php
+    files: /tests/W3C/Level1/Html/HTMLStyleElement01Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTableCellElement::getColSpan':
     _total: 3
     _comment: ''
@@ -339,9 +339,9 @@
         testHTMLTableCellElement16
         testTable25
     files: |-
-        /tests/W3c/Level1/Html/HTMLTableCellElement15Test.php
-        /tests/W3c/Level1/Html/HTMLTableCellElement16Test.php
-        /tests/W3c/Level1/Html/Table25Test.php
+        /tests/W3C/Level1/Html/HTMLTableCellElement15Test.php
+        /tests/W3C/Level1/Html/HTMLTableCellElement16Test.php
+        /tests/W3C/Level1/Html/Table25Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTableCellElement::getRowSpan':
     _total: 3
     _comment: ''
@@ -350,9 +350,9 @@
         testHTMLTableCellElement24
         testTable28
     files: |-
-        /tests/W3c/Level1/Html/HTMLTableCellElement23Test.php
-        /tests/W3c/Level1/Html/HTMLTableCellElement24Test.php
-        /tests/W3c/Level1/Html/Table28Test.php
+        /tests/W3C/Level1/Html/HTMLTableCellElement23Test.php
+        /tests/W3C/Level1/Html/HTMLTableCellElement24Test.php
+        /tests/W3C/Level1/Html/Table28Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTableColElement::getSpan':
     _total: 3
     _comment: ''
@@ -361,9 +361,9 @@
         testHTMLTableColElement08
         testTable51
     files: |-
-        /tests/W3c/Level1/Html/HTMLTableColElement07Test.php
-        /tests/W3c/Level1/Html/HTMLTableColElement08Test.php
-        /tests/W3c/Level1/Html/Table51Test.php
+        /tests/W3C/Level1/Html/HTMLTableColElement07Test.php
+        /tests/W3C/Level1/Html/HTMLTableColElement08Test.php
+        /tests/W3C/Level1/Html/Table51Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTableElement::getCaption':
     _total: 2
     _comment: ''
@@ -371,28 +371,28 @@
         testHTMLTableElement02
         testTable01
     files: |-
-        /tests/W3c/Level1/Html/HTMLTableElement02Test.php
-        /tests/W3c/Level1/Html/Table01Test.php
+        /tests/W3C/Level1/Html/HTMLTableElement02Test.php
+        /tests/W3C/Level1/Html/Table01Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTableElement::getTHead':
     _total: 1
     _comment: ''
     testcases: testHTMLTableElement04
-    files: /tests/W3c/Level1/Html/HTMLTableElement04Test.php
+    files: /tests/W3C/Level1/Html/HTMLTableElement04Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTableElement::getTFoot':
     _total: 1
     _comment: ''
     testcases: testHTMLTableElement06
-    files: /tests/W3c/Level1/Html/HTMLTableElement06Test.php
+    files: /tests/W3C/Level1/Html/HTMLTableElement06Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTableElement::getRows':
     _total: 1
     _comment: ''
     testcases: testHTMLTableElement07
-    files: /tests/W3c/Level1/Html/HTMLTableElement07Test.php
+    files: /tests/W3C/Level1/Html/HTMLTableElement07Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTableRowElement::getCells':
     _total: 1
     _comment: ''
     testcases: testHTMLTableRowElement05
-    files: /tests/W3c/Level1/Html/HTMLTableRowElement05Test.php
+    files: /tests/W3C/Level1/Html/HTMLTableRowElement05Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTableSectionElement::getRows':
     _total: 3
     _comment: ''
@@ -401,9 +401,9 @@
         testHTMLTableSectionElement14
         testHTMLTableSectionElement15
     files: |-
-        /tests/W3c/Level1/Html/HTMLTableSectionElement13Test.php
-        /tests/W3c/Level1/Html/HTMLTableSectionElement14Test.php
-        /tests/W3c/Level1/Html/HTMLTableSectionElement15Test.php
+        /tests/W3C/Level1/Html/HTMLTableSectionElement13Test.php
+        /tests/W3C/Level1/Html/HTMLTableSectionElement14Test.php
+        /tests/W3C/Level1/Html/HTMLTableSectionElement15Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTextAreaElement::getForm':
     _total: 2
     _comment: ''
@@ -411,28 +411,28 @@
         testHTMLTextAreaElement02
         testHTMLTextAreaElement03
     files: |-
-        /tests/W3c/Level1/Html/HTMLTextAreaElement02Test.php
-        /tests/W3c/Level1/Html/HTMLTextAreaElement03Test.php
+        /tests/W3C/Level1/Html/HTMLTextAreaElement02Test.php
+        /tests/W3C/Level1/Html/HTMLTextAreaElement03Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTextAreaElement::getCols':
     _total: 1
     _comment: ''
     testcases: testHTMLTextAreaElement05
-    files: /tests/W3c/Level1/Html/HTMLTextAreaElement05Test.php
+    files: /tests/W3C/Level1/Html/HTMLTextAreaElement05Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTextAreaElement::getRows':
     _total: 1
     _comment: ''
     testcases: testHTMLTextAreaElement09
-    files: /tests/W3c/Level1/Html/HTMLTextAreaElement09Test.php
+    files: /tests/W3C/Level1/Html/HTMLTextAreaElement09Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLTitleElement::getText':
     _total: 1
     _comment: ''
     testcases: testHTMLTitleElement01
-    files: /tests/W3c/Level1/Html/HTMLTitleElement01Test.php
+    files: /tests/W3C/Level1/Html/HTMLTitleElement01Test.php
 'Error: Call to a member function getImplementation() on null':
     _total: 1
     _comment: ''
     testcases: testHasFeature01
-    files: /tests/W3c/Level1/Html/HasFeature01Test.php
+    files: /tests/W3C/Level1/Html/HasFeature01Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLElement::getDataset':
     _total: 1
     _comment: ''
@@ -710,7 +710,7 @@
     _comment: ''
     testcases: testDocumentImportNode
     files: /tests/Wpt/Dom/Nodes/DocumentImportNodeTest.php
-'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertTrue() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 783':
+'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertTrue() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 774':
     _total: 10
     _comment: ''
     testcases: |-
@@ -855,7 +855,7 @@
     files: |-
         /tests/Wpt/Dom/Nodes/NodeIsConnectedShadowDomTest.php
         /tests/Wpt/Dom/Nodes/RootNodeTest.php
-'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertFalse() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 331':
+'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertFalse() must be of the type string, null given, called in /tests/Wpt/Harness/WptTestHarness.php on line 322':
     _total: 2
     _comment: ''
     testcases: |-

@@ -14,7 +14,7 @@ class ParentNodeQuerySelectorEscapesTest extends WptTestHarness
             $child->id = $id;
             $container->appendChild($child);
             $this->assertEqualsData($container->querySelector($selector), $child);
-        }, " should match with {json_encode( {$id} )}{json_encode( {$selector} )}");
+        }, "{json_encode( {$id} )} should match with {json_encode( {$selector} )}");
     }
     public function testNeverMatched($id, $selector)
     {
@@ -24,7 +24,7 @@ class ParentNodeQuerySelectorEscapesTest extends WptTestHarness
             $child->id = $id;
             $container->appendChild($child);
             $this->assertEqualsData($container->querySelector($selector), null);
-        }, " should never match with {json_encode( {$id} )}{json_encode( {$selector} )}");
+        }, "{json_encode( {$id} )} should never match with {json_encode( {$selector} )}");
     }
     public function testParentNodeQuerySelectorEscapes()
     {
@@ -44,9 +44,9 @@ class ParentNodeQuerySelectorEscapesTest extends WptTestHarness
         $this->testNeverMatched("zero\\u0000", '#zero\\000000');
         // 2. surrogate points
         $this->testMatched("�surrogateFirst", '#\\d83d surrogateFirst');
-        $this->testNeverMatched("\\ud83dsurrogateFirst", '#\\d83d surrogateFirst');
+        $this->testNeverMatched("�surrogateFirst", '#\\d83d surrogateFirst');
         $this->testMatched("surrogateSecond�", '#surrogateSecond\\dd11');
-        $this->testNeverMatched("surrogateSecond\\udd11", '#surrogateSecond\\dd11');
+        $this->testNeverMatched("surrogateSecond�", '#surrogateSecond\\dd11');
         $this->testMatched("surrogatePair��", '#surrogatePair\\d83d\\dd11');
         $this->testNeverMatched("surrogatePair🔑", '#surrogatePair\\d83d\\dd11');
         // 3. out of range points

@@ -31,7 +31,7 @@ class TestsGenerator extends Tasks {
 	use IO;
 	use Helpers;
 
-	public const W3C = "W3c";
+	public const W3C = "W3C";
 	public const WPT = "Wpt";
 
 	private const W3C_TESTS = "/vendor/fgnass/domino/test/w3c";
@@ -129,9 +129,10 @@ class TestsGenerator extends Tasks {
 
 					// TODO comment
 					$test_path = $this->root_folder . ( $test_type === self::W3C ? self::W3C_TESTS : self::WPT_TESTS );
-					$test_path = str_replace( strtolower( $test_path ),
+					$test_path = str_replace(
+						$test_path,
 						'',
-						$file->getPath() );
+						realpath( $file->getPath() ) );
 
 					// eg. /level1/core -> /Level1/Core
 					$test_path = ucwords( $test_path,
@@ -247,8 +248,8 @@ class TestsGenerator extends Tasks {
 			throw new TaskException( $this, 'No WPT harness.' );
 		}
 
-		$result = $this->_copyDir( $this->folder . '/Harness/W3c',
-			$this->root_folder . '/tests/W3c/Harness' );
+		$result = $this->_copyDir( $this->folder . '/Harness/W3C',
+			$this->root_folder . '/tests/W3C/Harness' );
 
 		if ( !$result->wasSuccessful() ) {
 			throw new TaskException( $this, 'No W3C harness.' );
@@ -277,7 +278,7 @@ class TestsGenerator extends Tasks {
 		}
 
 		// Check if Domino was installed.
-		if ( !$this->filesystem->exists( $this->root_folder . '/tests/W3c' ) ) {
+		if ( !$this->filesystem->exists( $this->root_folder . '/tests/W3C' ) ) {
 			$domino_path = $this->root_folder . '/vendor/fgnass/domino';
 			if ( !$this->filesystem->exists( $domino_path ) ) {
 				if ( !$this->taskComposerInstall()->dev( true )->run()->wasSuccessful() ) {
@@ -388,8 +389,9 @@ class TestsGenerator extends Tasks {
 		$w3c_core = $this->root_folder . self::W3C_TESTS . '/level1/core/files/*.html';
 		$w3c_html = $this->root_folder . self::W3C_TESTS . '/level1/html/files/*.html';
 
-		$cp_dirs = [ $w3c_core => $this->root_folder . '/tests/' . self::W3C . '/level1/core/files/',
-			$w3c_html => $this->root_folder . '/tests/' . self::W3C . '/level1/html/files/' ];
+		$cp_dirs = [
+			$w3c_core => $this->root_folder . '/tests/' . self::W3C . '/Level1/Core/files/',
+			$w3c_html => $this->root_folder . '/tests/' . self::W3C . '/Level1/Html/files/' ];
 
 		return $this->taskFlattenDir( $cp_dirs )->run();
 	}
