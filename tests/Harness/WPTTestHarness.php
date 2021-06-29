@@ -1169,10 +1169,4 @@ abstract class WPTTestHarness extends TestCase {
 			[ 'actual' => $actual,
 				'expected' => $expected ] );
 	}
-
-	/**
-	 * @param mixed ...$arg
-	 */
-	protected function parseFromString( ...$arg ) : void {
-	}
 }

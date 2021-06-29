@@ -877,7 +877,7 @@
     _comment: ''
     testcases: testNodeNodeValue
     files: /tests/WPT/Dom/Nodes/NodeNodeValueTest.php
-'Trying to get property ''documentElement'' of non-object':
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\DOMParser::parseFromString( ''text/xml'' )':
     _total: 1
     _comment: ''
     testcases: testNodeNormalize

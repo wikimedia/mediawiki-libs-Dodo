@@ -5,6 +5,7 @@ use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
+use Wikimedia\Dodo\DOMParser;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-normalize.html.
 class NodeNormalizeTest extends WPTTestHarness
@@ -68,7 +69,7 @@ class NodeNormalizeTest extends WPTTestHarness
             // We create an XML document so that we can create CDATASection.
             // Except for the CDATASection the result should be the same for
             // an HTML document. (No non-Text node should be touched.)
-            $doc = $this->parseFromString('<div/>', 'text/xml');
+            $doc = (new DOMParser())->parseFromString('<div/>', 'text/xml');
             $div = $doc->documentElement;
             $t1 = $div->appendChild($doc->createTextNode('a'));
             // The first parameter is the "target" of the processing

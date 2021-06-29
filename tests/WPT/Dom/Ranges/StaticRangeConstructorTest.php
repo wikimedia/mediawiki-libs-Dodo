@@ -7,6 +7,7 @@ use Wikimedia\Dodo\Attr;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
+use Wikimedia\Dodo\DOMParser;
 use Wikimedia\Dodo\Range;
 use Wikimedia\Dodo\StaticRange;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
@@ -70,7 +71,7 @@ class StaticRangeConstructorTest extends WPTTestHarness
             $this->assertFalseData($staticRange->collapsed, 'not collapsed');
         }, 'Construct static range with Comment container');
         $this->assertTest(function () {
-            $xmlDoc = $this->parseFromString('<xml></xml>', 'application/xml');
+            $xmlDoc = (new DOMParser())->parseFromString('<xml></xml>', 'application/xml');
             $testCDATASection = $xmlDoc->createCDATASection('abc');
             $staticRange = new StaticRange(['startContainer' => $testCDATASection, 'startOffset' => 1, 'endContainer' => $testCDATASection, 'endOffset' => 2]);
             $this->assertEqualsData($staticRange->startContainer, $testCDATASection, 'valid startContainer');

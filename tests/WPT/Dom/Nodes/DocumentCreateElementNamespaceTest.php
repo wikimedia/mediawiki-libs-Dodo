@@ -1,6 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DOMParser;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-createElement-namespace.html.
 class DocumentCreateElementNamespaceTest extends WPTTestHarness
@@ -38,19 +39,19 @@ class DocumentCreateElementNamespaceTest extends WPTTestHarness
         }, "Created element's namespace in created MathML document");
         // Second also test document created by DOMParser
         $this->assertTest(function () {
-            $this->testDoc($this->parseFromString('', 'text/html'), 'text/html');
+            $this->testDoc((new DOMParser())->parseFromString('', 'text/html'), 'text/html');
         }, "Created element's namespace in created HTML document by DOMParser ('text/html')");
         $this->assertTest(function () {
-            $this->testDoc($this->parseFromString('<root/>', 'text/xml'), 'text/xml');
+            $this->testDoc((new DOMParser())->parseFromString('<root/>', 'text/xml'), 'text/xml');
         }, "Created element's namespace in created XML document by DOMParser ('text/xml')");
         $this->assertTest(function () {
-            $this->testDoc($this->parseFromString('<root/>', 'application/xml'), 'application/xml');
+            $this->testDoc((new DOMParser())->parseFromString('<root/>', 'application/xml'), 'application/xml');
         }, "Created element's namespace in created XML document by DOMParser ('application/xml')");
         $this->assertTest(function () {
-            $this->testDoc($this->parseFromString('<html/>', 'application/xhtml+xml'), 'application/xhtml+xml');
+            $this->testDoc((new DOMParser())->parseFromString('<html/>', 'application/xhtml+xml'), 'application/xhtml+xml');
         }, "Created element's namespace in created XHTML document by DOMParser ('application/xhtml+xml')");
         $this->assertTest(function () {
-            $this->testDoc($this->parseFromString('<math/>', 'image/svg+xml'), 'image/svg+xml');
+            $this->testDoc((new DOMParser())->parseFromString('<math/>', 'image/svg+xml'), 'image/svg+xml');
         }, "Created element's namespace in created SVG document by DOMParser ('image/svg+xml')");
         // Now for various externally-loaded files.  Note: these lists must be kept
         // synced with the lists in generate.py in the subdirectory, and that script

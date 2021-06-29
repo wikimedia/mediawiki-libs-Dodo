@@ -2,6 +2,7 @@
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
+use Wikimedia\Dodo\DOMParser;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Element-tagName.html.
 class ElementTagNameTest extends WPTTestHarness
@@ -29,7 +30,7 @@ class ElementTagNameTest extends WPTTestHarness
         }, 'tagName should not upper-case for other non-HTML namespaces');
         $this->assertTest(function () {
             if (isset($this->window['DOMParser'])) {
-                $xmlel = $this->parseFromString('<div xmlns="http://www.w3.org/1999/xhtml">Test</div>', 'text/xml')->documentElement;
+                $xmlel = (new DOMParser())->parseFromString('<div xmlns="http://www.w3.org/1999/xhtml">Test</div>', 'text/xml')->documentElement;
                 $this->assertEqualsData($xmlel->tagName, 'div', 'tagName should be lowercase in XML');
                 $htmlel = $this->doc->importNode($xmlel, true);
                 $this->assertEqualsData($htmlel->tagName, 'DIV', 'tagName should be uppercase in HTML');

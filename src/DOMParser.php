@@ -25,7 +25,7 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 	public function parseFromString( string $string, /* DOMParserSupportedType */ string $type ) {
 		$type = DOMParserSupportedType::cast( $type );
 		if ( $type !== DOMParserSupportedType::text_html ) {
-			throw new UnimplementedException();
+			throw new UnimplementedException( __METHOD__ . "( '$type' )" );
 		}
 		$domBuilder = new class( [
 			'suppressHtmlNamespace' => true,

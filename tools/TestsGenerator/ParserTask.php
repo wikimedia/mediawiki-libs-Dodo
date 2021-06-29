@@ -721,6 +721,7 @@ class ParserTask extends BaseTask {
 			'URL' => 'Wikimedia\Dodo\URL',
 			'DomException' => 'Wikimedia\Dodo\DomException',
 			'DOMImplementation' => 'Wikimedia\Dodo\DOMImplementation',
+			'DOMParser' => 'Wikimedia\Dodo\DOMParser',
 			'Range' => 'Wikimedia\Dodo\Range',
 			'AbstractRange' => 'Wikimedia\Dodo\AbstractRange',
 			'StaticRange' => 'Wikimedia\Dodo\StaticRange', ];
@@ -767,7 +768,6 @@ class ParserTask extends BaseTask {
 			'\'type\' => $Comment' => '\'type\' => Comment::class',
 			'testConstructor' => 'assertTestConstructor',
 			'testCreate' => 'assertTestCreate',
-			'(new DOMParser())->parseFromString' => '$this->parseFromString',
 			'Node::class::insertBefore' => '\'insertBefore\'',
 			'$new_el[$pair[\'attr\']]' => '$new_el->{$pair[\'attr\']}',
 			'[$method]' => '->{$method}',
