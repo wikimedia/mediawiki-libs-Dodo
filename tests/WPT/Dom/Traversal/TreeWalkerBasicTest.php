@@ -138,9 +138,9 @@ class TreeWalkerBasicTest extends WPTTestHarness
             $this->assertEqualsData($walker->currentNode, $f);
         }, 'Walk over nodes.');
         $this->assertTest(function () {
-            $treeWalker = $this->doc->createTreeWalker($this->getDocBody( $this->doc ), 42, null);
-            $this->assertEqualsData($treeWalker->root, $this->getDocBody( $this->doc ));
-            $this->assertEqualsData($treeWalker->currentNode, $this->getDocBody( $this->doc ));
+            $treeWalker = $this->doc->createTreeWalker($this->doc->body, 42, null);
+            $this->assertEqualsData($treeWalker->root, $this->doc->body);
+            $this->assertEqualsData($treeWalker->currentNode, $this->doc->body);
             $this->assertEqualsData($treeWalker->whatToShow, 42);
             $this->assertEqualsData($treeWalker->filter, null);
         }, 'Optional arguments to createTreeWalker should be optional (3 passed, null).');

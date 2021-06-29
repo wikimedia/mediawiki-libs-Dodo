@@ -17,7 +17,7 @@ class HTMLCollectionAsPrototypeTest extends WPTTestHarness
         $this->assertTest(function () {
             $element = $this->doc->createElement('p');
             $element->id = 'named';
-            $this->getDocBody( $this->doc )->appendChild($element);
+            $this->doc->body->appendChild($element);
             $this->{$this}->addCleanup(function () use(&$element) {
                 $element->remove();
             });

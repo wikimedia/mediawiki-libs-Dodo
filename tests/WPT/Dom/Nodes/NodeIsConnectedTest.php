@@ -22,7 +22,7 @@ class NodeIsConnectedTest extends WPTTestHarness
             $nodes = [$this->doc->createElement('div'), $this->doc->createElement('div'), $this->doc->createElement('div')];
             $this->checkNodes([], $nodes);
             // Append nodes[0].
-            $this->getDocBody( $this->doc )->appendChild($nodes[0]);
+            $this->doc->body->appendChild($nodes[0]);
             $this->checkNodes([$nodes[0]], [$nodes[1], $nodes[2]]);
             // Append nodes[1] and nodes[2] together.
             $nodes[1]->appendChild($nodes[2]);
@@ -42,7 +42,7 @@ class NodeIsConnectedTest extends WPTTestHarness
             $this->checkNodes([], $nodes);
             // Since we cannot append anything to the contentWindow of an iframe before it
             // is appended to the main DOM tree, we append the iframes one after another.
-            $this->getDocBody( $this->doc )->appendChild($nodes[0]);
+            $this->doc->body->appendChild($nodes[0]);
             $this->checkNodes([$nodes[0]], [$nodes[1], $nodes[2], $nodes[3], $nodes[4]]);
             $frames[0]->getOwnerDocument()->body->appendChild($nodes[1]);
             $this->checkNodes([$nodes[0], $nodes[1]], [$nodes[2], $nodes[3], $nodes[4]]);

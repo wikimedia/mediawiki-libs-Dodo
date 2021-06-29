@@ -10,7 +10,7 @@ class NodeIsConnectedShadowDomTest extends WPTTestHarness
     {
         $this->assertTest(function () use(&$mode) {
             $host = $this->doc->createElement('div');
-            $this->getDocBody( $this->doc )->appendChild($host);
+            $this->doc->body->appendChild($host);
             $root = $host->attachShadow(['mode' => $mode]);
             $node = $this->doc->createElement('div');
             $root->appendChild($node);

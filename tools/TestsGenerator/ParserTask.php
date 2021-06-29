@@ -770,7 +770,6 @@ class ParserTask extends BaseTask {
 			'(new DOMParser())->parseFromString' => '$this->parseFromString',
 			'Node::class::insertBefore' => '\'insertBefore\'',
 			'$new_el[$pair[\'attr\']]' => '$new_el->{$pair[\'attr\']}',
-			'$this->doc->body' => '$this->getDocBody( $this->doc )',
 			'[$method]' => '->{$method}',
 			// 'new Range()' => '$this->doc->createRange()',
 			// '$testDiv' => '$this->testDiv',

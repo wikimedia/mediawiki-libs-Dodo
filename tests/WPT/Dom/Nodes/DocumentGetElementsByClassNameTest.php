@@ -13,16 +13,16 @@ class DocumentGetElementsByClassNameTest extends WPTTestHarness
             $b = $this->doc->createElement('b');
             $a->className = 'foo';
             $this->{$this}->addCleanup(function () use(&$a) {
-                $this->getDocBody( $this->doc )->removeChild($a);
+                $this->doc->body->removeChild($a);
             });
-            $this->getDocBody( $this->doc )->appendChild($a);
+            $this->doc->body->appendChild($a);
             $l = $this->doc->getElementsByClassName('foo');
             $this->assertTrueData($l instanceof HTMLCollection);
             $this->assertEqualsData(count($l), 1);
             $b->className = 'foo';
-            $this->getDocBody( $this->doc )->appendChild($b);
+            $this->doc->body->appendChild($b);
             $this->assertEqualsData(count($l), 2);
-            $this->getDocBody( $this->doc )->removeChild($b);
+            $this->doc->body->removeChild($b);
             $this->assertEqualsData(count($l), 1);
         }, 'getElementsByClassName() should be a live collection');
     }

@@ -148,13 +148,13 @@ class NodeInsertBeforeTest extends WPTTestHarness
         $this->assertTest(function () {
             // WebIDL.
             $this->assertThrowsJsData($this->type_error, function () {
-                $this->getDocBody( $this->doc )->insertBefore(null, null);
+                $this->doc->body->insertBefore(null, null);
             });
             $this->assertThrowsJsData($this->type_error, function () {
-                $this->getDocBody( $this->doc )->insertBefore(null, $this->getDocBody( $this->doc )->firstChild);
+                $this->doc->body->insertBefore(null, $this->doc->body->firstChild);
             });
             $this->assertThrowsJsData($this->type_error, function () {
-                $this->getDocBody( $this->doc )->insertBefore(['a' => 'b'], $this->getDocBody( $this->doc )->firstChild);
+                $this->doc->body->insertBefore(['a' => 'b'], $this->doc->body->firstChild);
             });
         }, 'Calling insertBefore with a non-Node first argument must throw TypeError.');
         $this->testLeafNode('DocumentType', function () {
@@ -172,10 +172,10 @@ class NodeInsertBeforeTest extends WPTTestHarness
         $this->assertTest(function () {
             // Step 2.
             $this->assertThrowsDomData('HIERARCHY_REQUEST_ERR', function () {
-                $this->getDocBody( $this->doc )->insertBefore($this->getDocBody( $this->doc ), $this->doc->getElementById('log'));
+                $this->doc->body->insertBefore($this->doc->body, $this->doc->getElementById('log'));
             });
             $this->assertThrowsDomData('HIERARCHY_REQUEST_ERR', function () {
-                $this->getDocBody( $this->doc )->insertBefore($this->doc->documentElement, $this->doc->getElementById('log'));
+                $this->doc->body->insertBefore($this->doc->documentElement, $this->doc->getElementById('log'));
             });
         }, 'Calling insertBefore with an inclusive ancestor of the context object must throw HIERARCHY_REQUEST_ERR.');
         // Step 3.

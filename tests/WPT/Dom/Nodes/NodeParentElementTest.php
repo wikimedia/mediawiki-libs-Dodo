@@ -78,14 +78,14 @@ class NodeParentElementTest extends WPTTestHarness
         $this->assertTest(function () {
             $el = $this->doc->createElement('div');
             $this->assertEqualsData($el->parentElement, null);
-            $this->getDocBody( $this->doc )->appendChild($el);
-            $this->assertEqualsData($el->parentElement, $this->getDocBody( $this->doc ));
+            $this->doc->body->appendChild($el);
+            $this->assertEqualsData($el->parentElement, $this->doc->body);
         }, 'parentElement should work correctly in a document (element)');
         $this->assertTest(function () {
             $text = $this->doc->createElement('div');
             $this->assertEqualsData($text->parentElement, null);
-            $this->getDocBody( $this->doc )->appendChild($text);
-            $this->assertEqualsData($text->parentElement, $this->getDocBody( $this->doc ));
+            $this->doc->body->appendChild($text);
+            $this->assertEqualsData($text->parentElement, $this->doc->body);
         }, 'parentElement should work correctly in a document (text)');
     }
 }

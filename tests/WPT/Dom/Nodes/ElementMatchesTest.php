@@ -196,7 +196,7 @@ class ElementMatchesTest extends WPTTestHarness
                 return $this->init($e, 'matches');
             });
             $frame->src = '/dom/nodes/ParentNode-querySelector-All-content.html#target';
-            $this->getDocBody( $this->doc )->appendChild($frame);
+            $this->doc->body->appendChild($frame);
         });
     }
 }

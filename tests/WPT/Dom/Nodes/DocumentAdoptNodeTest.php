@@ -13,7 +13,7 @@ class DocumentAdoptNodeTest extends WPTTestHarness
         $this->assertTest(function () {
             $y = $this->doc->getElementsByTagName('x<')[0];
             $child = $y->firstChild;
-            $this->assertEqualsData($y->parentNode, $this->getDocBody( $this->doc ));
+            $this->assertEqualsData($y->parentNode, $this->doc->body);
             $this->assertEqualsData($y->ownerDocument, $this->doc);
             $this->assertEqualsData($this->doc->adoptNode($y), $y);
             $this->assertEqualsData($y->parentNode, null);

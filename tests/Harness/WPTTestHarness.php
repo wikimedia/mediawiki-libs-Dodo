@@ -9,7 +9,6 @@
 // @phan-file-suppress PhanTypeMismatchArgument
 // @phan-file-suppress PhanTypeMismatchArgumentInternalProbablyReal
 // @phan-file-suppress PhanTypeMismatchArgumentProbablyReal
-// @phan-file-suppress PhanTypeMismatchReturnNullable
 // @phan-file-suppress PhanTypePossiblyInvalidDimOffset
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
@@ -34,7 +33,6 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
-use Wikimedia\Dodo\HTMLElement;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\Utils\Selectors;
@@ -130,15 +128,6 @@ abstract class WPTTestHarness extends TestCase {
 	 */
 	public function same( $expected, $actual ) : bool {
 		return $expected === $actual;
-	}
-
-	/**
-	 * @param Document $doc
-	 *
-	 * @return HTMLElement
-	 */
-	public function getDocBody( Document $doc ) : HTMLElement {
-		return $doc->getBody();
 	}
 
 	/**

@@ -209,10 +209,10 @@ class RangeInsertNodeTest extends WPTTestHarness
         }
         $actualIframe = $this->doc->createElement('iframe');
         $actualIframe->style->display = 'none';
-        $this->getDocBody( $this->doc )->appendChild($actualIframe);
+        $this->doc->body->appendChild($actualIframe);
         $expectedIframe = $this->doc->createElement('iframe');
         $expectedIframe->style->display = 'none';
-        $this->getDocBody( $this->doc )->appendChild($expectedIframe);
+        $this->doc->body->appendChild($expectedIframe);
         $referenceDoc = $this->doc->implementation->createHTMLDocument('');
         $referenceDoc->removeChild($referenceDoc->documentElement);
         $actualIframe->onload = function () use(&$expectedIframe, &$iStart, &$iStop, &$jStart, &$jStop, &$referenceDoc, &$actualIframe) {

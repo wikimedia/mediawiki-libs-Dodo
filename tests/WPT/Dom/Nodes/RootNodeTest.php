@@ -14,7 +14,7 @@ class RootNodeTest extends WPTTestHarness
         $this->shadowHost = $this->doc->getElementById("shadowHost");
         $this->assertTest(function () {
             $this->shadowHost = $this->doc->createElement('div');
-            $this->getDocBody( $this->doc )->appendChild($this->shadowHost);
+            $this->doc->body->appendChild($this->shadowHost);
             $shadowRoot = $this->shadowHost->attachShadow(['mode' => 'open']);
             $shadowRoot->innerHTML = '<div class="shadowChild">content</div>';
             $shadowChild = $shadowRoot->querySelector('.shadowChild');
@@ -45,7 +45,7 @@ class RootNodeTest extends WPTTestHarness
         }, 'getRootNode() must return the parent node of the context object when the context object has a single ancestor not in a document');
         $this->assertTest(function () {
             $parent = $this->doc->createElement('div');
-            $this->getDocBody( $this->doc )->appendChild($parent);
+            $this->doc->body->appendChild($parent);
             $element = $this->doc->createElement('div');
             $parent->appendChild($element);
             $this->assertEqualsData($element->getRootNode(), $this->doc, 'getRootNode() on an element inside a document must return the document');

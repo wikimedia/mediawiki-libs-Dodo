@@ -11,7 +11,7 @@ class RangeComparePoint2Test extends WPTTestHarness
         $this->assertTest(function () {
             $r = $this->doc->createRange();
             $r->detach();
-            $this->assertEqualsData($r->comparePoint($this->getDocBody( $this->doc ), 0), 1);
+            $this->assertEqualsData($r->comparePoint($this->doc->body, 0), 1);
         });
         $this->assertTest(function () {
             $r = $this->doc->createRange();

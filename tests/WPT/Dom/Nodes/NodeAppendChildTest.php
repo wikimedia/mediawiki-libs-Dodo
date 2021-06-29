@@ -29,10 +29,10 @@ class NodeAppendChildTest extends WPTTestHarness
         // WebIDL.
         $this->assertTest(function () {
             $this->assertThrowsJsData($this->type_error, function () {
-                $this->getDocBody( $this->doc )->appendChild(null);
+                $this->doc->body->appendChild(null);
             });
             $this->assertThrowsJsData($this->type_error, function () {
-                $this->getDocBody( $this->doc )->appendChild(['a' => 'b']);
+                $this->doc->body->appendChild(['a' => 'b']);
             });
         }, 'WebIDL tests');
         // WebIDL and pre-insert step 1.
@@ -45,7 +45,7 @@ class NodeAppendChildTest extends WPTTestHarness
         $this->assertTest(function () {
             $frameDoc = $frames[0]->document;
             $this->assertThrowsDomData('HIERARCHY_REQUEST_ERR', function () use(&$frameDoc) {
-                $this->getDocBody( $this->doc )->appendChild($frameDoc);
+                $this->doc->body->appendChild($frameDoc);
             });
         }, 'Appending a document');
         // Pre-insert step 8.
@@ -53,7 +53,7 @@ class NodeAppendChildTest extends WPTTestHarness
             $frameDoc = $frames[0]->document;
             $s = $frameDoc->createElement('a');
             $this->assertEqualsData($s->ownerDocument, $frameDoc);
-            $this->getDocBody( $this->doc )->appendChild($s);
+            $this->doc->body->appendChild($s);
             $this->assertEqualsData($s->ownerDocument, $this->doc);
         }, 'Adopting an orphan');
         $this->assertTest(function () {
@@ -62,7 +62,7 @@ class NodeAppendChildTest extends WPTTestHarness
             $this->assertEqualsData($s->ownerDocument, $frameDoc);
             $frameDoc->body->appendChild($s);
             $this->assertEqualsData($s->ownerDocument, $frameDoc);
-            $this->getDocBody( $this->doc )->appendChild($s);
+            $this->doc->body->appendChild($s);
             $this->assertEqualsData($s->ownerDocument, $this->doc);
         }, 'Adopting a non-orphan');
     }

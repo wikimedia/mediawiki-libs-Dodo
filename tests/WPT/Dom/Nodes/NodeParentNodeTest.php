@@ -32,8 +32,8 @@ class NodeParentNodeTest extends WPTTestHarness
         $this->assertTest(function () {
             $el = $this->doc->createElement('div');
             $this->assertEqualsData($el->parentNode, null);
-            $this->getDocBody( $this->doc )->appendChild($el);
-            $this->assertEqualsData($el->parentNode, $this->getDocBody( $this->doc ));
+            $this->doc->body->appendChild($el);
+            $this->assertEqualsData($el->parentNode, $this->doc->body);
         }, 'Element');
         $t = $this->asyncTest('Removed iframe');
     }

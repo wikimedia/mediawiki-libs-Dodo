@@ -229,10 +229,10 @@ class RangeDeleteContentsTest extends WPTTestHarness
         $testDiv->parentNode->removeChild($testDiv);
         $actualIframe = $this->doc->createElement('iframe');
         $actualIframe->style->display = 'none';
-        $this->getDocBody( $this->doc )->appendChild($actualIframe);
+        $this->doc->body->appendChild($actualIframe);
         $expectedIframe = $this->doc->createElement('iframe');
         $expectedIframe->style->display = 'none';
-        $this->getDocBody( $this->doc )->appendChild($expectedIframe);
+        $this->doc->body->appendChild($expectedIframe);
         // First test a detached Range, synchronously
         $this->assertTest(function () {
             $range = $this->doc->createRange();
