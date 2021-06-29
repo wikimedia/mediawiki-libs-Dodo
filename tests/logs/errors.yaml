@@ -679,7 +679,7 @@
     _comment: ''
     testcases: testDocumentFragmentQuerySelectorAllAfterModification
     files: /tests/WPT/Dom/Nodes/DocumentFragmentQuerySelectorAllAfterModificationTest.php
-'TypeError: Argument 1 passed to Wikimedia\Dodo\Document::getElementById() must be of the type string, null given, called in /tests/WPT/Dom/Nodes/DocumentGetElementByIdTest.php on line 25':
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Element::setInnerHTML':
     _total: 1
     _comment: ''
     testcases: testDocumentGetElementById

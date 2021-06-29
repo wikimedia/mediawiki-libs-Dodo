@@ -22,16 +22,16 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $this->add_cleanup(function () use(&$element) {
                 $this->doc->body->removeChild($element);
             });
-            $this->assertEqualsData($this->doc->getElementById(null), $element);
+            $this->assertEqualsData($this->doc->getElementById("null"), $element);
         }, 'Calling document.getElementById with a null argument.');
         $this->assertTest(function () {
             $element = $this->doc->createElement('div');
-            $element->setAttribute('id', NULL);
+            $element->setAttribute('id', "null");
             $this->doc->body->appendChild($element);
             $this->add_cleanup(function () use(&$element) {
                 $this->doc->body->removeChild($element);
             });
-            $this->assertEqualsData($this->doc->getElementById(null), $element);
+            $this->assertEqualsData($this->doc->getElementById("null"), $element);
         }, 'Calling document.getElementById with an undefined argument.');
         $this->assertTest(function () {
             $bar = $this->doc->getElementById('test1');

@@ -453,7 +453,12 @@ class ParserTask extends BaseTask {
 			'Object::getPrototypeOf' => 'get_class',
 			'Document::prototype' => 'Document::class',
 			'Node::prototype' => 'Node::class',
-			'->previousSibling' => '->getPreviousSibling()' ];
+			'->previousSibling' => '->getPreviousSibling()',
+			// implicit cast of null to string is a JS feature; PHP uses
+			// strict typing.  WPT/Dom/Nodes/DocumentGetElementByIdTest.php
+			'->getElementById( null )' => '->getElementById( "null" )',
+			'->setAttribute( \'id\', NULL )' => '->setAttribute( \'id\', "null" )',
+		];
 
 		$this->test = strtr( $this->test,
 			$find_replace );
