@@ -535,7 +535,11 @@ class TestsGenerator extends Tasks {
 				$test_case->textContent,
 				$matches );
 			if ( !empty( $matches ) && isset( $matches[0] ) ) {
-				$matches[0] = trim( $matches[0] );
+				# replace object memory address, because it varies every run
+				$matches[0] = preg_replace(
+					'/(Object|Array) &[0-9a-f]*/', '$1',
+					trim( $matches[0] )
+				);
 				$existing_entry = $existing_log[$matches[0]] ?? [];
 				$files = $errors_cause[$matches[0]]['files'] ?? [];
 				$cases = $errors_cause[$matches[0]]['testcases'] ?? [];
