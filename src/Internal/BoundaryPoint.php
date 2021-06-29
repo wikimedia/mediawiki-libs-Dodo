@@ -56,7 +56,7 @@ class BoundaryPoint {
 	/**
 	 * @see https://dom.spec.whatwg.org/#concept-range-bp-position
 	 * @param BoundaryPoint $bp
-	 * @return int -1 if this is before $bp, 0 if they are equal, or 1 if this
+	 * @return int -1 if $this is before $bp, 0 if they are equal, or 1 if this
 	 *   is after $bp.
 	 */
 	public function compare( BoundaryPoint $bp ): int {
@@ -75,7 +75,14 @@ class BoundaryPoint {
 			}
 			return +1;
 		}
-		$c = $nodeA->compareDocumentPosition( $nodeB );
+		// Argument order is unexpected here.  '$c' will tell us the
+		// position of *nodeA* compared to *nodeB*.  That is,
+		// "following" mean nodeA is *after* nodeB, and "contains"
+		// means nodeA is an ancestor of nodeB (it's tempting to read
+		// the arguments in the opposite order; and indeed this
+		// BoundaryPoint::compare method has the arguments in the
+		// opposite order)
+		$c = $nodeB->compareDocumentPosition( $nodeA );
 		if ( ( $c & Node::DOCUMENT_POSITION_FOLLOWING ) !== 0 ) {
 			return -( $bp->compare( $this ) );
 		}

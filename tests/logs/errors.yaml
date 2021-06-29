@@ -268,11 +268,6 @@
     _comment: ''
     testcases: testThrowingNoParent
     files: /tests/WPT/Domparsing/InsertAdjacentHtmlTest.php
-'Error: Call to a member function createElement() on null':
-    _total: 1
-    _comment: ''
-    testcases: testRangeAdoptTest
-    files: /tests/WPT/Dom/Ranges/RangeAdoptTestTest.php
 'Error: Call to a member function detach() on null':
     _total: 1
     _comment: ''
@@ -419,20 +414,6 @@
     _comment: ''
     testcases: testNamednodemapSupportedPropertyNames
     files: /tests/WPT/Dom/Collections/NamednodemapSupportedPropertyNamesTest.php
-'Undefined property via __get(): _end in /src/Range.php on line 67':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testRangeCommonAncestorContainer
-        testRangeIntersectsNode
-    files: |-
-        /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php
-        /tests/WPT/Dom/Ranges/RangeIntersectsNodeTest.php
-'Undefined property via __get(): _start in /src/Range.php on line 300':
-    _total: 1
-    _comment: ''
-    testcases: testRangeComparePoint2
-    files: /tests/WPT/Dom/Ranges/RangeComparePoint2Test.php
 'Undefined property via __get(): constructor in /tests/WPT/Dom/Nodes/NodeCloneNodeXMLDocumentTest.php on line 14':
     _total: 1
     _comment: ''
@@ -468,6 +449,11 @@
     _comment: ''
     testcases: testRangeCloneContents
     files: /tests/WPT/Dom/Ranges/RangeCloneContentsTest.php
+'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php on line 34':
+    _total: 1
+    _comment: ''
+    testcases: testRangeCommonAncestorContainer
+    files: /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php
 'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeDeleteContentsTest.php on line 232':
     _total: 1
     _comment: ''
@@ -478,6 +464,11 @@
     _comment: ''
     testcases: testRangeExtractContents
     files: /tests/WPT/Dom/Ranges/RangeExtractContentsTest.php
+'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeIntersectsNodeTest.php on line 54':
+    _total: 1
+    _comment: ''
+    testcases: testRangeIntersectsNode
+    files: /tests/WPT/Dom/Ranges/RangeIntersectsNodeTest.php
 'Undefined property via __get(): style in /tests/WPT/Dom/Traversal/NodeIteratorRemovalTest.php on line 83':
     _total: 1
     _comment: ''

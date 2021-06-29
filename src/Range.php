@@ -246,6 +246,19 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	}
 
 	/**
+	 * Return a new live range with the same start and end as this.
+	 * @see https://dom.spec.whatwg.org/#dom-range-clonerange
+	 * @return Range
+	 */
+	public function cloneRange() : Range {
+		$doc = $this->getStartContainer()->_nodeDocument;
+		$r = $doc->createRange();
+		$r->setStart( $this->getStartContainer(), $this->getStartOffset() );
+		$r->setEnd( $this->getEndContainer(), $this->getEndOffset() );
+		return $r;
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	public function detach() : void {
@@ -323,7 +336,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 		$offset = $node->_getSiblingIndex();
 		$bp1 = new BoundaryPoint( $parent, $offset );
 		$bp2 = new BoundaryPoint( $parent, $offset + 1 );
-		if ( $bp1->compare( $this->_end ) < 0 && $bp2->compare( $this->start ) > 0 ) {
+		if ( $bp1->compare( $this->_end ) < 0 && $bp2->compare( $this->_start ) > 0 ) {
 			return true;
 		}
 		return false;

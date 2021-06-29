@@ -18,12 +18,12 @@ class AbstractRange implements \Wikimedia\IDLeDOM\AbstractRange {
 	/**
 	 * @var BoundaryPoint
 	 */
-	private $_start;
+	protected $_start;
 
 	/**
 	 * @var BoundaryPoint
 	 */
-	private $_end;
+	protected $_end;
 
 	/**
 	 * Create a new AbstractRange object. For subclass use only.
