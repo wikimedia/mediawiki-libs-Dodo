@@ -6,9 +6,7 @@
 // @phan-file-suppress PhanParamTooMany
 // @phan-file-suppress PhanTypeInvalidCallableObjectOfMethod
 // @phan-file-suppress PhanTypeInvalidInstanceof
-// @phan-file-suppress PhanTypeMismatchArgument
 // @phan-file-suppress PhanTypeMismatchArgumentInternalProbablyReal
-// @phan-file-suppress PhanTypeMismatchArgumentProbablyReal
 // @phan-file-suppress PhanTypePossiblyInvalidDimOffset
 // @phan-file-suppress PhanUndeclaredMethod
 // @phan-file-suppress PhanUndeclaredProperty
@@ -307,12 +305,11 @@ abstract class WPTTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param $actual
-	 * @param null $message
+	 * @param bool $actual
+	 * @param string $message
 	 */
-	protected function assertFalseData( $actual, $message = null ) : void {
-		$this->assertFalse( $actual,
-			$message );
+	protected function assertFalseData( bool $actual, string $message = '' ) : void {
+		Assert::assertFalse( $actual, $message );
 	}
 
 	/**
@@ -759,12 +756,11 @@ abstract class WPTTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param $actual
-	 * @param null $message
+	 * @param bool $actual
+	 * @param string $message
 	 */
-	protected function assertTrueData( $actual, $message = null ) {
-		$this->assertTrue( $actual,
-			$message );
+	protected function assertTrueData( bool $actual, string $message = '' ) {
+		Assert::assertTrue( $actual, $message );
 	}
 
 	/**
@@ -1159,14 +1155,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param $expected
 	 * @param string|null $description
 	 */
-	protected function assertInArrayData( $actual, $expected, ?string $description = null ) : void {
-		$this->assertData( in_array( $actual,
-			$expected,
-			true ),
-			'assertInArrayData',
-			$description,
-			'value ${actual} not in array ${expected}',
-			[ 'actual' => $actual,
-				'expected' => $expected ] );
+	protected function assertInArrayData( $needle, $haystack, ?string $description = null ) : void {
+		Assert::assertContains( $needle, $haystack, $description );
 	}
 }

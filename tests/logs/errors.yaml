@@ -702,31 +702,6 @@
     _comment: ''
     testcases: testDocumentImportNode
     files: /tests/WPT/Dom/Nodes/DocumentImportNodeTest.php
-'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertTrue() must be of the type string, null given, called in /tests/Harness/WPTTestHarness.php on line 766':
-    _total: 10
-    _comment: ''
-    testcases: |-
-        testDocumentTypeLiteral
-        testDocumentTypeRemove
-        testElementFirstElementChildNamespace
-        testElementFirstElementChild
-        testElementHasAttribute
-        testElementLastElementChild
-        testElementNextElementSibling
-        testElementPreviousElementSibling
-        testElementRemove
-        testRangeAttributes
-    files: |-
-        /tests/WPT/Dom/Nodes/DocumentTypeLiteralTest.php
-        /tests/WPT/Dom/Nodes/DocumentTypeRemoveTest.php
-        /tests/WPT/Dom/Nodes/ElementFirstElementChildNamespaceTest.php
-        /tests/WPT/Dom/Nodes/ElementFirstElementChildTest.php
-        /tests/WPT/Dom/Nodes/ElementHasAttributeTest.php
-        /tests/WPT/Dom/Nodes/ElementLastElementChildTest.php
-        /tests/WPT/Dom/Nodes/ElementNextElementSiblingTest.php
-        /tests/WPT/Dom/Nodes/ElementPreviousElementSiblingTest.php
-        /tests/WPT/Dom/Nodes/ElementRemoveTest.php
-        /tests/WPT/Dom/Ranges/RangeAttributesTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Element::getChildElementCount':
     _total: 3
     _comment: ''
@@ -853,15 +828,6 @@
     files: |-
         /tests/WPT/Dom/Nodes/NodeIsConnectedShadowDomTest.php
         /tests/WPT/Dom/Nodes/RootNodeTest.php
-'TypeError: Argument 2 passed to PHPUnit\Framework\Assert::assertFalse() must be of the type string, null given, called in /tests/Harness/WPTTestHarness.php on line 314':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testNodeIsConnected
-        testNodeIsEqualNode
-    files: |-
-        /tests/WPT/Dom/Nodes/NodeIsConnectedTest.php
-        /tests/WPT/Dom/Nodes/NodeIsEqualNodeTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\NodeIsEqualNodeTest::testDeepEquality(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1527 and exactly 1 expected':
     _total: 1
     _comment: ''
