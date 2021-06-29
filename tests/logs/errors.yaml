@@ -690,6 +690,11 @@
     _comment: ''
     testcases: testDocumentFragmentQuerySelectorAllAfterModification
     files: /tests/Wpt/Dom/Nodes/DocumentFragmentQuerySelectorAllAfterModificationTest.php
+'Object of class Wikimedia\Dodo\Tests\Wpt\Dom\DocumentGetElementByIdTest could not be converted to string':
+    _total: 1
+    _comment: ''
+    testcases: testDocumentGetElementById
+    files: /tests/Wpt/Dom/Nodes/DocumentGetElementByIdTest.php
 'Object of class Wikimedia\Dodo\Tests\Wpt\Dom\DocumentGetElementsByClassNameTest could not be converted to string':
     _total: 1
     _comment: ''

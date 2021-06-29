@@ -66,11 +66,6 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\Wpt\Dom\DocumentFragmentGetElementByIdTest
     files: /tests/Wpt/Dom/Nodes/DocumentFragmentGetElementByIdTest.php
-'Wikimedia\Dodo\HTMLDivElement Object (...) does not match expected type "NULL".':
-    _total: 1
-    _comment: ''
-    testcases: Wikimedia\Dodo\Tests\Wpt\Dom\DocumentGetElementByIdTest
-    files: /tests/Wpt/Dom/Nodes/DocumentGetElementByIdTest.php
 '[default]-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''

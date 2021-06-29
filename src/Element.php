@@ -103,7 +103,9 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 					if ( $old !== null ) {
 						$elem->_nodeDocument->_removeFromIdTable( $old, $elem );
 					}
-					if ( $new !== null ) {
+					// Note that the empty string is not a valid ID.
+					// https://dom.spec.whatwg.org/#concept-id
+					if ( $new !== null && $new !== '' ) {
 						$elem->_nodeDocument->_addToIdTable( $new, $elem );
 					}
 				},
