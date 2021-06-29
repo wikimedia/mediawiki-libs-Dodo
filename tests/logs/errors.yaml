@@ -429,7 +429,7 @@
     _comment: ''
     testcases: testDomstringmapSupportedPropertyNames
     files: /tests/WPT/Dom/Collections/DomstringmapSupportedPropertyNamesTest.php
-'Object of class Wikimedia\Dodo\Tests\WPT\Dom\HTMLCollectionAsPrototypeTest could not be converted to string':
+'Undefined property via __get(): named in /tests/WPT/Dom/Collections/HTMLCollectionAsPrototypeTest.php on line 25':
     _total: 1
     _comment: ''
     testcases: testHTMLCollectionAsPrototype
@@ -440,19 +440,16 @@
     testcases: testHTMLCollectionDelete
     files: /tests/WPT/Dom/Collections/HTMLCollectionDeleteTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Internal\FilteredElementList::namedItem':
-    _total: 2
+    _total: 3
     _comment: ''
     testcases: |-
         testHTMLCollectionEmptyName
         testHTMLCollectionIterator
+        testHTMLCollectionOwnProps
     files: |-
         /tests/WPT/Dom/Collections/HTMLCollectionEmptyNameTest.php
         /tests/WPT/Dom/Collections/HTMLCollectionIteratorTest.php
-'Object of class Wikimedia\Dodo\Tests\WPT\Dom\HTMLCollectionOwnPropsTest could not be converted to string':
-    _total: 1
-    _comment: ''
-    testcases: testHTMLCollectionOwnProps
-    files: /tests/WPT/Dom/Collections/HTMLCollectionOwnPropsTest.php
+        /tests/WPT/Dom/Collections/HTMLCollectionOwnPropsTest.php
 'Undefined offset: 2':
     _total: 1
     _comment: ''
@@ -682,16 +679,11 @@
     _comment: ''
     testcases: testDocumentFragmentQuerySelectorAllAfterModification
     files: /tests/WPT/Dom/Nodes/DocumentFragmentQuerySelectorAllAfterModificationTest.php
-'Object of class Wikimedia\Dodo\Tests\WPT\Dom\DocumentGetElementByIdTest could not be converted to string':
+'TypeError: Argument 1 passed to Wikimedia\Dodo\Document::getElementById() must be of the type string, null given, called in /tests/WPT/Dom/Nodes/DocumentGetElementByIdTest.php on line 25':
     _total: 1
     _comment: ''
     testcases: testDocumentGetElementById
     files: /tests/WPT/Dom/Nodes/DocumentGetElementByIdTest.php
-'Object of class Wikimedia\Dodo\Tests\WPT\Dom\DocumentGetElementsByClassNameTest could not be converted to string':
-    _total: 1
-    _comment: ''
-    testcases: testDocumentGetElementsByClassName
-    files: /tests/WPT/Dom/Nodes/DocumentGetElementsByClassNameTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\DocumentGetElementsByTagNameNSTest::testGetElementsByTagNameNS(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1527 and exactly 2 expected':
     _total: 1
     _comment: ''

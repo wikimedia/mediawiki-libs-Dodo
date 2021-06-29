@@ -20,7 +20,7 @@ class ElementGetElementsByTagNameNSTest extends WPTTestHarness
         });
         $this->assertTest(function () use(&$element, &$context) {
             $t = $element->appendChild($this->doc->createElementNS('test', 'body'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $actual = $context->getElementsByTagNameNS('*', 'body');
@@ -42,28 +42,28 @@ class ElementGetElementsByTagNameNSTest extends WPTTestHarness
         $this->assertTest(function () use(&$context, &$element) {
             $this->assertArrayEqualsData($context->getElementsByTagNameNS('', '*'), []);
             $t = $element->appendChild($this->doc->createElementNS('', 'body'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $this->assertArrayEqualsData($context->getElementsByTagNameNS('', '*'), [$t]);
         }, 'Empty string namespace');
         $this->assertTest(function () use(&$element, &$context) {
             $t = $element->appendChild($this->doc->createElementNS('test', 'body'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $this->assertArrayEqualsData($context->getElementsByTagNameNS('test', 'body'), [$t]);
         }, 'body element in test namespace, no prefix');
         $this->assertTest(function () use(&$element, &$context) {
             $t = $element->appendChild($this->doc->createElementNS('test', 'test:body'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $this->assertArrayEqualsData($context->getElementsByTagNameNS('test', 'body'), [$t]);
         }, 'body element in test namespace, prefix');
         $this->assertTest(function () use(&$element, &$context) {
             $t = $element->appendChild($this->doc->createElementNS('test', 'BODY'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $this->assertArrayEqualsData($context->getElementsByTagNameNS('test', 'BODY'), [$t]);
@@ -71,7 +71,7 @@ class ElementGetElementsByTagNameNSTest extends WPTTestHarness
         }, 'BODY element in test namespace, no prefix');
         $this->assertTest(function () use(&$element, &$context) {
             $t = $element->appendChild($this->doc->createElementNS('http://www.w3.org/1999/xhtml', 'abc'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $this->assertArrayEqualsData($context->getElementsByTagNameNS('http://www.w3.org/1999/xhtml', 'abc'), [$t]);
@@ -80,7 +80,7 @@ class ElementGetElementsByTagNameNSTest extends WPTTestHarness
         }, 'abc element in html namespace');
         $this->assertTest(function () use(&$element, &$context) {
             $t = $element->appendChild($this->doc->createElementNS('http://www.w3.org/1999/xhtml', 'ABC'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $this->assertArrayEqualsData($context->getElementsByTagNameNS('http://www.w3.org/1999/xhtml', 'abc'), []);
@@ -88,7 +88,7 @@ class ElementGetElementsByTagNameNSTest extends WPTTestHarness
         }, 'ABC element in html namespace');
         $this->assertTest(function () use(&$element, &$context) {
             $t = $element->appendChild($this->doc->createElementNS('http://www.w3.org/1999/xhtml', "AÇ"));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $this->assertArrayEqualsData($context->getElementsByTagNameNS('http://www.w3.org/1999/xhtml', "AÇ"), [$t]);
@@ -97,7 +97,7 @@ class ElementGetElementsByTagNameNSTest extends WPTTestHarness
         }, "AÇ, case sensitivity");
         $this->assertTest(function () use(&$element, &$context) {
             $t = $element->appendChild($this->doc->createElementNS('test', 'test:BODY'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $this->assertArrayEqualsData($context->getElementsByTagNameNS('test', 'BODY'), [$t]);
@@ -105,7 +105,7 @@ class ElementGetElementsByTagNameNSTest extends WPTTestHarness
         }, 'BODY element in test namespace, prefix');
         $this->assertTest(function () use(&$element, &$context) {
             $t = $element->appendChild($this->doc->createElementNS('test', 'test:test'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t) {
+            $this->add_cleanup(function () use(&$element, &$t) {
                 $element->removeChild($t);
             });
             $actual = $context->getElementsByTagNameNS('http://www.w3.org/1999/xhtml', '*');
@@ -146,7 +146,7 @@ class ElementGetElementsByTagNameNSTest extends WPTTestHarness
         }, 'Empty lists');
         $this->assertTest(function () use(&$element, &$context) {
             $t1 = $element->appendChild($this->doc->createElementNS('test', 'abc'));
-            $this->{$this}->addCleanup(function () use(&$element, &$t1) {
+            $this->add_cleanup(function () use(&$element, &$t1) {
                 $element->removeChild($t1);
             });
             $l = $context->getElementsByTagNameNS('test', 'abc');

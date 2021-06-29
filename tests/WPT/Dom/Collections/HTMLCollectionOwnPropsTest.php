@@ -12,7 +12,7 @@ class HTMLCollectionOwnPropsTest extends WPTTestHarness
             $element->id = $name;
         }
         $this->doc->body->appendChild($element);
-        $t->{$this}->addCleanup(function () use(&$element) {
+        $t->add_cleanup(function () use(&$element) {
             $element->remove();
         });
         return $element;

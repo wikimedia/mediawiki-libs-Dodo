@@ -19,7 +19,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $element = $this->doc->createElement('div');
             $element->setAttribute('id', 'null');
             $this->doc->body->appendChild($element);
-            $this->{$this}->addCleanup(function () use(&$element) {
+            $this->add_cleanup(function () use(&$element) {
                 $this->doc->body->removeChild($element);
             });
             $this->assertEqualsData($this->doc->getElementById(null), $element);
@@ -28,7 +28,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $element = $this->doc->createElement('div');
             $element->setAttribute('id', NULL);
             $this->doc->body->appendChild($element);
-            $this->{$this}->addCleanup(function () use(&$element) {
+            $this->add_cleanup(function () use(&$element) {
                 $this->doc->body->removeChild($element);
             });
             $this->assertEqualsData($this->doc->getElementById(null), $element);

@@ -57,13 +57,15 @@
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\DocumentFragmentGetElementByIdTest
     files: /tests/WPT/Dom/Nodes/DocumentFragmentGetElementByIdTest.php
 'Failed asserting that false is true.':
-    _total: 3
+    _total: 4
     _comment: ''
     testcases: |-
+        Wikimedia\Dodo\Tests\WPT\Dom\DocumentGetElementsByClassNameTest
         Wikimedia\Dodo\Tests\WPT\Dom\DocumentTypeLiteralTest
         Wikimedia\Dodo\Tests\WPT\Dom\DocumentTypeRemoveTest
         Wikimedia\Dodo\Tests\WPT\Dom\ElementRemoveTest
     files: |-
+        /tests/WPT/Dom/Nodes/DocumentGetElementsByClassNameTest.php
         /tests/WPT/Dom/Nodes/DocumentTypeLiteralTest.php
         /tests/WPT/Dom/Nodes/DocumentTypeRemoveTest.php
         /tests/WPT/Dom/Nodes/ElementRemoveTest.php

@@ -95,6 +95,11 @@ abstract class WPTTestHarness extends TestCase {
 	protected $invalid_qnames;
 
 	/**
+	 * @var callable[]
+	 */
+	protected $cleanupFuncs;
+
+	/**
 	 * @param mixed $expected
 	 * @param mixed $actual
 	 *
@@ -108,6 +113,14 @@ abstract class WPTTestHarness extends TestCase {
 	 * TODO implement this
 	 */
 	public function step_func_done( $func = null, $this_obj = null ) : void {
+	}
+
+	/**
+	 * Add a cleanup function to run after assertTest() completes.
+	 * @param callable $func
+	 */
+	public function add_cleanup( callable $func ) : void {
+		$this->cleanupFuncs[] = $func;
 	}
 
 	/**
@@ -1128,7 +1141,16 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param string|null $message
 	 */
 	protected function assertTest( callable $closure, string $message = null ) : void {
-		$closure( null );
+		$this->cleanupFuncs = [];
+		try {
+			$closure( null );
+		} finally {
+			// @phan-suppress-next-line PhanEmptyForeach $closure may add cleanups
+			foreach ( $this->cleanupFuncs as $f ) {
+				$f();
+			}
+			$this->cleanupFuncs = [];
+		}
 	}
 
 	/**
