@@ -1,3 +1,87 @@
+'$iframe->onload = $this->step_func_done(function () use(&$iframe) {':
+    _total: 1
+    _comment: ''
+    suites: Document-URL
+'CommentConstructorTest - Object::getPrototypeOf(Object::getPrototypeOf($object))':
+    _total: 1
+    _comment: ''
+    suites: Comment-constructor
+'HTMLCollection::prototype::item':
+    _total: 1
+    _comment: ''
+    suites: Element-getElementsByTagName
+'HTMLCollection::prototype::namedItem':
+    _total: 1
+    _comment: ''
+    suites: Document-getElementsByTagName
+MutationObserver.:
+    _total: 2
+    _comment: ''
+    suites: |-
+        ParentNode-replaceChildren
+        MutationObserver*
+'Node::class::replaceChild':
+    _total: 1
+    _comment: ''
+    suites: Node-replaceChild
+'Not applicable at the moment':
+    _total: 1
+    _comment: ''
+    suites: ParentNode-querySelector-All
+'Object::getPrototypeOf(Object::getPrototypeOf($object)':
+    _total: 2
+    _comment: ''
+    suites: |-
+        comment-constructor.html
+        Text-constructor
+'Pointless, tests browser':
+    _total: 1
+    _comment: ''
+    suites: DOMImplementation-createHTMLDocument-with-null-browsing-context-crash
+'Same as previous':
+    _total: 1
+    _comment: ''
+    suites: DOMImplementation-createDocument-with-null-browsing-context-crash
+'Syntax error, unexpected T_USE, expecting ''{'' on line 57.':
+    _total: 1
+    _comment: ''
+    suites: case
+TakeScreenshot.:
+    _total: 1
+    _comment: ''
+    suites: remove-from-shadow-host-and-adopt-into-iframe.html
+'Uses onload event to run test, no sence to convert':
+    _total: 1
+    _comment: ''
+    suites: Range-test-iframe
+'Window and addEventListener':
+    _total: 1
+    _comment: ''
+    suites: DocumentCreateElementTest
+'Window and addEventListener, could be transformed':
+    _total: 1
+    _comment: ''
+    suites: DocumentCreateElementNSTest
+addEventListener:
+    _total: 1
+    _comment: ''
+    suites: Document-createElementNS
+asyncTest:
+    _total: 1
+    _comment: ''
+    suites: Document-characterSet-normalization
+'asyncTest and addEventListener':
+    _total: 1
+    _comment: ''
+    suites: Document-createElement
+'difficult to parse and convert to PHP.':
+    _total: 1
+    _comment: ''
+    suites: 'Range-mutations-*'
+'hard to make valid':
+    _total: 1
+    _comment: ''
+    suites: aria-element-reflection.tentative
 'js2php or parsing issue':
     _total: 18
     _comment: asdfasdfasdfdasf
@@ -20,107 +104,23 @@
         HTMLCollection-supported-property-names
         Node-cloneNode
         ParentNode-querySelectorAll-removed-elements
-'Syntax error, unexpected T_USE, expecting ''{'' on line 57.':
-    _total: 1
-    _comment: ''
-    suites: case
-'uses window & dispatchEvent':
-    _total: 1
-    _comment: ''
-    suites: remove-unscopable
-TakeScreenshot.:
-    _total: 1
-    _comment: ''
-    suites: remove-from-shadow-host-and-adopt-into-iframe.html
-'uses window, tests a Chrome to crash.':
-    _total: 1
-    _comment: ''
-    suites: remove-and-adopt-thcrash
-'uses addEventListener.':
-    _total: 1
-    _comment: ''
-    suites: query-target-in-load-event
 takeScreenshot.:
     _total: 1
     _comment: ''
     suites: remove-from-shadow-host-and-adopt-into-iframe
-MutationObserver.:
-    _total: 2
-    _comment: ''
-    suites: |-
-        ParentNode-replaceChildren
-        MutationObserver*
-'difficult to parse and convert to PHP.':
+'uses addEventListener.':
     _total: 1
     _comment: ''
-    suites: 'Range-mutations-*'
-'CommentConstructorTest - Object::getPrototypeOf(Object::getPrototypeOf($object))':
-    _total: 1
-    _comment: ''
-    suites: Comment-constructor
-asyncTest:
-    _total: 1
-    _comment: ''
-    suites: Document-characterSet-normalization
-'Window and addEventListener':
-    _total: 1
-    _comment: ''
-    suites: DocumentCreateElementTest
-'Window and addEventListener, could be transformed':
-    _total: 1
-    _comment: ''
-    suites: DocumentCreateElementNSTest
+    suites: query-target-in-load-event
 'uses asyncTest.':
     _total: 1
     _comment: ''
     suites: attributes
-'Object::getPrototypeOf(Object::getPrototypeOf($object)':
-    _total: 2
-    _comment: ''
-    suites: |-
-        comment-constructor.html
-        Text-constructor
-addEventListener:
+'uses window & dispatchEvent':
     _total: 1
     _comment: ''
-    suites: Document-createElementNS
-'asyncTest and addEventListener':
+    suites: remove-unscopable
+'uses window, tests a Chrome to crash.':
     _total: 1
     _comment: ''
-    suites: Document-createElement
-'HTMLCollection::prototype::namedItem':
-    _total: 1
-    _comment: ''
-    suites: Document-getElementsByTagName
-'$iframe->onload = $this->step_func_done(function () use(&$iframe) {':
-    _total: 1
-    _comment: ''
-    suites: Document-URL
-'hard to make valid':
-    _total: 1
-    _comment: ''
-    suites: aria-element-reflection.tentative
-'HTMLCollection::prototype::item':
-    _total: 1
-    _comment: ''
-    suites: Element-getElementsByTagName
-'Node::class::replaceChild':
-    _total: 1
-    _comment: ''
-    suites: Node-replaceChild
-'Uses onload event to run test, no sence to convert':
-    _total: 1
-    _comment: ''
-    suites: Range-test-iframe
-'Pointless, tests browser':
-    _total: 1
-    _comment: ''
-    suites: DOMImplementation-createHTMLDocument-with-null-browsing-context-crash
-'Same as previous':
-    _total: 1
-    _comment: ''
-    suites: DOMImplementation-createDocument-with-null-browsing-context-crash
-'Not applicable at the moment':
-    _total: 1
-    _comment: ''
-    suites: ParentNode-querySelector-All
+    suites: remove-and-adopt-thcrash

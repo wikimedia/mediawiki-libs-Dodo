@@ -403,9 +403,11 @@ class TestsGenerator extends Tasks {
 
 		// Extracting errors
 		$test_suites = $xpath->evaluate( '//error/..' );
-		$errors_list = $this->extractSuites( $test_suites,
+		$errors_list = $this->extractSuites(
+			$test_suites,
 			"/\R(.*)\R\R/U",
-			$errors_cause );
+			$errors_cause
+		);
 
 		$this->taskWriteToFile( $error_list_file )->text( Yaml::dump( $errors_list,
 			2,
@@ -423,39 +425,47 @@ class TestsGenerator extends Tasks {
 		foreach ( $failures as $failure ) {
 			$textContent = trim( $failure->textContent );
 
-			if ( strpos( $textContent,
-					"---" ) !== false ) {
-				$textContent = substr_replace( $textContent,
+			if ( strpos( $textContent, "---" ) !== false ) {
+				$textContent = substr_replace(
+					$textContent,
 					'',
-					strpos( $textContent,
-						'---' ) );
+					strpos( $textContent, '---' )
+				);
 			}
 
-			$textContent = preg_replace( '/' .
-				preg_quote( 'Wikimedia\\Dodo\\Tests\\', '' ) .
-				'(.*)\R/', '',
-				$textContent );
+			$textContent = preg_replace(
+				'/' . preg_quote( 'Wikimedia\\Dodo\\Tests\\', '/' ) . '(.*)\R/',
+				'',
+				$textContent
+			);
 
-			if ( strpos( $textContent,
-					"\n\n" ) !== false ) {
-				$textContent = substr_replace( $textContent,
+			if ( strpos( $textContent, "\n\n" ) !== false ) {
+				$textContent = substr_replace(
+					$textContent,
 					'',
-					strpos( $textContent,
-						"\n\n" ) );
+					strpos( $textContent, "\n\n" )
+				);
 			}
 
 			$textContent = trim( $textContent );
-			$textContent = str_replace( "\n",
+			$textContent = str_replace(
+				"\n",
 				"-",
-				$textContent );
-			$textContent = preg_replace( '/\s+/',
+				$textContent
+			);
+			$textContent = preg_replace(
+				'/\s+/',
 				' ',
-				$textContent );
+				$textContent
+			);
 			$failure->textContent = $textContent;
 		}
 
-		$failures_list = $this->extractSuites( $failures,
-			"/(.*)/", $failures_cause );
+		$failures_list = $this->extractSuites(
+			$failures,
+			"/(.*)/",
+			$failures_cause
+		);
 
 		$this->taskWriteToFile( $log_folder . 'failures.yml' )->text( Yaml::dump( $failures_list,
 			2,
@@ -475,6 +485,7 @@ class TestsGenerator extends Tasks {
 				'suites' => implode( PHP_EOL,
 					$_ ), ];
 		}
+		ksort( $skipped );
 		$skipped_file = $log_folder . 'skipped.yaml';
 
 		$this->taskWriteToFile( $skipped_file )->text( Yaml::dump( $skipped,
@@ -540,14 +551,17 @@ class TestsGenerator extends Tasks {
 			}
 		}
 
-		/** Count totals and impload */
+		/** Count totals and implode */
 		foreach ( $errors_cause as &$cause ) {
 			$cause['_total'] = count( $cause['testcases'] );
+			sort( $cause['testcases'], SORT_NATURAL );
 			$cause['testcases'] = implode( PHP_EOL,
 				$cause['testcases'] );
+			sort( $cause['files'], SORT_NATURAL );
 			$cause['files'] = implode( PHP_EOL,
 				$cause['files'] );
 		}
+		ksort( $errors_cause );
 
 		return $errors_cause;
 	}
