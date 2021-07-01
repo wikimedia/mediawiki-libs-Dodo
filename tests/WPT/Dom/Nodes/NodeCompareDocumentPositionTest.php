@@ -1,6 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Node;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-compareDocumentPosition.html.
 class NodeCompareDocumentPositionTest extends WPTTestHarness
@@ -26,7 +27,7 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
                     // DOCUMENT_POSITION_PRECEDING or DOCUMENT_POSITION_FOLLOWING, with the
                     // constraint that this is to be consistent, together and terminate these
                     // steps."
-                    if ($this->furthestAncestor($reference) !== $this->furthestAncestor($other)) {
+                    if (Common::furthestAncestor($reference) !== Common::furthestAncestor($other)) {
                         // TODO: Test that it's consistent.
                         $this->assertInArrayData($result, [Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_PRECEDING, Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_FOLLOWING]);
                         return;
@@ -55,9 +56,9 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
                     }
                     // "If other is preceding reference return DOCUMENT_POSITION_PRECEDING
                     // and terminate these steps."
-                    $prev = $this->previousNode($reference);
+                    $prev = Common::previousNode($reference);
                     while ($prev && $prev !== $other) {
-                        $prev = $this->previousNode($prev);
+                        $prev = Common::previousNode($prev);
                     }
                     if ($prev === $other) {
                         $this->assertEqualsData($result, Node::DOCUMENT_POSITION_PRECEDING);

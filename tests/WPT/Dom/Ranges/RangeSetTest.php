@@ -2,6 +2,7 @@
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-set.html.
 class RangeSetTest extends WPTTestHarness
@@ -14,7 +15,7 @@ class RangeSetTest extends WPTTestHarness
             }, 'setStart() to a doctype must throw INVALID_NODE_TYPE_ERR');
             return;
         }
-        if ($offset < 0 || $offset > nodeLength($node)) {
+        if ($offset < 0 || $offset > Common::nodeLength($node)) {
             $this->assertThrowsDomData('INDEX_SIZE_ERR', function () use(&$range, &$node, &$offset) {
                 $range->setStart($node, $offset);
             }, 'setStart() to a too-large offset must throw INDEX_SIZE_ERR');
@@ -26,7 +27,7 @@ class RangeSetTest extends WPTTestHarness
         $this->assertEqualsData($newRange->startOffset, $offset, 'setStart() must change startOffset to the new offset');
         // FIXME: I'm assuming comparePoint() is correct, but the tests for that
         // will depend on setStart()/setEnd().
-        if ($this->furthestAncestor($node) != $this->furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) > 0) {
+        if (Common::furthestAncestor($node) != Common::furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) > 0) {
             $this->assertEqualsData($newRange->endContainer, $node, 'setStart(node, offset) where node is after current end or in different document must set the end node to node too');
             $this->assertEqualsData($newRange->endOffset, $offset, 'setStart(node, offset) where node is after current end or in different document must set the end offset to offset too');
         } else {
@@ -42,7 +43,7 @@ class RangeSetTest extends WPTTestHarness
             }, 'setEnd() to a doctype must throw INVALID_NODE_TYPE_ERR');
             return;
         }
-        if ($offset < 0 || $offset > nodeLength($node)) {
+        if ($offset < 0 || $offset > Common::nodeLength($node)) {
             $this->assertThrowsDomData('INDEX_SIZE_ERR', function () use(&$range, &$node, &$offset) {
                 $range->setEnd($node, $offset);
             }, 'setEnd() to a too-large offset must throw INDEX_SIZE_ERR');
@@ -52,7 +53,7 @@ class RangeSetTest extends WPTTestHarness
         $newRange->setEnd($node, $offset);
         // FIXME: I'm assuming comparePoint() is correct, but the tests for that
         // will depend on setStart()/setEnd().
-        if ($this->furthestAncestor($node) != $this->furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) < 0) {
+        if (Common::furthestAncestor($node) != Common::furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) < 0) {
             $this->assertEqualsData($newRange->startContainer, $node, 'setEnd(node, offset) where node is before current start or in different document must set the end node to node too');
             $this->assertEqualsData($newRange->startOffset, $offset, 'setEnd(node, offset) where node is before current start or in different document must set the end offset to offset too');
         } else {
@@ -138,7 +139,7 @@ class RangeSetTest extends WPTTestHarness
             $endpoints = eval($this->testRangesShort[$i]);
             $range = null;
             $this->assertTest(function () use(&$endpoints) {
-                $range = ownerDocument($endpoints[0])->createRange();
+                $range = Common::ownerDocument($endpoints[0])->createRange();
                 $range->setStart($endpoints[0], $endpoints[1]);
                 $range->setEnd($endpoints[2], $endpoints[3]);
             }, 'Set up range ' . $i . ' ' . $this->testRangesShort[$i]);

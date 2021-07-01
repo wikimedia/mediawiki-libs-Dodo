@@ -1,6 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Node;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/traversal/NodeIterator-removal.html.
 class NodeIteratorRemovalTest extends WPTTestHarness
@@ -42,20 +43,20 @@ class NodeIteratorRemovalTest extends WPTTestHarness
                             // We also have to rule out the case where node is an ancestor of
                             // root, which is implicitly handled by the spec since such a node
                             // was not part of the iterator collection to start with.
-                            if (isInclusiveAncestor($node, $root) || !isInclusiveAncestor($node, $iter->referenceNode)) {
+                            if (Common::isInclusiveAncestor($node, $root) || !Common::isInclusiveAncestor($node, $iter->referenceNode)) {
                                 continue;
                             }
                             // "If the pointerBeforeReferenceNode attribute value is false, set
                             // the referenceNode attribute to the first node preceding the node
                             // that is being removed, and terminate these steps."
                             if (!$iter->pointerBeforeReferenceNode) {
-                                $expectedReferenceNodes[$idx] = $this->previousNode($node);
+                                $expectedReferenceNodes[$idx] = Common::previousNode($node);
                                 continue;
                             }
                             // "If there is a node following the last inclusive descendant of the
                             // node that is being removed, set the referenceNode attribute to the
                             // first such node, and terminate these steps."
-                            $next = nextNodeDescendants($node);
+                            $next = Common::nextNodeDescendants($node);
                             if ($next) {
                                 $expectedReferenceNodes[$idx] = $next;
                                 continue;
@@ -63,7 +64,7 @@ class NodeIteratorRemovalTest extends WPTTestHarness
                             // "Set the referenceNode attribute to the first node preceding the
                             // node that is being removed and set the pointerBeforeReferenceNode
                             // attribute to false."
-                            $expectedReferenceNodes[$idx] = $this->previousNode($node);
+                            $expectedReferenceNodes[$idx] = Common::previousNode($node);
                             $expectedPointers[$idx] = false;
                         }
                     }

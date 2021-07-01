@@ -5,6 +5,7 @@ use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-selectNode.html.
 class RangeSelectNodeTest extends WPTTestHarness
@@ -47,7 +48,7 @@ class RangeSelectNodeTest extends WPTTestHarness
             $this->assertEqualsData($range->startContainer, $node, 'After selectNodeContents(), startContainer must equal node');
             $this->assertEqualsData($range->endContainer, $node, 'After selectNodeContents(), endContainer must equal node');
             $this->assertEqualsData($range->startOffset, 0, 'After selectNodeContents(), startOffset must equal 0');
-            $len = nodeLength($node);
+            $len = Common::nodeLength($node);
             $this->assertEqualsData($range->endOffset, $len, 'After selectNodeContents(), endOffset must equal node length (' . $len . ')');
         }
     }

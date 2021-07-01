@@ -6,6 +6,7 @@ use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-deleteContents.html.
 class RangeDeleteContentsTest extends WPTTestHarness
@@ -64,9 +65,9 @@ class RangeDeleteContentsTest extends WPTTestHarness
         // We rely on the fact that the contained nodes must lie in tree order
         // between the start node, and the end node's last descendant (inclusive).
         $nodesToRemove = [];
-        $stop = nextNodeDescendants($range->endContainer);
-        for ($node = $range->startContainer; $node != $stop; $node = nextNode($node)) {
-            if (isContained($node, $range) && !($node->parentNode && isContained($node->parentNode, $range))) {
+        $stop = Common::nextNodeDescendants($range->endContainer);
+        for ($node = $range->startContainer; $node != $stop; $node = Common::nextNode($node)) {
+            if (Common::isContained($node, $range) && !($node->parentNode && Common::isContained($node->parentNode, $range))) {
                 $nodesToRemove[] = $node;
             }
         }
@@ -90,14 +91,14 @@ class RangeDeleteContentsTest extends WPTTestHarness
             // "Set new node to the parent of reference node, and new offset to one
             // plus the index of reference node."
             $newNode = $referenceNode->parentNode;
-            $newOffset = 1 + indexOf($referenceNode);
+            $newOffset = 1 + Common::indexOf($referenceNode);
         }
         // "If original start node is a Text, ProcessingInstruction, or Comment node,
         // replace data with node original start node, offset original start offset,
         // count original start node's length minus original start offset, data the
         // empty start"
         if ($originalStartNode->nodeType == Node::TEXT_NODE || $originalStartNode->nodeType == Node::PROCESSING_INSTRUCTION_NODE || $originalStartNode->nodeType == Node::COMMENT_NODE) {
-            $originalStartNode->deleteData($originalStartOffset, nodeLength($originalStartNode) - $originalStartOffset);
+            $originalStartNode->deleteData($originalStartOffset, Common::nodeLength($originalStartNode) - $originalStartOffset);
         }
         // "For each node in nodes to remove, in order, remove node from its
         // parent."
@@ -118,8 +119,8 @@ class RangeDeleteContentsTest extends WPTTestHarness
     {
         global $actualIframe;
         global $expectedIframe;
-        restoreIframe($actualIframe, $i);
-        restoreIframe($expectedIframe, $i);
+        $this->restoreIframe($actualIframe, $i);
+        $this->restoreIframe($expectedIframe, $i);
         $actualRange = $actualIframe->contentWindow->testRange;
         $expectedRange = $expectedIframe->contentWindow->testRange;
         $actualRoots = null;
@@ -141,15 +142,15 @@ class RangeDeleteContentsTest extends WPTTestHarness
             // tested for isEqualNode() and checking the children would be
             // redundant.
             $actualAllNodes = [];
-            $node = $this->furthestAncestor($actualRange->startContainer);
+            $node = Common::furthestAncestor($actualRange->startContainer);
             do {
                 $actualAllNodes[] = $node;
-            } while ($node = nextNode($node));
+            } while ($node = Common::nextNode($node));
             $expectedAllNodes = [];
-            $node = $this->furthestAncestor($expectedRange->startContainer);
+            $node = Common::furthestAncestor($expectedRange->startContainer);
             do {
                 $expectedAllNodes[] = $node;
-            } while ($node = nextNode($node));
+            } while ($node = Common::nextNode($node));
             $actualRange->deleteContents();
             myDeleteContents($expectedRange);
             $actualRoots = [];
@@ -176,8 +177,8 @@ class RangeDeleteContentsTest extends WPTTestHarness
                         $this->assertEqualsData($actual->nodeName, $expected->nodeName, $msg . 'First difference: differing nodeName');
                         $this->assertEqualsData($actual->nodeValue, $expected->nodeValue, $msg . 'First difference: differing nodeValue (nodeName = "' . $actual->nodeName . '")');
                         $this->assertEqualsData(count($actual->childNodes), count($expected->childNodes), $msg . 'First difference: differing number of children (nodeName = "' . $actual->nodeName . '")');
-                        $actual = nextNode($actual);
-                        $expected = nextNode($expected);
+                        $actual = Common::nextNode($actual);
+                        $expected = Common::nextNode($expected);
                     }
                     $this->assertUnreachedData("DOMs were not equal but we couldn't figure out why");
                 }
@@ -212,8 +213,8 @@ class RangeDeleteContentsTest extends WPTTestHarness
             $actual = '';
             $expected = '';
             while ($currentActual && $currentExpected) {
-                $actual = indexOf($currentActual) . '-' . $actual;
-                $expected = indexOf($currentExpected) . '-' . $expected;
+                $actual = Common::indexOf($currentActual) . '-' . $actual;
+                $expected = Common::indexOf($currentExpected) . '-' . $expected;
                 $currentActual = $currentActual->parentNode;
                 $currentExpected = $currentExpected->parentNode;
             }

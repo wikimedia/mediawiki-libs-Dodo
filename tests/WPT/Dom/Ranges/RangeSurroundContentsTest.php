@@ -7,6 +7,7 @@ use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\DomException;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-surroundContents.html.
 class RangeSurroundContentsTest extends WPTTestHarness
@@ -17,9 +18,9 @@ class RangeSurroundContentsTest extends WPTTestHarness
             // "If a non-Text node is partially contained in the context object,
             // throw a "InvalidStateError" exception and terminate these steps."
             $node = $range->commonAncestorContainer;
-            $stop = nextNodeDescendants($node);
-            for (; $node != $stop; $node = nextNode($node)) {
-                if ($node->nodeType != Node::TEXT_NODE && isPartiallyContained($node, $range)) {
+            $stop = Common::nextNodeDescendants($node);
+            for (; $node != $stop; $node = Common::nextNode($node)) {
+                if ($node->nodeType != Node::TEXT_NODE && Common::isPartiallyContained($node, $range)) {
                     return 'INVALID_STATE_ERR';
                 }
             }
@@ -31,7 +32,7 @@ class RangeSurroundContentsTest extends WPTTestHarness
             }
             // "Call extractContents() on the context object, and let fragment be
             // the result."
-            $fragment = myExtractContents($range);
+            $fragment = Common::myExtractContents($range);
             if (gettype($fragment) == 'string') {
                 return $fragment;
             }
@@ -40,7 +41,7 @@ class RangeSurroundContentsTest extends WPTTestHarness
                 $newParent->removeChild($newParent->firstChild);
             }
             // "Call insertNode(newParent) on the context object."
-            $ret = myInsertNode($range, $newParent);
+            $ret = Common::myInsertNode($range, $newParent);
             if (gettype($ret) == 'string') {
                 return $ret;
             }
@@ -52,11 +53,11 @@ class RangeSurroundContentsTest extends WPTTestHarness
             if (!$newParent->parentNode) {
                 return 'INVALID_NODE_TYPE_ERR';
             }
-            $index = indexOf($newParent);
+            $index = Common::indexOf($newParent);
             $range->setStart($newParent->parentNode, $index);
             $range->setEnd($newParent->parentNode, $index + 1);
         } catch (Exception $e) {
-            return getDomExceptionName($e);
+            return Common::getDomExceptionName($e);
         }
     }
     public function restoreIframe($iframe, $i, $j)
@@ -94,8 +95,8 @@ class RangeSurroundContentsTest extends WPTTestHarness
         $actualRoots = [];
         $expectedRoots = [];
         $domTests[$i][$j]->step(function () use(&$i, &$j, &$actualRoots, &$expectedRoots) {
-            restoreIframe($actualIframe, $i, $j);
-            restoreIframe($expectedIframe, $i, $j);
+            $this->restoreIframe($actualIframe, $i, $j);
+            $this->restoreIframe($expectedIframe, $i, $j);
             $actualRange = $actualIframe->contentWindow->testRange;
             $expectedRange = $expectedIframe->contentWindow->testRange;
             $actualNode = $actualIframe->contentWindow->testNode;
@@ -114,13 +115,13 @@ class RangeSurroundContentsTest extends WPTTestHarness
             // also the trees containing the moved nodes.  These might not be the
             // same, if we're inserting a node from a detached tree or a different
             // document.
-            $actualRoots[] = $this->furthestAncestor($actualRange->startContainer);
-            $expectedRoots[] = $this->furthestAncestor($expectedRange->startContainer);
-            if ($this->furthestAncestor($actualNode) != $actualRoots[0]) {
-                $actualRoots[] = $this->furthestAncestor($actualNode);
+            $actualRoots[] = Common::furthestAncestor($actualRange->startContainer);
+            $expectedRoots[] = Common::furthestAncestor($expectedRange->startContainer);
+            if (Common::furthestAncestor($actualNode) != $actualRoots[0]) {
+                $actualRoots[] = Common::furthestAncestor($actualNode);
             }
-            if ($this->furthestAncestor($expectedNode) != $expectedRoots[0]) {
-                $expectedRoots[] = $this->furthestAncestor($expectedNode);
+            if (Common::furthestAncestor($expectedNode) != $expectedRoots[0]) {
+                $expectedRoots[] = Common::furthestAncestor($expectedNode);
             }
             $this->assertEqualsData(count($actualRoots), count($expectedRoots), 'Either the actual node and actual range are in the same tree but the expected are in different trees, or vice versa');
             // This doctype stuff is to work around the fact that Opera 11.00 will
@@ -174,7 +175,7 @@ class RangeSurroundContentsTest extends WPTTestHarness
                 }
             }
             for ($k = 0; $k < count($actualRoots); $k++) {
-                $this->assertNodesEqualData($actualRoots[$k], $expectedRoots[$k], $k ? "moved node's tree root" : "range's tree root");
+                Common::assertNodesEqual($actualRoots[$k], $expectedRoots[$k], $k ? "moved node's tree root" : "range's tree root");
             }
         });
         $domTests[$i][$j]->done();
@@ -190,7 +191,7 @@ class RangeSurroundContentsTest extends WPTTestHarness
             $this->assertEqualsData(gettype($expectedNode), 'object', 'typeof Node produced in expected iframe');
             $this->assertNotEqualsData($expectedNode, null, 'Node produced in expected iframe was null');
             for ($k = 0; $k < count($actualRoots); $k++) {
-                $this->assertNodesEqualData($actualRoots[$k], $expectedRoots[$k], $k ? "moved node's tree root" : "range's tree root");
+                Common::assertNodesEqual($actualRoots[$k], $expectedRoots[$k], $k ? "moved node's tree root" : "range's tree root");
             }
             $this->assertEqualsData($actualRange->startOffset, $expectedRange->startOffset, 'Unexpected startOffset after surroundContents()');
             $this->assertEqualsData($actualRange->endOffset, $expectedRange->endOffset, 'Unexpected endOffset after surroundContents()');
@@ -204,8 +205,8 @@ class RangeSurroundContentsTest extends WPTTestHarness
             $actual = '';
             $expected = '';
             while ($currentActual && $currentExpected) {
-                $actual = indexOf($currentActual) . '-' . $actual;
-                $expected = indexOf($currentExpected) . '-' . $expected;
+                $actual = Common::indexOf($currentActual) . '-' . $actual;
+                $expected = Common::indexOf($currentExpected) . '-' . $expected;
                 $currentActual = $currentActual->parentNode;
                 $currentExpected = $currentExpected->parentNode;
             }

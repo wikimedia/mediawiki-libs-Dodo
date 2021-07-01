@@ -128,7 +128,7 @@
     _comment: ''
     testcases: testDeepEquality
     files: /tests/WPT/Dom/Nodes/NodeIsEqualNodeTest.php
-'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\NodeIteratorTest::checkIter(), 2 passed in /tests/WPT/Dom/Traversal/NodeIteratorTest.php on line 131 and exactly 3 expected':
+'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\NodeIteratorTest::checkIter(), 2 passed in /tests/WPT/Dom/Traversal/NodeIteratorTest.php on line 132 and exactly 3 expected':
     _total: 1
     _comment: ''
     testcases: testNodeIterator
@@ -487,6 +487,11 @@
     _comment: ''
     testcases: testNodeIteratorRemoval
     files: /tests/WPT/Dom/Traversal/NodeIteratorRemovalTest.php
+'Undefined property: Wikimedia\Dodo\Tests\WPT\Dom\RangeCompareBoundaryPointsTest::$testRangesShort':
+    _total: 1
+    _comment: ''
+    testcases: testRangeCompareBoundaryPoints
+    files: /tests/WPT/Dom/Ranges/RangeCompareBoundaryPointsTest.php
 'Undefined property: Wikimedia\Dodo\Tests\WPT\Dom\RangeIntersectsNodeTest::$testNodes':
     _total: 1
     _comment: ''
@@ -1079,13 +1084,11 @@
         /tests/WPT/Dom/Lists/DOMTokenListStringifierTest.php
         /tests/WPT/Dom/Lists/DOMTokenListValueTest.php
 'count(): Parameter must be an array or an object that implements Countable':
-    _total: 3
+    _total: 2
     _comment: ''
     testcases: |-
         testCharacterDataAppendData
         testCharacterDataData
-        testRangeCompareBoundaryPoints
     files: |-
         /tests/WPT/Dom/Nodes/CharacterDataAppendDataTest.php
         /tests/WPT/Dom/Nodes/CharacterDataDataTest.php
-        /tests/WPT/Dom/Ranges/RangeCompareBoundaryPointsTest.php

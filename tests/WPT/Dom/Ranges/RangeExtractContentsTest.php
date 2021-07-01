@@ -4,6 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-extractContents.html.
 class RangeExtractContentsTest extends WPTTestHarness
@@ -37,8 +38,8 @@ class RangeExtractContentsTest extends WPTTestHarness
     {
         global $actualIframe;
         global $expectedIframe;
-        restoreIframe($actualIframe, $i);
-        restoreIframe($expectedIframe, $i);
+        $this->restoreIframe($actualIframe, $i);
+        $this->restoreIframe($expectedIframe, $i);
         $actualRange = $actualIframe->contentWindow->testRange;
         $expectedRange = $expectedIframe->contentWindow->testRange;
         $actualFrag = null;
@@ -62,16 +63,16 @@ class RangeExtractContentsTest extends WPTTestHarness
             // tested for isEqualNode() and checking the children would be
             // redundant.
             $actualAllNodes = [];
-            $node = $this->furthestAncestor($actualRange->startContainer);
+            $node = Common::furthestAncestor($actualRange->startContainer);
             do {
                 $actualAllNodes[] = $node;
-            } while ($node = nextNode($node));
+            } while ($node = Common::nextNode($node));
             $expectedAllNodes = [];
-            $node = $this->furthestAncestor($expectedRange->startContainer);
+            $node = Common::furthestAncestor($expectedRange->startContainer);
             do {
                 $expectedAllNodes[] = $node;
-            } while ($node = nextNode($node));
-            $expectedFrag = myExtractContents($expectedRange);
+            } while ($node = Common::nextNode($node));
+            $expectedFrag = Common::myExtractContents($expectedRange);
             if (gettype($expectedFrag) == 'string') {
                 $this->assertThrowsDomData($expectedFrag, $actualIframe->contentWindow->DOMException, function () use(&$actualRange) {
                     $actualRange->extractContents();
@@ -92,7 +93,7 @@ class RangeExtractContentsTest extends WPTTestHarness
                 }
             }
             for ($j = 0; $j < count($actualRoots); $j++) {
-                $this->assertNodesEqualData($actualRoots[$j], $expectedRoots[$j], $j ? 'detached node #' . $j : 'tree root');
+                Common::assertNodesEqual($actualRoots[$j], $expectedRoots[$j], $j ? 'detached node #' . $j : 'tree root');
                 if ($j == 0) {
                     // Clearly something is wrong if the node lists are different
                     // lengths.  We want to report this only after we've already
@@ -129,8 +130,8 @@ class RangeExtractContentsTest extends WPTTestHarness
             $actual = '';
             $expected = '';
             while ($currentActual && $currentExpected) {
-                $actual = indexOf($currentActual) . '-' . $actual;
-                $expected = indexOf($currentExpected) . '-' . $expected;
+                $actual = Common::indexOf($currentActual) . '-' . $actual;
+                $expected = Common::indexOf($currentExpected) . '-' . $expected;
                 $currentActual = $currentActual->parentNode;
                 $currentExpected = $currentExpected->parentNode;
             }
@@ -148,7 +149,7 @@ class RangeExtractContentsTest extends WPTTestHarness
                 // Comparing makes no sense
                 return;
             }
-            $this->assertNodesEqualData($actualFrag, $expectedFrag, 'returned fragment');
+            Common::assertNodesEqual($actualFrag, $expectedFrag, 'returned fragment');
         });
         $fragTests[$i]->done();
     }

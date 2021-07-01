@@ -8,6 +8,7 @@ use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-cloneContents.html.
 class RangeCloneContentsTest extends WPTTestHarness
@@ -49,19 +50,19 @@ class RangeCloneContentsTest extends WPTTestHarness
         $commonAncestor = $originalStartNode;
         // "While common ancestor is not an ancestor container of original end
         // node, set common ancestor to its own parent."
-        while (!isAncestorContainer($commonAncestor, $originalEndNode)) {
+        while (!Common::isAncestorContainer($commonAncestor, $originalEndNode)) {
             $commonAncestor = $commonAncestor->parentNode;
         }
         // "If original start node is an ancestor container of original end node,
         // let first partially contained child be null."
         $firstPartiallyContainedChild = null;
-        if (isAncestorContainer($originalStartNode, $originalEndNode)) {
+        if (Common::isAncestorContainer($originalStartNode, $originalEndNode)) {
             $firstPartiallyContainedChild = null;
             // "Otherwise, let first partially contained child be the first child of
             // common ancestor that is partially contained in the context object."
         } else {
             for ($i = 0; $i < count($commonAncestor->childNodes); $i++) {
-                if (isPartiallyContained($commonAncestor->childNodes[$i], $range)) {
+                if (Common::isPartiallyContained($commonAncestor->childNodes[$i], $range)) {
                     $firstPartiallyContainedChild = $commonAncestor->childNodes[$i];
                     break;
                 }
@@ -73,13 +74,13 @@ class RangeCloneContentsTest extends WPTTestHarness
         // "If original end node is an ancestor container of original start node,
         // let last partially contained child be null."
         $lastPartiallyContainedChild = null;
-        if (isAncestorContainer($originalEndNode, $originalStartNode)) {
+        if (Common::isAncestorContainer($originalEndNode, $originalStartNode)) {
             $lastPartiallyContainedChild = null;
             // "Otherwise, let last partially contained child be the last child of
             // common ancestor that is partially contained in the context object."
         } else {
             for ($i = count($commonAncestor->childNodes) - 1; $i >= 0; $i--) {
-                if (isPartiallyContained($commonAncestor->childNodes[$i], $range)) {
+                if (Common::isPartiallyContained($commonAncestor->childNodes[$i], $range)) {
                     $lastPartiallyContainedChild = $commonAncestor->childNodes[$i];
                     break;
                 }
@@ -95,7 +96,7 @@ class RangeCloneContentsTest extends WPTTestHarness
         // HIERARCHY_REQUEST_ERR exception and abort these steps."
         $containedChildren = [];
         for ($i = 0; $i < count($commonAncestor->childNodes); $i++) {
-            if (isContained($commonAncestor->childNodes[$i], $range)) {
+            if (Common::isContained($commonAncestor->childNodes[$i], $range)) {
                 if ($commonAncestor->childNodes[$i]->nodeType == Node::DOCUMENT_TYPE_NODE) {
                     return 'HIERARCHY_REQUEST_ERR';
                 }
@@ -111,7 +112,7 @@ class RangeCloneContentsTest extends WPTTestHarness
             // original start node, with original start offset as the first
             // argument and (length of original start node − original start offset)
             // as the second."
-            $clone->data = $originalStartNode->substringData($originalStartOffset, nodeLength($originalStartNode) - $originalStartOffset);
+            $clone->data = $originalStartNode->substringData($originalStartOffset, Common::nodeLength($originalStartNode) - $originalStartOffset);
             // "Append clone as the last child of frag."
             $frag->appendChild($clone);
             // "Otherwise, if first partially contained child is not null:"
@@ -127,10 +128,10 @@ class RangeCloneContentsTest extends WPTTestHarness
                 // child, length of first partially contained child)."
                 $subrange = $ownerDoc->createRange();
                 $subrange->setStart($originalStartNode, $originalStartOffset);
-                $subrange->setEnd($firstPartiallyContainedChild, nodeLength($firstPartiallyContainedChild));
+                $subrange->setEnd($firstPartiallyContainedChild, Common::nodeLength($firstPartiallyContainedChild));
                 // "Let subfrag be the result of calling cloneContents() on
                 // subrange."
-                $subfrag = myCloneContents($subrange);
+                $subfrag = $this->myCloneContents($subrange);
                 // "For each child of subfrag, in order, append that child to clone as
                 // its last child."
                 for ($i = 0; $i < count($subfrag->childNodes); $i++) {
@@ -172,7 +173,7 @@ class RangeCloneContentsTest extends WPTTestHarness
                 $subrange->setEnd($originalEndNode, $originalEndOffset);
                 // "Let subfrag be the result of calling cloneContents() on
                 // subrange."
-                $subfrag = myCloneContents($subrange);
+                $subfrag = $this->myCloneContents($subrange);
                 // "For each child of subfrag, in order, append that child to clone as
                 // its last child."
                 for ($i = 0; $i < count($subfrag->childNodes); $i++) {
@@ -212,8 +213,8 @@ class RangeCloneContentsTest extends WPTTestHarness
     {
         global $actualIframe;
         global $expectedIframe;
-        restoreIframe($actualIframe, $i);
-        restoreIframe($expectedIframe, $i);
+        $this->restoreIframe($actualIframe, $i);
+        $this->restoreIframe($expectedIframe, $i);
         $actualRange = $actualIframe->contentWindow->testRange;
         $expectedRange = $expectedIframe->contentWindow->testRange;
         $actualFrag = null;
@@ -243,16 +244,16 @@ class RangeCloneContentsTest extends WPTTestHarness
             // tested for isEqualNode() and checking the children would be
             // redundant.
             $actualAllNodes = [];
-            $node = $this->furthestAncestor($actualRange->startContainer);
+            $node = Common::furthestAncestor($actualRange->startContainer);
             do {
                 $actualAllNodes[] = $node;
-            } while ($node = nextNode($node));
+            } while ($node = Common::nextNode($node));
             $expectedAllNodes = [];
-            $node = $this->furthestAncestor($expectedRange->startContainer);
+            $node = Common::furthestAncestor($expectedRange->startContainer);
             do {
                 $expectedAllNodes[] = $node;
-            } while ($node = nextNode($node));
-            $expectedFrag = myCloneContents($expectedRange);
+            } while ($node = Common::nextNode($node));
+            $expectedFrag = $this->myCloneContents($expectedRange);
             if (gettype($expectedFrag) == 'string') {
                 $this->assertThrowsDomData($expectedFrag, $actualIframe->contentWindow->DOMException, function () use(&$actualRange) {
                     $actualRange->cloneContents();
@@ -273,7 +274,7 @@ class RangeCloneContentsTest extends WPTTestHarness
                 }
             }
             for ($j = 0; $j < count($actualRoots); $j++) {
-                $this->assertNodesEqualData($actualRoots[$j], $expectedRoots[$j], $j ? 'detached node #' . $j : 'tree root');
+                Common::assertNodesEqual($actualRoots[$j], $expectedRoots[$j], $j ? 'detached node #' . $j : 'tree root');
                 if ($j == 0) {
                     // Clearly something is wrong if the node lists are different
                     // lengths.  We want to report this only after we've already
@@ -306,8 +307,8 @@ class RangeCloneContentsTest extends WPTTestHarness
             $actual = '';
             $expected = '';
             while ($currentActual && $currentExpected) {
-                $actual = indexOf($currentActual) . '-' . $actual;
-                $expected = indexOf($currentExpected) . '-' . $expected;
+                $actual = Common::indexOf($currentActual) . '-' . $actual;
+                $expected = Common::indexOf($currentExpected) . '-' . $expected;
                 $currentActual = $currentActual->parentNode;
                 $currentExpected = $currentExpected->parentNode;
             }
@@ -325,7 +326,7 @@ class RangeCloneContentsTest extends WPTTestHarness
                 // Comparing makes no sense
                 return;
             }
-            $this->assertNodesEqualData($actualFrag, $expectedFrag, 'returned fragment');
+            Common::assertNodesEqual($actualFrag, $expectedFrag, 'returned fragment');
         });
         $fragTests[$i]->done();
     }

@@ -2,6 +2,7 @@
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-compareBoundaryPoints.html.
 class RangeCompareBoundaryPointsTest extends WPTTestHarness
@@ -14,7 +15,7 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
         $testRangesCached[0]->detach();
         for ($i = 0; $i < count($this->testRangesShort); $i++) {
             try {
-                $testRangesCached[] = rangeFromEndpoints(eval($this->testRangesShort[$i]));
+                $testRangesCached[] = Common::rangeFromEndpoints(eval($this->testRangesShort[$i]));
             } catch (Exception $e) {
                 $testRangesCached[] = null;
             }
@@ -111,7 +112,7 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
                         // "If context object's root is not the same as sourceRange's
                         // root, throw a "WrongDocumentError" exception and terminate
                         // these steps."
-                        if ($this->furthestAncestor($range1->startContainer) != $this->furthestAncestor($range2->startContainer)) {
+                        if (Common::furthestAncestor($range1->startContainer) != Common::furthestAncestor($range2->startContainer)) {
                             $this->assertThrowsDomData('WRONG_DOCUMENT_ERR', function () use(&$range1, &$how, &$range2) {
                                 $range1->compareBoundaryPoints($how, $range2);
                             }, "WrongDocumentError required if the ranges don't share a root");
@@ -139,7 +140,7 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
                         //     Return 0.
                         //   after
                         //     Return 1."
-                        $position = getPosition($thisPoint[0], $thisPoint[1], $otherPoint[0], $otherPoint[1]);
+                        $position = Common::getPosition($thisPoint[0], $thisPoint[1], $otherPoint[0], $otherPoint[1]);
                         $expected = null;
                         if ($position == 'before') {
                             $expected = -1;

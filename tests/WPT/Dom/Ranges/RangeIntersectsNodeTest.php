@@ -2,6 +2,7 @@
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode.html.
 class RangeIntersectsNodeTest extends WPTTestHarness
@@ -17,7 +18,7 @@ class RangeIntersectsNodeTest extends WPTTestHarness
                 $this->assertTest(function () use(&$testRangesCached, &$j, &$i, &$node) {
                     if ($testRangesCached[$j] === null) {
                         try {
-                            $testRangesCached[$j] = rangeFromEndpoints(eval($testRanges[$i]));
+                            $testRangesCached[$j] = Common::rangeFromEndpoints(eval($testRanges[$i]));
                         } catch (Exception $e) {
                             $testRangesCached[$j] = null;
                         }
@@ -26,7 +27,7 @@ class RangeIntersectsNodeTest extends WPTTestHarness
                     $range = $testRangesCached[$j]->cloneRange();
                     // "If node's root is different from the context object's root,
                     // return false and terminate these steps."
-                    if ($this->furthestAncestor($node) !== $this->furthestAncestor($range->startContainer)) {
+                    if (Common::furthestAncestor($node) !== Common::furthestAncestor($range->startContainer)) {
                         $this->assertEqualsData($range->intersectsNode($node), false, 'Must return false if node and range have different roots');
                         return;
                     }
@@ -38,10 +39,10 @@ class RangeIntersectsNodeTest extends WPTTestHarness
                         return;
                     }
                     // "Let offset be node's index."
-                    $offset = indexOf($node);
+                    $offset = Common::indexOf($node);
                     // "If (parent, offset) is before end and (parent, offset + 1) is
                     // after start, return true and terminate these steps."
-                    if (getPosition($parent_, $offset, $range->endContainer, $range->endOffset) === 'before' && getPosition($parent_, $offset + 1, $range->startContainer, $range->startOffset) === 'after') {
+                    if (Common::getPosition($parent_, $offset, $range->endContainer, $range->endOffset) === 'before' && Common::getPosition($parent_, $offset + 1, $range->startContainer, $range->startOffset) === 'after') {
                         $this->assertEqualsData($range->intersectsNode($node), true, 'Must return true if (parent, offset) is before range end and (parent, offset + 1) is after range start');
                         return;
                     }

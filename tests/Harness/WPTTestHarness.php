@@ -32,7 +32,6 @@ use PHPUnit\Framework\TestCase;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Internal\Util;
-use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\Utils\Selectors;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
 
@@ -42,7 +41,6 @@ use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
 abstract class WPTTestHarness extends TestCase {
 	use Helpers;
 	use Selectors;
-	use Common;
 
 	const TEST_QSA = 0x01; // querySelector() and querySelectorAll() tests
 	const TEST_FIND = 0x04; // find() and findAll() tests, may be unsuitable for querySelector[All]
@@ -796,23 +794,6 @@ abstract class WPTTestHarness extends TestCase {
 			"assert_unreached",
 			$description,
 			"Reached unreachable code" );
-	}
-
-	/**
-	 * Returns the last Node that's before node in tree order, or null if node is
-	 * the first Node.
-	 */
-	protected function previousNode( $node ) {
-		if ( $node->getPreviousSibling() ) {
-			$node = $node->getPreviousSibling();
-			while ( $node->hasChildNodes() ) {
-				$node = $node->lastChild;
-			}
-
-			return $node;
-		}
-
-		return $node->parentNode;
 	}
 
 	/**

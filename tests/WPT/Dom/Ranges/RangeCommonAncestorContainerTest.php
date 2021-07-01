@@ -2,6 +2,7 @@
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-commonAncestorContainer.html.
 class RangeCommonAncestorContainerTest extends WPTTestHarness
@@ -17,13 +18,13 @@ class RangeCommonAncestorContainerTest extends WPTTestHarness
                     $range = $this->doc->createRange();
                     $range->detach();
                 } else {
-                    $range = rangeFromEndpoints(eval($testRanges[$i]));
+                    $range = Common::rangeFromEndpoints(eval($testRanges[$i]));
                 }
                 // "Let container be start node."
                 $container = $range->startContainer;
                 // "While container is not an inclusive ancestor of end node, let
                 // container be container's parent."
-                while ($container != $range->endContainer && !isAncestor($container, $range->endContainer)) {
+                while ($container != $range->endContainer && !Common::isAncestor($container, $range->endContainer)) {
                     $container = $container->parentNode;
                 }
                 // "Return container."

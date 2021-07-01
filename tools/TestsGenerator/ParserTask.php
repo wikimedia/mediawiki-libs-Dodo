@@ -320,8 +320,14 @@ class ParserTask extends BaseTask {
 			}
 		} );
 
-		$traverser->addVisitor( new class extends NodeVisitorAbstract {
+		$visitor = new class extends NodeVisitorAbstract
+		{
 			use Helpers;
+
+			/**
+			 * @var array<string,bool>
+			 */
+			public $uses = [];
 
 			/**
 			 * @param mixed $node
@@ -346,15 +352,16 @@ class ParserTask extends BaseTask {
 					}
 				}
 			}
-		} );
+		};
 
+		$traverser->addVisitor( $visitor );
 		$stmts = $traverser->traverse( $ast );
 
 		if ( !$this->compact ) {
 			$class = $this->factory->class( $this->snakeToPascal( $this->test_name ) . 'Test' )
 				->extend( 'W3CTestHarness' )->addStmts( $stmts )->setDocComment( '// @see ' . $this->test_path . '.' )
 				->getNode();
-			$use_stmts = $this->getUseStmts();
+			$use_stmts = $this->getUseStmts( $visitor->uses );
 
 			$stmts = $this->factory->namespace( 'Wikimedia\Dodo\Tests\W3C' )->addStmts( $use_stmts )->addStmts( [
 				$class ] )->getNode();
@@ -501,7 +508,8 @@ class ParserTask extends BaseTask {
 
 		// $dump = $this->dumper->dump( $stmts ) . "n";
 
-		$traverser->addVisitor( new class( $this->parser, $this->factory ) extends NodeVisitorAbstract {
+		$visitor = new class( $this->parser, $this->factory ) extends NodeVisitorAbstract
+		{
 			use Helpers;
 
 			/**
@@ -512,6 +520,10 @@ class ParserTask extends BaseTask {
 			 * @var BuilderFactory
 			 */
 			private $factory;
+			/**
+			 * @var array<string,bool>
+			 */
+			public $uses;
 
 			/**
 			 *  constructor.
@@ -522,6 +534,7 @@ class ParserTask extends BaseTask {
 			public function __construct( Parser $parser, BuilderFactory $factory ) {
 				$this->parser = $parser;
 				$this->factory = $factory;
+				$this->uses = [];
 			}
 
 			/**
@@ -577,7 +590,35 @@ class ParserTask extends BaseTask {
 						return $node;
 					}
 
-					$functions_calls = [ 'testNode',
+					// *static* functions defined in Common.php
+					$common_functions = array_flip( [
+						'nodeLength',
+						'furthestAncestor',
+						'isAncestorContainer',
+						'nextNode',
+						'previousNode',
+						'nextNodeDescendants',
+						'ownerDocument',
+						'isAncestor',
+						'isInclusiveAncestor',
+						'isDescendant',
+						'isInclusiveDescendant',
+						'getPosition',
+						'isContained',
+						'isPartiallyContained',
+						'indexOf',
+						'myExtractContents',
+						'myInsertNode',
+						'isElement',
+						'isText',
+						'isDoctype',
+						'ensurePreInsertionValidity',
+						'assertNodesEqual',
+						'getDomExceptionName',
+						'rangeFromEndpoints',
+					] );
+					$harness_functions = array_flip( [
+						'testNode',
 						'create',
 						'test',
 						'async_test',
@@ -594,8 +635,6 @@ class ParserTask extends BaseTask {
 						'getIDs',
 						'format_value',
 						'attr_is',
-						'moveNodeToNewlyCreatedDocumentWithAppendChild',
-						'nestRangeInOuterContainer',
 						'getWin',
 						'attributes_are',
 						'getEnumerableOwnProps1',
@@ -614,12 +653,77 @@ class ParserTask extends BaseTask {
 						'init',
 						'isDefaultNamespace',
 						'array_map',
-						'furthestAncestor',
-						'previousNode' ];
+						'generate_tests',
+						// assertion methods
+						'assert_array_equals',
+						'assert_class_string',
+						'assert_equals',
+						'assert_false',
+						'assert_idl_attribute',
+						'assert_in_array',
+						'assert_node',
+						'assert_not_equals',
+						'assert_readonly',
+						'assert_throws_dom',
+						'assert_throws_exactly',
+						'assert_throws_js',
+						'assert_true',
+						'assert_unreached',
+						// from Common.php
+						'setupRangeTests',
+						// helper functions defined in specific test classes
+						'checkNodes',
+						'check_iter', // aka checkIter
+						'check_walker', // aka checkWalker
+						'createHTMLDocuments',
+						'createRangeWithUnparentedContainerOfSingleElement',
+						'createSampleDOM',
+						'moveNodeToNewlyCreatedDocumentWithAppendChild',
+						'myCloneContents',
+						'nestRangeInOuterContainer',
+						'restoreIframe',
+						// These are helper functions defined in classes
+						// which unfortunately begin with 'test' and so
+						// PHPUnit will think that they are standalone
+						// test methods.  We should rename these.
+						'testAlias',
+						'testAttr',
+						'testCloneContents',
+						'testConstants',
+						'testDeepEquality',
+						'testDeleteContents',
+						'testDoc',
+						'testExtractContents',
+						'testIsConnected',
+						'testIterator',
+						'testLeaf',
+						'testLeafNode',
+						'testMatched',
+						'testNeverMatched',
+						'testSetEnd',
+						'testSetStart',
+						'testSurroundContents',
+						'testTree',
+						'test_after', // aka testAfter
+						'test_append', // aka testAppend
+						'test_before', // aka testBefore
+						'test_create', // aka testCreate
+						'test_getElementsByTagNameNS', // aka testGetElementsByTagNameNS
+						'test_prepend', // aka testPrepend
+						'test_replaceWith', // aka testReplaceWith
+					] );
 
-					if ( preg_match( '(' . implode( '|',
-								$functions_calls ) . ')',
-							$expr_name ) === 1 /* && $expr_name !== 'testDeepEquality'*/ ) {
+					if ( array_key_exists( $expr_name, $common_functions ) ) {
+						$args = $node->args;
+						$call = new Node\Expr\StaticCall(
+							new Node\Name( 'Common' ),
+							$expr_name,
+							$args,
+							$node->getAttributes()
+						);
+						$this->uses['Common'] = true;
+						$node = $call;
+					} elseif ( array_key_exists( $expr_name, $harness_functions ) ) {
 						$args = $node->args;
 
 						if ( strpos( $expr_name,
@@ -668,8 +772,9 @@ class ParserTask extends BaseTask {
 					return $node;
 				}
 			}
-		} );
+		};
 
+		$traverser->addVisitor( $visitor );
 		$stmts = $traverser->traverse( $stmts );
 
 		if ( !$this->compact ) {
@@ -682,7 +787,7 @@ class ParserTask extends BaseTask {
 			$class = $this->factory->class( $this->snakeToPascal( $this->test_name ) )->extend( 'WPTTestHarness' )
 				->addStmts( $stmts )->setDocComment( '// @see ' . $this->test_path .
 					'.' )->getNode();
-			$use_stmts = $this->getUseStmts();
+			$use_stmts = $this->getUseStmts( $visitor->uses );
 			$stmts = $this->factory->namespace( 'Wikimedia\Dodo\Tests\WPT\Dom' )->addStmts( $use_stmts )->addStmts( [
 				$class ] )
 				->getNode();
@@ -692,11 +797,13 @@ class ParserTask extends BaseTask {
 	}
 
 	/**
+	 * @param array<string,bool> $extraUses
 	 * @return array
 	 */
-	private function getUseStmts() : array {
+	private function getUseStmts( $extraUses ) : array {
 		$stmts = [];
-		$list_ns = [ 'Node' => 'Wikimedia\Dodo\Node',
+		$list_ns = [
+			'Node' => 'Wikimedia\Dodo\Node',
 			'DocumentFragment' => 'Wikimedia\Dodo\DocumentFragment',
 			'HTMLElement' => 'Wikimedia\Dodo\HTMLElement',
 			'NodeFilter' => 'Wikimedia\Dodo\NodeFilter',
@@ -727,11 +834,15 @@ class ParserTask extends BaseTask {
 			'DOMParser' => 'Wikimedia\Dodo\DOMParser',
 			'Range' => 'Wikimedia\Dodo\Range',
 			'AbstractRange' => 'Wikimedia\Dodo\AbstractRange',
-			'StaticRange' => 'Wikimedia\Dodo\StaticRange', ];
+			'StaticRange' => 'Wikimedia\Dodo\StaticRange',
+			'Common' => 'Wikimedia\Dodo\Tests\Harness\Utils\Common',
+		];
 
 		foreach ( $list_ns as $use => $namespace ) {
-			if ( strpos( $this->test,
-					$use ) !== false ) {
+			if (
+				strpos( $this->test, $use ) !== false ||
+				( $extraUses[$use] ?? false ) !== false
+			) {
 				$stmts[] = $this->factory->use( $namespace );
 			}
 		}

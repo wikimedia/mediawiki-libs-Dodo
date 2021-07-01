@@ -4,6 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\Range;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-insertNode.html.
 class RangeInsertNodeTest extends WPTTestHarness
@@ -44,8 +45,8 @@ class RangeInsertNodeTest extends WPTTestHarness
         $expectedRoots = [];
         $detached = false;
         $domTests[$i][$j]->step(function () use(&$i, &$j, &$actualRoots, &$expectedRoots) {
-            restoreIframe($actualIframe, $i, $j);
-            restoreIframe($expectedIframe, $i, $j);
+            $this->restoreIframe($actualIframe, $i, $j);
+            $this->restoreIframe($expectedIframe, $i, $j);
             $actualRange = $actualIframe->contentWindow->testRange;
             $expectedRange = $expectedIframe->contentWindow->testRange;
             $actualNode = $actualIframe->contentWindow->testNode;
@@ -75,14 +76,14 @@ class RangeInsertNodeTest extends WPTTestHarness
                 $actualRoots[] = $actualIframe->getOwnerDocument();
                 $expectedRoots[] = $expectedIframe->getOwnerDocument();
             } else {
-                $actualRoots[] = $this->furthestAncestor($actualRange->startContainer);
-                $expectedRoots[] = $this->furthestAncestor($expectedRange->startContainer);
+                $actualRoots[] = Common::furthestAncestor($actualRange->startContainer);
+                $expectedRoots[] = Common::furthestAncestor($expectedRange->startContainer);
             }
-            if ($this->furthestAncestor($actualNode) != $actualRoots[0]) {
-                $actualRoots[] = $this->furthestAncestor($actualNode);
+            if (Common::furthestAncestor($actualNode) != $actualRoots[0]) {
+                $actualRoots[] = Common::furthestAncestor($actualNode);
             }
-            if ($this->furthestAncestor($expectedNode) != $expectedRoots[0]) {
-                $expectedRoots[] = $this->furthestAncestor($expectedNode);
+            if (Common::furthestAncestor($expectedNode) != $expectedRoots[0]) {
+                $expectedRoots[] = Common::furthestAncestor($expectedNode);
             }
             $this->assertEqualsData(count($actualRoots), count($expectedRoots), 'Either the actual node and actual range are in the same tree but the expected are in different trees, or vice versa');
             // This doctype stuff is to work around the fact that Opera 11.00 will
@@ -100,7 +101,7 @@ class RangeInsertNodeTest extends WPTTestHarness
             $expectedDoctype = $expectedIframe->getOwnerDocument()->doctype;
             $result = null;
             try {
-                $result = myInsertNode($expectedRange, $expectedNode);
+                $result = Common::myInsertNode($expectedRange, $expectedNode);
             } catch (Exception $e) {
                 if ($expectedDoctype != $expectedIframe->getOwnerDocument()->firstChild) {
                     $expectedIframe->getOwnerDocument()->insertBefore($expectedDoctype, $expectedIframe->getOwnerDocument()->firstChild);
@@ -136,7 +137,7 @@ class RangeInsertNodeTest extends WPTTestHarness
                 }
             }
             for ($k = 0; $k < count($actualRoots); $k++) {
-                $this->assertNodesEqualData($actualRoots[$k], $expectedRoots[$k], $k ? "moved node's tree root" : "range's tree root");
+                Common::assertNodesEqual($actualRoots[$k], $expectedRoots[$k], $k ? "moved node's tree root" : "range's tree root");
             }
         });
         $domTests[$i][$j]->done();
@@ -152,7 +153,7 @@ class RangeInsertNodeTest extends WPTTestHarness
             $this->assertEqualsData(gettype($expectedNode), 'object', 'typeof Node produced in expected iframe');
             $this->assertNotEqualsData($expectedNode, null, 'Node produced in expected iframe was null');
             for ($k = 0; $k < count($actualRoots); $k++) {
-                $this->assertNodesEqualData($actualRoots[$k], $expectedRoots[$k], $k ? "moved node's tree root" : "range's tree root");
+                Common::assertNodesEqual($actualRoots[$k], $expectedRoots[$k], $k ? "moved node's tree root" : "range's tree root");
             }
             if ($detached) {
                 // No further tests we can do
@@ -170,8 +171,8 @@ class RangeInsertNodeTest extends WPTTestHarness
             $actual = '';
             $expected = '';
             while ($currentActual && $currentExpected) {
-                $actual = indexOf($currentActual) . '-' . $actual;
-                $expected = indexOf($currentExpected) . '-' . $expected;
+                $actual = Common::indexOf($currentActual) . '-' . $actual;
+                $expected = Common::indexOf($currentExpected) . '-' . $expected;
                 $currentActual = $currentActual->parentNode;
                 $currentExpected = $currentExpected->parentNode;
             }
@@ -219,7 +220,7 @@ class RangeInsertNodeTest extends WPTTestHarness
             $expectedIframe->onload = function () use(&$iStart, &$iStop, &$jStart, &$jStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
                     for ($j = $jStart; $j < $jStop; $j++) {
-                        $this->testInsertNode($i, $j);
+                        testInsertNode($i, $j);
                     }
                 }
             };

@@ -2,6 +2,7 @@
 namespace Wikimedia\Dodo\Tests\WPT\Dom;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\NodeFilter;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/traversal/NodeIterator.html.
 class NodeIteratorTest extends WPTTestHarness
@@ -43,8 +44,8 @@ class NodeIteratorTest extends WPTTestHarness
                 if (!$beforeNode) {
                     // "If before node is false, let node be the first node following node
                     // in the iterator collection. If there is no such node return null."
-                    $node = nextNode($node);
-                    if (!isInclusiveDescendant($node, $root)) {
+                    $node = Common::nextNode($node);
+                    if (!Common::isInclusiveDescendant($node, $root)) {
                         $node = null;
                         break;
                     }
@@ -88,8 +89,8 @@ class NodeIteratorTest extends WPTTestHarness
                 if ($beforeNode) {
                     // "If before node is true, let node be the first node preceding node
                     // in the iterator collection. If there is no such node return null."
-                    $node = $this->previousNode($node);
-                    if (!isInclusiveDescendant($node, $root)) {
+                    $node = Common::previousNode($node);
+                    if (!Common::isInclusiveDescendant($node, $root)) {
                         $node = null;
                         break;
                     }
