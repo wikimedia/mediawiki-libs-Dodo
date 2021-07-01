@@ -10,7 +10,7 @@ use Wikimedia\Dodo\Internal\Util;
  * CharacterData.php
  * -----------------
  */
-abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\CharacterData {
+abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\CharacterData, \Countable {
 	// DOM mixins
 	use ChildNode;
 	use NonDocumentTypeChildNode;
@@ -23,6 +23,21 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 
 	/** @var string */
 	protected $_data;
+
+	// Keep track of our internal encoding.
+	/** @var bool */
+	protected $_isUtf16;
+
+	/**
+	 * Create a CharacterData with data (in UTF-8 encoding).
+	 * @param Document $nodeDocument the owner document
+	 * @param string $data contents, in UTF-8 encoding
+	 */
+	protected function __construct( Document $nodeDocument, string $data ) {
+		parent::__construct( $nodeDocument );
+		$this->_data = $data;
+		$this->_isUtf16 = false;
+	}
 
 	/**
 	 * @inheritDoc
@@ -74,16 +89,25 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 * In Domino.js, checking was done to ensure $offset and $count
 	 * were integers and not-undefined. Here we just use type hints.
 	 *
+	 * The DOM spec requires that the offset and count be in *UTF-16 units*
+	 * (and the PHP \DOMText etc classes do tihs as well).  Be careful!
+	 *
 	 * @param int $offset
 	 * @param int $count
 	 * @return string
 	 */
 	public function substringData( int $offset, int $count ) : string {
-		if ( $offset > strlen( $this->_data ) || $offset < 0 || $count < 0 ) {
+		$data = $this->_getDataUTF16();
+		// Silly conversion to an int32 to make our test suites happy
+		$offset &= 0xFFFFFFFF;
+		$count &= 0xFFFFFFFF;
+
+		if ( $offset * 2 > strlen( $data ) || $offset < 0 || $count < 0 ) {
 			Util::error( "IndexSizeError" );
 		}
 
-		return substr( $this->_data, $offset, $offset + $count );
+		$result = substr( $data, $offset * 2, $count * 2 );
+		return mb_convert_encoding( $result, "utf8", "utf16" );
 	}
 
 	/**
@@ -97,7 +121,8 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 * @param string $data
 	 */
 	public function appendData( string $data ) : void {
-		$this->_data .= $data;
+		$oldData = $this->getData(); // convert to UTF8 representation
+		$this->_data = $oldData . $data;
 		if ( $this->getIsConnected() ) {
 			$this->_nodeDocument->_mutateValue( $this );
 		}
@@ -157,8 +182,13 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 * @param string $data
 	 */
 	public function replaceData( int $offset, int $count, string $data ) : void {
-		$curtext = $this->_data;
-		$len = strlen( $curtext );
+		$curtext = $this->_getDataUTF16();
+		$len = strlen( $curtext ) / 2;
+		// convert next text to UTF16 as well
+		$data = mb_convert_encoding( $data, "utf16", "utf8" );
+		// Silly conversion to an int32 to make our test suites happy
+		$offset &= 0xFFFFFFFF;
+		$count &= 0xFFFFFFFF;
 
 		if ( $offset > $len || $offset < 0 ) {
 			Util::error( "IndexSizeError" );
@@ -171,13 +201,12 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 		// Fast path
 		if ( $offset === 0 && $count === $len ) {
 			$this->_data = $data;
-			return;
+		} else {
+			$prefix = substr( $curtext, 0, $offset * 2 );
+			$suffix = substr( $curtext, ( $offset + $count ) * 2 );
+
+			$this->_data = $prefix . $data . $suffix;
 		}
-
-		$prefix = substr( $curtext, 0, $offset );
-		$suffix = substr( $curtext, $offset + $count );
-
-		$this->_data = $prefix . $data . $suffix;
 		if ( $this->getIsConnected() ) {
 			$this->_nodeDocument->_mutateValue( $this );
 		}
@@ -185,17 +214,43 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 
 	/** @inheritDoc */
 	public function getLength(): int {
-		return strlen( $this->_data );
+		// UTF-16 units
+		return strlen( $this->_getDataUTF16() ) / 2;
 	}
 
 	/** @inheritDoc */
 	public function getData() : string {
+		if ( $this->_isUtf16 ) {
+			$this->_data = mb_convert_encoding(
+				$this->_data, "utf8", "utf16"
+			);
+			$this->_isUtf16 = false;
+		}
+		return $this->_data;
+	}
+
+	/**
+	 * Internal method to convert our internal representation to UTF16 and
+	 * return that.
+	 * @return string a UTF-16 representation of `data`
+	 */
+	public function _getDataUTF16() : string {
+		if ( !$this->_isUtf16 ) {
+			$this->_data = mb_convert_encoding(
+				$this->_data, "utf16", "utf8"
+			);
+			$this->_isUtf16 = true;
+		}
 		return $this->_data;
 	}
 
 	/** @inheritDoc */
 	public function setData( ?string $value ) : void {
-		$this->replaceData( 0, $this->getLength(), $value ?? '' );
+		$this->_data = $value ?? '';
+		$this->_isUtf16 = false;
+		if ( $this->getIsConnected() ) {
+			$this->_nodeDocument->_mutateValue( $this );
+		}
 	}
 
 	/** @inheritDoc */
@@ -205,6 +260,16 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 
 	/** @inheritDoc */
 	public function _empty(): bool {
-		return $this->_length() === 0;
+		return strlen( $this->_data ) === 0; // utf8 or utf16, doesn't matter
+	}
+
+	/**
+	 * This is a non-standard extension, but it allows count() to be used
+	 * on CharacterData nodes in the same way that .length is used on them
+	 * in JavaScript -- and makes some of our WPT test cases pass.
+	 * @return int
+	 */
+	public function count(): int {
+		return $this->_length();
 	}
 }

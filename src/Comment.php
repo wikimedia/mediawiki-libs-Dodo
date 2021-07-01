@@ -33,8 +33,7 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 	 * @param string $data
 	 */
 	public function __construct( Document $nodeDocument, $data ) {
-		parent::__construct( $nodeDocument );
-		$this->_data = $data;
+		parent::__construct( $nodeDocument, $data );
 	}
 
 	/**

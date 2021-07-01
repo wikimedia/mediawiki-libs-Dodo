@@ -369,6 +369,16 @@
     _comment: ''
     testcases: testNodeParentNode
     files: /tests/WPT/Dom/Nodes/NodeParentNodeTest.php
+'TypeError: Argument 1 passed to Wikimedia\Dodo\CharacterData::appendData() must be of the type string, null given, called in /tests/WPT/Dom/Nodes/CharacterDataAppendDataTest.php on line 34':
+    _total: 1
+    _comment: ''
+    testcases: testCharacterDataAppendData
+    files: /tests/WPT/Dom/Nodes/CharacterDataAppendDataTest.php
+'TypeError: Argument 1 passed to Wikimedia\Dodo\CharacterData::substringData() must be of the type int, string given, called in /tests/WPT/Dom/Nodes/CharacterDataSubstringDataTest.php on line 75':
+    _total: 1
+    _comment: ''
+    testcases: testCharacterDataSubstringData
+    files: /tests/WPT/Dom/Nodes/CharacterDataSubstringDataTest.php
 'TypeError: Argument 1 passed to Wikimedia\Dodo\Document::createAttribute() must be of the type string, null given, called in /tests/WPT/Dom/Nodes/DocumentCreateAttributeTest.php on line 40':
     _total: 1
     _comment: ''
@@ -577,11 +587,6 @@
     _comment: ''
     testcases: testDocumentCreateTextNode
     files: /tests/WPT/Dom/Nodes/DocumentCreateTextNodeTest.php
-'Wikimedia\Dodo\DOMException: INDEX_SIZE_ERR (1): the index is not in the allowed range':
-    _total: 1
-    _comment: ''
-    testcases: testCharacterDataInsertData
-    files: /tests/WPT/Dom/Nodes/CharacterDataInsertDataTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\DOMParser::parseFromString( ''text/xml'' )':
     _total: 1
     _comment: ''
@@ -617,9 +622,10 @@
     testcases: testDocumentCreateCDATASection
     files: /tests/WPT/Dom/Nodes/DocumentCreateCDATASectionTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::createTreeWalker':
-    _total: 6
+    _total: 7
     _comment: ''
     testcases: |-
+        testDocumentCreateTreeWalker
         testTreeWalkerBasic
         testTreeWalkerCurrentNode
         testTreeWalkerTraversalReject
@@ -627,6 +633,7 @@
         testTreeWalkerTraversalSkipMost
         testTreeWalkerWalkingOutsideATree
     files: |-
+        /tests/WPT/Dom/Nodes/DocumentCreateTreeWalkerTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerBasicTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerCurrentNodeTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerTraversalRejectTest.php
@@ -1064,12 +1071,3 @@
     _comment: ''
     testcases: testRangeCommonAncestorContainer
     files: /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php
-'count(): Parameter must be an array or an object that implements Countable':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testCharacterDataAppendData
-        testCharacterDataData
-    files: |-
-        /tests/WPT/Dom/Nodes/CharacterDataAppendDataTest.php
-        /tests/WPT/Dom/Nodes/CharacterDataDataTest.php

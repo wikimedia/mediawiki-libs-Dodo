@@ -42,8 +42,7 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	 * @param string $data
 	 */
 	public function __construct( Document $nodeDocument, string $data ) {
-		parent::__construct( $nodeDocument );
-		$this->_data = $data;
+		parent::__construct( $nodeDocument, $data );
 	}
 
 	/**
@@ -76,17 +75,21 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	}
 
 	/**
-	 * @param int $offset
+	 * @param int $offset Offset *in UTF-16 code units*
 	 * @return Text
 	 */
 	public function splitText( $offset ) {
-		if ( $offset > strlen( $this->_data ) || $offset < 0 ) {
+		$data = $this->_getDataUTF16();
+		if ( $offset * 2 > strlen( $data ) || $offset < 0 ) {
 			Util::error( "IndexSizeError" );
 		}
 
-		$newdata = substr( $this->_data, $offset );
-		$newnode = $this->_nodeDocument->createTextNode( $newdata );
-		$this->setNodeValue( substr( $this->_data, 0, $offset ) );
+		$newdata = substr( $data, $offset * 2 );
+		// Avoid converting newdata to UTF8 if we don't need to
+		$newnode = new Text( $this->_nodeDocument, $newdata );
+		$newnode->_isUtf16 = true;
+		// Same: this is already UTF-16 thanks to the _getDataUTF16 call above
+		$this->_data = substr( $data, 0, $offset * 2 );
 
 		$parent = $this->getParentNode();
 

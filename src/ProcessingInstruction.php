@@ -29,9 +29,8 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	 * @param string $data
 	 */
 	public function __construct( Document $nodeDocument, string $target, string $data ) {
-		parent::__construct( $nodeDocument );
+		parent::__construct( $nodeDocument, $data );
 		$this->_target = $target;
-		$this->_data = $data;
 	}
 
 	/**
