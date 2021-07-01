@@ -10,7 +10,7 @@ class ElementChildElementCountNochildTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-childElementCount-nochild.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
-            $this->assertEqualsData($parentEl->childElementCount, 0);
+            $this->wptAssertEquals($parentEl->childElementCount, 0);
         });
     }
 }

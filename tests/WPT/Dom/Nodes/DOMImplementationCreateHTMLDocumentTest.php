@@ -34,67 +34,67 @@ class DOMImplementationCreateHTMLDocumentTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DOMImplementation-createHTMLDocument.html');
         $this->createHTMLDocuments(function ($doc, $expectedtitle, $normalizedtitle) {
-            $this->assertTrueData($doc instanceof Document, 'Should be a Document');
-            $this->assertTrueData($doc instanceof Node, 'Should be a Node');
-            $this->assertEqualsData(count($doc->childNodes), 2, 'Document should have two child nodes');
+            $this->wptAssertTrue($doc instanceof Document, 'Should be a Document');
+            $this->wptAssertTrue($doc instanceof Node, 'Should be a Node');
+            $this->wptAssertEquals(count($doc->childNodes), 2, 'Document should have two child nodes');
             $doctype = $doc->doctype;
-            $this->assertTrueData($doctype instanceof DocumentType, 'Doctype should be a DocumentType');
-            $this->assertTrueData($doctype instanceof Node, 'Doctype should be a Node');
-            $this->assertEqualsData($doctype->name, 'html');
-            $this->assertEqualsData($doctype->publicId, '');
-            $this->assertEqualsData($doctype->systemId, '');
+            $this->wptAssertTrue($doctype instanceof DocumentType, 'Doctype should be a DocumentType');
+            $this->wptAssertTrue($doctype instanceof Node, 'Doctype should be a Node');
+            $this->wptAssertEquals($doctype->name, 'html');
+            $this->wptAssertEquals($doctype->publicId, '');
+            $this->wptAssertEquals($doctype->systemId, '');
             $this->docElement = $doc->documentElement;
-            $this->assertTrueData($this->docElement instanceof HTMLHtmlElement, 'Document element should be a HTMLHtmlElement');
-            $this->assertEqualsData(count($this->docElement->childNodes), 2, 'Document element should have two child nodes');
-            $this->assertEqualsData($this->docElement->localName, 'html');
-            $this->assertEqualsData($this->docElement->tagName, 'HTML');
+            $this->wptAssertTrue($this->docElement instanceof HTMLHtmlElement, 'Document element should be a HTMLHtmlElement');
+            $this->wptAssertEquals(count($this->docElement->childNodes), 2, 'Document element should have two child nodes');
+            $this->wptAssertEquals($this->docElement->localName, 'html');
+            $this->wptAssertEquals($this->docElement->tagName, 'HTML');
             $head = $this->docElement->firstChild;
-            $this->assertTrueData($head instanceof HTMLHeadElement, 'Head should be a HTMLHeadElement');
-            $this->assertEqualsData($head->localName, 'head');
-            $this->assertEqualsData($head->tagName, 'HEAD');
+            $this->wptAssertTrue($head instanceof HTMLHeadElement, 'Head should be a HTMLHeadElement');
+            $this->wptAssertEquals($head->localName, 'head');
+            $this->wptAssertEquals($head->tagName, 'HEAD');
             if ($expectedtitle !== null) {
-                $this->assertEqualsData(count($head->childNodes), 1);
+                $this->wptAssertEquals(count($head->childNodes), 1);
                 $title = $head->firstChild;
-                $this->assertTrueData($title instanceof HTMLTitleElement, 'Title should be a HTMLTitleElement');
-                $this->assertEqualsData($title->localName, 'title');
-                $this->assertEqualsData($title->tagName, 'TITLE');
-                $this->assertEqualsData(count($title->childNodes), 1);
-                $this->assertEqualsData($title->firstChild->data, $expectedtitle);
+                $this->wptAssertTrue($title instanceof HTMLTitleElement, 'Title should be a HTMLTitleElement');
+                $this->wptAssertEquals($title->localName, 'title');
+                $this->wptAssertEquals($title->tagName, 'TITLE');
+                $this->wptAssertEquals(count($title->childNodes), 1);
+                $this->wptAssertEquals($title->firstChild->data, $expectedtitle);
             } else {
-                $this->assertEqualsData(count($head->childNodes), 0);
+                $this->wptAssertEquals(count($head->childNodes), 0);
             }
             $body = $this->docElement->lastChild;
-            $this->assertTrueData($body instanceof HTMLBodyElement, 'Body should be a HTMLBodyElement');
-            $this->assertEqualsData($body->localName, 'body');
-            $this->assertEqualsData($body->tagName, 'BODY');
-            $this->assertEqualsData(count($body->childNodes), 0);
+            $this->wptAssertTrue($body instanceof HTMLBodyElement, 'Body should be a HTMLBodyElement');
+            $this->wptAssertEquals($body->localName, 'body');
+            $this->wptAssertEquals($body->tagName, 'BODY');
+            $this->wptAssertEquals(count($body->childNodes), 0);
         });
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('test');
-            $this->assertEqualsData($doc->URL, 'about:blank');
-            $this->assertEqualsData($doc->documentURI, 'about:blank');
-            $this->assertEqualsData($doc->compatMode, 'CSS1Compat');
-            $this->assertEqualsData($doc->characterSet, 'UTF-8');
-            $this->assertEqualsData($doc->contentType, 'text/html');
-            $this->assertEqualsData($doc->createElement('DIV')->localName, 'div');
+            $this->wptAssertEquals($doc->URL, 'about:blank');
+            $this->wptAssertEquals($doc->documentURI, 'about:blank');
+            $this->wptAssertEquals($doc->compatMode, 'CSS1Compat');
+            $this->wptAssertEquals($doc->characterSet, 'UTF-8');
+            $this->wptAssertEquals($doc->contentType, 'text/html');
+            $this->wptAssertEquals($doc->createElement('DIV')->localName, 'div');
         }, 'createHTMLDocument(): metadata');
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('test');
-            $this->assertEqualsData($doc->characterSet, 'UTF-8', 'characterSet');
-            $this->assertEqualsData($doc->charset, 'UTF-8', 'charset');
-            $this->assertEqualsData($doc->inputEncoding, 'UTF-8', 'inputEncoding');
+            $this->wptAssertEquals($doc->characterSet, 'UTF-8', 'characterSet');
+            $this->wptAssertEquals($doc->charset, 'UTF-8', 'charset');
+            $this->wptAssertEquals($doc->inputEncoding, 'UTF-8', 'inputEncoding');
         }, 'createHTMLDocument(): characterSet aliases');
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('test');
             $a = $doc->createElement('a');
             // In UTF-8: 0xC3 0xA4
             $a->href = "http://example.org/?ä";
-            $this->assertEqualsData($a->href, 'http://example.org/?%C3%A4');
+            $this->wptAssertEquals($a->href, 'http://example.org/?%C3%A4');
         }, 'createHTMLDocument(): URL parsing');
         // Test the document location getter is null outside of browser context
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument();
-            $this->assertEqualsData($doc->location, null);
+            $this->wptAssertEquals($doc->location, null);
         }, 'createHTMLDocument(): document location getter is null');
     }
 }

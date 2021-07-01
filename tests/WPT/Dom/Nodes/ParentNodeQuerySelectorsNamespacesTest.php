@@ -9,8 +9,8 @@ class ParentNodeQuerySelectorsNamespacesTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelectors-namespaces.html');
         $el = $this->doc->getElementById('thesvg');
-        $this->assertEqualsData($this->doc->querySelector('[*|href]'), $el);
-        $this->assertArrayEqualsData($this->doc->querySelectorAll('[*|href]'), [$el]);
+        $this->wptAssertEquals($this->doc->querySelector('[*|href]'), $el);
+        $this->wptAssertArrayEquals($this->doc->querySelectorAll('[*|href]'), [$el]);
         $this->done();
     }
 }

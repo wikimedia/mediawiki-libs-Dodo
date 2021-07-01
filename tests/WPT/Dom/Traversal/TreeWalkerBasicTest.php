@@ -56,23 +56,23 @@ class TreeWalkerBasicTest extends WPTTestHarness
     public function checkWalker($walker, $root, $whatToShowValue)
     {
         $whatToShowValue = $whatToShowValue === null ? 0xffffffff : $whatToShowValue;
-        $this->assertEqualsData($walker, '[object TreeWalker]', 'toString');
-        $this->assertEqualsData($walker->root, $root, 'root');
-        $this->assertEqualsData($walker->whatToShow, $whatToShowValue, 'whatToShow');
-        $this->assertEqualsData($walker->filter, null, 'filter');
-        $this->assertEqualsData($walker->currentNode, $root, 'currentNode');
-        $this->assertReadonlyData($walker, 'root');
-        $this->assertReadonlyData($walker, 'whatToShow');
-        $this->assertReadonlyData($walker, 'filter');
+        $this->wptAssertEquals($walker, '[object TreeWalker]', 'toString');
+        $this->wptAssertEquals($walker->root, $root, 'root');
+        $this->wptAssertEquals($walker->whatToShow, $whatToShowValue, 'whatToShow');
+        $this->wptAssertEquals($walker->filter, null, 'filter');
+        $this->wptAssertEquals($walker->currentNode, $root, 'currentNode');
+        $this->wptAssertReadonly($walker, 'root');
+        $this->wptAssertReadonly($walker, 'whatToShow');
+        $this->wptAssertReadonly($walker, 'filter');
     }
     public function assertNode($actual, $expected)
     {
-        $this->assertTrueData($actual instanceof $expected->type, 'Node type mismatch: actual = ' . $actual->nodeType . ', expected = ' . $expected->nodeType);
+        $this->wptAssertTrue($actual instanceof $expected->type, 'Node type mismatch: actual = ' . $actual->nodeType . ', expected = ' . $expected->nodeType);
         if (gettype($expected->id) !== NULL) {
-            $this->assertEqualsData($actual->id, $expected->id);
+            $this->wptAssertEquals($actual->id, $expected->id);
         }
         if (gettype($expected->nodeValue) !== NULL) {
-            $this->assertEqualsData($actual->nodeValue, $expected->nodeValue);
+            $this->wptAssertEquals($actual->nodeValue, $expected->nodeValue);
         }
     }
     public function testTreeWalkerBasic()
@@ -94,19 +94,19 @@ class TreeWalkerBasicTest extends WPTTestHarness
             $this->checkWalker($walker, $root);
         }, 'Construct a TreeWalker by document.createTreeWalker(root, undefined, undefined).');
         $this->assertTest(function () {
-            $this->assertThrowsJsData($this->type_error, function () {
+            $this->wptAssertThrowsJs($this->type_error, function () {
                 $this->doc->createTreeWalker();
             });
-            $this->assertThrowsJsData($this->type_error, function () {
+            $this->wptAssertThrowsJs($this->type_error, function () {
                 $this->doc->createTreeWalker(null);
             });
-            $this->assertThrowsJsData($this->type_error, function () {
+            $this->wptAssertThrowsJs($this->type_error, function () {
                 $this->doc->createTreeWalker(null);
             });
-            $this->assertThrowsJsData($this->type_error, function () {
+            $this->wptAssertThrowsJs($this->type_error, function () {
                 $this->doc->createTreeWalker(new Object());
             });
-            $this->assertThrowsJsData($this->type_error, function () {
+            $this->wptAssertThrowsJs($this->type_error, function () {
                 $this->doc->createTreeWalker(1);
             });
         }, 'Give an invalid root node to document.createTreeWalker().');
@@ -115,34 +115,34 @@ class TreeWalkerBasicTest extends WPTTestHarness
             $walker = $this->doc->createTreeWalker($root);
             $f = $root->lastChild->firstChild->childNodes[1];
             // An element node: div#f.
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'a']);
-            $this->assertEqualsData($walker->parentNode(), null);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'a']);
-            $this->assertNodeData($walker->firstChild(), ['type' => Text, 'nodeValue' => 'b']);
-            $this->assertNodeData($walker->currentNode, ['type' => Text, 'nodeValue' => 'b']);
-            $this->assertNodeData($walker->nextSibling(), ['type' => Element, 'id' => 'c']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'c']);
-            $this->assertNodeData($walker->lastChild(), ['type' => Comment, 'nodeValue' => 'j']);
-            $this->assertNodeData($walker->currentNode, ['type' => Comment, 'nodeValue' => 'j']);
-            $this->assertNodeData($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'd']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'd']);
-            $this->assertNodeData($walker->nextNode(), ['type' => Text, 'nodeValue' => 'e']);
-            $this->assertNodeData($walker->currentNode, ['type' => Text, 'nodeValue' => 'e']);
-            $this->assertNodeData($walker->parentNode(), ['type' => Element, 'id' => 'd']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'd']);
-            $this->assertNodeData($walker->previousNode(), ['type' => Element, 'id' => 'c']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'c']);
-            $this->assertEqualsData($walker->nextSibling(), null);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'c']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'a']);
+            $this->wptAssertEquals($walker->parentNode(), null);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'a']);
+            assert_node($walker->firstChild(), ['type' => Text, 'nodeValue' => 'b']);
+            assert_node($walker->currentNode, ['type' => Text, 'nodeValue' => 'b']);
+            assert_node($walker->nextSibling(), ['type' => Element, 'id' => 'c']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'c']);
+            assert_node($walker->lastChild(), ['type' => Comment, 'nodeValue' => 'j']);
+            assert_node($walker->currentNode, ['type' => Comment, 'nodeValue' => 'j']);
+            assert_node($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'd']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'd']);
+            assert_node($walker->nextNode(), ['type' => Text, 'nodeValue' => 'e']);
+            assert_node($walker->currentNode, ['type' => Text, 'nodeValue' => 'e']);
+            assert_node($walker->parentNode(), ['type' => Element, 'id' => 'd']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'd']);
+            assert_node($walker->previousNode(), ['type' => Element, 'id' => 'c']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'c']);
+            $this->wptAssertEquals($walker->nextSibling(), null);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'c']);
             $walker->currentNode = $f;
-            $this->assertEqualsData($walker->currentNode, $f);
+            $this->wptAssertEquals($walker->currentNode, $f);
         }, 'Walk over nodes.');
         $this->assertTest(function () {
             $treeWalker = $this->doc->createTreeWalker($this->doc->body, 42, null);
-            $this->assertEqualsData($treeWalker->root, $this->doc->body);
-            $this->assertEqualsData($treeWalker->currentNode, $this->doc->body);
-            $this->assertEqualsData($treeWalker->whatToShow, 42);
-            $this->assertEqualsData($treeWalker->filter, null);
+            $this->wptAssertEquals($treeWalker->root, $this->doc->body);
+            $this->wptAssertEquals($treeWalker->currentNode, $this->doc->body);
+            $this->wptAssertEquals($treeWalker->whatToShow, 42);
+            $this->wptAssertEquals($treeWalker->filter, null);
         }, 'Optional arguments to createTreeWalker should be optional (3 passed, null).');
     }
 }

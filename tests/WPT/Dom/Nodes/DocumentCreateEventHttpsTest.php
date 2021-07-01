@@ -10,17 +10,17 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
         $ev = null;
         $this->assertTest(function () use(&$arg, &$iface) {
             $ev = $this->doc->createEvent($arg);
-            $this->assertEqualsData(get_class($ev), $this->window[$iface]->prototype);
+            $this->wptAssertEquals(get_class($ev), $this->window[$iface]->prototype);
         }, $arg . ' should be an alias for ' . $iface . '.');
         $this->assertTest(function () use(&$ev) {
-            $this->assertEqualsData($ev->type, '', 'type should be initialized to the empty string');
-            $this->assertEqualsData($ev->target, null, 'target should be initialized to null');
-            $this->assertEqualsData($ev->currentTarget, null, 'currentTarget should be initialized to null');
-            $this->assertEqualsData($ev->eventPhase, 0, 'eventPhase should be initialized to NONE (0)');
-            $this->assertEqualsData($ev->bubbles, false, 'bubbles should be initialized to false');
-            $this->assertEqualsData($ev->cancelable, false, 'cancelable should be initialized to false');
-            $this->assertEqualsData($ev->defaultPrevented, false, 'defaultPrevented should be initialized to false');
-            $this->assertEqualsData($ev->isTrusted, false, 'isTrusted should be initialized to false');
+            $this->wptAssertEquals($ev->type, '', 'type should be initialized to the empty string');
+            $this->wptAssertEquals($ev->target, null, 'target should be initialized to null');
+            $this->wptAssertEquals($ev->currentTarget, null, 'currentTarget should be initialized to null');
+            $this->wptAssertEquals($ev->eventPhase, 0, 'eventPhase should be initialized to NONE (0)');
+            $this->wptAssertEquals($ev->bubbles, false, 'bubbles should be initialized to false');
+            $this->wptAssertEquals($ev->cancelable, false, 'cancelable should be initialized to false');
+            $this->wptAssertEquals($ev->defaultPrevented, false, 'defaultPrevented should be initialized to false');
+            $this->wptAssertEquals($ev->isTrusted, false, 'isTrusted should be initialized to false');
         }, "createEvent('" . $arg . "') should be initialized correctly.");
     }
     public function testDocumentCreateEventHttps()
@@ -35,7 +35,7 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
                 $plural = $alias . 's';
                 if (!isset($aliases[$plural])) {
                     $this->assertTest(function () use(&$plural) {
-                        $this->assertThrowsDomData('NOT_SUPPORTED_ERR', function () use(&$plural) {
+                        $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use(&$plural) {
                             $evt = $this->doc->createEvent($plural);
                         });
                     }, 'Should throw NOT_SUPPORTED_ERR for pluralized legacy event interface "' . $plural . '"');
@@ -43,14 +43,14 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
             }
         }
         $this->assertTest(function () {
-            $this->assertThrowsDomData('NOT_SUPPORTED_ERR', function () {
+            $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () {
                 $evt = $this->doc->createEvent('foo');
             });
-            $this->assertThrowsDomData('NOT_SUPPORTED_ERR', function () {
+            $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () {
                 // 'LATIN CAPITAL LETTER I WITH DOT ABOVE' (U+0130)
                 $evt = $this->doc->createEvent("UİEvent");
             });
-            $this->assertThrowsDomData('NOT_SUPPORTED_ERR', function () {
+            $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () {
                 // 'LATIN SMALL LETTER DOTLESS I' (U+0131)
                 $evt = $this->doc->createEvent("UıEvent");
             });
@@ -137,14 +137,14 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
         ];
         foreach ($someNonCreateableEvents as $eventInterface) {
             $this->assertTest(function () use(&$eventInterface) {
-                $this->assertThrowsDomData('NOT_SUPPORTED_ERR', function () use(&$eventInterface) {
+                $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use(&$eventInterface) {
                     $evt = $this->doc->createEvent($eventInterface);
                 });
             }, 'Should throw NOT_SUPPORTED_ERR for non-legacy event interface "' . $eventInterface . '"');
             // SVGEvents is allowed, other plurals are not
             if ($eventInterface !== 'SVGEvent') {
                 $this->assertTest(function () use(&$eventInterface) {
-                    $this->assertThrowsDomData('NOT_SUPPORTED_ERR', function () use(&$eventInterface) {
+                    $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use(&$eventInterface) {
                         $evt = $this->doc->createEvent($eventInterface . 's');
                     });
                 }, 'Should throw NOT_SUPPORTED_ERR for pluralized non-legacy event interface "' . $eventInterface . 's"');

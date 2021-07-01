@@ -9,10 +9,10 @@ class NodeIsConnectedTest extends WPTTestHarness
     public function checkNodes($aConnectedNodes, $aDisconnectedNodes)
     {
         foreach ($aConnectedNodes as $node) {
-            return $this->assertTrueData($node->isConnected);
+            return $this->wptAssertTrue($node->isConnected);
         }
         foreach ($aDisconnectedNodes as $node) {
-            return $this->assertFalseData($node->isConnected);
+            return $this->wptAssertFalse($node->isConnected);
         }
     }
     public function testNodeIsConnected()

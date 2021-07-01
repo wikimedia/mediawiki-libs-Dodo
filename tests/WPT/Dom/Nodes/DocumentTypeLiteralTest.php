@@ -10,10 +10,10 @@ class DocumentTypeLiteralTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DocumentType-literal.html');
         $this->assertTest(function () {
             $doctype = $this->doc->firstChild;
-            $this->assertTrueData($doctype instanceof DocumentType);
-            $this->assertEqualsData($doctype->name, 'html');
-            $this->assertEqualsData($doctype->publicId, 'STAFF');
-            $this->assertEqualsData($doctype->systemId, 'staffNS.dtd');
+            $this->wptAssertTrue($doctype instanceof DocumentType);
+            $this->wptAssertEquals($doctype->name, 'html');
+            $this->wptAssertEquals($doctype->publicId, 'STAFF');
+            $this->wptAssertEquals($doctype->systemId, 'staffNS.dtd');
         });
     }
 }

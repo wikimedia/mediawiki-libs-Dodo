@@ -28,7 +28,7 @@ class RangeCommonAncestorContainerTest extends WPTTestHarness
                     $container = $container->parentNode;
                 }
                 // "Return container."
-                $this->assertEqualsData($range->commonAncestorContainer, $container);
+                $this->wptAssertEquals($range->commonAncestorContainer, $container);
             }, $i . ': range ' . $testRanges[$i]);
         }
         $testDiv->style->display = 'none';

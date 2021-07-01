@@ -13,20 +13,20 @@ class DocumentCreateTextNodeTest extends WPTTestHarness
             $this->assertTest(function () use(&$method, &$value, &$iface, &$nodeType, &$nodeName) {
                 $c = $this->doc->{$method}($value);
                 $expected = strval($value);
-                $this->assertTrueData($c instanceof $iface);
-                $this->assertTrueData($c instanceof CharacterData);
-                $this->assertTrueData($c instanceof Node);
-                $this->assertEqualsData($c->ownerDocument, $this->doc);
-                $this->assertEqualsData($c->data, $expected, 'data');
-                $this->assertEqualsData($c->nodeValue, $expected, 'nodeValue');
-                $this->assertEqualsData($c->textContent, $expected, 'textContent');
-                $this->assertEqualsData(count($c), count($expected));
-                $this->assertEqualsData($c->nodeType, $nodeType);
-                $this->assertEqualsData($c->nodeName, $nodeName);
-                $this->assertEqualsData($c->hasChildNodes(), false);
-                $this->assertEqualsData(count($c->childNodes), 0);
-                $this->assertEqualsData($c->firstChild, null);
-                $this->assertEqualsData($c->lastChild, null);
+                $this->wptAssertTrue($c instanceof $iface);
+                $this->wptAssertTrue($c instanceof CharacterData);
+                $this->wptAssertTrue($c instanceof Node);
+                $this->wptAssertEquals($c->ownerDocument, $this->doc);
+                $this->wptAssertEquals($c->data, $expected, 'data');
+                $this->wptAssertEquals($c->nodeValue, $expected, 'nodeValue');
+                $this->wptAssertEquals($c->textContent, $expected, 'textContent');
+                $this->wptAssertEquals(count($c), count($expected));
+                $this->wptAssertEquals($c->nodeType, $nodeType);
+                $this->wptAssertEquals($c->nodeName, $nodeName);
+                $this->wptAssertEquals($c->hasChildNodes(), false);
+                $this->wptAssertEquals(count($c->childNodes), 0);
+                $this->wptAssertEquals($c->firstChild, null);
+                $this->wptAssertEquals($c->lastChild, null);
             }, $method . '(' . $this->formatValue($value) . ')');
         }
     }

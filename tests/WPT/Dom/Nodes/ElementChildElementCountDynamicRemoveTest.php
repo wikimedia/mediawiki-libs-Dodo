@@ -12,7 +12,7 @@ class ElementChildElementCountDynamicRemoveTest extends WPTTestHarness
             $parentEl = $this->doc->getElementById('parentEl');
             $lec = $parentEl->lastElementChild;
             $parentEl->removeChild($lec);
-            $this->assertEqualsData($parentEl->childElementCount, 1);
+            $this->wptAssertEquals($parentEl->childElementCount, 1);
         });
     }
 }

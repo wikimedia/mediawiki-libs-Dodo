@@ -14,7 +14,7 @@ class RangeCollapseTest extends WPTTestHarness
             $range->detach();
             // should be a no-op and therefore the following should not throw
             $range->collapse($toStart);
-            $this->assertEqualsData(true, $range->collapsed);
+            $this->wptAssertEquals(true, $range->collapsed);
         }
         // Have to account for Ranges involving Documents!
         $ownerDoc = $rangeEndpoints[0]->nodeType == Node::DOCUMENT_NODE ? $rangeEndpoints[0] : $rangeEndpoints[0]->ownerDocument;
@@ -23,17 +23,17 @@ class RangeCollapseTest extends WPTTestHarness
         $range->setEnd($rangeEndpoints[2], $rangeEndpoints[3]);
         $expectedContainer = $toStart ? $range->startContainer : $range->endContainer;
         $expectedOffset = $toStart ? $range->startOffset : $range->endOffset;
-        $this->assertEqualsData($range->collapsed, $range->startContainer == $range->endContainer && $range->startOffset == $range->endOffset, 'collapsed must be true if and only if the start and end are equal');
+        $this->wptAssertEquals($range->collapsed, $range->startContainer == $range->endContainer && $range->startOffset == $range->endOffset, 'collapsed must be true if and only if the start and end are equal');
         if ($toStart === null) {
             $range->collapse();
         } else {
             $range->collapse($toStart);
         }
-        $this->assertEqualsData($range->startContainer, $expectedContainer, 'Wrong startContainer');
-        $this->assertEqualsData($range->endContainer, $expectedContainer, 'Wrong endContainer');
-        $this->assertEqualsData($range->startOffset, $expectedOffset, 'Wrong startOffset');
-        $this->assertEqualsData($range->endOffset, $expectedOffset, 'Wrong endOffset');
-        $this->assertTrueData($range->collapsed, '.collapsed must be set after .collapsed()');
+        $this->wptAssertEquals($range->startContainer, $expectedContainer, 'Wrong startContainer');
+        $this->wptAssertEquals($range->endContainer, $expectedContainer, 'Wrong endContainer');
+        $this->wptAssertEquals($range->startOffset, $expectedOffset, 'Wrong startOffset');
+        $this->wptAssertEquals($range->endOffset, $expectedOffset, 'Wrong endOffset');
+        $this->wptAssertTrue($range->collapsed, '.collapsed must be set after .collapsed()');
     }
     public function testRangeCollapse()
     {

@@ -18,44 +18,44 @@ class InsertAdjacentTest extends WPTTestHarness
             $this->assertTest(function () use(&$div, &$texts, &$position, &$el, &$possiblePositions) {
                 $div->id = $texts[$position];
                 $el->insertAdjacentElement($position, $div);
-                $this->assertEqualsData($el[$possiblePositions[$position]]->id, $texts[$position]);
+                $this->wptAssertEquals($el[$possiblePositions[$position]]->id, $texts[$position]);
             }, 'insertAdjacentElement(' . $position . ', ' . $div . ' )');
             $this->assertTest(function () use(&$el, &$position, &$texts, &$possiblePositions) {
                 $el->insertAdjacentText($position, $texts[$position]);
-                $this->assertEqualsData($el[$possiblePositions[$position]]->textContent, $texts[$position]);
+                $this->wptAssertEquals($el[$possiblePositions[$position]]->textContent, $texts[$position]);
             }, 'insertAdjacentText(' . $position . ', ' . $texts[$position] . ' )');
         }
         $this->assertTest(function () use(&$el) {
-            $this->assertThrowsJsData($this->type_error, function () use(&$el) {
+            $this->wptAssertThrowsJs($this->type_error, function () use(&$el) {
                 $el->insertAdjacentElement('afterbegin', $this->doc->implementation->createDocumentType('html'));
             });
         }, 'invalid object argument insertAdjacentElement');
         $this->assertTest(function () {
             $el = $this->doc->implementation->createHTMLDocument()->documentElement;
-            $this->assertThrowsDomData('HIERARCHY_REQUEST_ERR', function () use(&$el) {
+            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use(&$el) {
                 $el->insertAdjacentElement('beforebegin', $this->doc->createElement('banane'));
             });
         }, 'invalid caller object insertAdjacentElement');
         $this->assertTest(function () {
             $el = $this->doc->implementation->createHTMLDocument()->documentElement;
-            $this->assertThrowsDomData('HIERARCHY_REQUEST_ERR', function () use(&$el) {
+            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use(&$el) {
                 $el->insertAdjacentText('beforebegin', 'tomate farcie');
             });
         }, 'invalid caller object insertAdjacentText');
         $this->assertTest(function () use(&$el) {
             $div = $this->doc->createElement('h3');
-            $this->assertThrowsDomData('SYNTAX_ERR', function () use(&$el, &$div) {
+            $this->wptAssertThrowsDom('SYNTAX_ERR', function () use(&$el, &$div) {
                 $el->insertAdjacentElement('heeeee', $div);
             });
         }, 'invalid syntax for insertAdjacentElement');
         $this->assertTest(function () use(&$el) {
-            $this->assertThrowsDomData('SYNTAX_ERR', function () use(&$el) {
+            $this->wptAssertThrowsDom('SYNTAX_ERR', function () use(&$el) {
                 $el->insertAdjacentText('hoooo', 'magret de canard');
             });
         }, 'invalid syntax for insertAdjacentText');
         $this->assertTest(function () use(&$el) {
             $div = $this->doc->createElement('div');
-            $this->assertEqualsData($div->insertAdjacentElement('beforebegin', $el), null);
+            $this->wptAssertEquals($div->insertAdjacentElement('beforebegin', $el), null);
         }, 'insertAdjacentText should return null');
     }
 }

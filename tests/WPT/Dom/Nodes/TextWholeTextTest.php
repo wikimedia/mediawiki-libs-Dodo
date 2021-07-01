@@ -15,25 +15,25 @@ class TextWholeTextTest extends WPTTestHarness
             $t1 = $this->doc->createTextNode('a');
             $t2 = $this->doc->createTextNode('b');
             $t3 = $this->doc->createTextNode('c');
-            $this->assertEqualsData($t1->wholeText, $t1->textContent);
+            $this->wptAssertEquals($t1->wholeText, $t1->textContent);
             $parent->appendChild($t1);
-            $this->assertEqualsData($t1->wholeText, $t1->textContent);
+            $this->wptAssertEquals($t1->wholeText, $t1->textContent);
             $parent->appendChild($t2);
-            $this->assertEqualsData($t1->wholeText, $t1->textContent + $t2->textContent);
-            $this->assertEqualsData($t2->wholeText, $t1->textContent + $t2->textContent);
+            $this->wptAssertEquals($t1->wholeText, $t1->textContent + $t2->textContent);
+            $this->wptAssertEquals($t2->wholeText, $t1->textContent + $t2->textContent);
             $parent->appendChild($t3);
-            $this->assertEqualsData($t1->wholeText, $t1->textContent + $t2->textContent + $t3->textContent);
-            $this->assertEqualsData($t2->wholeText, $t1->textContent + $t2->textContent + $t3->textContent);
-            $this->assertEqualsData($t3->wholeText, $t1->textContent + $t2->textContent + $t3->textContent);
+            $this->wptAssertEquals($t1->wholeText, $t1->textContent + $t2->textContent + $t3->textContent);
+            $this->wptAssertEquals($t2->wholeText, $t1->textContent + $t2->textContent + $t3->textContent);
+            $this->wptAssertEquals($t3->wholeText, $t1->textContent + $t2->textContent + $t3->textContent);
             $a = $this->doc->createElement('a');
             $a->textContent = "I'm an Anchor";
             $parent->insertBefore($a, $t3);
             $span = $this->doc->createElement('span');
             $span->textContent = "I'm a Span";
             $parent->appendChild($this->doc->createElement('span'));
-            $this->assertEqualsData($t1->wholeText, $t1->textContent + $t2->textContent);
-            $this->assertEqualsData($t2->wholeText, $t1->textContent + $t2->textContent);
-            $this->assertEqualsData($t3->wholeText, $t3->textContent);
+            $this->wptAssertEquals($t1->wholeText, $t1->textContent + $t2->textContent);
+            $this->wptAssertEquals($t2->wholeText, $t1->textContent + $t2->textContent);
+            $this->wptAssertEquals($t3->wholeText, $t3->textContent);
         }, 'wholeText returns text of all Text nodes logically adjacent to the node, in document order.');
     }
 }

@@ -18,7 +18,7 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
                     // "If other and reference are the same object, return zero and
                     // terminate these steps."
                     if ($other === $reference) {
-                        $this->assertEqualsData($result, 0);
+                        $this->wptAssertEquals($result, 0);
                         return;
                     }
                     // "If other and reference are not in the same tree, return the result of
@@ -29,7 +29,7 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
                     // steps."
                     if (Common::furthestAncestor($reference) !== Common::furthestAncestor($other)) {
                         // TODO: Test that it's consistent.
-                        $this->assertInArrayData($result, [Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_PRECEDING, Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_FOLLOWING]);
+                        $this->wptAssertInArray($result, [Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_PRECEDING, Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_FOLLOWING]);
                         return;
                     }
                     // "If other is an ancestor of reference, return the result of
@@ -40,7 +40,7 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
                         $ancestor = $ancestor->parentNode;
                     }
                     if ($ancestor === $other) {
-                        $this->assertEqualsData($result, Node::DOCUMENT_POSITION_CONTAINS + Node::DOCUMENT_POSITION_PRECEDING);
+                        $this->wptAssertEquals($result, Node::DOCUMENT_POSITION_CONTAINS + Node::DOCUMENT_POSITION_PRECEDING);
                         return;
                     }
                     // "If other is a descendant of reference, return the result of adding
@@ -51,7 +51,7 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
                         $ancestor = $ancestor->parentNode;
                     }
                     if ($ancestor === $reference) {
-                        $this->assertEqualsData($result, Node::DOCUMENT_POSITION_CONTAINED_BY + Node::DOCUMENT_POSITION_FOLLOWING);
+                        $this->wptAssertEquals($result, Node::DOCUMENT_POSITION_CONTAINED_BY + Node::DOCUMENT_POSITION_FOLLOWING);
                         return;
                     }
                     // "If other is preceding reference return DOCUMENT_POSITION_PRECEDING
@@ -61,11 +61,11 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
                         $prev = Common::previousNode($prev);
                     }
                     if ($prev === $other) {
-                        $this->assertEqualsData($result, Node::DOCUMENT_POSITION_PRECEDING);
+                        $this->wptAssertEquals($result, Node::DOCUMENT_POSITION_PRECEDING);
                         return;
                     }
                     // "Return DOCUMENT_POSITION_FOLLOWING."
-                    $this->assertEqualsData($result, Node::DOCUMENT_POSITION_FOLLOWING);
+                    $this->wptAssertEquals($result, Node::DOCUMENT_POSITION_FOLLOWING);
                 }, $referenceName . '.compareDocumentPosition(' . $otherName . ')');
             }
         }

@@ -15,14 +15,14 @@ class ElementGetElementsByClassNameTest extends WPTTestHarness
             $b->className = 'foo';
             $a->appendChild($b);
             $list = $a->getElementsByClassName('foo');
-            $this->assertArrayEqualsData($list, [$b]);
+            $this->wptAssertArrayEquals($list, [$b]);
             $secondList = $a->getElementsByClassName('foo');
-            $this->assertTrueData($list === $secondList || $list !== $secondList, 'Caching is allowed.');
+            $this->wptAssertTrue($list === $secondList || $list !== $secondList, 'Caching is allowed.');
         }, 'getElementsByClassName should work on disconnected subtrees.');
         $this->assertTest(function () {
             $list = $this->doc->getElementsByClassName('foo');
-            $this->assertFalseData($list instanceof NodeList, 'NodeList');
-            $this->assertTrueData($list instanceof HTMLCollection, 'HTMLCollection');
+            $this->wptAssertFalse($list instanceof NodeList, 'NodeList');
+            $this->wptAssertTrue($list instanceof HTMLCollection, 'HTMLCollection');
         }, 'Interface should be correct.');
         $this->assertTest(function () {
             $a = $this->doc->createElement('a');
@@ -35,13 +35,13 @@ class ElementGetElementsByClassNameTest extends WPTTestHarness
             });
             $a->appendChild($b);
             $l = $a->getElementsByClassName('foo');
-            $this->assertTrueData($l instanceof HTMLCollection);
-            $this->assertEqualsData(count($l), 1);
+            $this->wptAssertTrue($l instanceof HTMLCollection);
+            $this->wptAssertEquals(count($l), 1);
             $c->className = 'foo';
             $a->appendChild($c);
-            $this->assertEqualsData(count($l), 2);
+            $this->wptAssertEquals(count($l), 2);
             $a->removeChild($c);
-            $this->assertEqualsData(count($l), 1);
+            $this->wptAssertEquals(count($l), 1);
         }, 'getElementsByClassName() should be a live collection');
     }
 }

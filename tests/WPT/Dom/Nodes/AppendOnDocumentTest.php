@@ -13,39 +13,39 @@ class AppendOnDocumentTest extends WPTTestHarness
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $parent->append();
-            $this->assertArrayEqualsData($parent->childNodes, []);
+            $this->wptAssertArrayEquals($parent->childNodes, []);
         }, 'Document.append() without any argument, on a Document having no child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $x = $this->doc->createElement('x');
             $parent->append($x);
-            $this->assertArrayEqualsData($parent->childNodes, [$x]);
+            $this->wptAssertArrayEquals($parent->childNodes, [$x]);
         }, 'Document.append() with only one element as an argument, on a Document having no child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $x = $this->doc->createElement('x');
             $y = $this->doc->createElement('y');
             $parent->appendChild($x);
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$parent, &$y) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$parent, &$y) {
                 $parent->append($y);
             });
-            $this->assertArrayEqualsData($parent->childNodes, [$x]);
+            $this->wptAssertArrayEquals($parent->childNodes, [$x]);
         }, 'Document.append() with only one element as an argument, on a Document having one child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$parent) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$parent) {
                 $parent->append('text');
             });
-            $this->assertArrayEqualsData($parent->childNodes, []);
+            $this->wptAssertArrayEquals($parent->childNodes, []);
         }, 'Document.append() with text as an argument, on a Document having no child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $x = $this->doc->createElement('x');
             $y = $this->doc->createElement('y');
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$parent, &$x, &$y) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$parent, &$x, &$y) {
                 $parent->append($x, $y);
             });
-            $this->assertArrayEqualsData($parent->childNodes, []);
+            $this->wptAssertArrayEquals($parent->childNodes, []);
         }, 'Document.append() with two elements as the argument, on a Document having no child.');
     }
 }

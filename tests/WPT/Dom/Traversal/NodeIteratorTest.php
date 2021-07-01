@@ -10,26 +10,26 @@ class NodeIteratorTest extends WPTTestHarness
     public function checkIter($iter, $root, $whatToShowValue)
     {
         $whatToShowValue = $whatToShowValue === null ? 0xffffffff : $whatToShowValue;
-        $this->assertEqualsData($iter, '[object NodeIterator]', 'toString');
-        $this->assertEqualsData($iter->root, $root, 'root');
-        $this->assertEqualsData($iter->whatToShow, $whatToShowValue, 'whatToShow');
-        $this->assertEqualsData($iter->filter, null, 'filter');
-        $this->assertEqualsData($iter->referenceNode, $root, 'referenceNode');
-        $this->assertEqualsData($iter->pointerBeforeReferenceNode, true, 'pointerBeforeReferenceNode');
-        $this->assertReadonlyData($iter, 'root');
-        $this->assertReadonlyData($iter, 'whatToShow');
-        $this->assertReadonlyData($iter, 'filter');
-        $this->assertReadonlyData($iter, 'referenceNode');
-        $this->assertReadonlyData($iter, 'pointerBeforeReferenceNode');
+        $this->wptAssertEquals($iter, '[object NodeIterator]', 'toString');
+        $this->wptAssertEquals($iter->root, $root, 'root');
+        $this->wptAssertEquals($iter->whatToShow, $whatToShowValue, 'whatToShow');
+        $this->wptAssertEquals($iter->filter, null, 'filter');
+        $this->wptAssertEquals($iter->referenceNode, $root, 'referenceNode');
+        $this->wptAssertEquals($iter->pointerBeforeReferenceNode, true, 'pointerBeforeReferenceNode');
+        $this->wptAssertReadonly($iter, 'root');
+        $this->wptAssertReadonly($iter, 'whatToShow');
+        $this->wptAssertReadonly($iter, 'filter');
+        $this->wptAssertReadonly($iter, 'referenceNode');
+        $this->wptAssertReadonly($iter, 'pointerBeforeReferenceNode');
     }
     public function testIterator($root, $whatToShow, $filter)
     {
         $iter = $this->doc->createNodeIterator($root, $whatToShow, $filter);
-        $this->assertEqualsData($iter->root, $root, '.root');
-        $this->assertEqualsData($iter->referenceNode, $root, 'Initial .referenceNode');
-        $this->assertEqualsData($iter->pointerBeforeReferenceNode, true, '.pointerBeforeReferenceNode');
-        $this->assertEqualsData($iter->whatToShow, $whatToShow, '.whatToShow');
-        $this->assertEqualsData($iter->filter, $filter, '.filter');
+        $this->wptAssertEquals($iter->root, $root, '.root');
+        $this->wptAssertEquals($iter->referenceNode, $root, 'Initial .referenceNode');
+        $this->wptAssertEquals($iter->pointerBeforeReferenceNode, true, '.pointerBeforeReferenceNode');
+        $this->wptAssertEquals($iter->whatToShow, $whatToShow, '.whatToShow');
+        $this->wptAssertEquals($iter->filter, $filter, '.filter');
         $expectedReferenceNode = $root;
         $expectedBeforeNode = true;
         // "Let node be the value of the referenceNode attribute."
@@ -68,9 +68,9 @@ class NodeIteratorTest extends WPTTestHarness
                 $expectedBeforeNode = $beforeNode;
                 break;
             } while (true);
-            $this->assertEqualsData($iter->nextNode(), $node, '.nextNode() ' . $i . ' time(s)');
-            $this->assertEqualsData($iter->referenceNode, $expectedReferenceNode, '.referenceNode after nextNode() ' . $i . ' time(s)');
-            $this->assertEqualsData($iter->pointerBeforeReferenceNode, $expectedBeforeNode, '.pointerBeforeReferenceNode after nextNode() ' . $i . ' time(s)');
+            $this->wptAssertEquals($iter->nextNode(), $node, '.nextNode() ' . $i . ' time(s)');
+            $this->wptAssertEquals($iter->referenceNode, $expectedReferenceNode, '.referenceNode after nextNode() ' . $i . ' time(s)');
+            $this->wptAssertEquals($iter->pointerBeforeReferenceNode, $expectedBeforeNode, '.pointerBeforeReferenceNode after nextNode() ' . $i . ' time(s)');
             $i++;
         }
         // Same but for previousNode() (mostly copy-pasted, oh well)
@@ -113,9 +113,9 @@ class NodeIteratorTest extends WPTTestHarness
                 $expectedBeforeNode = $beforeNode;
                 break;
             } while (true);
-            $this->assertEqualsData($iter->previousNode(), $node, '.previousNode() ' . $i . ' time(s)');
-            $this->assertEqualsData($iter->referenceNode, $expectedReferenceNode, '.referenceNode after previousNode() ' . $i . ' time(s)');
-            $this->assertEqualsData($iter->pointerBeforeReferenceNode, $expectedBeforeNode, '.pointerBeforeReferenceNode after previousNode() ' . $i . ' time(s)');
+            $this->wptAssertEquals($iter->previousNode(), $node, '.previousNode() ' . $i . ' time(s)');
+            $this->wptAssertEquals($iter->referenceNode, $expectedReferenceNode, '.referenceNode after previousNode() ' . $i . ' time(s)');
+            $this->wptAssertEquals($iter->pointerBeforeReferenceNode, $expectedBeforeNode, '.pointerBeforeReferenceNode after previousNode() ' . $i . ' time(s)');
             $i++;
         }
     }
@@ -144,7 +144,7 @@ class NodeIteratorTest extends WPTTestHarness
             $iter = $this->doc->createNodeIterator($this->doc, NodeFilter::SHOW_ALL, function () use(&$err) {
                 throw $err;
             });
-            $this->assertThrowsExactlyData($err, function () use(&$iter) {
+            $this->wptAssertThrowsExactly($err, function () use(&$iter) {
                 $iter->nextNode();
             });
         }, 'Propagate exception from filter function');
@@ -159,11 +159,11 @@ class NodeIteratorTest extends WPTTestHarness
             });
             $iter->nextNode();
             $iter->nextNode();
-            $this->assertThrowsDomData('InvalidStateError', function () use(&$iter) {
+            $this->wptAssertThrowsDom('InvalidStateError', function () use(&$iter) {
                 $iter->nextNode();
             });
             $depth--;
-            $this->assertThrowsDomData('InvalidStateError', function () use(&$iter) {
+            $this->wptAssertThrowsDom('InvalidStateError', function () use(&$iter) {
                 $iter->previousNode();
             });
         }, 'Recursive filters need to throw');

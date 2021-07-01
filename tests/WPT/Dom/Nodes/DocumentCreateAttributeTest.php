@@ -14,12 +14,12 @@ class DocumentCreateAttributeTest extends WPTTestHarness
         $xml_document = $this->doc->implementation->createDocument(null, null, null);
         foreach ($this->invalid_names as $name) {
             $this->assertTest(function () use(&$name) {
-                $this->assertThrowsDomData('INVALID_CHARACTER_ERR', function () use(&$name) {
+                $this->wptAssertThrowsDom('INVALID_CHARACTER_ERR', function () use(&$name) {
                     $this->doc->createAttribute($name, 'test');
                 });
             }, 'HTML document.createAttribute(' . $this->formatValue($name) . ') should throw');
             $this->assertTest(function () use(&$xml_document, &$name) {
-                $this->assertThrowsDomData('INVALID_CHARACTER_ERR', function () use(&$xml_document, &$name) {
+                $this->wptAssertThrowsDom('INVALID_CHARACTER_ERR', function () use(&$xml_document, &$name) {
                     $xml_document->createAttribute($name, 'test');
                 });
             }, 'XML document.createAttribute(' . $this->formatValue($name) . ') should throw');
@@ -39,12 +39,12 @@ class DocumentCreateAttributeTest extends WPTTestHarness
             $this->assertTest(function () use(&$name) {
                 $attribute = $this->doc->createAttribute($name);
                 $this->attrIs($attribute, '', strtolower(strval($name)), null, null, strtolower(strval($name)));
-                $this->assertEqualsData($attribute->ownerElement, null);
+                $this->wptAssertEquals($attribute->ownerElement, null);
             }, 'HTML document.createAttribute(' . $this->formatValue($name) . ')');
             $this->assertTest(function () use(&$xml_document, &$name) {
                 $attribute = $xml_document->createAttribute($name);
                 $this->attrIs($attribute, '', strval($name), null, null, strval($name));
-                $this->assertEqualsData($attribute->ownerElement, null);
+                $this->wptAssertEquals($attribute->ownerElement, null);
             }, 'XML document.createAttribute(' . $this->formatValue($name) . ')');
         }
     }

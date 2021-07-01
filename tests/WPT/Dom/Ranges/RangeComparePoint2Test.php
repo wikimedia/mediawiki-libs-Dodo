@@ -11,18 +11,18 @@ class RangeComparePoint2Test extends WPTTestHarness
         $this->assertTest(function () {
             $r = $this->doc->createRange();
             $r->detach();
-            $this->assertEqualsData($r->comparePoint($this->doc->body, 0), 1);
+            $this->wptAssertEquals($r->comparePoint($this->doc->body, 0), 1);
         });
         $this->assertTest(function () {
             $r = $this->doc->createRange();
-            $this->assertThrowsJsData($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
                 $r->comparePoint(null, 0);
             });
         });
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('tralala');
             $r = $this->doc->createRange();
-            $this->assertThrowsDomData('WRONG_DOCUMENT_ERR', function () use(&$r, &$doc) {
+            $this->wptAssertThrowsDom('WRONG_DOCUMENT_ERR', function () use(&$r, &$doc) {
                 $r->comparePoint($doc->body, 0);
             });
         });

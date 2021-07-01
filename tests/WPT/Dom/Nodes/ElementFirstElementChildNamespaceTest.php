@@ -15,10 +15,10 @@ class ElementFirstElementChildNamespaceTest extends WPTTestHarness
             $el->setAttribute('id', 'first_element_child');
             $parentEl->appendChild($el);
             $fec = $parentEl->firstElementChild;
-            $this->assertTrueData(!!$fec);
-            $this->assertEqualsData($fec->nodeType, 1);
-            $this->assertEqualsData($fec->getAttribute('id'), 'first_element_child');
-            $this->assertEqualsData($fec->localName, 'dill');
+            $this->wptAssertTrue(!!$fec);
+            $this->wptAssertEquals($fec->nodeType, 1);
+            $this->wptAssertEquals($fec->getAttribute('id'), 'first_element_child');
+            $this->wptAssertEquals($fec->localName, 'dill');
         });
     }
 }

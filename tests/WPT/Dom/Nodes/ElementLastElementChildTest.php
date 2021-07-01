@@ -12,9 +12,9 @@ class ElementLastElementChildTest extends WPTTestHarness
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $lec = $parentEl->lastElementChild;
-            $this->assertTrueData(!!$lec);
-            $this->assertEqualsData($lec->nodeType, 1);
-            $this->assertEqualsData($lec->getAttribute('id'), 'last_element_child');
+            $this->wptAssertTrue(!!$lec);
+            $this->wptAssertEquals($lec->nodeType, 1);
+            $this->wptAssertEquals($lec->getAttribute('id'), 'last_element_child');
         });
     }
 }

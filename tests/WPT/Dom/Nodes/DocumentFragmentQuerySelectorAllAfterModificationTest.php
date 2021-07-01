@@ -11,10 +11,10 @@ class DocumentFragmentQuerySelectorAllAfterModificationTest extends WPTTestHarne
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DocumentFragment-querySelectorAll-after-modification.html');
         $frag = $this->doc->createDocumentFragment();
         $frag->appendChild($this->doc->createElement('div'));
-        $this->assertArrayEqualsData($frag->querySelectorAll('img'), [], 'before modification');
+        $this->wptAssertArrayEquals($frag->querySelectorAll('img'), [], 'before modification');
         $frag->appendChild($this->doc->createElement('div'));
         // If the bug is present, this will throw.
-        $this->assertArrayEqualsData($frag->querySelectorAll('img'), [], 'after modification');
+        $this->wptAssertArrayEquals($frag->querySelectorAll('img'), [], 'after modification');
         $this->done();
     }
 }

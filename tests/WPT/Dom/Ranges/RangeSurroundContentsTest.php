@@ -101,16 +101,16 @@ class RangeSurroundContentsTest extends WPTTestHarness
             $expectedRange = $expectedIframe->contentWindow->testRange;
             $actualNode = $actualIframe->contentWindow->testNode;
             $expectedNode = $expectedIframe->contentWindow->testNode;
-            $this->assertEqualsData($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual surroundContents()');
-            $this->assertEqualsData($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated surroundContents()');
-            $this->assertEqualsData(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
-            $this->assertNotEqualsData($actualRange, null, 'Range produced in actual iframe was null');
-            $this->assertEqualsData(gettype($expectedRange), 'object', 'typeof Range produced in expected iframe');
-            $this->assertNotEqualsData($expectedRange, null, 'Range produced in expected iframe was null');
-            $this->assertEqualsData(gettype($actualNode), 'object', 'typeof Node produced in actual iframe');
-            $this->assertNotEqualsData($actualNode, null, 'Node produced in actual iframe was null');
-            $this->assertEqualsData(gettype($expectedNode), 'object', 'typeof Node produced in expected iframe');
-            $this->assertNotEqualsData($expectedNode, null, 'Node produced in expected iframe was null');
+            $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual surroundContents()');
+            $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated surroundContents()');
+            $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
+            $this->wptAssertNotEquals($actualRange, null, 'Range produced in actual iframe was null');
+            $this->wptAssertEquals(gettype($expectedRange), 'object', 'typeof Range produced in expected iframe');
+            $this->wptAssertNotEquals($expectedRange, null, 'Range produced in expected iframe was null');
+            $this->wptAssertEquals(gettype($actualNode), 'object', 'typeof Node produced in actual iframe');
+            $this->wptAssertNotEquals($actualNode, null, 'Node produced in actual iframe was null');
+            $this->wptAssertEquals(gettype($expectedNode), 'object', 'typeof Node produced in expected iframe');
+            $this->wptAssertNotEquals($expectedNode, null, 'Node produced in expected iframe was null');
             // We want to test that the trees containing the ranges are equal, and
             // also the trees containing the moved nodes.  These might not be the
             // same, if we're inserting a node from a detached tree or a different
@@ -123,7 +123,7 @@ class RangeSurroundContentsTest extends WPTTestHarness
             if (Common::furthestAncestor($expectedNode) != $expectedRoots[0]) {
                 $expectedRoots[] = Common::furthestAncestor($expectedNode);
             }
-            $this->assertEqualsData(count($actualRoots), count($expectedRoots), 'Either the actual node and actual range are in the same tree but the expected are in different trees, or vice versa');
+            $this->wptAssertEquals(count($actualRoots), count($expectedRoots), 'Either the actual node and actual range are in the same tree but the expected are in different trees, or vice versa');
             // This doctype stuff is to work around the fact that Opera 11.00 will
             // move around doctypes within a document, even to totally invalid
             // positions, but it won't allow a new doctype to be added to a
@@ -147,7 +147,7 @@ class RangeSurroundContentsTest extends WPTTestHarness
                 throw $e;
             }
             if (gettype($result) == 'string') {
-                $this->assertThrowsDomData($result, $actualIframe->contentWindow->DOMException, function () use(&$actualRange, &$actualNode, &$expectedDoctype, &$actualDoctype) {
+                $this->wptAssertThrowsDom($result, $actualIframe->contentWindow->DOMException, function () use(&$actualRange, &$actualNode, &$expectedDoctype, &$actualDoctype) {
                     try {
                         $actualRange->surroundContents($actualNode);
                     } catch (Exception $e) {
@@ -180,26 +180,26 @@ class RangeSurroundContentsTest extends WPTTestHarness
         });
         $domTests[$i][$j]->done();
         $positionTests[$i][$j]->step(function () use(&$actualRange, &$expectedRange, &$actualNode, &$expectedNode, &$actualRoots, &$expectedRoots) {
-            $this->assertEqualsData($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual surroundContents()');
-            $this->assertEqualsData($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated surroundContents()');
-            $this->assertEqualsData(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
-            $this->assertNotEqualsData($actualRange, null, 'Range produced in actual iframe was null');
-            $this->assertEqualsData(gettype($expectedRange), 'object', 'typeof Range produced in expected iframe');
-            $this->assertNotEqualsData($expectedRange, null, 'Range produced in expected iframe was null');
-            $this->assertEqualsData(gettype($actualNode), 'object', 'typeof Node produced in actual iframe');
-            $this->assertNotEqualsData($actualNode, null, 'Node produced in actual iframe was null');
-            $this->assertEqualsData(gettype($expectedNode), 'object', 'typeof Node produced in expected iframe');
-            $this->assertNotEqualsData($expectedNode, null, 'Node produced in expected iframe was null');
+            $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual surroundContents()');
+            $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated surroundContents()');
+            $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
+            $this->wptAssertNotEquals($actualRange, null, 'Range produced in actual iframe was null');
+            $this->wptAssertEquals(gettype($expectedRange), 'object', 'typeof Range produced in expected iframe');
+            $this->wptAssertNotEquals($expectedRange, null, 'Range produced in expected iframe was null');
+            $this->wptAssertEquals(gettype($actualNode), 'object', 'typeof Node produced in actual iframe');
+            $this->wptAssertNotEquals($actualNode, null, 'Node produced in actual iframe was null');
+            $this->wptAssertEquals(gettype($expectedNode), 'object', 'typeof Node produced in expected iframe');
+            $this->wptAssertNotEquals($expectedNode, null, 'Node produced in expected iframe was null');
             for ($k = 0; $k < count($actualRoots); $k++) {
                 Common::assertNodesEqual($actualRoots[$k], $expectedRoots[$k], $k ? "moved node's tree root" : "range's tree root");
             }
-            $this->assertEqualsData($actualRange->startOffset, $expectedRange->startOffset, 'Unexpected startOffset after surroundContents()');
-            $this->assertEqualsData($actualRange->endOffset, $expectedRange->endOffset, 'Unexpected endOffset after surroundContents()');
+            $this->wptAssertEquals($actualRange->startOffset, $expectedRange->startOffset, 'Unexpected startOffset after surroundContents()');
+            $this->wptAssertEquals($actualRange->endOffset, $expectedRange->endOffset, 'Unexpected endOffset after surroundContents()');
             // How do we decide that the two nodes are equal, since they're in
             // different trees?  Since the DOMs are the same, it's enough to check
             // that the index in the parent is the same all the way up the tree.
             // But we can first cheat by just checking they're actually equal.
-            $this->assertTrueData($actualRange->startContainer->isEqualNode($expectedRange->startContainer), 'Unexpected startContainer after surroundContents(), expected ' . strtolower($expectedRange->startContainer->nodeName) . ' but got ' . strtolower($actualRange->startContainer->nodeName));
+            $this->wptAssertTrue($actualRange->startContainer->isEqualNode($expectedRange->startContainer), 'Unexpected startContainer after surroundContents(), expected ' . strtolower($expectedRange->startContainer->nodeName) . ' but got ' . strtolower($actualRange->startContainer->nodeName));
             $currentActual = $actualRange->startContainer;
             $currentExpected = $expectedRange->startContainer;
             $actual = '';
@@ -212,7 +212,7 @@ class RangeSurroundContentsTest extends WPTTestHarness
             }
             $actual = substr($actual, 0, count($actual) - 1);
             $expected = substr($expected, 0, count($expected) - 1);
-            $this->assertEqualsData($actual, $expected, "startContainer superficially looks right but is actually the wrong node if you trace back its index in all its ancestors (I'm surprised this actually happened");
+            $this->wptAssertEquals($actual, $expected, "startContainer superficially looks right but is actually the wrong node if you trace back its index in all its ancestors (I'm surprised this actually happened");
         });
         $positionTests[$i][$j]->done();
     }

@@ -14,19 +14,19 @@ class ElementSetAttributeTest extends WPTTestHarness
             $el->setAttributeNS('foo', 'x', 'first');
             $el->setAttributeNS('foo2', 'x', 'second');
             $el->setAttribute('x', 'changed');
-            $this->assertEqualsData(count($el->attributes), 2);
-            $this->assertEqualsData($el->getAttribute('x'), 'changed');
-            $this->assertEqualsData($el->getAttributeNS('foo', 'x'), 'changed');
-            $this->assertEqualsData($el->getAttributeNS('foo2', 'x'), 'second');
+            $this->wptAssertEquals(count($el->attributes), 2);
+            $this->wptAssertEquals($el->getAttribute('x'), 'changed');
+            $this->wptAssertEquals($el->getAttributeNS('foo', 'x'), 'changed');
+            $this->wptAssertEquals($el->getAttributeNS('foo2', 'x'), 'second');
         }, 'setAttribute should change the first attribute, irrespective of namespace');
         $this->assertTest(function () {
             // https://github.com/whatwg/dom/issues/31
             $el = $this->doc->createElement('p');
             $el->setAttribute('FOO', 'bar');
-            $this->assertEqualsData($el->getAttribute('foo'), 'bar');
-            $this->assertEqualsData($el->getAttribute('FOO'), 'bar');
-            $this->assertEqualsData($el->getAttributeNS('', 'foo'), 'bar');
-            $this->assertEqualsData($el->getAttributeNS('', 'FOO'), null);
+            $this->wptAssertEquals($el->getAttribute('foo'), 'bar');
+            $this->wptAssertEquals($el->getAttribute('FOO'), 'bar');
+            $this->wptAssertEquals($el->getAttributeNS('', 'foo'), 'bar');
+            $this->wptAssertEquals($el->getAttributeNS('', 'FOO'), null);
         }, 'setAttribute should lowercase before setting');
     }
 }

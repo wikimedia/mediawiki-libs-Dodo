@@ -126,10 +126,10 @@ class RangeDeleteContentsTest extends WPTTestHarness
         $actualRoots = null;
         $expectedRoots = null;
         $domTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange) {
-            $this->assertEqualsData($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual deleteContents()');
-            $this->assertEqualsData($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated deleteContents()');
-            $this->assertEqualsData(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
-            $this->assertEqualsData(gettype($expectedRange), 'object', 'typeof Range produced in expected iframe');
+            $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual deleteContents()');
+            $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated deleteContents()');
+            $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
+            $this->wptAssertEquals(gettype($expectedRange), 'object', 'typeof Range produced in expected iframe');
             // Just to be pedantic, we'll test not only that the tree we're
             // modifying is the same in expected vs. actual, but also that all the
             // nodes originally in it were the same.  Typically some nodes will
@@ -173,41 +173,41 @@ class RangeDeleteContentsTest extends WPTTestHarness
                     $actual = $actualRoots[$j];
                     $expected = $expectedRoots[$j];
                     while ($actual && $expected) {
-                        $this->assertEqualsData($actual->nodeType, $expected->nodeType, $msg . 'First difference: differing nodeType');
-                        $this->assertEqualsData($actual->nodeName, $expected->nodeName, $msg . 'First difference: differing nodeName');
-                        $this->assertEqualsData($actual->nodeValue, $expected->nodeValue, $msg . 'First difference: differing nodeValue (nodeName = "' . $actual->nodeName . '")');
-                        $this->assertEqualsData(count($actual->childNodes), count($expected->childNodes), $msg . 'First difference: differing number of children (nodeName = "' . $actual->nodeName . '")');
+                        $this->wptAssertEquals($actual->nodeType, $expected->nodeType, $msg . 'First difference: differing nodeType');
+                        $this->wptAssertEquals($actual->nodeName, $expected->nodeName, $msg . 'First difference: differing nodeName');
+                        $this->wptAssertEquals($actual->nodeValue, $expected->nodeValue, $msg . 'First difference: differing nodeValue (nodeName = "' . $actual->nodeName . '")');
+                        $this->wptAssertEquals(count($actual->childNodes), count($expected->childNodes), $msg . 'First difference: differing number of children (nodeName = "' . $actual->nodeName . '")');
                         $actual = Common::nextNode($actual);
                         $expected = Common::nextNode($expected);
                     }
-                    $this->assertUnreachedData("DOMs were not equal but we couldn't figure out why");
+                    $this->wptAssertUnreached("DOMs were not equal but we couldn't figure out why");
                 }
                 if ($j == 0) {
                     // Clearly something is wrong if the node lists are different
                     // lengths.  We want to report this only after we've already
                     // checked the main tree for equality, though, so it doesn't
                     // mask more interesting errors.
-                    $this->assertEqualsData(count($actualRoots), count($expectedRoots), "Actual and expected DOMs were broken up into a different number of pieces by deleteContents() (this probably means you created or detached nodes when you weren't supposed to)");
+                    $this->wptAssertEquals(count($actualRoots), count($expectedRoots), "Actual and expected DOMs were broken up into a different number of pieces by deleteContents() (this probably means you created or detached nodes when you weren't supposed to)");
                 }
             }
         });
         $domTests[$i]->done();
         $positionTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$actualRoots, &$expectedRoots) {
-            $this->assertEqualsData($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual deleteContents()');
-            $this->assertEqualsData($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated deleteContents()');
-            $this->assertEqualsData(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
-            $this->assertEqualsData(gettype($expectedRange), 'object', 'typeof Range produced in expected iframe');
-            $this->assertTrueData($actualRoots[0]->isEqualNode($expectedRoots[0]), 'The resulting DOMs were not equal, so comparing positions makes no sense');
-            $this->assertEqualsData($actualRange->startContainer, $actualRange->endContainer, 'startContainer and endContainer must always be the same after deleteContents()');
-            $this->assertEqualsData($actualRange->startOffset, $actualRange->endOffset, 'startOffset and endOffset must always be the same after deleteContents()');
-            $this->assertEqualsData($expectedRange->startContainer, $expectedRange->endContainer, 'Test bug!  Expected startContainer and endContainer must always be the same after deleteContents()');
-            $this->assertEqualsData($expectedRange->startOffset, $expectedRange->endOffset, 'Test bug!  Expected startOffset and endOffset must always be the same after deleteContents()');
-            $this->assertEqualsData($actualRange->startOffset, $expectedRange->startOffset, 'Unexpected startOffset after deleteContents()');
+            $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual deleteContents()');
+            $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated deleteContents()');
+            $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
+            $this->wptAssertEquals(gettype($expectedRange), 'object', 'typeof Range produced in expected iframe');
+            $this->wptAssertTrue($actualRoots[0]->isEqualNode($expectedRoots[0]), 'The resulting DOMs were not equal, so comparing positions makes no sense');
+            $this->wptAssertEquals($actualRange->startContainer, $actualRange->endContainer, 'startContainer and endContainer must always be the same after deleteContents()');
+            $this->wptAssertEquals($actualRange->startOffset, $actualRange->endOffset, 'startOffset and endOffset must always be the same after deleteContents()');
+            $this->wptAssertEquals($expectedRange->startContainer, $expectedRange->endContainer, 'Test bug!  Expected startContainer and endContainer must always be the same after deleteContents()');
+            $this->wptAssertEquals($expectedRange->startOffset, $expectedRange->endOffset, 'Test bug!  Expected startOffset and endOffset must always be the same after deleteContents()');
+            $this->wptAssertEquals($actualRange->startOffset, $expectedRange->startOffset, 'Unexpected startOffset after deleteContents()');
             // How do we decide that the two nodes are equal, since they're in
             // different trees?  Since the DOMs are the same, it's enough to check
             // that the index in the parent is the same all the way up the tree.
             // But we can first cheat by just checking they're actually equal.
-            $this->assertTrueData($actualRange->startContainer->isEqualNode($expectedRange->startContainer), 'Unexpected startContainer after deleteContents(), expected ' . strtolower($expectedRange->startContainer->nodeName) . ' but got ' . strtolower($actualRange->startContainer->nodeName));
+            $this->wptAssertTrue($actualRange->startContainer->isEqualNode($expectedRange->startContainer), 'Unexpected startContainer after deleteContents(), expected ' . strtolower($expectedRange->startContainer->nodeName) . ' but got ' . strtolower($actualRange->startContainer->nodeName));
             $currentActual = $actualRange->startContainer;
             $currentExpected = $expectedRange->startContainer;
             $actual = '';
@@ -220,7 +220,7 @@ class RangeDeleteContentsTest extends WPTTestHarness
             }
             $actual = substr($actual, 0, count($actual) - 1);
             $expected = substr($expected, 0, count($expected) - 1);
-            $this->assertEqualsData($actual, $expected, "startContainer superficially looks right but is actually the wrong node if you trace back its index in all its ancestors (I'm surprised this actually happened");
+            $this->wptAssertEquals($actual, $expected, "startContainer superficially looks right but is actually the wrong node if you trace back its index in all its ancestors (I'm surprised this actually happened");
         });
         $positionTests[$i]->done();
     }

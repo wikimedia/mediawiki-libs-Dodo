@@ -10,9 +10,9 @@ class ElementClosestTest extends WPTTestHarness
         $this->assertTest(function () use(&$aElementId, &$aSelector, &$aTargetId) {
             $el = $this->doc->getElementById($aElementId)->closest($aSelector);
             if ($el === null) {
-                $this->assertEqualsData('', $aTargetId, $aSelector);
+                $this->wptAssertEquals('', $aTargetId, $aSelector);
             } else {
-                $this->assertEqualsData($el->id, $aTargetId, $aSelector);
+                $this->wptAssertEquals($el->id, $aTargetId, $aSelector);
             }
         }, "Element.closest with context node '" . $aElementId . "' and selector '" . $aSelector . "'");
     }

@@ -12,16 +12,16 @@ class NamednodemapSupportedPropertyNamesTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/collections/namednodemap-supported-property-names.html');
         $this->assertTest(function () {
             $elt = $this->doc->querySelector('#simple');
-            $this->assertArrayEqualsData($this->getOwnPropertyNames($elt->attributes), ['0', '1', 'id', 'class']);
+            $this->wptAssertArrayEquals($this->getOwnPropertyNames($elt->attributes), ['0', '1', 'id', 'class']);
         }, 'Object.getOwnPropertyNames on NamedNodeMap');
         $this->assertTest(function () {
             $result = $this->doc->getElementById('result');
-            $this->assertArrayEqualsData($this->getOwnPropertyNames($result->attributes), ['0', '1', '2', '3', 'id', 'type', 'value', 'width']);
+            $this->wptAssertArrayEquals($this->getOwnPropertyNames($result->attributes), ['0', '1', '2', '3', 'id', 'type', 'value', 'width']);
         }, 'Object.getOwnPropertyNames on NamedNodeMap of input');
         $this->assertTest(function () {
             $result = $this->doc->getElementById('result');
             $result->removeAttribute('width');
-            $this->assertArrayEqualsData($this->getOwnPropertyNames($result->attributes), ['0', '1', '2', 'id', 'type', 'value']);
+            $this->wptAssertArrayEquals($this->getOwnPropertyNames($result->attributes), ['0', '1', '2', 'id', 'type', 'value']);
         }, 'Object.getOwnPropertyNames on NamedNodeMap after attribute removal');
     }
 }

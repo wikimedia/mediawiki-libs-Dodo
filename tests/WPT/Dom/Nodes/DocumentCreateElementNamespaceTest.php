@@ -10,10 +10,10 @@ class DocumentCreateElementNamespaceTest extends WPTTestHarness
     {
         if ($doc->contentType !== null) {
             // Sanity check
-            $this->assertEqualsData($doc->contentType, $contentType, 'Wrong MIME type returned from doc.contentType');
+            $this->wptAssertEquals($doc->contentType, $contentType, 'Wrong MIME type returned from doc.contentType');
         }
         $expectedNamespace = $contentType == 'text/html' || $contentType == 'application/xhtml+xml' ? 'http://www.w3.org/1999/xhtml' : null;
-        $this->assertEqualsData($doc->createElement('x')->namespaceURI, $expectedNamespace);
+        $this->wptAssertEquals($doc->createElement('x')->namespaceURI, $expectedNamespace);
     }
     public function testDocumentCreateElementNamespace()
     {

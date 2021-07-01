@@ -10,15 +10,15 @@ class GetElementsByClassNameEmptySetTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/getElementsByClassName-empty-set.html');
         $this->assertTest(function () {
             $elements = $this->doc->getElementsByClassName('');
-            $this->assertArrayEqualsData($elements, []);
+            $this->wptAssertArrayEquals($elements, []);
         }, 'Passing an empty string to getElementsByClassName should return an empty HTMLCollection');
         $this->assertTest(function () {
             $elements = $this->doc->getElementsByClassName(' ');
-            $this->assertArrayEqualsData($elements, []);
+            $this->wptAssertArrayEquals($elements, []);
         }, 'Passing a space to getElementsByClassName should return an empty HTMLCollection');
         $this->assertTest(function () {
             $elements = $this->doc->getElementsByClassName('   ');
-            $this->assertArrayEqualsData($elements, []);
+            $this->wptAssertArrayEquals($elements, []);
         }, 'Passing three spaces to getElementsByClassName should return an empty HTMLCollection');
     }
 }

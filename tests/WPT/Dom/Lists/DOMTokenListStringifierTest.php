@@ -10,13 +10,13 @@ class DOMTokenListStringifierTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/lists/DOMTokenList-stringifier.html');
         $this->assertTest(function () {
-            $this->assertEqualsData(strval($this->doc->createElement('span')->classList), '', 'String(classList) should return the empty list for an undefined class attribute');
+            $this->wptAssertEquals(strval($this->doc->createElement('span')->classList), '', 'String(classList) should return the empty list for an undefined class attribute');
             $span = $this->doc->querySelector('span');
-            $this->assertEqualsData($span->getAttribute('class'), '   a  a b ', 'getAttribute should return the literal value');
-            $this->assertEqualsData($span->className, '   a  a b ', 'className should return the literal value');
-            $this->assertEqualsData(strval($span->classList), '   a  a b ', 'String(classList) should return the literal value');
-            $this->assertEqualsData($span->classList, '   a  a b ', 'classList.toString() should return the literal value');
-            $this->assertClassStringData($span->classList, 'DOMTokenList');
+            $this->wptAssertEquals($span->getAttribute('class'), '   a  a b ', 'getAttribute should return the literal value');
+            $this->wptAssertEquals($span->className, '   a  a b ', 'className should return the literal value');
+            $this->wptAssertEquals(strval($span->classList), '   a  a b ', 'String(classList) should return the literal value');
+            $this->wptAssertEquals($span->classList, '   a  a b ', 'classList.toString() should return the literal value');
+            $this->wptAssertClassString($span->classList, 'DOMTokenList');
         });
     }
 }

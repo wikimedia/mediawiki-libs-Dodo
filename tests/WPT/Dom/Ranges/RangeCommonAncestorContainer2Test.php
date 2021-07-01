@@ -16,7 +16,7 @@ class RangeCommonAncestorContainer2Test extends WPTTestHarness
         $this->assertTest(function () {
             $range = $this->doc->createRange();
             $range->detach();
-            $this->assertEqualsData($range->commonAncestorContainer, $this->doc);
+            $this->wptAssertEquals($range->commonAncestorContainer, $this->doc);
         }, 'Detached Range');
         $this->assertTest(function () {
             $df = $this->doc->createDocumentFragment();
@@ -35,7 +35,7 @@ class RangeCommonAncestorContainer2Test extends WPTTestHarness
                     $range = $this->doc->createRange();
                     $range->setStart($t[0], $t[1]);
                     $range->setEnd($t[2], $t[3]);
-                    $this->assertEqualsData($range->commonAncestorContainer, $t[4]);
+                    $this->wptAssertEquals($range->commonAncestorContainer, $t[4]);
                 });
             }
         }, 'Normal Ranges');

@@ -12,13 +12,13 @@ class NodeAppendChildTest extends WPTTestHarness
     {
         // WebIDL.
         $this->assertTest(function () use(&$node) {
-            $this->assertThrowsJsData($this->type_error, function () use(&$node) {
+            $this->wptAssertThrowsJs($this->type_error, function () use(&$node) {
                 $node->appendChild(null);
             });
         }, 'Appending null to a ' . $desc);
         // Pre-insert step 1.
         $this->assertTest(function () use(&$node) {
-            $this->assertThrowsDomData('HIERARCHY_REQUEST_ERR', function () use(&$node) {
+            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use(&$node) {
                 $node->appendChild($this->doc->createTextNode('fail'));
             });
         }, 'Appending to a ' . $desc);
@@ -28,10 +28,10 @@ class NodeAppendChildTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-appendChild.html');
         // WebIDL.
         $this->assertTest(function () {
-            $this->assertThrowsJsData($this->type_error, function () {
+            $this->wptAssertThrowsJs($this->type_error, function () {
                 $this->doc->body->appendChild(null);
             });
-            $this->assertThrowsJsData($this->type_error, function () {
+            $this->wptAssertThrowsJs($this->type_error, function () {
                 $this->doc->body->appendChild(['a' => 'b']);
             });
         }, 'WebIDL tests');
@@ -44,7 +44,7 @@ class NodeAppendChildTest extends WPTTestHarness
         // Pre-insert step 5.
         $this->assertTest(function () {
             $frameDoc = $frames[0]->document;
-            $this->assertThrowsDomData('HIERARCHY_REQUEST_ERR', function () use(&$frameDoc) {
+            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use(&$frameDoc) {
                 $this->doc->body->appendChild($frameDoc);
             });
         }, 'Appending a document');
@@ -52,18 +52,18 @@ class NodeAppendChildTest extends WPTTestHarness
         $this->assertTest(function () {
             $frameDoc = $frames[0]->document;
             $s = $frameDoc->createElement('a');
-            $this->assertEqualsData($s->ownerDocument, $frameDoc);
+            $this->wptAssertEquals($s->ownerDocument, $frameDoc);
             $this->doc->body->appendChild($s);
-            $this->assertEqualsData($s->ownerDocument, $this->doc);
+            $this->wptAssertEquals($s->ownerDocument, $this->doc);
         }, 'Adopting an orphan');
         $this->assertTest(function () {
             $frameDoc = $frames[0]->document;
             $s = $frameDoc->createElement('b');
-            $this->assertEqualsData($s->ownerDocument, $frameDoc);
+            $this->wptAssertEquals($s->ownerDocument, $frameDoc);
             $frameDoc->body->appendChild($s);
-            $this->assertEqualsData($s->ownerDocument, $frameDoc);
+            $this->wptAssertEquals($s->ownerDocument, $frameDoc);
             $this->doc->body->appendChild($s);
-            $this->assertEqualsData($s->ownerDocument, $this->doc);
+            $this->wptAssertEquals($s->ownerDocument, $this->doc);
         }, 'Adopting a non-orphan');
     }
 }

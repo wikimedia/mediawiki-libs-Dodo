@@ -13,9 +13,9 @@ class ElementNextElementSiblingTest extends WPTTestHarness
             $parentEl = $this->doc->getElementById('parentEl');
             $fec = $this->doc->getElementById('first_element_child');
             $nes = $fec->nextElementSibling;
-            $this->assertTrueData(!!$nes);
-            $this->assertEqualsData($nes->nodeType, 1);
-            $this->assertEqualsData($nes->getAttribute('id'), 'last_element_child');
+            $this->wptAssertTrue(!!$nes);
+            $this->wptAssertEquals($nes->nodeType, 1);
+            $this->wptAssertEquals($nes->getAttribute('id'), 'last_element_child');
         });
     }
 }

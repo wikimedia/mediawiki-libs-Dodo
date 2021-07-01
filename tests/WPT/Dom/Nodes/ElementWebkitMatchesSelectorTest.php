@@ -12,11 +12,11 @@ class ElementWebkitMatchesSelectorTest extends WPTTestHarness
     {
         if ($obj->nodeType === $obj::ELEMENT_NODE) {
             $this->assertTest(function () use(&$obj, &$method, &$type) {
-                $this->assertIdlAttributeData($obj, $method, $type . ' supports ' . $method);
+                $this->wptAssertIdlAttribute($obj, $method, $type . ' supports ' . $method);
             }, $type . ' supports ' . $method);
         } else {
             $this->assertTest(function () use(&$obj, &$method, &$type) {
-                $this->assertFalseData(isset($obj->{$method}), $type . ' supports ' . $method);
+                $this->wptAssertFalse(isset($obj->{$method}), $type . ' supports ' . $method);
             }, $type . ' should not support ' . $method);
         }
     }
@@ -25,22 +25,22 @@ class ElementWebkitMatchesSelectorTest extends WPTTestHarness
         $this->assertTest(function () use(&$element, &$method) {
             // 1
             if (strtolower($element->tagName) === 'null') {
-                $this->assertTrueData($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should match.");
+                $this->wptAssertTrue($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should match.");
             } else {
-                $this->assertFalseData($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should not match.");
+                $this->wptAssertFalse($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should not match.");
             }
         }, $type . '.' . $method . '(null)');
         $this->assertTest(function () use(&$element, &$method) {
             // 2
             if (strtolower($element->tagName) === NULL) {
-                $this->assertTrueData($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should match.");
+                $this->wptAssertTrue($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should match.");
             } else {
-                $this->assertFalseData($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should not match.");
+                $this->wptAssertFalse($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should not match.");
             }
         }, $type . '.' . $method . '(undefined)');
         $this->assertTest(function () use(&$element, &$method) {
             // 3
-            $this->assertThrowsJsData($element->ownerDocument->defaultView->TypeError, function () use(&$element, &$method) {
+            $this->wptAssertThrowsJs($element->ownerDocument->defaultView->TypeError, function () use(&$element, &$method) {
                 $element->{$method}();
             }, 'This should throw a TypeError.');
         }, $type . '.' . $method . ' no parameter');
@@ -53,7 +53,7 @@ class ElementWebkitMatchesSelectorTest extends WPTTestHarness
                 $n = $s['name'];
                 $q = $s['selector'];
                 $this->assertTest(function () use(&$root, &$method, &$q) {
-                    $this->assertThrowsDomData('SyntaxError', $root->ownerDocument->defaultView->DOMException, function () use(&$root, &$method, &$q) {
+                    $this->wptAssertThrowsDom('SyntaxError', $root->ownerDocument->defaultView->DOMException, function () use(&$root, &$method, &$q) {
                         $root->{$method}($q);
                     });
                 }, $type . '.' . $method . ': ' . $n . ': ' . $q);
@@ -80,13 +80,13 @@ class ElementWebkitMatchesSelectorTest extends WPTTestHarness
                         for ($j = 0; $j < count($e); $j++) {
                             $element = $root->querySelector('#' . $e[$j]);
                             $refNode = $root->querySelector($ctx);
-                            $this->assertTrueData($element->{$method}($q, $refNode), 'The element #' . $e[$j] . ' should match the selector.');
+                            $this->wptAssertTrue($element->{$method}($q, $refNode), 'The element #' . $e[$j] . ' should match the selector.');
                         }
                         if ($u) {
                             for ($j = 0; $j < count($u); $j++) {
                                 $element = $root->querySelector('#' . $u[$j]);
                                 $refNode = $root->querySelector($ctx);
-                                $this->assertFalseData($element->{$method}($q, $refNode), 'The element #' . $u[$j] . ' should not match the selector.');
+                                $this->wptAssertFalse($element->{$method}($q, $refNode), 'The element #' . $u[$j] . ' should not match the selector.');
                             }
                         }
                     }, $type . ' Element.' . $method . ': ' . $n . ' (with refNode Element): ' . $q);
@@ -99,13 +99,13 @@ class ElementWebkitMatchesSelectorTest extends WPTTestHarness
                         for ($j = 0; $j < count($e); $j++) {
                             $element = $root->querySelector('#' . $e[$j]);
                             $refNodes = $root->querySelectorAll($ref);
-                            $this->assertTrueData($element->{$method}($q, $refNodes), 'The element #' . $e[$j] . ' should match the selector.');
+                            $this->wptAssertTrue($element->{$method}($q, $refNodes), 'The element #' . $e[$j] . ' should match the selector.');
                         }
                         if ($u) {
                             for ($j = 0; $j < count($u); $j++) {
                                 $element = $root->querySelector('#' . $u[$j]);
                                 $refNodes = $root->querySelectorAll($ref);
-                                $this->assertFalseData($element->{$method}($q, $refNodes), 'The element #' . $u[$j] . ' should not match the selector.');
+                                $this->wptAssertFalse($element->{$method}($q, $refNodes), 'The element #' . $u[$j] . ' should not match the selector.');
                             }
                         }
                     }, $type . ' Element.' . $method . ': ' . $n . ' (with refNodes NodeList): ' . $q);
@@ -114,12 +114,12 @@ class ElementWebkitMatchesSelectorTest extends WPTTestHarness
                     $this->assertTest(function () use(&$e, &$root, &$method, &$q, &$u) {
                         for ($j = 0; $j < count($e); $j++) {
                             $element = $root->querySelector('#' . $e[$j]);
-                            $this->assertTrueData($element->{$method}($q), 'The element #' . $e[$j] . ' should match the selector.');
+                            $this->wptAssertTrue($element->{$method}($q), 'The element #' . $e[$j] . ' should match the selector.');
                         }
                         if ($u) {
                             for ($j = 0; $j < count($u); $j++) {
                                 $element = $root->querySelector('#' . $u[$j]);
-                                $this->assertFalseData($element->{$method}($q), 'The element #' . $u[$j] . ' should not match the selector.');
+                                $this->wptAssertFalse($element->{$method}($q), 'The element #' . $u[$j] . ' should not match the selector.');
                             }
                         }
                     }, $type . ' Element.' . $method . ': ' . $n . ' (with no refNodes): ' . $q);

@@ -21,10 +21,10 @@ class ElementSetAttributeCrbug1138487Test extends WPTTestHarness
             $el = $this->doc->createElement('div');
             $el->setAttribute('labelXQL', 'abc');
             $el->setAttribute('_valueXQL', 'def');
-            $this->assertEqualsData($el->getAttribute('labelXQL'), 'abc');
-            $this->assertEqualsData($el->getAttribute('labelxql'), 'abc');
-            $this->assertEqualsData($el->getAttribute('_valueXQL'), 'def');
-            $this->assertEqualsData($el->getAttribute('_valuexql'), 'def');
+            $this->wptAssertEquals($el->getAttribute('labelXQL'), 'abc');
+            $this->wptAssertEquals($el->getAttribute('labelxql'), 'abc');
+            $this->wptAssertEquals($el->getAttribute('_valueXQL'), 'def');
+            $this->wptAssertEquals($el->getAttribute('_valuexql'), 'def');
         }, 'Attributes first seen in mixed ASCII case should not be corrupted.');
     }
 }

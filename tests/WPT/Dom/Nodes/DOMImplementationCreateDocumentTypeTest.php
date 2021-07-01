@@ -13,12 +13,12 @@ class DOMImplementationCreateDocumentTypeTest extends WPTTestHarness
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $doTest = function ($aDocument, $aQualifiedName, $aPublicId, $aSystemId) {
                 $doctype = $aDocument->implementation->createDocumentType($aQualifiedName, $aPublicId, $aSystemId);
-                $this->assertEqualsData($doctype->name, $aQualifiedName, 'name');
-                $this->assertEqualsData($doctype->nodeName, $aQualifiedName, 'nodeName');
-                $this->assertEqualsData($doctype->publicId, $aPublicId, 'publicId');
-                $this->assertEqualsData($doctype->systemId, $aSystemId, 'systemId');
-                $this->assertEqualsData($doctype->ownerDocument, $aDocument, 'ownerDocument');
-                $this->assertEqualsData($doctype->nodeValue, null, 'nodeValue');
+                $this->wptAssertEquals($doctype->name, $aQualifiedName, 'name');
+                $this->wptAssertEquals($doctype->nodeName, $aQualifiedName, 'nodeName');
+                $this->wptAssertEquals($doctype->publicId, $aPublicId, 'publicId');
+                $this->wptAssertEquals($doctype->systemId, $aSystemId, 'systemId');
+                $this->wptAssertEquals($doctype->ownerDocument, $aDocument, 'ownerDocument');
+                $this->wptAssertEquals($doctype->nodeValue, null, 'nodeValue');
             };
             foreach ($tests as $t) {
                 $qualifiedName = $t[0];
@@ -27,7 +27,7 @@ class DOMImplementationCreateDocumentTypeTest extends WPTTestHarness
                 $expected = $t[3];
                 $this->assertTest(function () use(&$expected, &$qualifiedName, &$publicId, &$systemId, &$doTest, &$doc) {
                     if ($expected) {
-                        $this->assertThrowsDomData($expected, function () use(&$qualifiedName, &$publicId, &$systemId) {
+                        $this->wptAssertThrowsDom($expected, function () use(&$qualifiedName, &$publicId, &$systemId) {
                             $this->doc->implementation->createDocumentType($qualifiedName, $publicId, $systemId);
                         });
                     } else {

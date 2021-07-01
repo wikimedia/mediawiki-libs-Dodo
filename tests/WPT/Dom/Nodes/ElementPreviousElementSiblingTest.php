@@ -13,9 +13,9 @@ class ElementPreviousElementSiblingTest extends WPTTestHarness
             $parentEl = $this->doc->getElementById('parentEl');
             $lec = $this->doc->getElementById('last_element_child');
             $pes = $lec->previousElementSibling;
-            $this->assertTrueData(!!$pes);
-            $this->assertEqualsData($pes->nodeType, 1);
-            $this->assertEqualsData($pes->getAttribute('id'), 'middle_element_child');
+            $this->wptAssertTrue(!!$pes);
+            $this->wptAssertEquals($pes->nodeType, 1);
+            $this->wptAssertEquals($pes->getAttribute('id'), 'middle_element_child');
         });
     }
 }

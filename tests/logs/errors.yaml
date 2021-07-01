@@ -307,7 +307,7 @@
     testcases: testElementMatchesNamespacedElements
     files: /tests/WPT/Dom/Nodes/ElementMatchesNamespacedElementsTest.php
 'This test did not perform any assertions':
-    _total: 20
+    _total: 19
     _comment: ''
     testcases: |-
         testElementGetElementsByTagNameChangeDocumentHTMLNess
@@ -329,7 +329,6 @@
         testObject08
         testObject13
         testRangeDetach
-        testRangeIntersectsNodeBinding
     files: |-
         /tests/W3C/Level1/Core/HcDocumentgetdoctypeTest.php
         /tests/W3C/Level1/Core/HcEntitiesremovenameditem1Test.php
@@ -350,7 +349,6 @@
         /tests/W3C/Level1/Html/Object13Test.php
         /tests/WPT/Dom/Nodes/ElementGetElementsByTagNameChangeDocumentHTMLNessTest.php
         /tests/WPT/Dom/Ranges/RangeDetachTest.php
-        /tests/WPT/Dom/Ranges/RangeIntersectsNodeBindingTest.php
 'Trying to get property ''firstChild'' of non-object':
     _total: 1
     _comment: ''
@@ -376,11 +374,6 @@
     _comment: ''
     testcases: testDocumentCreateAttribute
     files: /tests/WPT/Dom/Nodes/DocumentCreateAttributeTest.php
-'TypeError: Argument 1 passed to Wikimedia\Dodo\Tests\Harness\WPTTestHarness::arrayMap() must be of the type array, object given, called in /tests/WPT/Dom/Nodes/GetElementsByClassName32Test.php on line 41':
-    _total: 1
-    _comment: ''
-    testcases: testGetElementsByClassName32
-    files: /tests/WPT/Dom/Nodes/GetElementsByClassName32Test.php
 'TypeError: Argument 2 passed to Wikimedia\Dodo\Document::importNode() must be of the type bool, null given, called in /tests/WPT/Dom/Nodes/DocumentImportNodeTest.php on line 31':
     _total: 1
     _comment: ''
@@ -421,11 +414,6 @@
     _comment: ''
     testcases: testDocumentConstructor
     files: /tests/WPT/Dom/Nodes/DocumentConstructorTest.php
-'Undefined property via __get(): named in /tests/WPT/Dom/Collections/HTMLCollectionAsPrototypeTest.php on line 25':
-    _total: 1
-    _comment: ''
-    testcases: testHTMLCollectionAsPrototype
-    files: /tests/WPT/Dom/Collections/HTMLCollectionAsPrototypeTest.php
 'Undefined property via __get(): role in /tests/WPT/Dom/Nodes/AriaAttributeReflectionTentativeTest.php on line 15':
     _total: 1
     _comment: ''
@@ -441,17 +429,6 @@
     _comment: ''
     testcases: testHTMLCollectionDelete
     files: /tests/WPT/Dom/Collections/HTMLCollectionDeleteTest.php
-'Undefined property: Wikimedia\Dodo\Internal\UnimplementedException::$name':
-    _total: 3
-    _comment: ''
-    testcases: |-
-        testDocumentCreateCDATASection
-        testElementInsertAdjacentElement
-        testElementInsertAdjacentText
-    files: |-
-        /tests/WPT/Dom/Nodes/DocumentCreateCDATASectionTest.php
-        /tests/WPT/Dom/Nodes/ElementInsertAdjacentElementTest.php
-        /tests/WPT/Dom/Nodes/ElementInsertAdjacentTextTest.php
 'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodeappendchildnewchilddiffdocumentTest::$doc1':
     _total: 1
     _comment: ''
@@ -611,9 +588,10 @@
     testcases: testNodeNormalize
     files: /tests/WPT/Dom/Nodes/NodeNormalizeTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::_createElementNS':
-    _total: 6
+    _total: 7
     _comment: ''
     testcases: |-
+        testDOMTokenListCoverageForAttributes
         testDocumentCreateElementNamespace
         testElementTagName
         testNodeCloneNodeSvg
@@ -621,6 +599,7 @@
         testParentNodeQuerySelectorsNamespaces
         testSvgTemplateQuerySelector
     files: |-
+        /tests/WPT/Dom/Lists/DOMTokenListCoverageForAttributesTest.php
         /tests/WPT/Dom/Nodes/DocumentCreateElementNamespaceTest.php
         /tests/WPT/Dom/Nodes/ElementTagNameTest.php
         /tests/WPT/Dom/Nodes/NodeCloneNodeSvgTest.php
@@ -632,11 +611,15 @@
     _comment: ''
     testcases: testAppendOnDocument
     files: /tests/WPT/Dom/Nodes/AppendOnDocumentTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::createCDATASection':
+    _total: 1
+    _comment: ''
+    testcases: testDocumentCreateCDATASection
+    files: /tests/WPT/Dom/Nodes/DocumentCreateCDATASectionTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::createTreeWalker':
-    _total: 7
+    _total: 6
     _comment: ''
     testcases: |-
-        testDocumentCreateTreeWalker
         testTreeWalkerBasic
         testTreeWalkerCurrentNode
         testTreeWalkerTraversalReject
@@ -644,7 +627,6 @@
         testTreeWalkerTraversalSkipMost
         testTreeWalkerWalkingOutsideATree
     files: |-
-        /tests/WPT/Dom/Nodes/DocumentCreateTreeWalkerTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerBasicTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerCurrentNodeTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerTraversalRejectTest.php
@@ -715,6 +697,16 @@
         /tests/WPT/Dom/Nodes/ChildNodeAfterTest.php
         /tests/WPT/Dom/Nodes/ChildNodeBeforeTest.php
         /tests/WPT/Dom/Nodes/ChildNodeReplaceWithTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Element::insertAdjacentElement':
+    _total: 1
+    _comment: ''
+    testcases: testElementInsertAdjacentElement
+    files: /tests/WPT/Dom/Nodes/ElementInsertAdjacentElementTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Element::insertAdjacentText':
+    _total: 1
+    _comment: ''
+    testcases: testElementInsertAdjacentText
+    files: /tests/WPT/Dom/Nodes/ElementInsertAdjacentTextTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Element::setInnerHTML':
     _total: 1
     _comment: ''
@@ -1072,17 +1064,6 @@
     _comment: ''
     testcases: testRangeCommonAncestorContainer
     files: /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php
-'call_user_func() expects parameter 1 to be a valid callback, first array member is not a valid class name or object':
-    _total: 3
-    _comment: ''
-    testcases: |-
-        testDOMTokenListCoverageForAttributes
-        testDOMTokenListStringifier
-        testDOMTokenListValue
-    files: |-
-        /tests/WPT/Dom/Lists/DOMTokenListCoverageForAttributesTest.php
-        /tests/WPT/Dom/Lists/DOMTokenListStringifierTest.php
-        /tests/WPT/Dom/Lists/DOMTokenListValueTest.php
 'count(): Parameter must be an array or an object that implements Countable':
     _total: 2
     _comment: ''

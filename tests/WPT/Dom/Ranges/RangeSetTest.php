@@ -10,41 +10,41 @@ class RangeSetTest extends WPTTestHarness
     public function testSetStart($range, $node, $offset)
     {
         if ($node->nodeType == Node::DOCUMENT_TYPE_NODE) {
-            $this->assertThrowsDomData('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node, &$offset) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node, &$offset) {
                 $range->setStart($node, $offset);
             }, 'setStart() to a doctype must throw INVALID_NODE_TYPE_ERR');
             return;
         }
         if ($offset < 0 || $offset > Common::nodeLength($node)) {
-            $this->assertThrowsDomData('INDEX_SIZE_ERR', function () use(&$range, &$node, &$offset) {
+            $this->wptAssertThrowsDom('INDEX_SIZE_ERR', function () use(&$range, &$node, &$offset) {
                 $range->setStart($node, $offset);
             }, 'setStart() to a too-large offset must throw INDEX_SIZE_ERR');
             return;
         }
         $newRange = $range->cloneRange();
         $newRange->setStart($node, $offset);
-        $this->assertEqualsData($newRange->startContainer, $node, 'setStart() must change startContainer to the new node');
-        $this->assertEqualsData($newRange->startOffset, $offset, 'setStart() must change startOffset to the new offset');
+        $this->wptAssertEquals($newRange->startContainer, $node, 'setStart() must change startContainer to the new node');
+        $this->wptAssertEquals($newRange->startOffset, $offset, 'setStart() must change startOffset to the new offset');
         // FIXME: I'm assuming comparePoint() is correct, but the tests for that
         // will depend on setStart()/setEnd().
         if (Common::furthestAncestor($node) != Common::furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) > 0) {
-            $this->assertEqualsData($newRange->endContainer, $node, 'setStart(node, offset) where node is after current end or in different document must set the end node to node too');
-            $this->assertEqualsData($newRange->endOffset, $offset, 'setStart(node, offset) where node is after current end or in different document must set the end offset to offset too');
+            $this->wptAssertEquals($newRange->endContainer, $node, 'setStart(node, offset) where node is after current end or in different document must set the end node to node too');
+            $this->wptAssertEquals($newRange->endOffset, $offset, 'setStart(node, offset) where node is after current end or in different document must set the end offset to offset too');
         } else {
-            $this->assertEqualsData($newRange->endContainer, $range->endContainer, 'setStart() must not change the end node if the new start is before the old end');
-            $this->assertEqualsData($newRange->endOffset, $range->endOffset, 'setStart() must not change the end offset if the new start is before the old end');
+            $this->wptAssertEquals($newRange->endContainer, $range->endContainer, 'setStart() must not change the end node if the new start is before the old end');
+            $this->wptAssertEquals($newRange->endOffset, $range->endOffset, 'setStart() must not change the end offset if the new start is before the old end');
         }
     }
     public function testSetEnd($range, $node, $offset)
     {
         if ($node->nodeType == Node::DOCUMENT_TYPE_NODE) {
-            $this->assertThrowsDomData('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node, &$offset) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node, &$offset) {
                 $range->setEnd($node, $offset);
             }, 'setEnd() to a doctype must throw INVALID_NODE_TYPE_ERR');
             return;
         }
         if ($offset < 0 || $offset > Common::nodeLength($node)) {
-            $this->assertThrowsDomData('INDEX_SIZE_ERR', function () use(&$range, &$node, &$offset) {
+            $this->wptAssertThrowsDom('INDEX_SIZE_ERR', function () use(&$range, &$node, &$offset) {
                 $range->setEnd($node, $offset);
             }, 'setEnd() to a too-large offset must throw INDEX_SIZE_ERR');
             return;
@@ -54,20 +54,20 @@ class RangeSetTest extends WPTTestHarness
         // FIXME: I'm assuming comparePoint() is correct, but the tests for that
         // will depend on setStart()/setEnd().
         if (Common::furthestAncestor($node) != Common::furthestAncestor($range->startContainer) || $range->comparePoint($node, $offset) < 0) {
-            $this->assertEqualsData($newRange->startContainer, $node, 'setEnd(node, offset) where node is before current start or in different document must set the end node to node too');
-            $this->assertEqualsData($newRange->startOffset, $offset, 'setEnd(node, offset) where node is before current start or in different document must set the end offset to offset too');
+            $this->wptAssertEquals($newRange->startContainer, $node, 'setEnd(node, offset) where node is before current start or in different document must set the end node to node too');
+            $this->wptAssertEquals($newRange->startOffset, $offset, 'setEnd(node, offset) where node is before current start or in different document must set the end offset to offset too');
         } else {
-            $this->assertEqualsData($newRange->startContainer, $range->startContainer, 'setEnd() must not change the start node if the new end is after the old start');
-            $this->assertEqualsData($newRange->startOffset, $range->startOffset, 'setEnd() must not change the start offset if the new end is after the old start');
+            $this->wptAssertEquals($newRange->startContainer, $range->startContainer, 'setEnd() must not change the start node if the new end is after the old start');
+            $this->wptAssertEquals($newRange->startOffset, $range->startOffset, 'setEnd() must not change the start offset if the new end is after the old start');
         }
-        $this->assertEqualsData($newRange->endContainer, $node, 'setEnd() must change endContainer to the new node');
-        $this->assertEqualsData($newRange->endOffset, $offset, 'setEnd() must change endOffset to the new offset');
+        $this->wptAssertEquals($newRange->endContainer, $node, 'setEnd() must change endContainer to the new node');
+        $this->wptAssertEquals($newRange->endOffset, $offset, 'setEnd() must change endOffset to the new offset');
     }
     public function testSetStartBefore($range, $node)
     {
         $parent = $node->parentNode;
         if ($parent === null) {
-            $this->assertThrowsDomData('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
                 $range->setStartBefore($node);
             }, 'setStartBefore() to a node with null parent must throw INVALID_NODE_TYPE_ERR');
             return;
@@ -82,7 +82,7 @@ class RangeSetTest extends WPTTestHarness
     {
         $parent = $node->parentNode;
         if ($parent === null) {
-            $this->assertThrowsDomData('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
                 $range->setStartAfter($node);
             }, 'setStartAfter() to a node with null parent must throw INVALID_NODE_TYPE_ERR');
             return;
@@ -97,7 +97,7 @@ class RangeSetTest extends WPTTestHarness
     {
         $parent = $node->parentNode;
         if ($parent === null) {
-            $this->assertThrowsDomData('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
                 $range->setEndBefore($node);
             }, 'setEndBefore() to a node with null parent must throw INVALID_NODE_TYPE_ERR');
             return;
@@ -112,7 +112,7 @@ class RangeSetTest extends WPTTestHarness
     {
         $parent = $node->parentNode;
         if ($parent === null) {
-            $this->assertThrowsDomData('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
                 $range->setEndAfter($node);
             }, 'setEndAfter() to a node with null parent must throw INVALID_NODE_TYPE_ERR');
             return;

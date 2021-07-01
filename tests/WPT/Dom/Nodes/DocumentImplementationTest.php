@@ -10,12 +10,12 @@ class DocumentImplementationTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-implementation.html');
         $this->assertTest(function () {
             $implementation = $this->doc->implementation;
-            $this->assertTrueData($implementation instanceof DOMImplementation, 'implementation should implement DOMImplementation');
-            $this->assertEqualsData($this->doc->implementation, $implementation);
+            $this->wptAssertTrue($implementation instanceof DOMImplementation, 'implementation should implement DOMImplementation');
+            $this->wptAssertEquals($this->doc->implementation, $implementation);
         }, 'Getting implementation off the same document');
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument();
-            $this->assertNotEqualsData($this->doc->implementation, $doc->implementation);
+            $this->wptAssertNotEquals($this->doc->implementation, $doc->implementation);
         }, 'Getting implementation off different documents');
     }
 }

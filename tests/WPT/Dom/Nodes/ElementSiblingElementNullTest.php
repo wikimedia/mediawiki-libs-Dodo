@@ -10,8 +10,8 @@ class ElementSiblingElementNullTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-siblingElement-null.html');
         $this->assertTest(function () {
             $fec = $this->doc->getElementById('first_element_child');
-            $this->assertEqualsData($fec->previousElementSibling, null);
-            $this->assertEqualsData($fec->nextElementSibling, null);
+            $this->wptAssertEquals($fec->previousElementSibling, null);
+            $this->wptAssertEquals($fec->nextElementSibling, null);
         });
     }
 }

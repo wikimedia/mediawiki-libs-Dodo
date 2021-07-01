@@ -10,12 +10,12 @@ class TreeWalkerTraversalSkipMostTest extends WPTTestHarness
 {
     public function assertNode($actual, $expected)
     {
-        $this->assertTrueData($actual instanceof $expected->type, 'Node type mismatch: actual = ' . $actual->nodeType . ', expected = ' . $expected->nodeType);
+        $this->wptAssertTrue($actual instanceof $expected->type, 'Node type mismatch: actual = ' . $actual->nodeType . ', expected = ' . $expected->nodeType);
         if (gettype($expected->id) !== NULL) {
-            $this->assertEqualsData($actual->id, $expected->id);
+            $this->wptAssertEquals($actual->id, $expected->id);
         }
         if (gettype($expected->nodeValue) !== NULL) {
-            $this->assertEqualsData($actual->nodeValue, $expected->nodeValue);
+            $this->wptAssertEquals($actual->nodeValue, $expected->nodeValue);
         }
     }
     public function testTreeWalkerTraversalSkipMost()
@@ -54,13 +54,13 @@ class TreeWalkerTraversalSkipMostTest extends WPTTestHarness
         }];
         $this->assertTest(function () use(&$testElement, &$filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'B1']);
-            $this->assertNodeData($walker->nextSibling(), ['type' => Element, 'id' => 'B3']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'B1']);
+            assert_node($walker->nextSibling(), ['type' => Element, 'id' => 'B3']);
         }, 'Testing nextSibling');
         $this->assertTest(function () use(&$testElement, &$filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
             $walker->currentNode = $testElement->querySelectorAll('#B3')[0];
-            $this->assertNodeData($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);
+            assert_node($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);
         }, 'Testing previousSibling');
     }
 }

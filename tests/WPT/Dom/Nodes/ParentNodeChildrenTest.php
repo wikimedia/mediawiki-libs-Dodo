@@ -13,13 +13,13 @@ class ParentNodeChildrenTest extends WPTTestHarness
             $node = $this->doc->getElementById('test');
             $parentNode = $node->parentNode;
             $children = $parentNode->children;
-            $this->assertTrueData($children instanceof HTMLCollection);
+            $this->wptAssertTrue($children instanceof HTMLCollection);
             $li = $this->doc->createElement('li');
-            $this->assertEqualsData(count($children), 4);
+            $this->wptAssertEquals(count($children), 4);
             $parentNode->appendChild($li);
-            $this->assertEqualsData(count($children), 5);
+            $this->wptAssertEquals(count($children), 5);
             $parentNode->removeChild($li);
-            $this->assertEqualsData(count($children), 4);
+            $this->wptAssertEquals(count($children), 4);
         }, 'ParentNode.children should be a live collection');
     }
 }

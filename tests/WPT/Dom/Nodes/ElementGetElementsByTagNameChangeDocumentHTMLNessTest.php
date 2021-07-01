@@ -23,17 +23,17 @@ class ElementGetElementsByTagNameChangeDocumentHTMLNessTest extends WPTTestHarne
             $parent->appendChild($child3);
             $parent->appendChild($child4);
             $list = $parent->getElementsByTagName('A');
-            $this->assertArrayEqualsData($list, [$child1, $child4], 'In an HTML document, should lowercase the tagname passed in for HTML ' . 'elements only');
+            $this->wptAssertArrayEquals($list, [$child1, $child4], 'In an HTML document, should lowercase the tagname passed in for HTML ' . 'elements only');
             $frames[0]->document->documentElement->appendChild($parent);
-            $this->assertArrayEqualsData($list, [$child1, $child4], 'After changing document, should still be lowercasing for HTML');
-            $this->assertArrayEqualsData($parent->getElementsByTagName('A'), [$child2, $child4], 'New list with same root and argument should not be lowercasing now');
+            $this->wptAssertArrayEquals($list, [$child1, $child4], 'After changing document, should still be lowercasing for HTML');
+            $this->wptAssertArrayEquals($parent->getElementsByTagName('A'), [$child2, $child4], 'New list with same root and argument should not be lowercasing now');
             // Now reinsert all those nodes into the parent, to blow away caches.
             $parent->appendChild($child1);
             $parent->appendChild($child2);
             $parent->appendChild($child3);
             $parent->appendChild($child4);
-            $this->assertArrayEqualsData($list, [$child1, $child4], 'After blowing away caches, should still have the same list');
-            $this->assertArrayEqualsData($parent->getElementsByTagName('A'), [$child2, $child4], 'New list with same root and argument should still not be lowercasing');
+            $this->wptAssertArrayEquals($list, [$child1, $child4], 'After blowing away caches, should still have the same list');
+            $this->wptAssertArrayEquals($parent->getElementsByTagName('A'), [$child2, $child4], 'New list with same root and argument should still not be lowercasing');
             $this->done();
         };
     }

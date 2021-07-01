@@ -9,12 +9,12 @@ class TreeWalkerTraversalSkipTest extends WPTTestHarness
 {
     public function assertNode($actual, $expected)
     {
-        $this->assertTrueData($actual instanceof $expected->type, 'Node type mismatch: actual = ' . $actual->nodeType . ', expected = ' . $expected->nodeType);
+        $this->wptAssertTrue($actual instanceof $expected->type, 'Node type mismatch: actual = ' . $actual->nodeType . ', expected = ' . $expected->nodeType);
         if (gettype($expected->id) !== NULL) {
-            $this->assertEqualsData($actual->id, $expected->id);
+            $this->wptAssertEquals($actual->id, $expected->id);
         }
         if (gettype($expected->nodeValue) !== NULL) {
-            $this->assertEqualsData($actual->nodeValue, $expected->nodeValue);
+            $this->wptAssertEquals($actual->nodeValue, $expected->nodeValue);
         }
     }
     public function testTreeWalkerTraversalSkip()
@@ -62,38 +62,38 @@ class TreeWalkerTraversalSkipTest extends WPTTestHarness
         }];
         $this->assertTest(function () use(&$testElement, &$skipB1Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB1Filter);
-            $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'C1']);
-            $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
-            $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'B3']);
+            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'C1']);
+            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
+            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B3']);
         }, 'Testing nextNode');
         $this->assertTest(function () use(&$testElement, &$skipB1Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB1Filter);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'C1']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'C1']);
         }, 'Testing firstChild');
         $this->assertTest(function () use(&$testElement, &$skipB2Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB2Filter);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'B1']);
-            $this->assertNodeData($walker->nextSibling(), ['type' => Element, 'id' => 'B3']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'B1']);
+            assert_node($walker->nextSibling(), ['type' => Element, 'id' => 'B3']);
         }, 'Testing nextSibling');
         $this->assertTest(function () use(&$testElement, &$skipB1Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB1Filter);
             $walker->currentNode = $testElement->querySelectorAll('#C1')[0];
-            $this->assertNodeData($walker->parentNode(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->parentNode(), ['type' => Element, 'id' => 'A1']);
         }, 'Testing parentNode');
         $this->assertTest(function () use(&$testElement, &$skipB2Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB2Filter);
             $walker->currentNode = $testElement->querySelectorAll('#B3')[0];
-            $this->assertNodeData($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);
+            assert_node($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);
         }, 'Testing previousSibling');
         $this->assertTest(function () use(&$testElement, &$skipB1Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB1Filter);
             $walker->currentNode = $testElement->querySelectorAll('#B3')[0];
-            $this->assertNodeData($walker->previousNode(), ['type' => Element, 'id' => 'B2']);
-            $this->assertNodeData($walker->previousNode(), ['type' => Element, 'id' => 'C1']);
-            $this->assertNodeData($walker->previousNode(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->previousNode(), ['type' => Element, 'id' => 'B2']);
+            assert_node($walker->previousNode(), ['type' => Element, 'id' => 'C1']);
+            assert_node($walker->previousNode(), ['type' => Element, 'id' => 'A1']);
         }, 'Testing previousNode');
     }
 }

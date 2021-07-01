@@ -13,7 +13,7 @@ class ParentNodeQuerySelectorEscapesTest extends WPTTestHarness
             $child = $this->doc->createElement('span');
             $child->id = $id;
             $container->appendChild($child);
-            $this->assertEqualsData($container->querySelector($selector), $child);
+            $this->wptAssertEquals($container->querySelector($selector), $child);
         }, "{json_encode( {$id} )} should match with {json_encode( {$selector} )}");
     }
     public function testNeverMatched($id, $selector)
@@ -23,7 +23,7 @@ class ParentNodeQuerySelectorEscapesTest extends WPTTestHarness
             $child = $this->doc->createElement('span');
             $child->id = $id;
             $container->appendChild($child);
-            $this->assertEqualsData($container->querySelector($selector), null);
+            $this->wptAssertEquals($container->querySelector($selector), null);
         }, "{json_encode( {$id} )} should never match with {json_encode( {$selector} )}");
     }
     public function testParentNodeQuerySelectorEscapes()

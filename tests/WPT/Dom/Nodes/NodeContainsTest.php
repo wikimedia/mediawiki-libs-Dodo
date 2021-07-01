@@ -11,7 +11,7 @@ class NodeContainsTest extends WPTTestHarness
         foreach ($this->testNodes as $referenceName) {
             $reference = eval($referenceName);
             $this->assertTest(function () use(&$reference) {
-                $this->assertFalseData($reference->contains(null));
+                $this->wptAssertFalse($reference->contains(null));
             }, $referenceName . '.contains(null)');
             foreach ($this->testNodes as $otherName) {
                 $other = eval($otherName);
@@ -21,9 +21,9 @@ class NodeContainsTest extends WPTTestHarness
                         $ancestor = $ancestor->parentNode;
                     }
                     if ($ancestor === $reference) {
-                        $this->assertTrueData($reference->contains($other));
+                        $this->wptAssertTrue($reference->contains($other));
                     } else {
-                        $this->assertFalseData($reference->contains($other));
+                        $this->wptAssertFalse($reference->contains($other));
                     }
                 }, $referenceName . '.contains(' . $otherName . ')');
             }

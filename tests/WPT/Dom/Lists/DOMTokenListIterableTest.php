@@ -11,26 +11,26 @@ class DOMTokenListIterableTest extends WPTTestHarness
         // setup()
         $elementClasses = $this->doc->querySelector('span')->classList;
         $this->assertTest(function () use(&$elementClasses) {
-            $this->assertTrueData(isset($elementClasses['length']));
+            $this->wptAssertTrue(isset($elementClasses['length']));
         }, 'DOMTokenList has length method.');
         $this->assertTest(function () use(&$elementClasses) {
-            $this->assertTrueData(isset($elementClasses['values']));
+            $this->wptAssertTrue(isset($elementClasses['values']));
         }, 'DOMTokenList has values method.');
         $this->assertTest(function () use(&$elementClasses) {
-            $this->assertTrueData(isset($elementClasses['entries']));
+            $this->wptAssertTrue(isset($elementClasses['entries']));
         }, 'DOMTokenList has entries method.');
         $this->assertTest(function () use(&$elementClasses) {
-            $this->assertTrueData(isset($elementClasses['forEach']));
+            $this->wptAssertTrue(isset($elementClasses['forEach']));
         }, 'DOMTokenList has forEach method.');
         $this->assertTest(function () use(&$elementClasses) {
-            // $this->assertTrueData(isset($elementClasses[Symbol::iterator]));
+            $this->wptAssertTrue(isset($elementClasses[Symbol::iterator]));
         }, 'DOMTokenList has Symbol.iterator.');
         $this->assertTest(function () use(&$elementClasses) {
             $classList = [];
             foreach ($elementClasses as $className => $___) {
                 $classList[] = $className;
             }
-            $this->assertArrayEqualsData($classList, ['foo', 'Foo']);
+            $this->wptAssertArrayEquals($classList, ['foo', 'Foo']);
         }, 'DOMTokenList is iterable via for-of loop.');
     }
 }

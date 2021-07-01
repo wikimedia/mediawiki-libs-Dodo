@@ -15,36 +15,36 @@ class ParentNodeAppendTest extends WPTTestHarness
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $parent->append();
-            $this->assertArrayEqualsData($parent->childNodes, []);
+            $this->wptAssertArrayEquals($parent->childNodes, []);
         }, $nodeName . '.append() without any argument, on a parent having no child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $parent->append(null);
-            $this->assertEqualsData($parent->childNodes[0]->textContent, 'null');
+            $this->wptAssertEquals($parent->childNodes[0]->textContent, 'null');
         }, $nodeName . '.append() with null as an argument, on a parent having no child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $parent->append(null);
-            $this->assertEqualsData($parent->childNodes[0]->textContent, NULL);
+            $this->wptAssertEquals($parent->childNodes[0]->textContent, NULL);
         }, $nodeName . '.append() with undefined as an argument, on a parent having no child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $parent->append('text');
-            $this->assertEqualsData($parent->childNodes[0]->textContent, 'text');
+            $this->wptAssertEquals($parent->childNodes[0]->textContent, 'text');
         }, $nodeName . '.append() with only text as an argument, on a parent having no child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $x = $this->doc->createElement('x');
             $parent->append($x);
-            $this->assertArrayEqualsData($parent->childNodes, [$x]);
+            $this->wptAssertArrayEquals($parent->childNodes, [$x]);
         }, $nodeName . '.append() with only one element as an argument, on a parent having no child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
             $child = $this->doc->createElement('test');
             $parent->appendChild($child);
             $parent->append(null);
-            $this->assertEqualsData($parent->childNodes[0], $child);
-            $this->assertEqualsData($parent->childNodes[1]->textContent, 'null');
+            $this->wptAssertEquals($parent->childNodes[0], $child);
+            $this->wptAssertEquals($parent->childNodes[1]->textContent, 'null');
         }, $nodeName . '.append() with null as an argument, on a parent having a child.');
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
@@ -52,9 +52,9 @@ class ParentNodeAppendTest extends WPTTestHarness
             $child = $this->doc->createElement('test');
             $parent->appendChild($child);
             $parent->append($x, 'text');
-            $this->assertEqualsData($parent->childNodes[0], $child);
-            $this->assertEqualsData($parent->childNodes[1], $x);
-            $this->assertEqualsData($parent->childNodes[2]->textContent, 'text');
+            $this->wptAssertEquals($parent->childNodes[0], $child);
+            $this->wptAssertEquals($parent->childNodes[1], $x);
+            $this->wptAssertEquals($parent->childNodes[2]->textContent, 'text');
         }, $nodeName . '.append() with one element and text as argument, on a parent having a child.');
     }
     public function preInsertionValidateHierarchy($methodName)
@@ -62,10 +62,10 @@ class ParentNodeAppendTest extends WPTTestHarness
         // Step 2
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc) {
                 return $this->insert($doc->body, $doc->body);
             });
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc) {
                 return $this->insert($doc->body, $doc->documentElement);
             });
         }, 'If node is a host-including inclusive ancestor of parent, then throw a HierarchyRequestError DOMException.');
@@ -73,14 +73,14 @@ class ParentNodeAppendTest extends WPTTestHarness
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $doc2 = $this->doc->implementation->createHTMLDocument('title2');
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc, &$doc2) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doc2) {
                 return $this->insert($doc, $doc2);
             });
         }, 'If node is not a DocumentFragment, DocumentType, Element, Text, ProcessingInstruction, or Comment node, then throw a HierarchyRequestError DOMException.');
         // Step 5, in case of inserting a text node into a document
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc) {
                 return $this->insert($doc, $doc->createTextNode('text'));
             });
         }, 'If node is a Text node and parent is a document, then throw a HierarchyRequestError DOMException.');
@@ -88,7 +88,7 @@ class ParentNodeAppendTest extends WPTTestHarness
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $doctype = $doc->childNodes[0];
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
                 return $this->insert($doc->createElement('a'), $doctype);
             });
         }, 'If node is a doctype and parent is not a document, then throw a HierarchyRequestError DOMException.');
@@ -99,7 +99,7 @@ class ParentNodeAppendTest extends WPTTestHarness
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createElement('a'));
             $df->appendChild($doc->createElement('b'));
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
                 return $this->insert($doc, $df);
             });
         }, 'If node is a DocumentFragment with multiple elements and parent is a document, then throw a HierarchyRequestError DOMException.');
@@ -108,7 +108,7 @@ class ParentNodeAppendTest extends WPTTestHarness
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createElement('a'));
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
                 return $this->insert($doc, $df);
             });
         }, 'If node is a DocumentFragment with an element and parent is a document with another element, then throw a HierarchyRequestError DOMException.');
@@ -116,7 +116,7 @@ class ParentNodeAppendTest extends WPTTestHarness
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $el = $doc->createElement('a');
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc, &$el) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$el) {
                 return $this->insert($doc, $el);
             });
         }, 'If node is an Element and parent is a document with another element, then throw a HierarchyRequestError DOMException.');
@@ -125,7 +125,7 @@ class ParentNodeAppendTest extends WPTTestHarness
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $doctype = $doc->childNodes[0]->cloneNode();
             $doc->documentElement->remove();
-            $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
                 return $this->insert($doc, $doctype);
             });
         }, 'If node is a doctype and parent is a document with another doctype, then throw a HierarchyRequestError DOMException.');
@@ -136,7 +136,7 @@ class ParentNodeAppendTest extends WPTTestHarness
                 $doc = $this->doc->implementation->createHTMLDocument('title');
                 $doctype = $doc->childNodes[0]->cloneNode();
                 $doc->childNodes[0]->remove();
-                $this->assertThrowsDomData('HierarchyRequestError', function () use(&$doc, &$doctype) {
+                $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
                     return $this->insert($doc, $doctype);
                 });
             }, 'If node is a doctype and parent is a document with an element, then throw a HierarchyRequestError DOMException.');

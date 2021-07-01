@@ -16,12 +16,12 @@ class TreeWalkerAcceptNodeFilterTest extends WPTTestHarness
     }
     public function assertNode($actual, $expected)
     {
-        $this->assertTrueData($actual instanceof $expected->type, 'Node type mismatch: actual = ' . $actual->nodeType . ', expected = ' . $expected->nodeType);
+        $this->wptAssertTrue($actual instanceof $expected->type, 'Node type mismatch: actual = ' . $actual->nodeType . ', expected = ' . $expected->nodeType);
         if (gettype($expected->id) !== NULL) {
-            $this->assertEqualsData($actual->id, $expected->id);
+            $this->wptAssertEquals($actual->id, $expected->id);
         }
         if (gettype($expected->nodeValue) !== NULL) {
-            $this->assertEqualsData($actual->nodeValue, $expected->nodeValue);
+            $this->wptAssertEquals($actual->nodeValue, $expected->nodeValue);
         }
     }
     public function testTreeWalkerAcceptNodeFilter()
@@ -44,11 +44,11 @@ class TreeWalkerAcceptNodeFilterTest extends WPTTestHarness
         $a1->appendChild($b2);
         $this->assertTest(function () use(&$testElement) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'B2']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'B2']);
         }, 'Testing with raw function filter');
         $this->assertTest(function () use(&$testElement) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, ['acceptNode' => function ($node) {
@@ -57,49 +57,49 @@ class TreeWalkerAcceptNodeFilterTest extends WPTTestHarness
                 }
                 return NodeFilter::FILTER_ACCEPT;
             }]);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'B2']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'B2']);
         }, 'Testing with object filter');
         $this->assertTest(function () use(&$testElement) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, null);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'B1']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'B1']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B1']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'B1']);
         }, 'Testing with null filter');
         $this->assertTest(function () use(&$testElement) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, null);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'B1']);
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'B1']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B1']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'B1']);
         }, 'Testing with undefined filter');
         $this->assertTest(function () use(&$testElement) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, []);
-            $this->assertThrowsJsData($this->type_error, function () use(&$walker) {
+            $this->wptAssertThrowsJs($this->type_error, function () use(&$walker) {
                 $walker->firstChild();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            $this->assertThrowsJsData($this->type_error, function () use(&$walker) {
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            $this->wptAssertThrowsJs($this->type_error, function () use(&$walker) {
                 $walker->nextNode();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
         }, 'Testing with object lacking acceptNode property');
         $this->assertTest(function () use(&$testElement) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, ['acceptNode' => 'foo']);
-            $this->assertThrowsJsData($this->type_error, function () use(&$walker) {
+            $this->wptAssertThrowsJs($this->type_error, function () use(&$walker) {
                 $walker->firstChild();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            $this->assertThrowsJsData($this->type_error, function () use(&$walker) {
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            $this->wptAssertThrowsJs($this->type_error, function () use(&$walker) {
                 $walker->nextNode();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
         }, 'Testing with object with non-function acceptNode property');
         $this->assertTest(function ($t) use(&$testElement) {
             $filter = function () {
@@ -107,22 +107,22 @@ class TreeWalkerAcceptNodeFilterTest extends WPTTestHarness
             };
             $filter->acceptNode = $t->unreached_func('`acceptNode` method should not be called on functions');
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
-            $this->assertNodeData($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            $this->assertNodeData($walker->nextNode(), ['type' => Element, 'id' => 'B1']);
+            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B1']);
         }, 'Testing with function having acceptNode function');
         $this->assertTest(function () use(&$testElement) {
             $test_error = ['name' => 'test'];
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, function ($node) use(&$test_error) {
                 throw $test_error;
             });
-            $this->assertThrowsExactlyData($test_error, function () use(&$walker) {
+            $this->wptAssertThrowsExactly($test_error, function () use(&$walker) {
                 $walker->firstChild();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            $this->assertThrowsExactlyData($test_error, function () use(&$walker) {
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            $this->wptAssertThrowsExactly($test_error, function () use(&$walker) {
                 $walker->nextNode();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
         }, 'Testing with filter function that throws');
         $this->assertTest(function () use(&$testElement) {
             $testError = ['name' => 'test'];
@@ -130,14 +130,14 @@ class TreeWalkerAcceptNodeFilterTest extends WPTTestHarness
                 throw $testError;
             }];
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
-            $this->assertThrowsExactlyData($testError, function () use(&$walker) {
+            $this->wptAssertThrowsExactly($testError, function () use(&$walker) {
                 $walker->firstChild();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            $this->assertThrowsExactlyData($testError, function () use(&$walker) {
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            $this->wptAssertThrowsExactly($testError, function () use(&$walker) {
                 $walker->nextNode();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
         }, 'rethrows errors when getting `acceptNode`');
         $this->assertTest(function () use(&$testElement) {
             $calls = 0;
@@ -147,24 +147,24 @@ class TreeWalkerAcceptNodeFilterTest extends WPTTestHarness
                     return NodeFilter::FILTER_ACCEPT;
                 };
             }]);
-            $this->assertEqualsData($calls, 0);
+            $this->wptAssertEquals($calls, 0);
             $walker->nextNode();
             $walker->nextNode();
-            $this->assertEqualsData($calls, 2);
+            $this->wptAssertEquals($calls, 2);
         }, 'performs `Get` on every traverse');
         $this->assertTest(function () use(&$testElement) {
             $test_error = ['name' => 'test'];
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, ['acceptNode' => function ($node) use(&$test_error) {
                 throw $test_error;
             }]);
-            $this->assertThrowsExactlyData($test_error, function () use(&$walker) {
+            $this->wptAssertThrowsExactly($test_error, function () use(&$walker) {
                 $walker->firstChild();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            $this->assertThrowsExactlyData($test_error, function () use(&$walker) {
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            $this->wptAssertThrowsExactly($test_error, function () use(&$walker) {
                 $walker->nextNode();
             });
-            $this->assertNodeData($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
         }, 'Testing with filter object that throws');
         $this->assertTest(function () use(&$testElement) {
             $thisValue = null;
@@ -176,8 +176,8 @@ class TreeWalkerAcceptNodeFilterTest extends WPTTestHarness
             }];
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
             $walker->nextNode();
-            $this->assertEqualsData($thisValue, $filter);
-            $this->assertEqualsData($nodeArgID, 'A1');
+            $this->wptAssertEquals($thisValue, $filter);
+            $this->wptAssertEquals($nodeArgID, 'A1');
         }, 'Testing with filter object: this value and `node` argument');
     }
 }

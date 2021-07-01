@@ -8,6 +8,7 @@ $cfg['directory_list'] = [
 	'tools',
 	'vendor/consolidation/robo/src',
 	'vendor/nikic/php-parser/lib',
+	'vendor/phpunit/phpunit/src/Framework',
 	'vendor/symfony',
 	'vendor/wikimedia/idle-dom/src',
 	'vendor/wikimedia/remex-html/RemexHtml/Serializer',

@@ -14,11 +14,11 @@ class NodeMutationAdoptNodeTest extends WPTTestHarness
             $old = $this->doc->implementation->createHTMLDocument('');
             $div = $old->createElement('div');
             $div->appendChild($old->createTextNode('text'));
-            $this->assertEqualsData($div->ownerDocument, $old);
-            $this->assertEqualsData($div->firstChild->ownerDocument, $old);
+            $this->wptAssertEquals($div->ownerDocument, $old);
+            $this->wptAssertEquals($div->firstChild->ownerDocument, $old);
             $this->doc->body->appendChild($div);
-            $this->assertEqualsData($div->ownerDocument, $this->doc);
-            $this->assertEqualsData($div->firstChild->ownerDocument, $this->doc);
+            $this->wptAssertEquals($div->ownerDocument, $this->doc);
+            $this->wptAssertEquals($div->firstChild->ownerDocument, $this->doc);
         }, 'simple append of foreign div with text');
     }
 }

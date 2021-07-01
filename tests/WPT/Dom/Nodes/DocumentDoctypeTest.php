@@ -12,13 +12,13 @@ class DocumentDoctypeTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-doctype.html');
         $this->assertTest(function () {
-            $this->assertTrueData($this->doc->doctype instanceof DocumentType, 'Doctype should be a DocumentType');
-            $this->assertEqualsData($this->doc->doctype, $this->doc->childNodes[1]);
+            $this->wptAssertTrue($this->doc->doctype instanceof DocumentType, 'Doctype should be a DocumentType');
+            $this->wptAssertEquals($this->doc->doctype, $this->doc->childNodes[1]);
         }, 'Window document with doctype');
         $this->assertTest(function () {
             $newdoc = new Document();
             $newdoc->appendChild($newdoc->createElement('html'));
-            $this->assertEqualsData($newdoc->doctype, null);
+            $this->wptAssertEquals($newdoc->doctype, null);
         }, 'new Document()');
     }
 }

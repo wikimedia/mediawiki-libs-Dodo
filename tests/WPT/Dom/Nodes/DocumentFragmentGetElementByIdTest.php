@@ -12,12 +12,12 @@ class DocumentFragmentGetElementByIdTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/DocumentFragment-getElementById.html');
         $this->assertTest(function () {
-            $this->assertEqualsData((new \ReflectionClass( DocumentFragment::class))->hasMethod( 'getElementById'), 'It must exist on the prototype');
-            $this->assertEqualsData(gettype($this->doc->createDocumentFragment()->getElementById), 'function', 'It must exist on an instance');
+            $this->wptAssertEquals((new \ReflectionClass( DocumentFragment::class))->hasMethod( 'getElementById'), 'It must exist on the prototype');
+            $this->wptAssertEquals(gettype($this->doc->createDocumentFragment()->getElementById), 'function', 'It must exist on an instance');
         }, 'The method must exist');
         $this->assertTest(function () {
-            $this->assertEqualsData($this->doc->createDocumentFragment()->getElementById('foo'), null);
-            $this->assertEqualsData($this->doc->createDocumentFragment()->getElementById(''), null);
+            $this->wptAssertEquals($this->doc->createDocumentFragment()->getElementById('foo'), null);
+            $this->wptAssertEquals($this->doc->createDocumentFragment()->getElementById(''), null);
         }, 'It must return null when there are no matches');
         $this->assertTest(function () {
             $frag = $this->doc->createDocumentFragment();
@@ -25,17 +25,17 @@ class DocumentFragmentGetElementByIdTest extends WPTTestHarness
             $frag->appendChild($this->doc->createElement('span'));
             $frag->childNodes[0]->id = 'foo';
             $frag->childNodes[1]->id = 'foo';
-            $this->assertEqualsData($frag->getElementById('foo'), $frag->childNodes[0]);
+            $this->wptAssertEquals($frag->getElementById('foo'), $frag->childNodes[0]);
         }, 'It must return the first element when there are matches');
         $this->assertTest(function () {
             $frag = $this->doc->createDocumentFragment();
             $frag->appendChild($this->doc->createElement('div'));
             $frag->childNodes[0]->setAttribute('id', '');
-            $this->assertEqualsData($frag->getElementById(''), null, 'Even if there is an element with an empty-string ID attribute, it must not be returned');
+            $this->wptAssertEquals($frag->getElementById(''), null, 'Even if there is an element with an empty-string ID attribute, it must not be returned');
         }, 'Empty string ID values');
         $this->assertTest(function () {
             $frag = $this->doc->querySelector('template')->content;
-            $this->assertTrueData($frag->getElementById('foo')->hasAttribute('data-yes'));
+            $this->wptAssertTrue($frag->getElementById('foo')->hasAttribute('data-yes'));
         }, 'It must return the first element when there are matches, using a template');
     }
 }

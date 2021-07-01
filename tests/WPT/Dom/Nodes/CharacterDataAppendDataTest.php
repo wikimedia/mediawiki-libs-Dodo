@@ -11,48 +11,48 @@ class CharacterDataAppendDataTest extends WPTTestHarness
     {
         $this->assertTest(function () use(&$create) {
             $node = $create();
-            $this->assertEqualsData($node->data, 'test');
+            $this->wptAssertEquals($node->data, 'test');
             $node->appendData('bar');
-            $this->assertEqualsData($node->data, 'testbar');
+            $this->wptAssertEquals($node->data, 'testbar');
         }, $type . ".appendData('bar')");
         $this->assertTest(function () use(&$create) {
             $node = $create();
-            $this->assertEqualsData($node->data, 'test');
+            $this->wptAssertEquals($node->data, 'test');
             $node->appendData('');
-            $this->assertEqualsData($node->data, 'test');
+            $this->wptAssertEquals($node->data, 'test');
         }, $type . ".appendData('')");
         $this->assertTest(function () use(&$create) {
             $node = $create();
-            $this->assertEqualsData($node->data, 'test');
+            $this->wptAssertEquals($node->data, 'test');
             $node->appendData(", append more 資料，測試資料");
-            $this->assertEqualsData($node->data, "test, append more 資料，測試資料");
-            $this->assertEqualsData(count($node), 25);
+            $this->wptAssertEquals($node->data, "test, append more 資料，測試資料");
+            $this->wptAssertEquals(count($node), 25);
         }, $type . '.appendData(non-ASCII)');
         $this->assertTest(function () use(&$create) {
             $node = $create();
-            $this->assertEqualsData($node->data, 'test');
+            $this->wptAssertEquals($node->data, 'test');
             $node->appendData(null);
-            $this->assertEqualsData($node->data, 'testnull');
+            $this->wptAssertEquals($node->data, 'testnull');
         }, $type . '.appendData(null)');
         $this->assertTest(function () use(&$create) {
             $node = $create();
-            $this->assertEqualsData($node->data, 'test');
+            $this->wptAssertEquals($node->data, 'test');
             $node->appendData(null);
-            $this->assertEqualsData($node->data, 'testundefined');
+            $this->wptAssertEquals($node->data, 'testundefined');
         }, $type . '.appendData(undefined)');
         $this->assertTest(function () use(&$create) {
             $node = $create();
-            $this->assertEqualsData($node->data, 'test');
+            $this->wptAssertEquals($node->data, 'test');
             $node->appendData('', 'bar');
-            $this->assertEqualsData($node->data, 'test');
+            $this->wptAssertEquals($node->data, 'test');
         }, $type . ".appendData('', 'bar')");
         $this->assertTest(function () use(&$create) {
             $node = $create();
-            $this->assertEqualsData($node->data, 'test');
-            $this->assertThrowsJsData($this->type_error, function () use(&$node) {
+            $this->wptAssertEquals($node->data, 'test');
+            $this->wptAssertThrowsJs($this->type_error, function () use(&$node) {
                 $node->appendData();
             });
-            $this->assertEqualsData($node->data, 'test');
+            $this->wptAssertEquals($node->data, 'test');
         }, $type . '.appendData()');
     }
     public function testCharacterDataAppendData()

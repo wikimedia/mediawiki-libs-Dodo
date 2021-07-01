@@ -13,39 +13,39 @@ class DocumentAdoptNodeTest extends WPTTestHarness
         $this->assertTest(function () {
             $y = $this->doc->getElementsByTagName('x<')[0];
             $child = $y->firstChild;
-            $this->assertEqualsData($y->parentNode, $this->doc->body);
-            $this->assertEqualsData($y->ownerDocument, $this->doc);
-            $this->assertEqualsData($this->doc->adoptNode($y), $y);
-            $this->assertEqualsData($y->parentNode, null);
-            $this->assertEqualsData($y->firstChild, $child);
-            $this->assertEqualsData($y->ownerDocument, $this->doc);
-            $this->assertEqualsData($child->ownerDocument, $this->doc);
+            $this->wptAssertEquals($y->parentNode, $this->doc->body);
+            $this->wptAssertEquals($y->ownerDocument, $this->doc);
+            $this->wptAssertEquals($this->doc->adoptNode($y), $y);
+            $this->wptAssertEquals($y->parentNode, null);
+            $this->wptAssertEquals($y->firstChild, $child);
+            $this->wptAssertEquals($y->ownerDocument, $this->doc);
+            $this->wptAssertEquals($child->ownerDocument, $this->doc);
             $doc = $this->doc->implementation->createDocument(null, null, null);
-            $this->assertEqualsData($doc->adoptNode($y), $y);
-            $this->assertEqualsData($y->parentNode, null);
-            $this->assertEqualsData($y->firstChild, $child);
-            $this->assertEqualsData($y->ownerDocument, $doc);
-            $this->assertEqualsData($child->ownerDocument, $doc);
+            $this->wptAssertEquals($doc->adoptNode($y), $y);
+            $this->wptAssertEquals($y->parentNode, null);
+            $this->wptAssertEquals($y->firstChild, $child);
+            $this->wptAssertEquals($y->ownerDocument, $doc);
+            $this->wptAssertEquals($child->ownerDocument, $doc);
         }, "Adopting an Element called 'x<' should work.");
         $this->assertTest(function () {
             $x = $this->doc->createElement(':good:times:');
-            $this->assertEqualsData($this->doc->adoptNode($x), $x);
+            $this->wptAssertEquals($this->doc->adoptNode($x), $x);
             $doc = $this->doc->implementation->createDocument(null, null, null);
-            $this->assertEqualsData($doc->adoptNode($x), $x);
-            $this->assertEqualsData($x->parentNode, null);
-            $this->assertEqualsData($x->ownerDocument, $doc);
+            $this->wptAssertEquals($doc->adoptNode($x), $x);
+            $this->wptAssertEquals($x->parentNode, null);
+            $this->wptAssertEquals($x->ownerDocument, $doc);
         }, "Adopting an Element called ':good:times:' should work.");
         $this->assertTest(function () {
             $doctype = $this->doc->doctype;
-            $this->assertEqualsData($doctype->parentNode, $this->doc);
-            $this->assertEqualsData($doctype->ownerDocument, $this->doc);
-            $this->assertEqualsData($this->doc->adoptNode($doctype), $doctype);
-            $this->assertEqualsData($doctype->parentNode, null);
-            $this->assertEqualsData($doctype->ownerDocument, $this->doc);
+            $this->wptAssertEquals($doctype->parentNode, $this->doc);
+            $this->wptAssertEquals($doctype->ownerDocument, $this->doc);
+            $this->wptAssertEquals($this->doc->adoptNode($doctype), $doctype);
+            $this->wptAssertEquals($doctype->parentNode, null);
+            $this->wptAssertEquals($doctype->ownerDocument, $this->doc);
         }, 'Explicitly adopting a DocumentType should work.');
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createDocument(null, null, null);
-            $this->assertThrowsDomData('NOT_SUPPORTED_ERR', function () use(&$doc) {
+            $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use(&$doc) {
                 $this->doc->adoptNode($doc);
             });
         }, 'Adopting a Document should throw.');

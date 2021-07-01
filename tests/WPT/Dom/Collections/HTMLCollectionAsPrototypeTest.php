@@ -10,7 +10,7 @@ class HTMLCollectionAsPrototypeTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-as-prototype.html');
         $this->assertTest(function () {
             $obj = clone $this->doc->getElementsByTagName('script');
-            $this->assertThrowsJsData($this->type_error, function () use(&$obj) {
+            $this->wptAssertThrowsJs($this->type_error, function () use(&$obj) {
                 count($obj);
             });
         }, 'HTMLCollection as a prototype should not allow getting .length on the base object');
@@ -22,12 +22,12 @@ class HTMLCollectionAsPrototypeTest extends WPTTestHarness
                 $element->remove();
             });
             $collection = $this->doc->getElementsByTagName('p');
-            $this->assertEqualsData($collection->named, $element);
+            $this->wptAssertEquals($collection->named, $element);
             $object = clone $this->doc->getElementsByTagName('script');
-            $this->assertEqualsData($object->named, $element);
+            $this->wptAssertEquals($object->named, $element);
             $object->named = 'foo';
-            $this->assertEqualsData($object->named, 'foo');
-            $this->assertEqualsData($collection->named, $element);
+            $this->wptAssertEquals($object->named, 'foo');
+            $this->wptAssertEquals($collection->named, $element);
         }, 'HTMLCollection as a prototype and setting own properties');
     }
 }

@@ -628,7 +628,6 @@ class ParserTask extends BaseTask {
 						'_test',
 						'check',
 						'runTestData',
-						'runMutationTest',
 						'done',
 						'append',
 						'step_func_done',
@@ -661,7 +660,6 @@ class ParserTask extends BaseTask {
 						'assert_false',
 						'assert_idl_attribute',
 						'assert_in_array',
-						'assert_node',
 						'assert_not_equals',
 						'assert_readonly',
 						'assert_throws_dom',
@@ -726,10 +724,12 @@ class ParserTask extends BaseTask {
 					} elseif ( array_key_exists( $expr_name, $harness_functions ) ) {
 						$args = $node->args;
 
-						if ( strpos( $expr_name,
-								'assert' ) !== false ) {
-							$call = new Node\Expr\MethodCall( new Variable( 'this' ),
-								$this->snakeToCamel( $expr_name ) . 'Data',
+						if ( strpos( $expr_name, 'assert' ) === 0 ) {
+							// TestCase already has methods named assert*
+							// so add a 'wpt' prefix to these harness functions.
+							$call = new Node\Expr\MethodCall(
+								new Variable( 'this' ),
+								$this->snakeToCamel( 'wpt_' . $expr_name ),
 								$args,
 								$node->getAttributes() );
 						} else {
@@ -873,9 +873,9 @@ class ParserTask extends BaseTask {
 				"(new \ReflectionClass( DocumentFragment::class))->hasMethod( 'getElementById')",
 			'testRemove' => 'assertTestRemove',
 			'HTMLUnknownElement::prototype::isPrototypeOf( $deepClone )' =>
-				'$this->isCloneOf($deepClone, \'HTMLUnknownElement\')',
+				'($deepClone instanceof HTMLUnknownElement)',
 			'HTMLUnknownElement::prototype::isPrototypeOf( $clone )' =>
-				'$this->isCloneOf($clone, \'HTMLUnknownElement\')',
+				'($clone instanceof HTMLUnknownElement)',
 			'$doc::URL' => '$doc->URL',
 			'\'type\' => $Element' => '\'type\' => Element::class',
 			'\'type\' => $Text' => '\'type\' => Text::class',

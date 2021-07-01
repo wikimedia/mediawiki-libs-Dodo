@@ -10,17 +10,17 @@ class RangeAttributesTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-attributes.html');
         $this->assertTest(function () {
             $r = $this->doc->createRange();
-            $this->assertEqualsData($r->startContainer, $this->doc);
-            $this->assertEqualsData($r->endContainer, $this->doc);
-            $this->assertEqualsData($r->startOffset, 0);
-            $this->assertEqualsData($r->endOffset, 0);
-            $this->assertTrueData($r->collapsed);
+            $this->wptAssertEquals($r->startContainer, $this->doc);
+            $this->wptAssertEquals($r->endContainer, $this->doc);
+            $this->wptAssertEquals($r->startOffset, 0);
+            $this->wptAssertEquals($r->endOffset, 0);
+            $this->wptAssertTrue($r->collapsed);
             $r->detach();
-            $this->assertEqualsData($r->startContainer, $this->doc);
-            $this->assertEqualsData($r->endContainer, $this->doc);
-            $this->assertEqualsData($r->startOffset, 0);
-            $this->assertEqualsData($r->endOffset, 0);
-            $this->assertTrueData($r->collapsed);
+            $this->wptAssertEquals($r->startContainer, $this->doc);
+            $this->wptAssertEquals($r->endContainer, $this->doc);
+            $this->wptAssertEquals($r->startOffset, 0);
+            $this->wptAssertEquals($r->endOffset, 0);
+            $this->wptAssertTrue($r->collapsed);
         });
     }
 }

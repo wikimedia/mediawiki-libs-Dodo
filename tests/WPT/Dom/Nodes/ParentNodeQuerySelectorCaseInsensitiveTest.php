@@ -10,10 +10,10 @@ class ParentNodeQuerySelectorCaseInsensitiveTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-case-insensitive.html');
         $input = $this->doc->getElementById('testInput');
         $this->assertTest(function () use(&$input) {
-            $this->assertEqualsData($this->doc->querySelector('input[name*=user i]'), $input);
+            $this->wptAssertEquals($this->doc->querySelector('input[name*=user i]'), $input);
         }, 'querySelector');
         $this->assertTest(function () use(&$input) {
-            $this->assertArrayEqualsData($this->doc->querySelectorAll('input[name*=user i]'), [$input]);
+            $this->wptAssertArrayEquals($this->doc->querySelectorAll('input[name*=user i]'), [$input]);
         }, 'querySelectorAll');
     }
 }

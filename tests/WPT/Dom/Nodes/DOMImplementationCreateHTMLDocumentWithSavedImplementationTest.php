@@ -14,7 +14,7 @@ class DOMImplementationCreateHTMLDocumentWithSavedImplementationTest extends WPT
             $this->doc->body->appendChild($iframe);
             $implementation = $iframe->getOwnerDocument()->implementation;
             $iframe->remove();
-            $this->assertNotEqualsData($implementation->createHTMLDocument(), null);
+            $this->wptAssertNotEquals($implementation->createHTMLDocument(), null);
         }, 'createHTMLDocument(): from a saved and detached implementation does not return null');
     }
 }

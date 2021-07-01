@@ -17,13 +17,13 @@ class DocumentGetElementsByClassNameTest extends WPTTestHarness
             });
             $this->doc->body->appendChild($a);
             $l = $this->doc->getElementsByClassName('foo');
-            $this->assertTrueData($l instanceof HTMLCollection);
-            $this->assertEqualsData(count($l), 1);
+            $this->wptAssertTrue($l instanceof HTMLCollection);
+            $this->wptAssertEquals(count($l), 1);
             $b->className = 'foo';
             $this->doc->body->appendChild($b);
-            $this->assertEqualsData(count($l), 2);
+            $this->wptAssertEquals(count($l), 2);
             $this->doc->body->removeChild($b);
-            $this->assertEqualsData(count($l), 1);
+            $this->wptAssertEquals(count($l), 1);
         }, 'getElementsByClassName() should be a live collection');
     }
 }

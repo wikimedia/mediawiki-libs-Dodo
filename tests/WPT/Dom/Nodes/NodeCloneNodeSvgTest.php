@@ -12,34 +12,34 @@ class NodeCloneNodeSvgTest extends WPTTestHarness
         $svg = $this->doc->querySelector('svg');
         $clone = $svg->cloneNode(true);
         $this->assertTest(function () use(&$clone) {
-            $this->assertEqualsData($clone->namespaceURI, 'http://www.w3.org/2000/svg');
-            $this->assertEqualsData($clone->prefix, null);
-            $this->assertEqualsData($clone->localName, 'svg');
-            $this->assertEqualsData($clone->tagName, 'svg');
+            $this->wptAssertEquals($clone->namespaceURI, 'http://www.w3.org/2000/svg');
+            $this->wptAssertEquals($clone->prefix, null);
+            $this->wptAssertEquals($clone->localName, 'svg');
+            $this->wptAssertEquals($clone->tagName, 'svg');
         }, 'cloned <svg> should have the right properties');
         $this->assertTest(function () use(&$clone) {
             $attr = $clone->attributes[0];
-            $this->assertEqualsData($attr->namespaceURI, 'http://www.w3.org/2000/xmlns/');
-            $this->assertEqualsData($attr->prefix, 'xmlns');
-            $this->assertEqualsData($attr->localName, 'xlink');
-            $this->assertEqualsData($attr->name, 'xmlns:xlink');
-            $this->assertEqualsData($attr->value, 'http://www.w3.org/1999/xlink');
+            $this->wptAssertEquals($attr->namespaceURI, 'http://www.w3.org/2000/xmlns/');
+            $this->wptAssertEquals($attr->prefix, 'xmlns');
+            $this->wptAssertEquals($attr->localName, 'xlink');
+            $this->wptAssertEquals($attr->name, 'xmlns:xlink');
+            $this->wptAssertEquals($attr->value, 'http://www.w3.org/1999/xlink');
         }, "cloned <svg>'s xmlns:xlink attribute should have the right properties");
         $this->assertTest(function () use(&$clone) {
             $use = $clone->firstElementChild;
-            $this->assertEqualsData($use->namespaceURI, 'http://www.w3.org/2000/svg');
-            $this->assertEqualsData($use->prefix, null);
-            $this->assertEqualsData($use->localName, 'use');
-            $this->assertEqualsData($use->tagName, 'use');
+            $this->wptAssertEquals($use->namespaceURI, 'http://www.w3.org/2000/svg');
+            $this->wptAssertEquals($use->prefix, null);
+            $this->wptAssertEquals($use->localName, 'use');
+            $this->wptAssertEquals($use->tagName, 'use');
         }, 'cloned <use> should have the right properties');
         $this->assertTest(function () use(&$clone) {
             $use = $clone->firstElementChild;
             $attr = $use->attributes[0];
-            $this->assertEqualsData($attr->namespaceURI, 'http://www.w3.org/1999/xlink');
-            $this->assertEqualsData($attr->prefix, 'xlink');
-            $this->assertEqualsData($attr->localName, 'href');
-            $this->assertEqualsData($attr->name, 'xlink:href');
-            $this->assertEqualsData($attr->value, '#test');
+            $this->wptAssertEquals($attr->namespaceURI, 'http://www.w3.org/1999/xlink');
+            $this->wptAssertEquals($attr->prefix, 'xlink');
+            $this->wptAssertEquals($attr->localName, 'href');
+            $this->wptAssertEquals($attr->name, 'xlink:href');
+            $this->wptAssertEquals($attr->value, '#test');
         }, "cloned <use>'s xlink:href attribute should have the right properties");
     }
 }

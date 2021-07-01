@@ -11,32 +11,32 @@ class DocumentTypeRemoveTest extends WPTTestHarness
     {
         global $node;
         $this->assertTest(function () use(&$node) {
-            $this->assertTrueData(isset($node['remove']));
-            $this->assertEqualsData(gettype($node->remove), 'function');
-            $this->assertEqualsData(count($node->remove), 0);
+            $this->wptAssertTrue(isset($node['remove']));
+            $this->wptAssertEquals(gettype($node->remove), 'function');
+            $this->wptAssertEquals(count($node->remove), 0);
         }, $type . ' should support remove()');
         $this->assertTest(function () use(&$node) {
-            $this->assertEqualsData($node->parentNode, null, 'Node should not have a parent');
-            $this->assertEqualsData($node->remove(), null);
-            $this->assertEqualsData($node->parentNode, null, 'Removed new node should not have a parent');
+            $this->wptAssertEquals($node->parentNode, null, 'Node should not have a parent');
+            $this->wptAssertEquals($node->remove(), null);
+            $this->wptAssertEquals($node->parentNode, null, 'Removed new node should not have a parent');
         }, 'remove() should work if ' . $type . " doesn't have a parent");
         $this->assertTest(function () use(&$node, &$parent) {
-            $this->assertEqualsData($node->parentNode, null, 'Node should not have a parent');
+            $this->wptAssertEquals($node->parentNode, null, 'Node should not have a parent');
             $parent->appendChild($node);
-            $this->assertEqualsData($node->parentNode, $parent, 'Appended node should have a parent');
-            $this->assertEqualsData($node->remove(), null);
-            $this->assertEqualsData($node->parentNode, null, 'Removed node should not have a parent');
-            $this->assertArrayEqualsData($parent->childNodes, [], 'Parent should not have children');
+            $this->wptAssertEquals($node->parentNode, $parent, 'Appended node should have a parent');
+            $this->wptAssertEquals($node->remove(), null);
+            $this->wptAssertEquals($node->parentNode, null, 'Removed node should not have a parent');
+            $this->wptAssertArrayEquals($parent->childNodes, [], 'Parent should not have children');
         }, 'remove() should work if ' . $type . ' does have a parent');
         $this->assertTest(function () use(&$node, &$parent) {
-            $this->assertEqualsData($node->parentNode, null, 'Node should not have a parent');
+            $this->wptAssertEquals($node->parentNode, null, 'Node should not have a parent');
             $before = $parent->appendChild($this->doc->createComment('before'));
             $parent->appendChild($node);
             $after = $parent->appendChild($this->doc->createComment('after'));
-            $this->assertEqualsData($node->parentNode, $parent, 'Appended node should have a parent');
-            $this->assertEqualsData($node->remove(), null);
-            $this->assertEqualsData($node->parentNode, null, 'Removed node should not have a parent');
-            $this->assertArrayEqualsData($parent->childNodes, [$before, $after], 'Parent should have two children left');
+            $this->wptAssertEquals($node->parentNode, $parent, 'Appended node should have a parent');
+            $this->wptAssertEquals($node->remove(), null);
+            $this->wptAssertEquals($node->parentNode, null, 'Removed node should not have a parent');
+            $this->wptAssertArrayEquals($parent->childNodes, [$before, $after], 'Parent should have two children left');
         }, 'remove() should work if ' . $type . ' does have a parent and siblings');
     }
     public function testDocumentTypeRemove()

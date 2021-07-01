@@ -14,8 +14,8 @@ class NodeFilterConstantsTest extends WPTTestHarness
             $desc = $arr[1];
             $this->assertTest(function () use(&$constants, &$o) {
                 foreach ($constants as $d) {
-                    $this->assertTrueData(isset($o[$d[0]]), 'Object ' . $o . " doesn't have " . $d[0]);
-                    $this->assertEqualsData($o[$d[0]], $d[1], 'Object ' . $o . ' value for ' . $d[0] . ' is wrong');
+                    $this->wptAssertTrue(isset($o[$d[0]]), 'Object ' . $o . " doesn't have " . $d[0]);
+                    $this->wptAssertEquals($o[$d[0]], $d[1], 'Object ' . $o . ' value for ' . $d[0] . ' is wrong');
                 }
             }, 'Constants for ' . $msg . ' on ' . $desc . '.');
         }

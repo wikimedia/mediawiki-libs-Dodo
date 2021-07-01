@@ -12,9 +12,9 @@ class ElementFirstElementChildTest extends WPTTestHarness
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
             $fec = $parentEl->firstElementChild;
-            $this->assertTrueData(!!$fec);
-            $this->assertEqualsData($fec->nodeType, 1);
-            $this->assertEqualsData($fec->getAttribute('id'), 'first_element_child');
+            $this->wptAssertTrue(!!$fec);
+            $this->wptAssertEquals($fec->nodeType, 1);
+            $this->wptAssertEquals($fec->getAttribute('id'), 'first_element_child');
         });
     }
 }

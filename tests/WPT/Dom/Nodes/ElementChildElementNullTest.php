@@ -10,8 +10,8 @@ class ElementChildElementNullTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-childElement-null.html');
         $this->assertTest(function () {
             $parentEl = $this->doc->getElementById('parentEl');
-            $this->assertEqualsData($parentEl->firstElementChild, null);
-            $this->assertEqualsData($parentEl->lastElementChild, null);
+            $this->wptAssertEquals($parentEl->firstElementChild, null);
+            $this->wptAssertEquals($parentEl->lastElementChild, null);
         });
     }
 }

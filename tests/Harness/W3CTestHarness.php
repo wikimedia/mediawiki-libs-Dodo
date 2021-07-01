@@ -7,7 +7,6 @@
 // @phan-file-suppress PhanTypeMismatchForeach
 // @phan-file-suppress PhanUndeclaredClassMethod
 // @phan-file-suppress PhanUndeclaredClassProperty
-// @phan-file-suppress PhanUndeclaredStaticMethod
 // @phan-file-suppress PhanUndeclaredTypeParameter
 // phpcs:disable Generic.Files.LineLength.TooLong
 

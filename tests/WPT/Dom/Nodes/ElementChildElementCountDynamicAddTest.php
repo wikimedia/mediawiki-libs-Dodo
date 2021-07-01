@@ -12,7 +12,7 @@ class ElementChildElementCountDynamicAddTest extends WPTTestHarness
             $parentEl = $this->doc->getElementById('parentEl');
             $newChild = $this->doc->createElement('span');
             $parentEl->appendChild($newChild);
-            $this->assertEqualsData($parentEl->childElementCount, 2);
+            $this->wptAssertEquals($parentEl->childElementCount, 2);
         });
     }
 }

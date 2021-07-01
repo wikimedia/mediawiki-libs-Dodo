@@ -10,12 +10,12 @@ class RangeConstructorTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-constructor.html');
         $this->assertTest(function () {
             $range = new Range();
-            $this->assertEqualsData($range->startContainer, $this->doc, 'startContainer');
-            $this->assertEqualsData($range->endContainer, $this->doc, 'endContainer');
-            $this->assertEqualsData($range->startOffset, 0, 'startOffset');
-            $this->assertEqualsData($range->endOffset, 0, 'endOffset');
-            $this->assertTrueData($range->collapsed, 'collapsed');
-            $this->assertEqualsData($range->commonAncestorContainer, $this->doc, 'commonAncestorContainer');
+            $this->wptAssertEquals($range->startContainer, $this->doc, 'startContainer');
+            $this->wptAssertEquals($range->endContainer, $this->doc, 'endContainer');
+            $this->wptAssertEquals($range->startOffset, 0, 'startOffset');
+            $this->wptAssertEquals($range->endOffset, 0, 'endOffset');
+            $this->wptAssertTrue($range->collapsed, 'collapsed');
+            $this->wptAssertEquals($range->commonAncestorContainer, $this->doc, 'commonAncestorContainer');
         });
     }
 }

@@ -74,8 +74,8 @@ class NodeIteratorRemovalTest extends WPTTestHarness
                 $oldParent->removeChild($node);
                 for ($j = 0; $j < count($iters); $j++) {
                     $iter = $iters[$j];
-                    $this->assertEqualsData($iter->referenceNode, $expectedReferenceNodes[$j], '.referenceNode of ' . $descs[$j]);
-                    $this->assertEqualsData($iter->pointerBeforeReferenceNode, $expectedPointers[$j], '.pointerBeforeReferenceNode of ' . $descs[$j]);
+                    $this->wptAssertEquals($iter->referenceNode, $expectedReferenceNodes[$j], '.referenceNode of ' . $descs[$j]);
+                    $this->wptAssertEquals($iter->pointerBeforeReferenceNode, $expectedPointers[$j], '.pointerBeforeReferenceNode of ' . $descs[$j]);
                 }
                 $oldParent->insertBefore($node, $oldSibling);
             }, 'Test removing node ' . $this->testNodes[$i]);

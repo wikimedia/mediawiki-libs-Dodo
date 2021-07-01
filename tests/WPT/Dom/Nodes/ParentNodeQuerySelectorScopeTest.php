@@ -10,12 +10,12 @@ class ParentNodeQuerySelectorScopeTest extends WPTTestHarness
         $div = $this->doc->querySelector('div');
         $p = $this->doc->querySelector('p');
         $this->assertTest(function () use(&$div, &$p) {
-            $this->assertEqualsData($div->querySelector(':scope > p'), $p);
-            $this->assertEqualsData($div->querySelector(':scope > span'), null);
+            $this->wptAssertEquals($div->querySelector(':scope > p'), $p);
+            $this->wptAssertEquals($div->querySelector(':scope > span'), null);
         }, 'querySelector');
         $this->assertTest(function () use(&$div, &$p) {
-            $this->assertArrayEqualsData($div->querySelectorAll(':scope > p'), [$p]);
-            $this->assertArrayEqualsData($div->querySelectorAll(':scope > span'), []);
+            $this->wptAssertArrayEquals($div->querySelectorAll(':scope > p'), [$p]);
+            $this->wptAssertArrayEquals($div->querySelectorAll(':scope > span'), []);
         }, 'querySelectorAll');
     }
 }

@@ -21,25 +21,25 @@ class NodeNormalizeTest extends WPTTestHarness
             $t4 = $this->doc->createTextNode('4');
             $df->appendChild($t1);
             $df->appendChild($t2);
-            $this->assertEqualsData(count($df->childNodes), 2);
-            $this->assertEqualsData($df->textContent, '12');
+            $this->wptAssertEquals(count($df->childNodes), 2);
+            $this->wptAssertEquals($df->textContent, '12');
             $el = $this->doc->createElement('x');
             $df->appendChild($el);
             $el->appendChild($t3);
             $el->appendChild($t4);
             $this->doc->normalize();
-            $this->assertEqualsData(count($el->childNodes), 2);
-            $this->assertEqualsData($el->textContent, '34');
-            $this->assertEqualsData(count($df->childNodes), 3);
-            $this->assertEqualsData($t1->data, '1');
+            $this->wptAssertEquals(count($el->childNodes), 2);
+            $this->wptAssertEquals($el->textContent, '34');
+            $this->wptAssertEquals(count($df->childNodes), 3);
+            $this->wptAssertEquals($t1->data, '1');
             $df->normalize();
-            $this->assertEqualsData(count($df->childNodes), 2);
-            $this->assertEqualsData($df->firstChild, $t1);
-            $this->assertEqualsData($t1->data, '12');
-            $this->assertEqualsData($t2->data, '2');
-            $this->assertEqualsData($el->firstChild, $t3);
-            $this->assertEqualsData($t3->data, '34');
-            $this->assertEqualsData($t4->data, '4');
+            $this->wptAssertEquals(count($df->childNodes), 2);
+            $this->wptAssertEquals($df->firstChild, $t1);
+            $this->wptAssertEquals($t1->data, '12');
+            $this->wptAssertEquals($t2->data, '2');
+            $this->wptAssertEquals($el->firstChild, $t3);
+            $this->wptAssertEquals($t3->data, '34');
+            $this->wptAssertEquals($t4->data, '4');
         });
         // https://www.w3.org/Bugs/Public/show_bug.cgi?id=19837
         $this->assertTest(function () {
@@ -47,17 +47,17 @@ class NodeNormalizeTest extends WPTTestHarness
             $t1 = $div->appendChild($this->doc->createTextNode(''));
             $t2 = $div->appendChild($this->doc->createTextNode('a'));
             $t3 = $div->appendChild($this->doc->createTextNode(''));
-            $this->assertArrayEqualsData($div->childNodes, [$t1, $t2, $t3]);
+            $this->wptAssertArrayEquals($div->childNodes, [$t1, $t2, $t3]);
             $div->normalize();
-            $this->assertArrayEqualsData($div->childNodes, [$t2]);
+            $this->wptAssertArrayEquals($div->childNodes, [$t2]);
         }, 'Empty text nodes separated by a non-empty text node');
         $this->assertTest(function () {
             $div = $this->doc->createElement('div');
             $t1 = $div->appendChild($this->doc->createTextNode(''));
             $t2 = $div->appendChild($this->doc->createTextNode(''));
-            $this->assertArrayEqualsData($div->childNodes, [$t1, $t2]);
+            $this->wptAssertArrayEquals($div->childNodes, [$t1, $t2]);
             $div->normalize();
-            $this->assertArrayEqualsData($div->childNodes, []);
+            $this->wptAssertArrayEquals($div->childNodes, []);
         }, 'Empty text nodes');
         // The specification for normalize is clear that only "exclusive Text
         // nodes" are to be modified. This excludes CDATASection nodes, which
@@ -83,9 +83,9 @@ class NodeNormalizeTest extends WPTTestHarness
             $t8 = $div->appendChild($doc->createElement('el'));
             $t9 = $div->appendChild($doc->createTextNode('e'));
             $expected = [$t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9];
-            $this->assertArrayEqualsData($div->childNodes, $expected);
+            $this->wptAssertArrayEquals($div->childNodes, $expected);
             $div->normalize();
-            $this->assertArrayEqualsData($div->childNodes, $expected);
+            $this->wptAssertArrayEquals($div->childNodes, $expected);
         }, 'Non-text nodes with empty textContent values.');
     }
 }

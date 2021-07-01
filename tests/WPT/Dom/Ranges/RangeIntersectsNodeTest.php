@@ -23,19 +23,19 @@ class RangeIntersectsNodeTest extends WPTTestHarness
                             $testRangesCached[$j] = null;
                         }
                     }
-                    $this->assertNotEqualsData($testRangesCached[$j], null, 'Setting up the range failed');
+                    $this->wptAssertNotEquals($testRangesCached[$j], null, 'Setting up the range failed');
                     $range = $testRangesCached[$j]->cloneRange();
                     // "If node's root is different from the context object's root,
                     // return false and terminate these steps."
                     if (Common::furthestAncestor($node) !== Common::furthestAncestor($range->startContainer)) {
-                        $this->assertEqualsData($range->intersectsNode($node), false, 'Must return false if node and range have different roots');
+                        $this->wptAssertEquals($range->intersectsNode($node), false, 'Must return false if node and range have different roots');
                         return;
                     }
                     // "Let parent be node's parent."
                     $parent_ = $node->parentNode;
                     // "If parent is null, return true and terminate these steps."
                     if (!$parent_) {
-                        $this->assertEqualsData($range->intersectsNode($node), true, "Must return true if node's parent is null");
+                        $this->wptAssertEquals($range->intersectsNode($node), true, "Must return true if node's parent is null");
                         return;
                     }
                     // "Let offset be node's index."
@@ -43,11 +43,11 @@ class RangeIntersectsNodeTest extends WPTTestHarness
                     // "If (parent, offset) is before end and (parent, offset + 1) is
                     // after start, return true and terminate these steps."
                     if (Common::getPosition($parent_, $offset, $range->endContainer, $range->endOffset) === 'before' && Common::getPosition($parent_, $offset + 1, $range->startContainer, $range->startOffset) === 'after') {
-                        $this->assertEqualsData($range->intersectsNode($node), true, 'Must return true if (parent, offset) is before range end and (parent, offset + 1) is after range start');
+                        $this->wptAssertEquals($range->intersectsNode($node), true, 'Must return true if (parent, offset) is before range end and (parent, offset + 1) is after range start');
                         return;
                     }
                     // "Return false."
-                    $this->assertEqualsData($range->intersectsNode($node), false, 'Must return false if (parent, offset) is not before range end or (parent, offset + 1) is not after range start');
+                    $this->wptAssertEquals($range->intersectsNode($node), false, 'Must return false if (parent, offset) is not before range end or (parent, offset + 1) is not after range start');
                 }, 'Node ' . $i . ' ' . $this->testNodes[$i] . ', range ' . $j . ' ' . $testRanges[$j]);
             }
         }
