@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeattributenodeattribute.js.
 class HcNodeattributenodeattributeTest extends W3CTestHarness
@@ -32,6 +32,6 @@ class HcNodeattributenodeattributeTest extends W3CTestHarness
         $addrAttr = $testAddr->attributes;
         $attrNode = $addrAttr->item(0);
         $attrList = $attrNode->attributes;
-        $this->assertNullData('nodeAttributeNodeAttributeAssert1', $attrList);
+        $this->w3cAssertNull('nodeAttributeNodeAttributeAssert1', $attrList);
     }
 }

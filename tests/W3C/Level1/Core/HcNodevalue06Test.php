@@ -1,7 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodevalue06.js.
 class HcNodevalue06Test extends W3CTestHarness
@@ -22,9 +22,9 @@ class HcNodevalue06Test extends W3CTestHarness
         }
         $newNode = $this->load($newNodeRef, 'newNode', 'hc_staff');
         $newValue = $newNode->nodeValue;
-        $this->assertNullData('initiallyNull', $newValue);
+        $this->w3cAssertNull('initiallyNull', $newValue);
         $newNode->nodeValue = 'This should have no effect';
         $newValue = $newNode->nodeValue;
-        $this->assertNullData('nullAfterAttemptedChange', $newValue);
+        $this->w3cAssertNull('nullAfterAttemptedChange', $newValue);
     }
 }

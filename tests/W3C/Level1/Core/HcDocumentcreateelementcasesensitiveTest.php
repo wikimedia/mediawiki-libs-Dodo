@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_documentcreateelementcasesensitive.js.
 class HcDocumentcreateelementcasesensitiveTest extends W3CTestHarness
@@ -33,11 +33,11 @@ class HcDocumentcreateelementcasesensitiveTest extends W3CTestHarness
         $newElement2->setAttribute('title', 'Dallas');
         $attribute1 = $newElement1->getAttribute('lang');
         $attribute2 = $newElement2->getAttribute('title');
-        $this->assertEqualsData('attrib1', 'EN', $attribute1);
-        $this->assertEqualsData('attrib2', 'Dallas', $attribute2);
+        $this->w3cAssertEquals('attrib1', 'EN', $attribute1);
+        $this->w3cAssertEquals('attrib2', 'Dallas', $attribute2);
         $nodeName1 = $newElement1->nodeName;
         $nodeName2 = $newElement2->nodeName;
-        $this->assertEqualsAutoCaseData('element', 'nodeName1', 'ACRONYM', $nodeName1);
-        $this->assertEqualsAutoCaseData('element', 'nodeName2', 'acronym', $nodeName2);
+        $this->w3cAssertEqualsAutoCase('element', 'nodeName1', 'ACRONYM', $nodeName1);
+        $this->w3cAssertEqualsAutoCase('element', 'nodeName2', 'acronym', $nodeName2);
     }
 }

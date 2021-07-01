@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodelistindexgetlength.js.
 class HcNodelistindexgetlengthTest extends W3CTestHarness
@@ -30,9 +30,9 @@ class HcNodelistindexgetlengthTest extends W3CTestHarness
         $employeeList = $employeeNode->childNodes;
         $length = count($employeeList);
         if (6 == $length) {
-            $this->assertEqualsData('length_wo_space', 6, $length);
+            $this->w3cAssertEquals('length_wo_space', 6, $length);
         } else {
-            $this->assertEqualsData('length_w_space', 13, $length);
+            $this->w3cAssertEquals('length_w_space', 13, $length);
         }
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodecloneattributescopied.js.
 class HcNodecloneattributescopiedTest extends W3CTestHarness
@@ -45,9 +45,9 @@ class HcNodecloneattributescopiedTest extends W3CTestHarness
             $result[count($result)] = $attributeName;
         }
         if ($builder->contentType == 'text/html') {
-            $this->assertEqualsCollectionData('nodeNames_html', array_map('strtolower', $htmlExpected), array_map('strtolower', $result));
+            $this->w3cAssertEqualsCollection('nodeNames_html', array_map('strtolower', $htmlExpected), array_map('strtolower', $result));
         } else {
-            $this->assertEqualsCollectionData('nodeNames', $expected, $result);
+            $this->w3cAssertEqualsCollection('nodeNames', $expected, $result);
         }
     }
 }

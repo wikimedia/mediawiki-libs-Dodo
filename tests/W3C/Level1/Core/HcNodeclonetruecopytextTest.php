@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeclonetruecopytext.js.
 class HcNodeclonetruecopytextTest extends W3CTestHarness
@@ -32,6 +32,6 @@ class HcNodeclonetruecopytextTest extends W3CTestHarness
         $clonedNode = $childNode->cloneNode(true);
         $lastChildNode = $clonedNode->lastChild;
         $childValue = $lastChildNode->nodeValue;
-        $this->assertEqualsData('cloneContainsText', '35,000', $childValue);
+        $this->w3cAssertEquals('cloneContainsText', '35,000', $childValue);
     }
 }

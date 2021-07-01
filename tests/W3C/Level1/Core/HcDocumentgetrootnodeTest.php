@@ -1,7 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_documentgetrootnode.js.
 class HcDocumentgetrootnodeTest extends W3CTestHarness
@@ -25,9 +25,9 @@ class HcDocumentgetrootnodeTest extends W3CTestHarness
         $root = $doc->documentElement;
         $rootName = $root->nodeName;
         if ($builder->contentType == 'image/svg+xml') {
-            $this->assertEqualsData('svgTagName', 'svg', $rootName);
+            $this->w3cAssertEquals('svgTagName', 'svg', $rootName);
         } else {
-            $this->assertEqualsAutoCaseData('element', 'docElemName', 'html', $rootName);
+            $this->w3cAssertEqualsAutoCase('element', 'docElemName', 'html', $rootName);
         }
     }
 }

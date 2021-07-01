@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodetextnodename.js.
 class HcNodetextnodenameTest extends W3CTestHarness
@@ -30,6 +30,6 @@ class HcNodetextnodenameTest extends W3CTestHarness
         $testAddr = $elementList->item(0);
         $textNode = $testAddr->firstChild;
         $textName = $textNode->nodeName;
-        $this->assertEqualsData('textNodeName', '#text', $textName);
+        $this->w3cAssertEquals('textNodeName', '#text', $textName);
     }
 }

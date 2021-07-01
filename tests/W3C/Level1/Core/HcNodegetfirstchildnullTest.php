@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodegetfirstchildnull.js.
 class HcNodegetfirstchildnullTest extends W3CTestHarness
@@ -30,6 +30,6 @@ class HcNodegetfirstchildnullTest extends W3CTestHarness
         $emNode = $emList->item(0);
         $emText = $emNode->firstChild;
         $nullChild = $emText->firstChild;
-        $this->assertNullData('nullChild', $nullChild);
+        $this->w3cAssertNull('nullChild', $nullChild);
     }
 }

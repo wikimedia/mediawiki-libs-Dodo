@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeappendchildchildexists.js.
 class HcNodeappendchildchildexistsTest extends W3CTestHarness
@@ -48,7 +48,7 @@ class HcNodeappendchildchildexistsTest extends W3CTestHarness
             $memberName = $memberNode->nodeName;
             $actual[count($actual)] = $memberName;
         }
-        $this->assertEqualsListAutoCaseData('element', 'liveByTagName', $expected, $actual);
+        $this->w3cAssertEqualsListAutoCase('element', 'liveByTagName', $expected, $actual);
         $childList = $childNode->childNodes;
         for ($indexN1009C = 0; $indexN1009C < count($childList); $indexN1009C++) {
             $memberNode = $childList->item($indexN1009C);
@@ -58,6 +58,6 @@ class HcNodeappendchildchildexistsTest extends W3CTestHarness
                 $refreshedActual[count($refreshedActual)] = $memberName;
             }
         }
-        $this->assertEqualsListAutoCaseData('element', 'refreshedChildNodes', $expected, $refreshedActual);
+        $this->w3cAssertEqualsListAutoCase('element', 'refreshedChildNodes', $expected, $refreshedActual);
     }
 }

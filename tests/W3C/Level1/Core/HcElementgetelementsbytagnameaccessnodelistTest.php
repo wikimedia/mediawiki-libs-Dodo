@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_elementgetelementsbytagnameaccessnodelist.js.
 class HcElementgetelementsbytagnameaccessnodelistTest extends W3CTestHarness
@@ -37,9 +37,9 @@ class HcElementgetelementsbytagnameaccessnodelistTest extends W3CTestHarness
             $nodeType = $firstC->nodeType;
         }
         $childName = $firstC->nodeName;
-        $this->assertEqualsAutoCaseData('element', 'childName', 'em', $childName);
+        $this->w3cAssertEqualsAutoCase('element', 'childName', 'em', $childName);
         $employeeIDNode = $firstC->firstChild;
         $employeeID = $employeeIDNode->nodeValue;
-        $this->assertEqualsData('employeeID', 'EMP0004', $employeeID);
+        $this->w3cAssertEquals('employeeID', 'EMP0004', $employeeID);
     }
 }

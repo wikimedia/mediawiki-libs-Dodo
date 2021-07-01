@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/button02.js.
 class Button02Test extends W3CTestHarness
@@ -26,10 +26,10 @@ class Button02Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'button');
         $nodeList = $doc->getElementsByTagName('button');
-        $this->assertSizeData('Asize', 2, $nodeList);
+        $this->w3cAssertSize('Asize', 2, $nodeList);
         $testNode = $nodeList->item(0);
         $formNode = $testNode->form;
         $vfname = $formNode->id;
-        $this->assertEqualsData('formLink', 'form2', $vfname);
+        $this->w3cAssertEquals('formLink', 'form2', $vfname);
     }
 }

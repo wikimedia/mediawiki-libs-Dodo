@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeelementnodevalue.js.
 class HcNodeelementnodevalueTest extends W3CTestHarness
@@ -25,6 +25,6 @@ class HcNodeelementnodevalueTest extends W3CTestHarness
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $elementNode = $doc->documentElement;
         $elementValue = $elementNode->nodeValue;
-        $this->assertNullData('elementNodeValue', $elementValue);
+        $this->w3cAssertNull('elementNodeValue', $elementValue);
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_elementinvalidcharacterexception1.js.
 class HcElementinvalidcharacterexception1Test extends W3CTestHarness
@@ -28,9 +28,9 @@ class HcElementinvalidcharacterexception1Test extends W3CTestHarness
         $success = false;
         try {
             $testAddress->setAttribute('', 'value');
-        } catch (DomException $ex) {
-            $success = gettype($ex->getCode()) != NULL && $ex->getCode() == 5;
+        } catch (DOMException $ex) {
+            $success = gettype($ex->code) != NULL && $ex->code == 5;
         }
-        $this->assertTrueData('throw_INVALID_CHARACTER_ERR', $success);
+        $this->w3cAssertTrue('throw_INVALID_CHARACTER_ERR', $success);
     }
 }

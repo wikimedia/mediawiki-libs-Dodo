@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeinsertbeforenodename.js.
 class HcNodeinsertbeforenodenameTest extends W3CTestHarness
@@ -35,6 +35,6 @@ class HcNodeinsertbeforenodenameTest extends W3CTestHarness
         $newChild = $doc->createElement('br');
         $insertedNode = $employeeNode->insertBefore($newChild, $refChild);
         $childName = $insertedNode->nodeName;
-        $this->assertEqualsAutoCaseData('element', 'nodeName', 'br', $childName);
+        $this->w3cAssertEqualsAutoCase('element', 'nodeName', 'br', $childName);
     }
 }

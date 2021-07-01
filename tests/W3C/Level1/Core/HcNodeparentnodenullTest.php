@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeparentnodenull.js.
 class HcNodeparentnodenullTest extends W3CTestHarness
@@ -25,6 +25,6 @@ class HcNodeparentnodenullTest extends W3CTestHarness
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $createdNode = $doc->createElement('br');
         $parentNode = $createdNode->parentNode;
-        $this->assertNullData('parentNode', $parentNode);
+        $this->w3cAssertNull('parentNode', $parentNode);
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_characterdataindexsizeerrsubstringoffsetgreater.js.
 class HcCharacterdataindexsizeerrsubstringoffsetgreaterTest extends W3CTestHarness
@@ -31,9 +31,9 @@ class HcCharacterdataindexsizeerrsubstringoffsetgreaterTest extends W3CTestHarne
         $success = false;
         try {
             $badString = $child->substringData(40, 3);
-        } catch (DomException $ex) {
-            $success = gettype($ex->getCode()) != NULL && $ex->getCode() == 1;
+        } catch (DOMException $ex) {
+            $success = gettype($ex->code) != NULL && $ex->code == 1;
         }
-        $this->assertTrueData('throw_INDEX_SIZE_ERR', $success);
+        $this->w3cAssertTrue('throw_INDEX_SIZE_ERR', $success);
     }
 }

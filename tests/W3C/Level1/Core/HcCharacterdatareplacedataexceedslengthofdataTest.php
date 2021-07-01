@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_characterdatareplacedataexceedslengthofdata.js.
 class HcCharacterdatareplacedataexceedslengthofdataTest extends W3CTestHarness
@@ -30,6 +30,6 @@ class HcCharacterdatareplacedataexceedslengthofdataTest extends W3CTestHarness
         $child = $nameNode->firstChild;
         $child->replaceData(0, 50, '2600');
         $childData = $child->data;
-        $this->assertEqualsData('characterdataReplaceDataExceedsLengthOfDataAssert', '2600', $childData);
+        $this->w3cAssertEquals('characterdataReplaceDataExceedsLengthOfDataAssert', '2600', $childData);
     }
 }

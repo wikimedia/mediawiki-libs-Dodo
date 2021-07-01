@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_documentgetelementsbytagnametotallength.js.
 class HcDocumentgetelementsbytagnametotallengthTest extends W3CTestHarness
@@ -119,9 +119,9 @@ class HcDocumentgetelementsbytagnametotallengthTest extends W3CTestHarness
             $actualNames[count($actualNames)] = $thisTag;
         }
         if ($builder->contentType == 'image/svg+xml') {
-            $this->assertEqualsListAutoCaseData('element', 'svgTagNames', $svgExpectedNames, $actualNames);
+            $this->w3cAssertEqualsListAutoCase('element', 'svgTagNames', $svgExpectedNames, $actualNames);
         } else {
-            $this->assertEqualsListAutoCaseData('element', 'tagNames', $expectedNames, $actualNames);
+            $this->w3cAssertEqualsListAutoCase('element', 'tagNames', $expectedNames, $actualNames);
         }
     }
 }

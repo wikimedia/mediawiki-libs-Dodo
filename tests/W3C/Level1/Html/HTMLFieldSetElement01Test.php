@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLFieldSetElement01.js.
 class HTMLFieldSetElement01Test extends W3CTestHarness
@@ -26,10 +26,10 @@ class HTMLFieldSetElement01Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'fieldset');
         $nodeList = $doc->getElementsByTagName('fieldset');
-        $this->assertSizeData('Asize', 2, $nodeList);
+        $this->w3cAssertSize('Asize', 2, $nodeList);
         $testNode = $nodeList->item(0);
         $fNode = $testNode->form;
         $vform = $fNode->id;
-        $this->assertEqualsData('formLink', 'form2', $vform);
+        $this->w3cAssertEquals('formLink', 'form2', $vform);
     }
 }

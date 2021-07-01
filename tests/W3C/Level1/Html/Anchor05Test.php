@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/anchor05.js.
 class Anchor05Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class Anchor05Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'anchor');
         $nodeList = $doc->getElementsByTagName('a');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vtype = $testNode->type;
-        $this->assertEqualsData('typeLink', 'image/gif', $vtype);
+        $this->w3cAssertEquals('typeLink', 'image/gif', $vtype);
     }
 }

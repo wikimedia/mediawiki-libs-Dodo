@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_namednodemapchildnoderange.js.
 class HcNamednodemapchildnoderangeTest extends W3CTestHarness
@@ -32,17 +32,17 @@ class HcNamednodemapchildnoderangeTest extends W3CTestHarness
         $attributes = $testEmployee->attributes;
         $length = count($attributes);
         if ($builder->contentType == 'text/html') {
-            $this->assertEqualsData('htmlLength', 2, $length);
+            $this->w3cAssertEquals('htmlLength', 2, $length);
         } else {
-            $this->assertEqualsData('length', 3, $length);
+            $this->w3cAssertEquals('length', 3, $length);
             $child = $attributes->item(2);
-            $this->assertNotNullData('attr2', $child);
+            $this->w3cAssertNotNull('attr2', $child);
         }
         $child = $attributes->item(0);
-        $this->assertNotNullData('attr0', $child);
+        $this->w3cAssertNotNull('attr0', $child);
         $child = $attributes->item(1);
-        $this->assertNotNullData('attr1', $child);
+        $this->w3cAssertNotNull('attr1', $child);
         $child = $attributes->item(3);
-        $this->assertNullData('attr3', $child);
+        $this->w3cAssertNull('attr3', $child);
     }
 }

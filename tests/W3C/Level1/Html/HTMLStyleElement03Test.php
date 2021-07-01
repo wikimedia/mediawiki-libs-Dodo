@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLStyleElement03.js.
 class HTMLStyleElement03Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLStyleElement03Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'style');
         $nodeList = $doc->getElementsByTagName('style');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vtype = $testNode->type;
-        $this->assertEqualsData('typeLink', 'text/css', $vtype);
+        $this->w3cAssertEquals('typeLink', 'text/css', $vtype);
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodegetnextsibling.js.
 class HcNodegetnextsiblingTest extends W3CTestHarness
@@ -29,6 +29,6 @@ class HcNodegetnextsiblingTest extends W3CTestHarness
         $emNode = $elementList->item(1);
         $nsNode = $emNode->nextSibling;
         $nsName = $nsNode->nodeName;
-        $this->assertEqualsData('whitespace', '#text', $nsName);
+        $this->w3cAssertEquals('whitespace', '#text', $nsName);
     }
 }

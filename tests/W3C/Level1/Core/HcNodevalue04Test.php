@@ -1,7 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodevalue04.js.
 class HcNodevalue04Test extends W3CTestHarness
@@ -23,14 +23,14 @@ class HcNodevalue04Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $newNode = $doc->doctype;
-        $this->assertTrueData('docTypeNotNullOrDocIsHTML', $newNode != null || $builder->contentType == 'text/html');
+        $this->w3cAssertTrue('docTypeNotNullOrDocIsHTML', $newNode != null || $builder->contentType == 'text/html');
         if ($newNode != null) {
-            $this->assertNotNullData('docTypeNotNull', $newNode);
+            $this->w3cAssertNotNull('docTypeNotNull', $newNode);
             $newValue = $newNode->nodeValue;
-            $this->assertNullData('initiallyNull', $newValue);
+            $this->w3cAssertNull('initiallyNull', $newValue);
             $newNode->nodeValue = 'This should have no effect';
             $newValue = $newNode->nodeValue;
-            $this->assertNullData('nullAfterAttemptedChange', $newValue);
+            $this->w3cAssertNull('nullAfterAttemptedChange', $newValue);
         }
     }
 }

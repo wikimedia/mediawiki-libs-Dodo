@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeappendchildnewchilddiffdocument.js.
 class HcNodeappendchildnewchilddiffdocumentTest extends W3CTestHarness
@@ -37,9 +37,9 @@ class HcNodeappendchildnewchilddiffdocumentTest extends W3CTestHarness
         $success = false;
         try {
             $appendedChild = $elementNode->appendChild($newChild);
-        } catch (DomException $ex) {
-            $success = gettype($ex->getCode()) != NULL && $ex->getCode() == 4;
+        } catch (DOMException $ex) {
+            $success = gettype($ex->code) != NULL && $ex->code == 4;
         }
-        $this->assertTrueData('throw_WRONG_DOCUMENT_ERR', $success);
+        $this->w3cAssertTrue('throw_WRONG_DOCUMENT_ERR', $success);
     }
 }

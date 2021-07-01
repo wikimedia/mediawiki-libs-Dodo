@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Comment;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_commentgetcomment.js.
 class HcCommentgetcommentTest extends W3CTestHarness
@@ -34,14 +34,14 @@ class HcCommentgetcommentTest extends W3CTestHarness
             $childType = $child->nodeType;
             if (8 == $childType) {
                 $childName = $child->nodeName;
-                $this->assertEqualsData('nodeName', '#comment', $childName);
+                $this->w3cAssertEquals('nodeName', '#comment', $childName);
                 $childValue = $child->nodeValue;
-                $this->assertEqualsData('nodeValue', ' This is comment number 1.', $childValue);
+                $this->w3cAssertEquals('nodeValue', ' This is comment number 1.', $childValue);
                 $attributes = $child->attributes;
-                $this->assertNullData('attributes', $attributes);
+                $this->w3cAssertNull('attributes', $attributes);
                 $commentCount += 1;
             }
         }
-        $this->assertTrueData('atMostOneComment', $commentCount < 2);
+        $this->w3cAssertTrue('atMostOneComment', $commentCount < 2);
     }
 }

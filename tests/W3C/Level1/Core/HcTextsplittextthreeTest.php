@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_textsplittextthree.js.
 class HcTextsplittextthreeTest extends W3CTestHarness
@@ -32,6 +32,6 @@ class HcTextsplittextthreeTest extends W3CTestHarness
         $textNode = $nameNode->firstChild;
         $splitNode = $textNode->splitText(6);
         $value = $splitNode->nodeValue;
-        $this->assertEqualsData('textSplitTextThreeAssert', ' Jones', $value);
+        $this->w3cAssertEquals('textSplitTextThreeAssert', ' Jones', $value);
     }
 }

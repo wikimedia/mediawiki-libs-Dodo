@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodereplacechildnewchildexists.js.
 class HcNodereplacechildnewchildexistsTest extends W3CTestHarness
@@ -44,7 +44,7 @@ class HcNodereplacechildnewchildexistsTest extends W3CTestHarness
         $newChild = $childList->item(0);
         $oldChild = $childList->item(5);
         $replacedChild = $employeeNode->replaceChild($newChild, $oldChild);
-        $this->assertSameData('return_value_same', $oldChild, $replacedChild);
+        $this->w3cAssertSame('return_value_same', $oldChild, $replacedChild);
         for ($indexN10094 = 0; $indexN10094 < count($childList); $indexN10094++) {
             $childNode = $childList->item($indexN10094);
             $childName = $childNode->nodeName;
@@ -52,10 +52,10 @@ class HcNodereplacechildnewchildexistsTest extends W3CTestHarness
             if (1 == $nodeType) {
                 $actual[count($actual)] = $childName;
             } else {
-                $this->assertEqualsData('textNodeType', 3, $nodeType);
-                $this->assertEqualsData('textNodeName', '#text', $childName);
+                $this->w3cAssertEquals('textNodeType', 3, $nodeType);
+                $this->w3cAssertEquals('textNodeName', '#text', $childName);
             }
         }
-        $this->assertEqualsListAutoCaseData('element', 'childNames', $expected, $actual);
+        $this->w3cAssertEqualsListAutoCase('element', 'childNames', $expected, $actual);
     }
 }

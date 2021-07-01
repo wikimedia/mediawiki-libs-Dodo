@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodedocumentnodeattribute.js.
 class HcNodedocumentnodeattributeTest extends W3CTestHarness
@@ -23,6 +23,6 @@ class HcNodedocumentnodeattributeTest extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $attrList = $doc->attributes;
-        $this->assertNullData('doc_attributes_is_null', $attrList);
+        $this->w3cAssertNull('doc_attributes_is_null', $attrList);
     }
 }

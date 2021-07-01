@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_textparseintolistofelements.js.
 class HcTextparseintolistofelementsTest extends W3CTestHarness
@@ -46,7 +46,7 @@ class HcTextparseintolistofelementsTest extends W3CTestHarness
             $value = $child->nodeValue;
             if ($value == null) {
                 $grandChild = $child->firstChild;
-                $this->assertNotNullData('grandChildNotNull', $grandChild);
+                $this->w3cAssertNotNull('grandChildNotNull', $grandChild);
                 $value = $grandChild->nodeValue;
                 $result[count($result)] = $value;
             } else {
@@ -54,9 +54,9 @@ class HcTextparseintolistofelementsTest extends W3CTestHarness
             }
         }
         if (1 == $length) {
-            $this->assertEqualsListData('assertEqCoalescing', $expectedExpanded, $result);
+            $this->w3cAssertEqualsList('assertEqCoalescing', $expectedExpanded, $result);
         } else {
-            $this->assertEqualsListData('assertEqNormal', $expectedNormal, $result);
+            $this->w3cAssertEqualsList('assertEqNormal', $expectedNormal, $result);
         }
     }
 }

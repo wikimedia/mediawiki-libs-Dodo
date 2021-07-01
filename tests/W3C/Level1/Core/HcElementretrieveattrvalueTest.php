@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_elementretrieveattrvalue.js.
 class HcElementretrieveattrvalueTest extends W3CTestHarness
@@ -27,6 +27,6 @@ class HcElementretrieveattrvalueTest extends W3CTestHarness
         $elementList = $doc->getElementsByTagName('acronym');
         $testAddress = $elementList->item(2);
         $attrValue = $testAddress->getAttribute('class');
-        $this->assertEqualsData('attrValue', 'No', $attrValue);
+        $this->w3cAssertEquals('attrValue', 'No', $attrValue);
     }
 }

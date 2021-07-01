@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLOptGroupElement01.js.
 class HTMLOptGroupElement01Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLOptGroupElement01Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'optgroup');
         $nodeList = $doc->getElementsByTagName('optgroup');
-        $this->assertSizeData('Asize', 2, $nodeList);
+        $this->w3cAssertSize('Asize', 2, $nodeList);
         $testNode = $nodeList->item(1);
         $vdisabled = $testNode->disabled;
-        $this->assertTrueData('disabledLink', $vdisabled);
+        $this->w3cAssertTrue('disabledLink', $vdisabled);
     }
 }

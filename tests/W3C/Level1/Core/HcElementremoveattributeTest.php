@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_elementremoveattribute.js.
 class HcElementremoveattributeTest extends W3CTestHarness
@@ -28,7 +28,7 @@ class HcElementremoveattributeTest extends W3CTestHarness
         $testEmployee = $elementList->item(3);
         $testEmployee->removeAttribute('class');
         $attrValue = $testEmployee->getAttribute('class');
-        $this->assertEqualsData('attrValue', null, $attrValue);
+        $this->w3cAssertEquals('attrValue', null, $attrValue);
         //XXX Domino returns null as WebKit and FF do
     }
 }

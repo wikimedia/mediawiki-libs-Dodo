@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodereplacechildnodeancestor.js.
 class HcNodereplacechildnodeancestorTest extends W3CTestHarness
@@ -35,9 +35,9 @@ class HcNodereplacechildnodeancestorTest extends W3CTestHarness
         $success = false;
         try {
             $replacedNode = $employeeNode->replaceChild($newChild, $oldChild);
-        } catch (DomException $ex) {
-            $success = gettype($ex->getCode()) != NULL && $ex->getCode() == 3;
+        } catch (DOMException $ex) {
+            $success = gettype($ex->code) != NULL && $ex->code == 3;
         }
-        $this->assertTrueData('throw_HIERARCHY_REQUEST_ERR', $success);
+        $this->w3cAssertTrue('throw_HIERARCHY_REQUEST_ERR', $success);
     }
 }

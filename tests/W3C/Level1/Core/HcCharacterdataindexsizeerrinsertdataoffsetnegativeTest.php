@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_characterdataindexsizeerrinsertdataoffsetnegative.js.
 class HcCharacterdataindexsizeerrinsertdataoffsetnegativeTest extends W3CTestHarness
@@ -31,9 +31,9 @@ class HcCharacterdataindexsizeerrinsertdataoffsetnegativeTest extends W3CTestHar
         $success = false;
         try {
             $child->replaceData(-5, 3, 'ABC');
-        } catch (DomException $ex) {
-            $success = gettype($ex->getCode()) != NULL && $ex->getCode() == 1;
+        } catch (DOMException $ex) {
+            $success = gettype($ex->code) != NULL && $ex->code == 1;
         }
-        $this->assertTrueData('throws_INDEX_SIZE_ERR', $success);
+        $this->w3cAssertTrue('throws_INDEX_SIZE_ERR', $success);
     }
 }

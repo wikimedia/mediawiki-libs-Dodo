@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLImageElement05.js.
 class HTMLImageElement05Test extends W3CTestHarness
@@ -30,10 +30,10 @@ class HTMLImageElement05Test extends W3CTestHarness
         $hasHTML2 = $domImpl->hasFeature('HTML', '2.0');
         if (!$hasHTML2) {
             $nodeList = $doc->getElementsByTagName('img');
-            $this->assertSizeData('Asize', 1, $nodeList);
+            $this->w3cAssertSize('Asize', 1, $nodeList);
             $testNode = $nodeList->item(0);
             $vheight = $testNode->height;
-            $this->assertEqualsData('heightLink', '47', $vheight);
+            $this->w3cAssertEquals('heightLink', '47', $vheight);
         }
     }
 }

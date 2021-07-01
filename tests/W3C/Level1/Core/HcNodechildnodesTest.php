@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodechildnodes.js.
 class HcNodechildnodesTest extends W3CTestHarness
@@ -45,9 +45,9 @@ class HcNodechildnodesTest extends W3CTestHarness
             if (1 == $nodeType) {
                 $actual[count($actual)] = $childName;
             } else {
-                $this->assertEqualsData('textNodeType', 3, $nodeType);
+                $this->w3cAssertEquals('textNodeType', 3, $nodeType);
             }
         }
-        $this->assertEqualsListAutoCaseData('element', 'elementNames', $expected, $actual);
+        $this->w3cAssertEqualsListAutoCase('element', 'elementNames', $expected, $actual);
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Comment;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodecommentnodename.js.
 class HcNodecommentnodenameTest extends W3CTestHarness
@@ -32,11 +32,11 @@ class HcNodecommentnodenameTest extends W3CTestHarness
             $nodeType = $commentNode->nodeType;
             if (8 == $nodeType) {
                 $commentNodeName = $commentNode->nodeName;
-                $this->assertEqualsData('existingNodeName', '#comment', $commentNodeName);
+                $this->w3cAssertEquals('existingNodeName', '#comment', $commentNodeName);
             }
         }
         $commentNode = $doc->createComment('This is a comment');
         $commentNodeName = $commentNode->nodeName;
-        $this->assertEqualsData('createdNodeName', '#comment', $commentNodeName);
+        $this->w3cAssertEquals('createdNodeName', '#comment', $commentNodeName);
     }
 }

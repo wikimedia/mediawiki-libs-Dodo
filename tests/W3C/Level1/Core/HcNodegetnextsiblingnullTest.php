@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodegetnextsiblingnull.js.
 class HcNodegetnextsiblingnullTest extends W3CTestHarness
@@ -29,6 +29,6 @@ class HcNodegetnextsiblingnullTest extends W3CTestHarness
         $employeeNode = $elementList->item(1);
         $lcNode = $employeeNode->lastChild;
         $nsNode = $lcNode->nextSibling;
-        $this->assertNullData('nodeGetNextSiblingNullAssert1', $nsNode);
+        $this->w3cAssertNull('nodeGetNextSiblingNullAssert1', $nsNode);
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLMetaElement02.js.
 class HTMLMetaElement02Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLMetaElement02Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'meta');
         $nodeList = $doc->getElementsByTagName('meta');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vhttpequiv = $testNode->httpEquiv;
-        $this->assertEqualsData('httpEquivLink', 'Content-Type', $vhttpequiv);
+        $this->w3cAssertEquals('httpEquivLink', 'Content-Type', $vhttpequiv);
     }
 }

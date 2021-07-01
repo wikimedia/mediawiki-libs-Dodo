@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\DocumentFragment;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_documentcreatedocumentfragment.js.
 class HcDocumentcreatedocumentfragmentTest extends W3CTestHarness
@@ -30,12 +30,12 @@ class HcDocumentcreatedocumentfragmentTest extends W3CTestHarness
         $newDocFragment = $doc->createDocumentFragment();
         $children = $newDocFragment->childNodes;
         $length = count($children);
-        $this->assertEqualsData('length', 0, $length);
+        $this->w3cAssertEquals('length', 0, $length);
         $newDocFragmentName = $newDocFragment->nodeName;
-        $this->assertEqualsData('strong', '#document-fragment', $newDocFragmentName);
+        $this->w3cAssertEquals('strong', '#document-fragment', $newDocFragmentName);
         $newDocFragmentType = $newDocFragment->nodeType;
-        $this->assertEqualsData('type', 11, $newDocFragmentType);
+        $this->w3cAssertEquals('type', 11, $newDocFragmentType);
         $newDocFragmentValue = $newDocFragment->nodeValue;
-        $this->assertNullData('value', $newDocFragmentValue);
+        $this->w3cAssertNull('value', $newDocFragmentValue);
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLTableElement06.js.
 class HTMLTableElement06Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLTableElement06Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'table');
         $nodeList = $doc->getElementsByTagName('table');
-        $this->assertSizeData('Asize', 3, $nodeList);
+        $this->w3cAssertSize('Asize', 3, $nodeList);
         $testNode = $nodeList->item(0);
         $vsection = $testNode->tFoot;
-        $this->assertNullData('sectionLink', $vsection);
+        $this->w3cAssertNull('sectionLink', $vsection);
     }
 }

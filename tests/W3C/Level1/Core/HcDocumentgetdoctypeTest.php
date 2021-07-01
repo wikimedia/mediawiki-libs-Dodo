@@ -1,7 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\DocumentType;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_documentgetdoctype.js.
 class HcDocumentgetdoctypeTest extends W3CTestHarness
@@ -26,19 +26,19 @@ class HcDocumentgetdoctypeTest extends W3CTestHarness
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $docType = $doc->doctype;
         if (!($builder->contentType == 'text/html')) {
-            $this->assertNotNullData('docTypeNotNull', $docType);
+            $this->w3cAssertNotNull('docTypeNotNull', $docType);
         }
         if ($docType != null) {
             $docTypeName = $docType->name;
             if ($builder->contentType == 'image/svg+xml') {
-                $this->assertEqualsData('nodeNameSVG', 'svg', $docTypeName);
+                $this->w3cAssertEquals('nodeNameSVG', 'svg', $docTypeName);
             } else {
-                $this->assertEqualsData('nodeName', 'html', $docTypeName);
+                $this->w3cAssertEquals('nodeName', 'html', $docTypeName);
             }
             $nodeValue = $docType->nodeValue;
-            $this->assertNullData('nodeValue', $nodeValue);
+            $this->w3cAssertNull('nodeValue', $nodeValue);
             $attributes = $docType->attributes;
-            $this->assertNullData('attributes', $attributes);
+            $this->w3cAssertNull('attributes', $attributes);
         }
     }
 }

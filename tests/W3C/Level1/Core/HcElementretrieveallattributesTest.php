@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_elementretrieveallattributes.js.
 class HcElementretrieveallattributesTest extends W3CTestHarness
@@ -41,9 +41,9 @@ class HcElementretrieveallattributesTest extends W3CTestHarness
             $actual[count($actual)] = $attributeName;
         }
         if ($builder->contentType == 'text/html') {
-            $this->assertEqualsCollectionData('htmlAttributeNames', array_map('strtolower', $htmlExpected), array_map('strtolower', $actual));
+            $this->w3cAssertEqualsCollection('htmlAttributeNames', array_map('strtolower', $htmlExpected), array_map('strtolower', $actual));
         } else {
-            $this->assertEqualsCollectionData('attributeNames', array_map('strtolower', $expected), array_map('strtolower', $actual));
+            $this->w3cAssertEqualsCollection('attributeNames', array_map('strtolower', $expected), array_map('strtolower', $actual));
         }
     }
 }

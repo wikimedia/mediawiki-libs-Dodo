@@ -1,6 +1,6 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodegetownerdocumentnull.js.
 class HcNodegetownerdocumentnullTest extends W3CTestHarness
@@ -21,6 +21,6 @@ class HcNodegetownerdocumentnullTest extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $ownerDocument = $doc->ownerDocument;
-        $this->assertNullData('nodeGetOwnerDocumentNullAssert1', $ownerDocument);
+        $this->w3cAssertNull('nodeGetOwnerDocumentNullAssert1', $ownerDocument);
     }
 }

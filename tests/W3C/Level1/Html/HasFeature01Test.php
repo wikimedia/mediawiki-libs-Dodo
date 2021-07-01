@@ -1,6 +1,6 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/hasFeature01.js.
 class HasFeature01Test extends W3CTestHarness
@@ -19,6 +19,6 @@ class HasFeature01Test extends W3CTestHarness
         $state = null;
         $domImpl = $this->getImplementation();
         $state = $domImpl->hasFeature('hTmL', $version);
-        $this->assertTrueData('hasHTMLnull', $state);
+        $this->w3cAssertTrue('hasHTMLnull', $state);
     }
 }

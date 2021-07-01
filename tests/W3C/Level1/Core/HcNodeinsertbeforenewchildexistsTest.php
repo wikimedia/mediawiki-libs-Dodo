@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeinsertbeforenewchildexists.js.
 class HcNodeinsertbeforenewchildexistsTest extends W3CTestHarness
@@ -52,6 +52,6 @@ class HcNodeinsertbeforenewchildexistsTest extends W3CTestHarness
                 $result[count($result)] = $childName;
             }
         }
-        $this->assertEqualsListAutoCaseData('element', 'childNames', $expected, $result);
+        $this->w3cAssertEqualsListAutoCase('element', 'childNames', $expected, $result);
     }
 }

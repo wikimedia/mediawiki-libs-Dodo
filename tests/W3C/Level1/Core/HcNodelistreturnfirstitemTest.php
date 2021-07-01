@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodelistreturnfirstitem.js.
 class HcNodelistreturnfirstitemTest extends W3CTestHarness
@@ -32,9 +32,9 @@ class HcNodelistreturnfirstitemTest extends W3CTestHarness
         $child = $employeeList->item(0);
         $childName = $child->nodeName;
         if ('#text' == $childName) {
-            $this->assertEqualsData('nodeName_w_space', '#text', $childName);
+            $this->w3cAssertEquals('nodeName_w_space', '#text', $childName);
         } else {
-            $this->assertEqualsAutoCaseData('element', 'nodeName_wo_space', 'em', $childName);
+            $this->w3cAssertEqualsAutoCase('element', 'nodeName_wo_space', 'em', $childName);
         }
     }
 }

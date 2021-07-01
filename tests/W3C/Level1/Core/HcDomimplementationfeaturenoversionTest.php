@@ -1,6 +1,6 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\DOMImplementation;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_domimplementationfeaturenoversion.js.
@@ -28,6 +28,6 @@ class HcDomimplementationfeaturenoversionTest extends W3CTestHarness
         } else {
             $state = $domImpl->hasFeature('XML', '');
         }
-        $this->assertTrueData('hasFeatureBlank', $state);
+        $this->w3cAssertTrue('hasFeatureBlank', $state);
     }
 }

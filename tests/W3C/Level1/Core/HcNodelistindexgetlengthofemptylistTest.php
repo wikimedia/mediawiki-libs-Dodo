@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodelistindexgetlengthofemptylist.js.
 class HcNodelistindexgetlengthofemptylistTest extends W3CTestHarness
@@ -32,6 +32,6 @@ class HcNodelistindexgetlengthofemptylistTest extends W3CTestHarness
         $textNode = $emNode->firstChild;
         $textList = $textNode->childNodes;
         $length = count($textList);
-        $this->assertEqualsData('length', 0, $length);
+        $this->w3cAssertEquals('length', 0, $length);
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLOptionElement07.js.
 class HTMLOptionElement07Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLOptionElement07Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'option');
         $nodeList = $doc->getElementsByTagName('option');
-        $this->assertSizeData('Asize', 10, $nodeList);
+        $this->w3cAssertSize('Asize', 10, $nodeList);
         $testNode = $nodeList->item(1);
         $vlabel = $testNode->label;
-        $this->assertEqualsData('labelLink', 'l1', $vlabel);
+        $this->w3cAssertEquals('labelLink', 'l1', $vlabel);
     }
 }

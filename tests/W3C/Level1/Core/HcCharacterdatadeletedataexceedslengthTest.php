@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_characterdatadeletedataexceedslength.js.
 class HcCharacterdatadeletedataexceedslengthTest extends W3CTestHarness
@@ -30,6 +30,6 @@ class HcCharacterdatadeletedataexceedslengthTest extends W3CTestHarness
         $child = $nameNode->firstChild;
         $child->deleteData(4, 50);
         $childData = $child->data;
-        $this->assertEqualsData('characterdataDeleteDataExceedsLengthAssert', '1230', $childData);
+        $this->w3cAssertEquals('characterdataDeleteDataExceedsLengthAssert', '1230', $childData);
     }
 }

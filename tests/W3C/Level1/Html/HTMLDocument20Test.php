@@ -1,6 +1,6 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLDocument20.js.
 class HTMLDocument20Test extends W3CTestHarness

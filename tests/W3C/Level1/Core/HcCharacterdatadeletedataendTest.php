@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_characterdatadeletedataend.js.
 class HcCharacterdatadeletedataendTest extends W3CTestHarness
@@ -30,6 +30,6 @@ class HcCharacterdatadeletedataendTest extends W3CTestHarness
         $child = $nameNode->firstChild;
         $child->deleteData(30, 5);
         $childData = $child->data;
-        $this->assertEqualsData('characterdataDeleteDataEndAssert', '1230 North Ave. Dallas, Texas ', $childData);
+        $this->w3cAssertEquals('characterdataDeleteDataEndAssert', '1230 North Ave. Dallas, Texas ', $childData);
     }
 }

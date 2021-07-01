@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLQuoteElement01.js.
 class HTMLQuoteElement01Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLQuoteElement01Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'quote');
         $nodeList = $doc->getElementsByTagName('q');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vcite = $testNode->cite;
-        $this->assertURIEqualsData('citeLink', null, null, null, 'Q.html', null, null, null, null, $vcite);
+        $this->w3cAssertURIEquals('citeLink', null, null, null, 'Q.html', null, null, null, null, $vcite);
     }
 }

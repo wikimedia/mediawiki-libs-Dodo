@@ -1,40 +1,32 @@
 <?php
-// @phan-file-suppress PhanTypeExpectedObjectPropAccess
-// @phan-file-suppress PhanTypeMismatchArgument
-// @phan-file-suppress PhanTypeMismatchArgumentInternalProbablyReal
-// @phan-file-suppress PhanTypeMismatchArgumentNullableInternal
-// @phan-file-suppress PhanTypeMismatchArgumentProbablyReal
-// @phan-file-suppress PhanTypeMismatchForeach
-// @phan-file-suppress PhanUndeclaredClassMethod
-// @phan-file-suppress PhanUndeclaredClassProperty
-// @phan-file-suppress PhanUndeclaredTypeParameter
-// phpcs:disable Generic.Files.LineLength.TooLong
+
+declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo\Tests\Harness;
 
-use Mockery;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Finder\Finder;
 use Wikimedia\Dodo\Document as DodoDOMDocument;
-use Wikimedia\Dodo\DOMException;
-use Wikimedia\Dodo\DOMImplementation;
-use Wikimedia\Dodo\Node as DOMNode;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
+use Wikimedia\IDLeDOM\Document;
+use Wikimedia\IDLeDOM\DOMImplementation;
+use Wikimedia\IDLeDOM\Node;
 
 /**
  * W3CTestHarness
  *
  * Derived from DomTestCase.js
  *
+ * @see vendor/fgnass/domino/test/w3c/harness/index.js
  * @see vendor/fgnass/domino/test/w3c/harness/DomTestCase.js
  */
 abstract class W3CTestHarness extends TestCase {
 	use Helpers;
 
 	/**
-	 * @var DodoDOMDocument
+	 * @var Document
 	 */
 	protected $doc;
 
@@ -43,158 +35,73 @@ abstract class W3CTestHarness extends TestCase {
 	 */
 	protected $contentType;
 
+	// The following assertion methods come from
+	// vendor/fgnass/domino/test/w3c/harness/index.js
+
 	/**
 	 * @param string $message
-	 * @param string|null $actual
+	 * @param mixed $expected
+	 * @param mixed $actual
 	 */
-	public function assertNullData( string $message, ?string $actual ) : void {
-		self::assertNull( $actual,
-			$message );
+	public function w3cAssertEquals( string $message, $expected, $actual ) : void {
+		Assert::assertEquals( $expected, $actual, $message );
+	}
+
+	/**
+	 * @param string $message
+	 * @param bool $actual
+	 */
+	public function w3cAssertTrue( string $message, bool $actual ) : void {
+		Assert::assertTrue( $actual, $message );
 	}
 
 	/**
 	 *
 	 * @param string $message
-	 * @param string $actual
+	 * @param bool $actual
 	 */
-	public function assertFalseData( string $message, string $actual ) : void {
-		self::assertFalse( !$actual,
-			$message );
+	public function w3cAssertFalse( string $message, bool $actual ) : void {
+		Assert::assertFalse( $actual, $message );
 	}
 
 	/**
-	 * @param string|null $message
-	 * @param bool|null $actual
+	 * @param string $message
+	 * @param mixed $actual
 	 */
-	public function assertTrueData( ?string $message, ?bool $actual ) : void {
-		self::assertTrue( $actual,
-			$message );
+	public function w3cAssertNull( string $message, $actual ) : void {
+		Assert::assertNull( $actual, $message );
 	}
+
+	/**
+	 *
+	 * @param string $message
+	 * @param mixed $actual
+	 */
+	public function w3cAssertNotNull( string $message, $actual ) : void {
+		Assert::assertNotNull( $actual, $message );
+	}
+
+	// The following assertion methods come from
+	// vendor/fgnass/domino/test/w3c/harness/DomTestCase.js
 
 	/**
 	 * @param string $descr
 	 * @param int $expected
 	 * @param mixed $actual
 	 */
-	public function assertSizeData( string $descr, int $expected, $actual ) : void {
-		$this->assertNotNullData( $descr,
-			$actual );
-		$actualSize = count( $actual );
-		$this->assertEqualsData( $descr,
-			$expected,
-			$actualSize );
+	public function w3cAssertSize( string $descr, int $expected, $actual ) : void {
+		Assert::assertCount( $expected, $actual, $descr );
 	}
 
 	/**
-	 *
-	 * @param string $message
-	 * @param mixed $actual
-	 */
-	public function assertNotNullData( string $message, $actual ) : void {
-		self::assertNotEquals( null,
-			$actual,
-			$message );
-	}
-
-	/**
-	 * @param string|null $message
-	 * @param string|null $expected
-	 * @param string|null $actual
-	 */
-	public function assertEqualsData( ?string $message, ?string $expected, ?string $actual ) : void {
-		self::assertEquals( $expected,
-			$actual,
-			$message );
-	}
-
-	/**
-	 * @todo replace assert
-	 *
 	 * @param string $context
 	 * @param string $descr
 	 * @param string $expected
-	 * @param string $actual
+	 * @param mixed $actual
 	 */
-	public function assertEqualsCollectionAutoCaseData( string $context, string $descr,
-		string $expected, string $actual ) : void {
-		//
-		// if they aren't the same size, they aren't equal
-		Assert::assertCount( count( $expected ), $actual, $descr );
-
-		// if their length is the same, then every entry in the expected list
-		// must appear once and only once in the actual list
-		$expectedValue = null;
-		$i = null;
-		$j = null;
-		$matches = null;
-		foreach ( $expected as $iValue ) {
-			$matches = 0;
-			$expectedValue = $iValue;
-			foreach ( $actual as $jValue ) {
-				if ( $this->contentType === 'text/html' ) {
-					if ( $context === 'attribute' ) {
-						if ( strtolower( $expectedValue ) == strtolower( $jValue ) ) {
-							$matches++;
-						}
-					} else {
-
-						if ( strtoupper( $expectedValue ) == $jValue ) {
-							$matches++;
-						}
-					}
-				} else {
-					if ( $expectedValue == $jValue ) {
-						$matches++;
-					}
-				}
-			}
-			if ( $matches == 0 ) {
-				// assert( $descr . ': No match found for ' . $expectedValue, false );
-			}
-			if ( $matches > 1 ) {
-				// assert( $descr . ': Multiple matches found for ' . $expectedValue, false );
-			}
-		}
-	}
-
-	/**
-	 * @todo replace assert
-	 *
-	 * @param string $descr
-	 * @param array $expected
-	 * @param array $actual
-	 */
-	public function assertEqualsCollectionData( string $descr, array $expected, array $actual ) : void {
-		Assert::assertEquals( $expected, $actual, $descr );
-	}
-
-	/**
-	 * @param string $context
-	 * @param string $descr
-	 * @param array $expected
-	 * @param array $actual
-	 */
-	public function assertEqualsListAutoCaseData( string $context, string $descr, array $expected, array $actual ) : void {
-		$minLength = count( $expected );
-		if ( count( $actual ) < $minLength ) {
-			$minLength = count( $actual );
-		}
-		for ( $i = 0; $i < $minLength; $i++ ) {
-			$this->assertEqualsAutoCaseData( $context,
-				$descr,
-				$expected[$i],
-				$actual[$i] );
-		}
-		Assert::assertCount( count( $expected ), $actual, $descr );
-	}
-
-	/**
-	 * @param string|null $context
-	 * @param string|null $descr
-	 * @param string|null $expected
-	 * @param string|null $actual
-	 */
-	public function assertEqualsAutoCaseData( ?string $context, ?string $descr, ?string $expected, ?string $actual ) : void {
+	public function w3cAssertEqualsAutoCase(
+		string $context, string $descr, string $expected, $actual
+	) : void {
 		if ( $this->contentType === 'text/html' ) {
 			if ( $context === 'attribute' ) {
 				Assert::assertEqualsIgnoringCase( $expected, $actual, $descr );
@@ -207,62 +114,122 @@ abstract class W3CTestHarness extends TestCase {
 	}
 
 	/**
-	 * @param string|null $descr
+	 * @param string $context
+	 * @param string $descr
 	 * @param array $expected
-	 * @param array $actual
+	 * @param mixed $actual
 	 */
-	public function assertEqualsListData( ?string $descr, array $expected, $actual ) : void {
-		$minLength = count( $expected );
-		if ( count( $actual ) < $minLength ) {
-			$minLength = count( $actual );
-		}
-
-		for ( $i = 0; $i < $minLength; $i++ ) {
-			if ( $expected[$i] != $actual[$i] ) {
-				$this->assertEqualsData( $descr,
-					$expected[$i],
-					$actual[$i] );
+	public function w3cAssertEqualsCollectionAutoCase(
+		string $context, string $descr, array $expected, $actual
+	) : void {
+		// This version of the assertion doesn't care about item order
+		if ( $this->contentType !== 'text/html' ) {
+			Assert::assertEqualsCanonicalizing( $expected, $actual, $descr );
+		} elseif ( $context === 'attribute' ) {
+			// The following code works, but *only on PHPUnit 9* (which
+			// requires PHP 7.3).
+			// https://github.com/sebastianbergmann/phpunit/issues/4724
+			// Once we drop PHP 7.2 / PHPUnit 8 support we can
+			// uncomment this implementation:
+			/*
+			Assert::assertThat(
+				$actual,
+				// canonicalizing *and* ignore case
+				new \PHPUnit\Framework\Constraint\IsEqual( $expected, 0.0, true, true ),
+				$descr
+			);
+			*/
+			// XXX But in practice this assertion isn't currently used by
+			// any test, so it's safe to just fail...
+			throw new \Exception( "unimplemented" );
+		} else {
+			// convert expected to upper case, then canonicalizing.
+			$ne = [];
+			foreach ( $expected as $val ) {
+				$ne[] = strtoupper( $val );
 			}
+			Assert::assertEqualsCanonicalizing( $ne, $actual, $descr );
 		}
-		// if they aren't the same size, they aren't equal
-		$this->assertEqualsData( $descr,
-			count( $expected ),
-			count( $actual ) );
 	}
 
 	/**
 	 * @param string $descr
-	 * @param string $type
-	 * @param string $obj
+	 * @param array $expected
+	 * @param mixed $actual
 	 */
-	public function assertInstanceOfData( string $descr, string $type, string $obj ) : void {
-		if ( $type === 'Attr' ) {
-			$this->assertEqualsData( $descr,
-				2,
-				$obj->nodeType );
-			// What's this ?
-			$specd = $obj->specified;
+	public function w3cAssertEqualsCollection(
+		string $descr, array $expected, $actual
+	) : void {
+		// This version of the assertion doesn't care about item order
+		Assert::assertEqualsCanonicalizing( $expected, $actual, $descr );
+	}
+
+	/**
+	 * @param string $context
+	 * @param string $descr
+	 * @param array $expected
+	 * @param mixed $actual
+	 */
+	public function w3cAssertEqualsListAutoCase(
+		string $context, string $descr, array $expected, $actual
+	) : void {
+		// This version of the assertion requires the items to match in order
+		if ( $this->contentType !== 'text/html' ) {
+			Assert::assertEquals( $expected, $actual, $descr );
+		} elseif ( $context === 'attribute' ) {
+			Assert::assertEqualsIgnoringCase( $expected, $actual, $descr );
+		} else {
+			// convert expected to upper case, then compare
+			$ne = [];
+			foreach ( $expected as $val ) {
+				$ne[] = strtoupper( $val );
+			}
+			Assert::assertEquals( $ne, $actual, $descr );
 		}
 	}
+
+	/**
+	 * @param string $descr
+	 * @param array $expected
+	 * @param mixed $actual
+	 */
+	public function w3cAssertEqualsList(
+		string $descr, array $expected, $actual
+	) : void {
+		// This version of the assertion requires the items to match in order
+		Assert::assertEquals( $expected, $actual, $descr );
+	}
+
+	// assertInstanceOf is unused
 
 	/**
 	 * @param string $descr
 	 * @param Node $expected
 	 * @param Node $actual
 	 */
-	public function assertSameData( string $descr, Node $expected, Node $actual ) : void {
-		if ( $expected !== $actual ) {
-			$this->assertEqualsData( $descr,
+	public function w3cAssertSame(
+		string $descr, Node $expected, Node $actual
+	) : void {
+		if ( $actual === $expected ) {
+			// This should always succeed, but we need to make sure our
+			// framework knows an assertion test was performed.
+			Assert::assertSame( $expected, $actual, $descr );
+		} else {
+			Assert::assertEquals(
 				$expected->nodeType,
-				$actual->nodeType );
-			$this->assertEqualsData( $descr,
+				$actual->nodeType,
+				$descr
+			);
+			Assert::assertEquals(
 				$expected->nodeValue,
-				$actual->nodeValue );
+				$actual->nodeValue,
+				$descr
+			);
 		}
 	}
 
 	/**
-	 * @param string $assertID
+	 * @param string $descr
 	 * @param string|null $scheme
 	 * @param string|null $path
 	 * @param string|null $host
@@ -270,199 +237,125 @@ abstract class W3CTestHarness extends TestCase {
 	 * @param string|null $name
 	 * @param string|null $query
 	 * @param string|null $fragment
-	 * @param string|null $isAbsolute
+	 * @param bool|null $isAbsolute
 	 * @param string|null $actual
 	 */
-	public function assertURIEqualsData( string $assertID, ?string $scheme, ?string $path, ?string $host,
-		?string $file, ?string $name, ?string $query, ?string $fragment, ?string $isAbsolute, ?string $actual ) : void {
+	public function w3cAssertURIEquals(
+		string $descr, ?string $scheme, ?string $path, ?string $host,
+		?string $file, ?string $name, ?string $query, ?string $fragment,
+		?bool $isAbsolute, $actual
+	) : void {
 		//
 		// URI must be non-null
-		$this->assertNotNullData( $assertID,
-			$actual );
+		Assert::assertNotNull( $actual, $descr );
+		'@phan-var string $actual';
 
 		$uri = $actual;
 
-		$lastPound = strrpos( $actual,
-			'#' );
+		$lastPound = strrpos( $actual, '#' );
 		$actualFragment = '';
-		if ( $lastPound != -1 ) {
+		if ( $lastPound !== false ) {
 			//
 			//  substring before pound
 			//
-			$uri = substr( $actual,
-				0,
-				$lastPound/*CHECK THIS*/ );
-			$actualFragment = substr( $actual,
-				$lastPound + 1 );
+			$uri = substr( $actual, 0, $lastPound );
+			$actualFragment = substr( $actual, $lastPound + 1 );
 		}
-		if ( $fragment != null ) {
-			$this->assertEqualsData( $assertID,
-				$fragment,
-				$actualFragment );
+		if ( $fragment !== null ) {
+			Assert::assertEquals( $fragment, $actualFragment, $descr );
 		}
 
-		$lastQuestion = strrpos( $uri,
-			'?' );
+		$lastQuestion = strrpos( $uri, '?' );
 		$actualQuery = '';
-		if ( $lastQuestion != -1 ) {
+		if ( $lastQuestion !== false ) {
 			//
-			//  substring before pound
+			//  substring before query
 			//
-			$uri = substr( $actual,
-				0,
-				$lastQuestion/*CHECK THIS*/ );
-			$actualQuery = substr( $actual,
-				$lastQuestion + 1 );
+			$uri = substr( $actual, 0, $lastQuestion );
+			$actualQuery = substr( $actual, $lastQuestion + 1 );
 		}
-		if ( $query != null ) {
-			$this->assertEqualsData( $assertID,
-				$query,
-				$actualQuery );
+		if ( $query !== null ) {
+			Assert::assertEquals( $query, $actualQuery, $descr );
 		}
 
-		$firstColon = strpos( $uri,
-			':' );
-		$firstSlash = strpos( $uri,
-			'/' );
+		$firstColon = strpos( $uri, ':' );
+		$firstSlash = strpos( $uri, '/' );
 		$actualPath = $uri;
 		$actualScheme = '';
-		if ( $firstColon != -1 && $firstColon < $firstSlash ) {
-			$actualScheme = substr( $uri,
-				0,
-				$firstColon/*CHECK THIS*/ );
-			$actualPath = substr( $uri,
-				$firstColon + 1 );
+		if (
+			$firstColon !== false &&
+			( $firstSlash === false || $firstColon < $firstSlash )
+		) {
+			$actualScheme = substr( $uri, 0, $firstColon );
+			$actualPath = substr( $uri, $firstColon + 1 );
 		}
 
-		if ( $scheme != null ) {
-			$this->assertEqualsData( $assertID,
-				$scheme,
-				$actualScheme );
+		if ( $scheme !== null ) {
+			Assert::assertEquals( $scheme, $actualScheme, $descr );
 		}
 
-		if ( $path != null ) {
-			$this->assertEqualsData( $assertID,
-				$path,
-				$actualPath );
+		if ( $path !== null ) {
+			Assert::assertEquals( $path, $actualPath, $descr );
 		}
 
-		if ( $host != null ) {
+		if ( $host !== null ) {
 			$actualHost = '';
-			// TODO: Refactor this.
-			if ( substr( $actualPath,
-					0,
-					2/*CHECK THIS*/ ) === '//' ) {
-				// TODO Test this!.
-				$termSlash = strpos( substr( $actualPath,
-						2 ),
-						'/' ) + 2;
-				$actualHost = substr( $actualPath,
-					0,
-					$termSlash/*CHECK THIS*/ );
+			if ( substr( $actualPath, 0, 2 ) === '//' ) {
+				$termSlash = strpos( $actualPath, '/', 2 );
+				$actualHost = ( $termSlash === false ) ? $actualPath :
+					substr( $actualPath, 0, $termSlash );
 			}
-			$this->assertEqualsData( $assertID,
-				$host,
-				$actualHost );
+			Assert::assertEquals( $host, $actualHost, $descr );
 		}
 
-		if ( $file != null || $name != null ) {
+		if ( $file !== null || $name !== null ) {
 			$actualFile = $actualPath;
-			$finalSlash = strrpos( $actualPath,
-				'/' );
-			if ( $finalSlash != -1 ) {
-				$actualFile = substr( $actualPath,
-					$finalSlash + 1 );
+			$finalSlash = strrpos( $actualPath, '/' );
+			if ( $finalSlash !== false ) {
+				$actualFile = substr( $actualPath, $finalSlash + 1 );
 			}
-			if ( $file != null ) {
-				$this->assertEqualsData( $assertID,
-					$file,
-					$actualFile );
+			if ( $file !== null ) {
+				Assert::assertEquals( $file, $actualFile, $descr );
 			}
 			if ( $name != null ) {
 				$actualName = $actualFile;
-				$finalDot = strrpos( $actualFile,
-					'.' );
-				if ( $finalDot != -1 ) {
-					$actualName = substr( $actualName,
-						0,
-						$finalDot/*CHECK THIS*/ );
+				$finalDot = strrpos( $actualFile, '.' );
+				if ( $finalDot !== false ) {
+					$actualName = substr( $actualName, 0, $finalDot );
 				}
-				$this->assertEqualsData( $assertID,
-					$name,
-					$actualName );
+				Assert::assertEquals( $name, $actualName, $descr );
 			}
 		}
 
-		if ( $isAbsolute != null ) {
-			$this->assertEqualsData( $assertID . ' ' . $actualPath,
+		if ( $isAbsolute !== null ) {
+			Assert::assertEquals(
 				$isAbsolute,
-				substr( $actualPath,
-					0,
-					1/*CHECK THIS*/ ) === '/' );
+				substr( $actualPath, 0, 1 ) === '/',
+				$descr . ' ' . $actualPath
+			);
 		}
-	}
-
-	/**
-	 * @param mixed $expected
-	 * @param mixed $actual
-	 *
-	 * @return bool
-	 */
-	public function same( $expected, $actual ) : bool {
-		return $expected === $actual;
-	}
-
-	/**
-	 * @param string $contentType
-	 *
-	 * @return string
-	 */
-	public function getSuffix( string $contentType ) {
-		switch ( $contentType ) {
-			case 'text/html':
-				return '.html';
-
-			case 'text/xml':
-				return '.xml';
-
-			case 'application/xhtml+xml':
-				return '.xhtml';
-
-			case 'image/svg+xml':
-				return '.svg';
-
-			case 'text/mathml':
-				return '.mml';
-		}
-
-		return '.html';
 	}
 
 	/**
 	 * @param string $error
-	 *
-	 * @throws DOMException
 	 */
-	public function makeFailed( string $error ) {
-		if ( $error === 'throw_HIER_OR_NO_MOD_ERR' ) {
-			throw new DOMException( 'throw_HIER_OR_NO_MOD_ERR',
-				'NoModificationAllowedError' );
-		}
+	public function w3cFail( string $error ) {
+		Assert::fail( $error );
 	}
 
 	/** @inheritDoc */
 	protected function tearDown() : void {
 		parent::tearDown();
-		Mockery::close();
 	}
 
 	/**
 	 * @todo rewrite this stub
 	 *
-	 * @param mixed ...$arg
+	 * @param mixed $builder
+	 * @param string $testName
 	 * @return null
 	 */
-	protected function checkInitialization( ...$arg ) {
+	protected function checkInitialization( $builder, string $testName ) {
 		return null;
 	}
 
@@ -494,7 +387,7 @@ abstract class W3CTestHarness extends TestCase {
 	 *
 	 * @return DodoDOMDocument|null
 	 */
-	protected function load( $docRef = null, ?string $name = null, ?string $href = null ) : ?DOMNode {
+	protected function load( $docRef = null, ?string $name = null, ?string $href = null ) : ?Node {
 		$this->contentType = 'text/html';
 		$realpath = realpath( '.' );
 		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/W3C' )

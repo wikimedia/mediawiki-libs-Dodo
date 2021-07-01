@@ -1,6 +1,6 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/documentinvalidcharacterexceptioncreatepi.js.
 class DocumentinvalidcharacterexceptioncreatepiTest extends W3CTestHarness
@@ -24,18 +24,18 @@ class DocumentinvalidcharacterexceptioncreatepiTest extends W3CTestHarness
             $success = false;
             try {
                 $badPI = $doc->createProcessingInstruction('foo', 'data');
-            } catch (DomException $ex) {
-                $success = gettype($ex->getCode()) != NULL && $ex->getCode() == 9;
+            } catch (DOMException $ex) {
+                $success = gettype($ex->code) != NULL && $ex->code == 9;
             }
-            $this->assertTrueData('throw_NOT_SUPPORTED_ERR', $success);
+            $this->w3cAssertTrue('throw_NOT_SUPPORTED_ERR', $success);
         } else {
             $success = false;
             try {
                 $badPI = $doc->createProcessingInstruction('invalid^Name', 'data');
-            } catch (DomException $ex) {
-                $success = gettype($ex->getCode()) != NULL && $ex->getCode() == 5;
+            } catch (DOMException $ex) {
+                $success = gettype($ex->code) != NULL && $ex->code == 5;
             }
-            $this->assertTrueData('throw_INVALID_CHARACTER_ERR', $success);
+            $this->w3cAssertTrue('throw_INVALID_CHARACTER_ERR', $success);
         }
     }
 }

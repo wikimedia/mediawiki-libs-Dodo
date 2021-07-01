@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodechildnodesempty.js.
 class HcNodechildnodesemptyTest extends W3CTestHarness
@@ -31,6 +31,6 @@ class HcNodechildnodesemptyTest extends W3CTestHarness
         $textNode = $employeeNode->firstChild;
         $childList = $textNode->childNodes;
         $length = count($childList);
-        $this->assertEqualsData('length_zero', 0, $length);
+        $this->w3cAssertEquals('length_zero', 0, $length);
     }
 }

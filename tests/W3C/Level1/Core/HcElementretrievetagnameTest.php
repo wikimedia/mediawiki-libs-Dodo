@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_elementretrievetagname.js.
 class HcElementretrievetagnameTest extends W3CTestHarness
@@ -27,8 +27,8 @@ class HcElementretrievetagnameTest extends W3CTestHarness
         $elementList = $doc->getElementsByTagName('code');
         $testEmployee = $elementList->item(1);
         $strong = $testEmployee->nodeName;
-        $this->assertEqualsAutoCaseData('element', 'nodename', 'code', $strong);
+        $this->w3cAssertEqualsAutoCase('element', 'nodename', 'code', $strong);
         $strong = $testEmployee->tagName;
-        $this->assertEqualsAutoCaseData('element', 'tagname', 'code', $strong);
+        $this->w3cAssertEqualsAutoCase('element', 'tagname', 'code', $strong);
     }
 }

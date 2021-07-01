@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLTextAreaElement08.js.
 class HTMLTextAreaElement08Test extends W3CTestHarness
@@ -26,9 +26,9 @@ class HTMLTextAreaElement08Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'textarea');
         $nodeList = $doc->getElementsByTagName('textarea');
-        $this->assertSizeData('Asize', 3, $nodeList);
+        $this->w3cAssertSize('Asize', 3, $nodeList);
         $testNode = $nodeList->item(2);
         $vreadonly = $testNode->readOnly;
-        $this->assertTrueData('readOnlyLink', $vreadonly);
+        $this->w3cAssertTrue('readOnlyLink', $vreadonly);
     }
 }

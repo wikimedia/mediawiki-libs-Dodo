@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLOListElement02.js.
 class HTMLOListElement02Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLOListElement02Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'olist');
         $nodeList = $doc->getElementsByTagName('ol');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vstart = $testNode->start;
-        $this->assertEqualsData('startLink', 1, $vstart);
+        $this->w3cAssertEquals('startLink', 1, $vstart);
     }
 }

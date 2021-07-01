@@ -108,7 +108,7 @@
     _comment: ''
     testcases: testConstants
     files: /tests/WPT/Dom/Traversal/NodeFilterConstantsTest.php
-'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\NodeInsertBeforeTest::insert(), 2 passed in /tests/WPT/Dom/Nodes/NodeInsertBeforeTest.php on line 54 and exactly 3 expected':
+'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\NodeInsertBeforeTest::insert(), 2 passed in /tests/WPT/Dom/Nodes/NodeInsertBeforeTest.php on line 55 and exactly 3 expected':
     _total: 1
     _comment: ''
     testcases: testNodeInsertBefore
@@ -143,7 +143,7 @@
     _comment: ''
     testcases: testIframe
     files: /tests/WPT/Dom/Nodes/NodeParentNodeTest.php
-'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\ParentNodeAppendTest::insert(), 2 passed in /tests/WPT/Dom/Nodes/ParentNodeAppendTest.php on line 66 and exactly 3 expected':
+'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\ParentNodeAppendTest::insert(), 2 passed in /tests/WPT/Dom/Nodes/ParentNodeAppendTest.php on line 67 and exactly 3 expected':
     _total: 1
     _comment: ''
     testcases: testParentNodeAppend
@@ -153,7 +153,7 @@
     _comment: ''
     testcases: testAppend
     files: /tests/WPT/Dom/Nodes/ParentNodeAppendTest.php
-'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\ParentNodePrependTest::insert(), 2 passed in /tests/WPT/Dom/Nodes/ParentNodePrependTest.php on line 66 and exactly 3 expected':
+'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\ParentNodePrependTest::insert(), 2 passed in /tests/WPT/Dom/Nodes/ParentNodePrependTest.php on line 67 and exactly 3 expected':
     _total: 1
     _comment: ''
     testcases: testParentNodePrepend
@@ -389,11 +389,6 @@
     _comment: ''
     testcases: testDocumentImportNode
     files: /tests/WPT/Dom/Nodes/DocumentImportNodeTest.php
-'TypeError: Argument 2 passed to Wikimedia\Dodo\Tests\Harness\W3CTestHarness::assertNullData() must be of the type string or null, object given, called in /tests/W3C/Level1/Html/HTMLDocument17Test.php on line 29':
-    _total: 1
-    _comment: ''
-    testcases: testHTMLDocument17
-    files: /tests/W3C/Level1/Html/HTMLDocument17Test.php
 'Undefined offset: 2':
     _total: 1
     _comment: ''

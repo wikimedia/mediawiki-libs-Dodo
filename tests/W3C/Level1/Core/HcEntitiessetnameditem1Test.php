@@ -1,7 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_entitiessetnameditem1.js.
 class HcEntitiessetnameditem1Test extends W3CTestHarness
@@ -26,25 +26,25 @@ class HcEntitiessetnameditem1Test extends W3CTestHarness
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $docType = $doc->doctype;
         if (!($builder->contentType == 'text/html')) {
-            $this->assertNotNullData('docTypeNotNull', $docType);
+            $this->w3cAssertNotNull('docTypeNotNull', $docType);
             $entities = $docType->entities;
-            $this->assertNotNullData('entitiesNotNull', $entities);
+            $this->w3cAssertNotNull('entitiesNotNull', $entities);
             $elem = $doc->createElement('br');
             try {
                 $retval = $entities->setNamedItem($elem);
-                $this->makeFailed('throw_HIER_OR_NO_MOD_ERR');
-            } catch (DomException $ex) {
-                if (gettype($ex->getCode()) != NULL) {
-                    switch ($ex->getCode()) {
+                $this->w3cFail('throw_HIER_OR_NO_MOD_ERR');
+            } catch (DOMException $ex) {
+                if (gettype($ex->code) != NULL) {
+                    switch ($ex->code) {
                         case 3:
                             break;
                         case 7:
                             break;
                         default:
-                            $this->fail($ex->getMessage());
+                            throw $ex;
                     }
                 } else {
-                    $this->fail($ex->getMessage());
+                    throw $ex;
                 }
             }
         }

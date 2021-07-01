@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_characterdatasubstringvalue.js.
 class HcCharacterdatasubstringvalueTest extends W3CTestHarness
@@ -29,6 +29,6 @@ class HcCharacterdatasubstringvalueTest extends W3CTestHarness
         $nameNode = $elementList->item(0);
         $child = $nameNode->firstChild;
         $substring = $child->substringData(0, 8);
-        $this->assertEqualsData('characterdataSubStringValueAssert', 'Margaret', $substring);
+        $this->w3cAssertEquals('characterdataSubStringValueAssert', 'Margaret', $substring);
     }
 }

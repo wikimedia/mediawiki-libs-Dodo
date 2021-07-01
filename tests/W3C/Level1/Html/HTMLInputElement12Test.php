@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLInputElement12.js.
 class HTMLInputElement12Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLInputElement12Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'input');
         $nodeList = $doc->getElementsByTagName('input');
-        $this->assertSizeData('Asize', 9, $nodeList);
+        $this->w3cAssertSize('Asize', 9, $nodeList);
         $testNode = $nodeList->item(0);
         $vreadonly = $testNode->readOnly;
-        $this->assertTrueData('readonlyLink', $vreadonly);
+        $this->w3cAssertTrue('readonlyLink', $vreadonly);
     }
 }

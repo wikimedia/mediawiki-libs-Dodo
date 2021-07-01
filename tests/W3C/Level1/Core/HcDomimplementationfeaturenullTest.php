@@ -1,7 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\DOMImplementation;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_domimplementationfeaturenull.js.
@@ -26,10 +26,10 @@ class HcDomimplementationfeaturenullTest extends W3CTestHarness
         $domImpl = $doc->implementation;
         if ($builder->contentType == 'text/html') {
             $state = $domImpl->hasFeature('HTML', null);
-            $this->assertTrueData('supports_HTML_null', $state);
+            $this->w3cAssertTrue('supports_HTML_null', $state);
         } else {
             $state = $domImpl->hasFeature('XML', null);
-            $this->assertTrueData('supports_XML_null', $state);
+            $this->w3cAssertTrue('supports_XML_null', $state);
         }
     }
 }

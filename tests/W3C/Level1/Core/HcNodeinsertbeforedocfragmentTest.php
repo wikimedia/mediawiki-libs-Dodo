@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeinsertbeforedocfragment.js.
 class HcNodeinsertbeforedocfragmentTest extends W3CTestHarness
@@ -45,9 +45,9 @@ class HcNodeinsertbeforedocfragmentTest extends W3CTestHarness
         $insertedNode = $employeeNode->insertBefore($newdocFragment, $refChild);
         $child = $childList->item(3);
         $childName = $child->nodeName;
-        $this->assertEqualsAutoCaseData('element', 'childName3', 'br', $childName);
+        $this->w3cAssertEqualsAutoCase('element', 'childName3', 'br', $childName);
         $child = $childList->item(4);
         $childName = $child->nodeName;
-        $this->assertEqualsAutoCaseData('element', 'childName4', 'b', $childName);
+        $this->w3cAssertEqualsAutoCase('element', 'childName4', 'b', $childName);
     }
 }

@@ -1,7 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodevalue08.js.
 class HcNodevalue08Test extends W3CTestHarness
@@ -26,16 +26,16 @@ class HcNodevalue08Test extends W3CTestHarness
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $docType = $doc->doctype;
         if (!($builder->contentType == 'text/html')) {
-            $this->assertNotNullData('docTypeNotNull', $docType);
+            $this->w3cAssertNotNull('docTypeNotNull', $docType);
             $nodeMap = $docType->notations;
-            $this->assertNotNullData('notationsNotNull', $nodeMap);
+            $this->w3cAssertNotNull('notationsNotNull', $nodeMap);
             $newNode = $nodeMap->getNamedItem('notation1');
-            $this->assertNotNullData('notationNotNull', $newNode);
+            $this->w3cAssertNotNull('notationNotNull', $newNode);
             $newValue = $newNode->nodeValue;
-            $this->assertNullData('initiallyNull', $newValue);
+            $this->w3cAssertNull('initiallyNull', $newValue);
             $newNode->nodeValue = 'This should have no effect';
             $newValue = $newNode->nodeValue;
-            $this->assertNullData('nullAfterAttemptedChange', $newValue);
+            $this->w3cAssertNull('nullAfterAttemptedChange', $newValue);
         }
     }
 }

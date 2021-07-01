@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_elementgetelementsbytagname.js.
 class HcElementgetelementsbytagnameTest extends W3CTestHarness
@@ -23,6 +23,6 @@ class HcElementgetelementsbytagnameTest extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $elementList = $doc->getElementsByTagName('p');
-        $this->assertSizeData('elementGetElementsByTagNameAssert', 5, $elementList);
+        $this->w3cAssertSize('elementGetElementsByTagNameAssert', 5, $elementList);
     }
 }

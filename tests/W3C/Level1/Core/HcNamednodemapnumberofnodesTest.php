@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_namednodemapnumberofnodes.js.
 class HcNamednodemapnumberofnodesTest extends W3CTestHarness
@@ -30,9 +30,9 @@ class HcNamednodemapnumberofnodesTest extends W3CTestHarness
         $attributes = $testEmployee->attributes;
         $length = count($attributes);
         if ($builder->contentType == 'text/html') {
-            $this->assertEqualsData('htmlLength', 2, $length);
+            $this->w3cAssertEquals('htmlLength', 2, $length);
         } else {
-            $this->assertEqualsData('length', 3, $length);
+            $this->w3cAssertEquals('length', 3, $length);
         }
     }
 }

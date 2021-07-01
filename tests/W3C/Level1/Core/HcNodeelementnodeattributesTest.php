@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeelementnodeattributes.js.
 class HcNodeelementnodeattributesTest extends W3CTestHarness
@@ -44,9 +44,9 @@ class HcNodeelementnodeattributesTest extends W3CTestHarness
             $attrList[count($attrList)] = $attrName;
         }
         if ($builder->contentType == 'text/html') {
-            $this->assertEqualsCollectionData('attrNames_html', array_map('strtolower', $htmlExpected), array_map('strtolower', $attrList));
+            $this->w3cAssertEqualsCollection('attrNames_html', array_map('strtolower', $htmlExpected), array_map('strtolower', $attrList));
         } else {
-            $this->assertEqualsCollectionData('attrNames', $expected, $attrList);
+            $this->w3cAssertEqualsCollection('attrNames', $expected, $attrList);
         }
     }
 }

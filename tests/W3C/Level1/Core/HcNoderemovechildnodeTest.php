@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_noderemovechildnode.js.
 class HcNoderemovechildnodeTest extends W3CTestHarness
@@ -46,7 +46,7 @@ class HcNoderemovechildnodeTest extends W3CTestHarness
         $oldChild = $emList->item(0);
         $removedChild = $employeeNode->removeChild($oldChild);
         $removedName = $removedChild->nodeName;
-        $this->assertEqualsAutoCaseData('element', 'removedName', 'em', $removedName);
+        $this->w3cAssertEqualsAutoCase('element', 'removedName', 'em', $removedName);
         for ($indexN10098 = 0; $indexN10098 < count($childList); $indexN10098++) {
             $child = $childList->item($indexN10098);
             $nodeType = $child->nodeType;
@@ -54,10 +54,10 @@ class HcNoderemovechildnodeTest extends W3CTestHarness
             if (1 == $nodeType) {
                 $actual[count($actual)] = $childName;
             } else {
-                $this->assertEqualsData('textNodeType', 3, $nodeType);
-                $this->assertEqualsData('textNodeName', '#text', $childName);
+                $this->w3cAssertEquals('textNodeType', 3, $nodeType);
+                $this->w3cAssertEquals('textNodeName', '#text', $childName);
             }
         }
-        $this->assertEqualsListAutoCaseData('element', 'childNames', $expected, $actual);
+        $this->w3cAssertEqualsListAutoCase('element', 'childNames', $expected, $actual);
     }
 }

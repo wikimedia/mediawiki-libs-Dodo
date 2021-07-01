@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodegetfirstchild.js.
 class HcNodegetfirstchildTest extends W3CTestHarness
@@ -31,9 +31,9 @@ class HcNodegetfirstchildTest extends W3CTestHarness
         $fchildNode = $employeeNode->firstChild;
         $childName = $fchildNode->nodeName;
         if ('#text' == $childName) {
-            $this->assertEqualsData('firstChild_w_whitespace', '#text', $childName);
+            $this->w3cAssertEquals('firstChild_w_whitespace', '#text', $childName);
         } else {
-            $this->assertEqualsAutoCaseData('element', 'firstChild_wo_whitespace', 'em', $childName);
+            $this->w3cAssertEqualsAutoCase('element', 'firstChild_wo_whitespace', 'em', $childName);
         }
     }
 }

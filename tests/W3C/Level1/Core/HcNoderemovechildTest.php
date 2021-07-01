@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_noderemovechild.js.
 class HcNoderemovechildTest extends W3CTestHarness
@@ -31,6 +31,6 @@ class HcNoderemovechildTest extends W3CTestHarness
         $childToRemove = $childList->item(1);
         $removedChild = $rootNode->removeChild($childToRemove);
         $parentNode = $removedChild->parentNode;
-        $this->assertNullData('parentNodeNull', $parentNode);
+        $this->w3cAssertNull('parentNodeNull', $parentNode);
     }
 }

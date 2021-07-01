@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLIFrameElement09.js.
 class HTMLIFrameElement09Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLIFrameElement09Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'iframe');
         $nodeList = $doc->getElementsByTagName('iframe');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vsrc = $testNode->src;
-        $this->assertURIEqualsData('srcLink', null, null, null, null, 'right', null, null, null, $vsrc);
+        $this->w3cAssertURIEquals('srcLink', null, null, null, null, 'right', null, null, null, $vsrc);
     }
 }

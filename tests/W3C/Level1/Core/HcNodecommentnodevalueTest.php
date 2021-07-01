@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Comment;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodecommentnodevalue.js.
 class HcNodecommentnodevalueTest extends W3CTestHarness
@@ -31,11 +31,11 @@ class HcNodecommentnodevalueTest extends W3CTestHarness
             $commentName = $commentNode->nodeName;
             if ('#comment' == $commentName) {
                 $commentValue = $commentNode->nodeValue;
-                $this->assertEqualsData('value', ' This is comment number 1.', $commentValue);
+                $this->w3cAssertEquals('value', ' This is comment number 1.', $commentValue);
             }
         }
         $commentNode = $doc->createComment(' This is a comment');
         $commentValue = $commentNode->nodeValue;
-        $this->assertEqualsData('createdCommentNodeValue', ' This is a comment', $commentValue);
+        $this->w3cAssertEquals('createdCommentNodeValue', ' This is a comment', $commentValue);
     }
 }

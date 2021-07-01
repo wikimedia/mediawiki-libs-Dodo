@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_characterdataappenddatagetdata.js.
 class HcCharacterdataappenddatagetdataTest extends W3CTestHarness
@@ -30,6 +30,6 @@ class HcCharacterdataappenddatagetdataTest extends W3CTestHarness
         $child = $nameNode->firstChild;
         $child->appendData(', Esquire');
         $childData = $child->data;
-        $this->assertEqualsData('characterdataAppendDataGetDataAssert', 'Margaret Martin, Esquire', $childData);
+        $this->w3cAssertEquals('characterdataAppendDataGetDataAssert', 'Margaret Martin, Esquire', $childData);
     }
 }

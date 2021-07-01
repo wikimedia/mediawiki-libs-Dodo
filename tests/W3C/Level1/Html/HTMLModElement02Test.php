@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLModElement02.js.
 class HTMLModElement02Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLModElement02Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'mod');
         $nodeList = $doc->getElementsByTagName('ins');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vdatetime = $testNode->dateTime;
-        $this->assertEqualsData('dateTimeLink', 'January 1, 2002', $vdatetime);
+        $this->w3cAssertEquals('dateTimeLink', 'January 1, 2002', $vdatetime);
     }
 }

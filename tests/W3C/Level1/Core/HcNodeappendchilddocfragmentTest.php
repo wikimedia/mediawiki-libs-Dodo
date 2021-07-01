@@ -4,7 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodeappendchilddocfragment.js.
 class HcNodeappendchilddocfragmentTest extends W3CTestHarness
@@ -60,6 +60,6 @@ class HcNodeappendchilddocfragmentTest extends W3CTestHarness
                 $result[count($result)] = $childName;
             }
         }
-        $this->assertEqualsListAutoCaseData('element', 'nodeNames', $expected, $result);
+        $this->w3cAssertEqualsListAutoCase('element', 'nodeNames', $expected, $result);
     }
 }

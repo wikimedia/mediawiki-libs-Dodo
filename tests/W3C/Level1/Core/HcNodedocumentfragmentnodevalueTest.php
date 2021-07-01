@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\DocumentFragment;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodedocumentfragmentnodevalue.js.
 class HcNodedocumentfragmentnodevalueTest extends W3CTestHarness
@@ -26,8 +26,8 @@ class HcNodedocumentfragmentnodevalueTest extends W3CTestHarness
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $docFragment = $doc->createDocumentFragment();
         $attrList = $docFragment->attributes;
-        $this->assertNullData('attributesNull', $attrList);
+        $this->w3cAssertNull('attributesNull', $attrList);
         $value = $docFragment->nodeValue;
-        $this->assertNullData('initiallyNull', $value);
+        $this->w3cAssertNull('initiallyNull', $value);
     }
 }

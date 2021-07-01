@@ -15,7 +15,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeDumper;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
@@ -217,7 +216,8 @@ class ParserTask extends BaseTask {
 
 		$traverser = new NodeTraverser;
 
-		$traverser->addVisitor( new class( $this->test_name, $this->factory ) extends NodeVisitorAbstract {
+		$visitor = new class( $this->test_name, $this->parser, $this->factory ) extends NodeVisitorAbstract
+		{
 			use Helpers;
 
 			/**
@@ -232,16 +232,25 @@ class ParserTask extends BaseTask {
 			 * @var BuilderFactory
 			 */
 			private $factory;
+			/**
+			 * @var array<string,bool>
+			 */
+			public $uses;
 
 			/**
 			 *  constructor.
 			 *
 			 * @param string $test_name
+			 * @param Parser $parser
 			 * @param BuilderFactory $factory
 			 */
-			public function __construct( string $test_name, BuilderFactory $factory ) {
+			public function __construct(
+				string $test_name, Parser $parser, BuilderFactory $factory
+			) {
 				$this->test_name = $test_name;
+				$this->parser = $parser;
 				$this->factory = $factory;
+				$this->uses = [];
 			}
 
 			/**
@@ -264,7 +273,7 @@ class ParserTask extends BaseTask {
 						return $node;
 					}
 
-					$functions_calls = [ 'assert',
+					$harness_functions = array_flip( [
 						'getImplementation',
 						'checkInitialization',
 						'load',
@@ -272,17 +281,36 @@ class ParserTask extends BaseTask {
 						'setImplementationAttribute',
 						'preload',
 						'catchInitializationError',
-						'checkFeature' ];
+						'checkFeature',
+						'fail', // it's not clear where this one is defined!
+						// assertion methods
+						'assertEquals',
+						'assertEqualsAutoCase',
+						'assertEqualsCollection',
+						'assertEqualsList',
+						'assertEqualsListAutoCase',
+						'assertFalse',
+						'assertNotNull',
+						'assertNull',
+						'assertSame',
+						'assertSize',
+						'assertTrue',
+						'assertURIEquals',
+					] );
 
-					if ( preg_match( '(' . implode( '|',
-								$functions_calls ) . ')',
-							$expr_name ) === 1 ) {
+					if ( array_key_exists( $expr_name, $harness_functions ) ) {
 						$args = $node->args;
 
-						if ( strpos( $expr_name,
-								'assert' ) !== false ) {
-							$call = new Node\Expr\MethodCall( new Variable( 'this' ),
-								$this->snakeToCamel( $expr_name ) . 'Data',
+						if (
+							strpos( $expr_name, 'assert' ) === 0 ||
+							$expr_name === 'fail'
+						) {
+							// TestCase already has methods named assert*
+							// and one called 'fail', so add a 'w3c' prefix to
+							// these harness functions.
+							$call = new Node\Expr\MethodCall(
+								new Variable( 'this' ),
+								$this->snakeToCamel( 'w3c_' . $expr_name ),
 								$args,
 								$node->getAttributes() );
 						} else {
@@ -318,22 +346,24 @@ class ParserTask extends BaseTask {
 					return $node;
 				}
 			}
-		} );
+		};
+		$traverser->addVisitor( $visitor );
 
+		/*
 		$visitor = new class extends NodeVisitorAbstract
 		{
 			use Helpers;
 
 			/**
 			 * @var array<string,bool>
-			 */
+			 * /
 			public $uses = [];
 
 			/**
 			 * @param mixed $node
 			 *
 			 * @return int|Node|Function_
-			 */
+			 * /
 			public function leaveNode( $node ) {
 				if ( $node instanceof If_ ) {
 					$left_part = $node->cond->left ?? null;
@@ -344,7 +374,7 @@ class ParserTask extends BaseTask {
 							$left_part->args[0]->value->name->name === 'code' &&
 							$left_part->args[0]->value->var->name === 'ex' ) {
 							$ast = $this->parser->parse( '<?php ' .
-								'$this->assertEquals( DOMException::NO_MODIFICATION_ALLOWED_ERR, 
+								'$this->assertEquals( DOMException::NO_MODIFICATION_ALLOWED_ERR,
 								$ex->getCode());' );
 
 							return reset( $ast );
@@ -353,8 +383,9 @@ class ParserTask extends BaseTask {
 				}
 			}
 		};
-
 		$traverser->addVisitor( $visitor );
+		*/
+
 		$stmts = $traverser->traverse( $ast );
 
 		if ( !$this->compact ) {
@@ -508,10 +539,14 @@ class ParserTask extends BaseTask {
 
 		// $dump = $this->dumper->dump( $stmts ) . "n";
 
-		$visitor = new class( $this->parser, $this->factory ) extends NodeVisitorAbstract
+		$visitor = new class( $this->test_name, $this->parser, $this->factory ) extends NodeVisitorAbstract
 		{
 			use Helpers;
 
+			/**
+			 * @var string
+			 */
+			public $test_name;
 			/**
 			 * @var Parser
 			 */
@@ -528,10 +563,14 @@ class ParserTask extends BaseTask {
 			/**
 			 *  constructor.
 			 *
+			 * @param string $test_name
 			 * @param Parser $parser
 			 * @param BuilderFactory $factory
 			 */
-			public function __construct( Parser $parser, BuilderFactory $factory ) {
+			public function __construct(
+				string $test_name, Parser $parser, BuilderFactory $factory
+			) {
+				$this->test_name = $test_name;
 				$this->parser = $parser;
 				$this->factory = $factory;
 				$this->uses = [];
@@ -829,7 +868,7 @@ class ParserTask extends BaseTask {
 			'CharacterData' => 'Wikimedia\Dodo\CharacterData',
 			'DocumentType' => 'Wikimedia\Dodo\DocumentType',
 			'URL' => 'Wikimedia\Dodo\URL',
-			'DomException' => 'Wikimedia\Dodo\DomException',
+			'DOMException' => 'Wikimedia\Dodo\DOMException',
 			'DOMImplementation' => 'Wikimedia\Dodo\DOMImplementation',
 			'DOMParser' => 'Wikimedia\Dodo\DOMParser',
 			'Range' => 'Wikimedia\Dodo\Range',
@@ -992,16 +1031,12 @@ class ParserTask extends BaseTask {
 		$find_replace = [
 			'global $builder;' => '',
 			'$builder = null;' => '$builder = $this->getBuilder();',
-			'->item(0)' => '[0]',
-			'$ex->code' => '$ex->getCode()',
-			'Exception $ex' => 'DomException $ex',
-			'fail(' => '$this->makeFailed(',
-			'throw $ex;' => '$this->fail($ex->getMessage());',
+			'Exception $ex' => 'DOMException $ex',
+			// 'throw $ex;' => '$this->fail($ex->getMessage());',
 			'&& false' => '',
 			'$doc->open()' => '// $doc->open()',
 			'$doc->close()' => '// $doc->close()',
 			'count( $childValue )' => 'strlen($childValue)',
-			'count( $child )' => 'strlen($childData)',
 			'toLowerArray(' => 'array_map(\'strtolower\',', ];
 
 		$this->test = strtr( $this->test,

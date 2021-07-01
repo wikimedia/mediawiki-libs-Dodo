@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_characterdatareplacedataend.js.
 class HcCharacterdatareplacedataendTest extends W3CTestHarness
@@ -30,6 +30,6 @@ class HcCharacterdatareplacedataendTest extends W3CTestHarness
         $child = $nameNode->firstChild;
         $child->replaceData(30, 5, '98665');
         $childData = $child->data;
-        $this->assertEqualsData('characterdataReplaceDataEndAssert', '1230 North Ave. Dallas, Texas 98665', $childData);
+        $this->w3cAssertEquals('characterdataReplaceDataEndAssert', '1230 North Ave. Dallas, Texas 98665', $childData);
     }
 }

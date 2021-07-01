@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodelisttraverselist.js.
 class HcNodelisttraverselistTest extends W3CTestHarness
@@ -45,10 +45,10 @@ class HcNodelisttraverselistTest extends W3CTestHarness
             if (1 == $nodeType) {
                 $result[count($result)] = $childName;
             } else {
-                $this->assertEqualsData('textNodeType', 3, $nodeType);
-                $this->assertEqualsData('textNodeName', '#text', $childName);
+                $this->w3cAssertEquals('textNodeType', 3, $nodeType);
+                $this->w3cAssertEquals('textNodeName', '#text', $childName);
             }
         }
-        $this->assertEqualsListAutoCaseData('element', 'nodeNames', $expected, $result);
+        $this->w3cAssertEqualsListAutoCase('element', 'nodeNames', $expected, $result);
     }
 }

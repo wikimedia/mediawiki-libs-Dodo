@@ -4,7 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_textwithnomarkup.js.
 class HcTextwithnomarkupTest extends W3CTestHarness
@@ -31,6 +31,6 @@ class HcTextwithnomarkupTest extends W3CTestHarness
         $nameNode = $elementList->item(2);
         $nodeV = $nameNode->firstChild;
         $value = $nodeV->nodeValue;
-        $this->assertEqualsData('textWithNoMarkupAssert', "Roger\n Jones", $value);
+        $this->w3cAssertEquals('textWithNoMarkupAssert', "Roger\n Jones", $value);
     }
 }

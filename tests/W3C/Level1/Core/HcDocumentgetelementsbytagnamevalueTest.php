@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_documentgetelementsbytagnamevalue.js.
 class HcDocumentgetelementsbytagnamevalueTest extends W3CTestHarness
@@ -29,6 +29,6 @@ class HcDocumentgetelementsbytagnamevalueTest extends W3CTestHarness
         $nameNode = $nameList->item(3);
         $firstChild = $nameNode->firstChild;
         $childValue = $firstChild->nodeValue;
-        $this->assertEqualsData('documentGetElementsByTagNameValueAssert', 'Jeny Oconnor', $childValue);
+        $this->w3cAssertEquals('documentGetElementsByTagNameValueAssert', 'Jeny Oconnor', $childValue);
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_documentcreateelement.js.
 class HcDocumentcreateelementTest extends W3CTestHarness
@@ -27,10 +27,10 @@ class HcDocumentcreateelementTest extends W3CTestHarness
         $doc = $this->load($docRef, 'doc', 'hc_staff');
         $newElement = $doc->createElement('acronym');
         $newElementName = $newElement->nodeName;
-        $this->assertEqualsAutoCaseData('element', 'strong', 'acronym', $newElementName);
+        $this->w3cAssertEqualsAutoCase('element', 'strong', 'acronym', $newElementName);
         $newElementType = $newElement->nodeType;
-        $this->assertEqualsData('type', 1, $newElementType);
+        $this->w3cAssertEquals('type', 1, $newElementType);
         $newElementValue = $newElement->nodeValue;
-        $this->assertNullData('valueInitiallyNull', $newElementValue);
+        $this->w3cAssertNull('valueInitiallyNull', $newElementValue);
     }
 }

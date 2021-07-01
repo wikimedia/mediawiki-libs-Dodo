@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodehaschildnodes.js.
 class HcNodehaschildnodesTest extends W3CTestHarness
@@ -27,6 +27,6 @@ class HcNodehaschildnodesTest extends W3CTestHarness
         $elementList = $doc->getElementsByTagName('p');
         $employeeNode = $elementList->item(1);
         $state = $employeeNode->hasChildNodes();
-        $this->assertTrueData('nodeHasChildAssert1', $state);
+        $this->w3cAssertTrue('nodeHasChildAssert1', $state);
     }
 }

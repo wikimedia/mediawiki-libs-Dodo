@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLImageElement09.js.
 class HTMLImageElement09Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLImageElement09Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'img');
         $nodeList = $doc->getElementsByTagName('img');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vsrc = $testNode->src;
-        $this->assertURIEqualsData('srcLink', null, null, null, 'dts.gif', null, null, null, null, $vsrc);
+        $this->w3cAssertURIEquals('srcLink', null, null, null, 'dts.gif', null, null, null, null, $vsrc);
     }
 }

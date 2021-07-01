@@ -1,7 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_elementgettagname.js.
 class HcElementgettagnameTest extends W3CTestHarness
@@ -25,9 +25,9 @@ class HcElementgettagnameTest extends W3CTestHarness
         $root = $doc->documentElement;
         $tagname = $root->tagName;
         if ($builder->contentType == 'image/svg+xml') {
-            $this->assertEqualsData('svgTagname', 'svg', $tagname);
+            $this->w3cAssertEquals('svgTagname', 'svg', $tagname);
         } else {
-            $this->assertEqualsAutoCaseData('element', 'tagname', 'html', $tagname);
+            $this->w3cAssertEqualsAutoCase('element', 'tagname', 'html', $tagname);
         }
     }
 }

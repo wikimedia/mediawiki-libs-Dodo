@@ -1,6 +1,6 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\W3C;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\DOMImplementation;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_documentgetimplementation.js.
@@ -27,9 +27,9 @@ class HcDocumentgetimplementationTest extends W3CTestHarness
         $xmlstate = $docImpl->hasFeature('XML', '1.0');
         $htmlstate = $docImpl->hasFeature('HTML', '1.0');
         if ($builder->contentType == 'text/html') {
-            $this->assertTrueData('supports_HTML_1.0', $htmlstate);
+            $this->w3cAssertTrue('supports_HTML_1.0', $htmlstate);
         } else {
-            $this->assertTrueData('supports_XML_1.0', $xmlstate);
+            $this->w3cAssertTrue('supports_XML_1.0', $xmlstate);
         }
     }
 }

@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLParamElement02.js.
 class HTMLParamElement02Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class HTMLParamElement02Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'param');
         $nodeList = $doc->getElementsByTagName('param');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vvalue = $testNode->value;
-        $this->assertURIEqualsData('valueLink', null, null, null, 'file.gif', null, null, null, null, $vvalue);
+        $this->w3cAssertURIEquals('valueLink', null, null, null, 'file.gif', null, null, null, null, $vvalue);
     }
 }

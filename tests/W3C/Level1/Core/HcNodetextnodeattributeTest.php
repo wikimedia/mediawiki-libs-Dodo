@@ -4,7 +4,7 @@ use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Attr;
 use Wikimedia\Dodo\Text;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/core/hc_nodetextnodeattribute.js.
 class HcNodetextnodeattributeTest extends W3CTestHarness
@@ -31,6 +31,6 @@ class HcNodetextnodeattributeTest extends W3CTestHarness
         $testAddr = $elementList->item(0);
         $textNode = $testAddr->firstChild;
         $attrList = $textNode->attributes;
-        $this->assertNullData('text_attributes_is_null', $attrList);
+        $this->w3cAssertNull('text_attributes_is_null', $attrList);
     }
 }

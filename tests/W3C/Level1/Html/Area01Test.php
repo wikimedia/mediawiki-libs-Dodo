@@ -2,7 +2,7 @@
 namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/area01.js.
 class Area01Test extends W3CTestHarness
@@ -25,9 +25,9 @@ class Area01Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'area');
         $nodeList = $doc->getElementsByTagName('area');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vcoords = $testNode->coords;
-        $this->assertEqualsData('coordsLink', '0,2,45,45', $vcoords);
+        $this->w3cAssertEquals('coordsLink', '0,2,45,45', $vcoords);
     }
 }

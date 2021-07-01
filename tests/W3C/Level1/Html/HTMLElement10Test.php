@@ -3,7 +3,7 @@ namespace Wikimedia\Dodo\Tests\W3C;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\HTMLElement;
 use Wikimedia\Dodo\Element;
-use Wikimedia\Dodo\DomException;
+use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Tests\Harness\W3CTestHarness;
 // @see vendor/fgnass/domino/test/w3c/level1/html/HTMLElement10.js.
 class HTMLElement10Test extends W3CTestHarness
@@ -26,9 +26,9 @@ class HTMLElement10Test extends W3CTestHarness
         }
         $doc = $this->load($docRef, 'doc', 'element');
         $nodeList = $doc->getElementsByTagName('s');
-        $this->assertSizeData('Asize', 1, $nodeList);
+        $this->w3cAssertSize('Asize', 1, $nodeList);
         $testNode = $nodeList->item(0);
         $vid = $testNode->id;
-        $this->assertEqualsData('idLink', 'Test-S', $vid);
+        $this->w3cAssertEquals('idLink', 'Test-S', $vid);
     }
 }
