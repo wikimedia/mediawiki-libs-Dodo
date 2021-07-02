@@ -561,6 +561,21 @@ abstract class WPTTestHarness extends TestCase {
 	// assert_implements is unused
 	// assert_implements_optional is unused
 
+	// This function is defined in DOMParser-parseFromString-html.html
+
+	/**
+	 * @param mixed $actual
+	 * @param array $expected
+	 */
+	public function wptAssertNode( $actual, array $expected ) : void {
+		Assert::assertInstanceOf( $expected['type'], $actual );
+		if ( ( $expected['id'] ?? null ) !== null ) {
+			Assert::assertEquals(
+				$expected['id'], $actual->id, $expected['idMessage']
+			);
+		}
+	}
+
 	/**
 	 * @param mixed $val
 	 * @return string

@@ -1,5 +1,5 @@
 <?php 
-namespace Wikimedia\Dodo\Tests\WPT\Dom;
+namespace Wikimedia\Dodo\Tests\WPT\Dom\Ranges;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Range;
 use Wikimedia\Dodo\Tests\Harness\Utils\Common;

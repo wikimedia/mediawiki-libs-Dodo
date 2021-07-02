@@ -1,5 +1,5 @@
 <?php 
-namespace Wikimedia\Dodo\Tests\WPT\Dom;
+namespace Wikimedia\Dodo\Tests\WPT\Dom\Traversal;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\NodeFilter;
 use Wikimedia\Dodo\Element;
@@ -62,36 +62,36 @@ class TreeWalkerTraversalRejectTest extends WPTTestHarness
         }];
         $this->assertTest(function () use(&$testElement, &$rejectB1Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $rejectB1Filter);
-            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'A1']);
-            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
-            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B3']);
+            $this->wptAssertNode($walker->nextNode(), ['type' => Element, 'id' => 'A1']);
+            $this->wptAssertNode($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
+            $this->wptAssertNode($walker->nextNode(), ['type' => Element, 'id' => 'B3']);
         }, 'Testing nextNode');
         $this->assertTest(function () use(&$testElement, &$rejectB1Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $rejectB1Filter);
-            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'B2']);
+            $this->wptAssertNode($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            $this->wptAssertNode($walker->firstChild(), ['type' => Element, 'id' => 'B2']);
         }, 'Testing firstChild');
         $this->assertTest(function () use(&$testElement, &$skipB2Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB2Filter);
-            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'B1']);
-            assert_node($walker->nextSibling(), ['type' => Element, 'id' => 'B3']);
+            $this->wptAssertNode($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            $this->wptAssertNode($walker->firstChild(), ['type' => Element, 'id' => 'B1']);
+            $this->wptAssertNode($walker->nextSibling(), ['type' => Element, 'id' => 'B3']);
         }, 'Testing nextSibling');
         $this->assertTest(function () use(&$testElement, &$rejectB1Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $rejectB1Filter);
             $walker->currentNode = $testElement->querySelectorAll('#C1')[0];
-            assert_node($walker->parentNode(), ['type' => Element, 'id' => 'A1']);
+            $this->wptAssertNode($walker->parentNode(), ['type' => Element, 'id' => 'A1']);
         }, 'Testing parentNode');
         $this->assertTest(function () use(&$testElement, &$skipB2Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $skipB2Filter);
             $walker->currentNode = $testElement->querySelectorAll('#B3')[0];
-            assert_node($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);
+            $this->wptAssertNode($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);
         }, 'Testing previousSibling');
         $this->assertTest(function () use(&$testElement, &$rejectB1Filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $rejectB1Filter);
             $walker->currentNode = $testElement->querySelectorAll('#B3')[0];
-            assert_node($walker->previousNode(), ['type' => Element, 'id' => 'B2']);
-            assert_node($walker->previousNode(), ['type' => Element, 'id' => 'A1']);
+            $this->wptAssertNode($walker->previousNode(), ['type' => Element, 'id' => 'B2']);
+            $this->wptAssertNode($walker->previousNode(), ['type' => Element, 'id' => 'A1']);
         }, 'Testing previousNode');
     }
 }

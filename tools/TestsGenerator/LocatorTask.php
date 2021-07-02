@@ -21,12 +21,13 @@ class LocatorTask extends BaseTask {
 
 	private const W3C_TESTS = "/vendor/fgnass/domino/test/w3c/level1";
 
-	private const WPT_TESTS = "/vendor/web-platform-tests/wpt/dom";
+	private const WPT_TESTS = "/vendor/web-platform-tests/wpt";
 
 	/**
 	 * @var string[]
 	 */
-	public static $skips = [ 'DOMImplementation-createDocument' => 'js2php or parsing issue',
+	public static $skips = [
+		'DOMImplementation-createDocument' => 'js2php or parsing issue',
 		'Document-createProcessingInstruction' => 'js2php or parsing issue',
 		'Element-classlist' => 'js2php or parsing issue',
 		'MutationObserver-document' => 'js2php or parsing issue',
@@ -71,7 +72,10 @@ class LocatorTask extends BaseTask {
 		'Range-test-iframe' => 'Uses onload event to run test, no sence to convert',
 		'DOMImplementation-createHTMLDocument-with-null-browsing-context-crash' => 'Pointless, tests browser',
 		'DOMImplementation-createDocument-with-null-browsing-context-crash' => 'Same as previous',
-		'ParentNode-querySelector-All' => 'Not applicable at the moment'
+		'ParentNode-querySelector-All' => 'Not applicable at the moment',
+		'DOMParser-parseFromString-url-moretests' => 'js2php or parsing issue',
+		'DOMParser-parseFromString-xml-internal-subset' => 'js2php or parsing issue',
+		'DOMParser-parseFromString-xml-parsererror' => 'js2php or parsing issue',
 	];
 
 	/**
@@ -126,17 +130,22 @@ class LocatorTask extends BaseTask {
 		/**
 		 * For now only load .html's
 		 */
-		$exclude_dirs = [ 'Document-createElement-namespace-tests',
+		$exclude_dirs = [
+			'Document-createElement-namespace-tests',
 			'unfinished',
 			'support',
-			'Document-contentType' ];
+			'Document-contentType',
+		];
 		$wpt_tests_path = $this->folder . self::WPT_TESTS;
 
-		$subfolders = [ '/nodes',
-			'/collections',
-			'/traversal',
-			'/ranges',
-			'/lists' ];
+		$subfolders = [
+			'/dom/nodes',
+			'/dom/collections',
+			'/dom/traversal',
+			'/dom/ranges',
+			'/dom/lists',
+			'/domparsing',
+		];
 
 		$subfolders = preg_filter( '/^/',
 			$wpt_tests_path,

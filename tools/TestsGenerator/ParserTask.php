@@ -478,7 +478,9 @@ class ParserTask extends BaseTask {
 			'$Comment' => 'Comment',
 			'$Element' => 'Element',
 			'$Node' => 'Node',
-			'$HTMLAnchorElement' => 'HTMLAnchorElement',
+			'$HTMLAnchorElement' => 'HTMLAnchorElement::class',
+			'$HTMLHtmlElement' => 'HTMLHtmlElement::class',
+			'$HTMLParagraphElement' => 'HTMLParagraphElement::class',
 			'$XMLDocument' => 'XMLDocument',
 			'function insert( $parent, $node ) use ( &$methodName )' =>
 				'function insert( $parent, $node, &$methodName )',
@@ -699,6 +701,7 @@ class ParserTask extends BaseTask {
 						'assert_false',
 						'assert_idl_attribute',
 						'assert_in_array',
+						'assert_node',
 						'assert_not_equals',
 						'assert_readonly',
 						'assert_throws_dom',
@@ -823,13 +826,35 @@ class ParserTask extends BaseTask {
 				$this->test_name .= 'Test';
 			}
 
-			$class = $this->factory->class( $this->snakeToPascal( $this->test_name ) )->extend( 'WPTTestHarness' )
-				->addStmts( $stmts )->setDocComment( '// @see ' . $this->test_path .
-					'.' )->getNode();
+			// Extract the package name
+			$pkg = implode(
+				'\\',
+				array_map(
+					function ( $s ) { return $this->snakeToPascal( $s );
+					},
+					array_slice(
+						explode( '/', $this->test_path ),
+						3, -1
+					)
+				)
+			);
+			$class = $this->factory->class(
+				$this->snakeToPascal( $this->test_name )
+			)->extend(
+				'WPTTestHarness'
+			)->addStmts(
+				$stmts
+			)->setDocComment(
+				'// @see ' . $this->test_path . '.'
+			)->getNode();
 			$use_stmts = $this->getUseStmts( $visitor->uses );
-			$stmts = $this->factory->namespace( 'Wikimedia\Dodo\Tests\WPT\Dom' )->addStmts( $use_stmts )->addStmts( [
-				$class ] )
-				->getNode();
+			$stmts = $this->factory->namespace(
+				'Wikimedia\Dodo\Tests\WPT\\' . $pkg
+			)->addStmts(
+				$use_stmts
+			)->addStmts( [
+				$class
+			] )->getNode();
 		}
 
 		$this->prettyPrint( $stmts );
@@ -857,6 +882,7 @@ class ParserTask extends BaseTask {
 			'HTMLAnchorElement' => 'Wikimedia\Dodo\HTMLAnchorElement',
 			'HTMLUnknownElement' => 'Wikimedia\Dodo\HTMLUnknownElement',
 			'HTMLHtmlElement' => 'Wikimedia\Dodo\HTMLHtmlElement',
+			'HTMLParagraphElement' => 'Wikimedia\Dodo\HTMLParagraphElement',
 			'HTMLBodyElement' => 'Wikimedia\Dodo\HTMLBodyElement',
 			'HTMLHeadElement' => 'Wikimedia\Dodo\HTMLHeadElement',
 			'HTMLHRElement' => 'Wikimedia\Dodo\HTMLHRElement',

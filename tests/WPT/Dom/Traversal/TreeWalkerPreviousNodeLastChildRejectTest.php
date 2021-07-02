@@ -1,5 +1,5 @@
 <?php 
-namespace Wikimedia\Dodo\Tests\WPT\Dom;
+namespace Wikimedia\Dodo\Tests\WPT\Dom\Traversal;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\NodeFilter;
 use Wikimedia\Dodo\Element;
@@ -81,17 +81,17 @@ class TreeWalkerPreviousNodeLastChildRejectTest extends WPTTestHarness
         $c2->appendChild($d2);
         $this->assertTest(function () use(&$testElement) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
-            assert_node($walker->currentNode, ['type' => Element, 'id' => 'root']);
-            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
-            assert_node($walker->currentNode, ['type' => Element, 'id' => 'A1']);
-            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B1']);
-            assert_node($walker->currentNode, ['type' => Element, 'id' => 'B1']);
-            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'C1']);
-            assert_node($walker->currentNode, ['type' => Element, 'id' => 'C1']);
-            assert_node($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
-            assert_node($walker->currentNode, ['type' => Element, 'id' => 'B2']);
-            assert_node($walker->previousNode(), ['type' => Element, 'id' => 'C1']);
-            assert_node($walker->currentNode, ['type' => Element, 'id' => 'C1']);
+            $this->wptAssertNode($walker->currentNode, ['type' => Element, 'id' => 'root']);
+            $this->wptAssertNode($walker->firstChild(), ['type' => Element, 'id' => 'A1']);
+            $this->wptAssertNode($walker->currentNode, ['type' => Element, 'id' => 'A1']);
+            $this->wptAssertNode($walker->nextNode(), ['type' => Element, 'id' => 'B1']);
+            $this->wptAssertNode($walker->currentNode, ['type' => Element, 'id' => 'B1']);
+            $this->wptAssertNode($walker->nextNode(), ['type' => Element, 'id' => 'C1']);
+            $this->wptAssertNode($walker->currentNode, ['type' => Element, 'id' => 'C1']);
+            $this->wptAssertNode($walker->nextNode(), ['type' => Element, 'id' => 'B2']);
+            $this->wptAssertNode($walker->currentNode, ['type' => Element, 'id' => 'B2']);
+            $this->wptAssertNode($walker->previousNode(), ['type' => Element, 'id' => 'C1']);
+            $this->wptAssertNode($walker->currentNode, ['type' => Element, 'id' => 'C1']);
         }, 'Test that previousNode properly respects the filter.');
     }
 }

@@ -1,5 +1,5 @@
 <?php 
-namespace Wikimedia\Dodo\Tests\WPT\Dom;
+namespace Wikimedia\Dodo\Tests\WPT\Dom\Collections;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/collections/HTMLCollection-own-props.html.

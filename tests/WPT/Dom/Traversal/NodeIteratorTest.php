@@ -1,5 +1,5 @@
 <?php 
-namespace Wikimedia\Dodo\Tests\WPT\Dom;
+namespace Wikimedia\Dodo\Tests\WPT\Dom\Traversal;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\NodeFilter;
 use Wikimedia\Dodo\Tests\Harness\Utils\Common;

@@ -1,5 +1,5 @@
 <?php 
-namespace Wikimedia\Dodo\Tests\WPT\Dom;
+namespace Wikimedia\Dodo\Tests\WPT\Dom\Traversal;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\NodeFilter;
 use Wikimedia\Dodo\Element;
@@ -54,13 +54,13 @@ class TreeWalkerTraversalSkipMostTest extends WPTTestHarness
         }];
         $this->assertTest(function () use(&$testElement, &$filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
-            assert_node($walker->firstChild(), ['type' => Element, 'id' => 'B1']);
-            assert_node($walker->nextSibling(), ['type' => Element, 'id' => 'B3']);
+            $this->wptAssertNode($walker->firstChild(), ['type' => Element, 'id' => 'B1']);
+            $this->wptAssertNode($walker->nextSibling(), ['type' => Element, 'id' => 'B3']);
         }, 'Testing nextSibling');
         $this->assertTest(function () use(&$testElement, &$filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
             $walker->currentNode = $testElement->querySelectorAll('#B3')[0];
-            assert_node($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);
+            $this->wptAssertNode($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);
         }, 'Testing previousSibling');
     }
 }

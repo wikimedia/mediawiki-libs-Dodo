@@ -83,7 +83,7 @@ asyncTest:
     _comment: ''
     suites: aria-element-reflection.tentative
 'js2php or parsing issue':
-    _total: 18
+    _total: 21
     _comment: asdfasdfasdfdasf
     suites: |-
         DOMImplementation-createDocument
@@ -104,6 +104,9 @@ asyncTest:
         HTMLCollection-supported-property-names
         Node-cloneNode
         ParentNode-querySelectorAll-removed-elements
+        DOMParser-parseFromString-url-moretests
+        DOMParser-parseFromString-xml-internal-subset
+        DOMParser-parseFromString-xml-parsererror
 takeScreenshot.:
     _total: 1
     _comment: ''

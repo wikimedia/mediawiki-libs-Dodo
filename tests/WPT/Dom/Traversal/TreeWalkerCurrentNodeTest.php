@@ -1,5 +1,5 @@
 <?php 
-namespace Wikimedia\Dodo\Tests\WPT\Dom;
+namespace Wikimedia\Dodo\Tests\WPT\Dom\Traversal;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\NodeFilter;
 use Wikimedia\Dodo\Element;
@@ -29,9 +29,9 @@ class TreeWalkerCurrentNodeTest extends WPTTestHarness
         };
         $this->assertTest(function () use(&$subTree, &$all) {
             $w = $this->doc->createTreeWalker($subTree, NodeFilter::SHOW_ELEMENT, $all);
-            assert_node($w->currentNode, ['type' => Element, 'id' => 'subTree']);
+            $this->wptAssertNode($w->currentNode, ['type' => Element, 'id' => 'subTree']);
             $this->wptAssertEquals($w->parentNode(), null);
-            assert_node($w->currentNode, ['type' => Element, 'id' => 'subTree']);
+            $this->wptAssertNode($w->currentNode, ['type' => Element, 'id' => 'subTree']);
         }, "Test that TreeWalker.parent() doesn't set the currentNode to a node not under the root.");
         $this->assertTest(function () use(&$subTree, &$all) {
             $w = $this->doc->createTreeWalker($subTree, NodeFilter::SHOW_ELEMENT | NodeFilter::SHOW_COMMENT, $all);

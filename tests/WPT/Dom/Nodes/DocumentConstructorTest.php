@@ -1,5 +1,5 @@
 <?php 
-namespace Wikimedia\Dodo\Tests\WPT\Dom;
+namespace Wikimedia\Dodo\Tests\WPT\Dom\Nodes;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Document;
 use Wikimedia\IDLeDOM\XMLDocument;
@@ -48,7 +48,7 @@ class DocumentConstructorTest extends WPTTestHarness
         $this->assertTest(function () {
             $doc = new Document();
             $a = $doc->createElementNS('http://www.w3.org/1999/xhtml', 'a');
-            $this->wptAssertEquals($a->constructor, HTMLAnchorElement);
+            $this->wptAssertEquals($a->constructor, HTMLAnchorElement::class);
             // In UTF-8: 0xC3 0xA4
             $a->href = "http://example.org/?ä";
             $this->wptAssertEquals($a->href, 'http://example.org/?%C3%A4');

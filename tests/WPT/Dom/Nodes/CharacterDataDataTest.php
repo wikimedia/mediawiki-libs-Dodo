@@ -1,5 +1,5 @@
 <?php 
-namespace Wikimedia\Dodo\Tests\WPT\Dom;
+namespace Wikimedia\Dodo\Tests\WPT\Dom\Nodes;
 use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Comment;
 use Wikimedia\Dodo\Text;
