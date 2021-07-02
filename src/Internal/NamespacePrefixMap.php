@@ -11,8 +11,14 @@ use Wikimedia\IDLeDOM\Element;
  * @see https://w3c.github.io/DOM-Parsing/#dfn-namespace-prefix-map
  */
 class NamespacePrefixMap {
-	/** @var array<string,string[]> Backing storage for this map */
+	/**
+	 * @var array<string,string[]> Map namespaces to a list of prefixes
+	 */
 	private $map = [];
+	/**
+	 * @var array<string,string> Maps prefixes to the namespaces they represent.
+	 */
+	private $reverseMap = [];
 
 	/**
 	 * Create a new empty namespace prefix map.
@@ -38,8 +44,8 @@ class NamespacePrefixMap {
 	 * @return bool
 	 */
 	public function found( ?string $namespace, string $prefix ) {
-		$candidatesList = $this->map[self::makeKey( $namespace )] ?? [];
-		return in_array( $prefix, $candidatesList, true );
+		$key = self::makeKey( $namespace );
+		return ( $this->reverseMap[$prefix] ?? null ) === $key;
 	}
 
 	/**
@@ -50,11 +56,21 @@ class NamespacePrefixMap {
 	 */
 	public function add( ?string $namespace, string $prefix ) {
 		$key = self::makeKey( $namespace );
-		if ( array_key_exists( $key, $this->map ) ) {
-			$this->map[$key][] = $prefix;
-		} else {
-			$this->map[$key] = [ $prefix ];
+		// Remove any other mapping for $prefix before adding it to the map
+		# https://github.com/w3c/DOM-Parsing/issues/45
+		if ( array_key_exists( $prefix, $this->reverseMap ) ) {
+			$otherKey = $this->reverseMap[$prefix];
+			$idx = array_search( $prefix, $this->map[$otherKey] );
+			array_splice( $this->map[$otherKey], $idx, 1 );
+			if ( count( $this->map[$otherKey] ) === 0 ) {
+				unset( $this->map[$otherKey] );
+			}
 		}
+		if ( !array_key_exists( $key, $this->map ) ) {
+			$this->map[$key] = [];
+		}
+		$this->map[$key][] = $prefix;
+		$this->reverseMap[$prefix] = $key;
 	}
 
 	/**
@@ -108,15 +124,20 @@ class NamespacePrefixMap {
 		?string $namespace,
 		?string $preferredPrefix
 	) : ?string {
-		$last = null;
-		$candidatesList = $this->map[self::makeKey( $namespace )] ?? [];
-		foreach ( $candidatesList as $prefix ) {
-			$last = $prefix;
-			if ( $prefix === $preferredPrefix ) {
-				break;
-			}
+		$key = self::makeKey( $namespace );
+		if (
+			$preferredPrefix !== null &&
+			( $this->reverseMap[$preferredPrefix] ?? null ) === $key
+		) {
+			return $preferredPrefix;
 		}
-		return $last;
+		if ( array_key_exists( $key, $this->map ) ) {
+			// return last prefix in list
+			$candidatesList = $this->map[$key];
+			return $candidatesList[count( $candidatesList ) - 1];
+		} else {
+			return null; // not found!
+		}
 	}
 
 	/**
@@ -126,7 +147,9 @@ class NamespacePrefixMap {
 	 */
 	public function clone() : NamespacePrefixMap {
 		$c = new NamespacePrefixMap();
-		$c->map = $this->map; // PHP handles the deep array copy for us
+		// Let PHP handle the deep array copy for us
+		$c->map = $this->map;
+		$c->reverseMap = $this->reverseMap;
 		return $c;
 	}
 
@@ -141,9 +164,15 @@ class NamespacePrefixMap {
 	public function generatePrefix(
 		?string $newNamespace, int &$prefixIndex
 	) {
-		$generatedPrefix = 'ns' . $prefixIndex;
-		$prefixIndex += 1;
-		$this->add( $newNamespace, $generatedPrefix );
-		return $generatedPrefix;
+		while ( true ) {
+			$generatedPrefix = 'ns' . $prefixIndex;
+			$prefixIndex += 1;
+			if ( array_key_exists( $generatedPrefix, $this->reverseMap ) ) {
+				// https://github.com/w3c/DOM-Parsing/issues/44
+				continue;
+			}
+			$this->add( $newNamespace, $generatedPrefix );
+			return $generatedPrefix;
+		}
 	}
 }
