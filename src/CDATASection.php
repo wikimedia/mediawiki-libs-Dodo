@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\BadXMLException;
+use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
 class CDATASection extends Text implements \Wikimedia\IDLeDOM\CDATASection {
@@ -26,5 +28,22 @@ class CDATASection extends Text implements \Wikimedia\IDLeDOM\CDATASection {
 	 */
 	public function getNodeName() : string {
 		return "#cdata-section";
+	}
+
+	/** @inheritDoc */
+	public function _xmlSerialize(
+		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
+		bool $requireWellFormed, array &$markup
+	) : void {
+		// See https://github.com/w3c/DOM-Parsing/issues/38
+		$data = $this->getData();
+		if ( $requireWellFormed ) {
+			if ( strpos( $data, ']]>' ) !== false ) {
+				throw new BadXMLException();
+			}
+		}
+		$markup[] = '<![CDATA[';
+		$markup[] = $this->getData();
+		$markup[] = ']]>';
 	}
 }

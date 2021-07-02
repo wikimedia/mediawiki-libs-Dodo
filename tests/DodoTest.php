@@ -26,7 +26,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testDodo() {
 		/* Instantiate the nodes */
-		$doc = new Document( null, 'html' );
+		$doc = new Document( null, 'html', 'text/html' );
 
 		$all_elements = $doc->getElementsByTagName( '*' );
 		$this->assertSame( 0, $all_elements->length );

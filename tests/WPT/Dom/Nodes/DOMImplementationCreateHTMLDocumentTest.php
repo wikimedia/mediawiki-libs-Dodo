@@ -1,6 +1,7 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\WPT\Dom\Nodes;
 use Wikimedia\Dodo\Node;
+use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\HTMLHtmlElement;
 use Wikimedia\Dodo\HTMLBodyElement;

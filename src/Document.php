@@ -233,11 +233,13 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @param ?Document $originDoc
 	 * @param string $type
+	 * @param string $contentType
 	 * @param ?string $url
 	 */
 	public function __construct(
 		?Document $originDoc = null,
 		string $type = "xml",
+		string $contentType = 'text/xml',
 		?string $url = null
 	) {
 		parent::__construct( $this );
@@ -249,6 +251,9 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		if ( $type === 'html' ) {
 			$this->_contentType = 'text/html';
 			$this->_typeIsHtml = true;
+		} else {
+			$this->_contentType = $contentType;
+			$this->_typeIsHtml = false;
 		}
 
 		/* DOM-LS: used by the documentURI and URL method */
@@ -280,6 +285,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			$newDoc = new Document(
 				$this,
 				$this->_typeIsHtml ? 'html' : 'xml',
+				$this->_contentType,
 				$this->_URL
 			);
 			$this->_templateDocCache = $newDoc->_templateDocCache = $newDoc;
@@ -463,6 +469,17 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/** @inheritDoc */
 	public function createTextNode( string $data ) : Text {
 		return new Text( $this, $data );
+	}
+
+	/** @inheritDoc */
+	public function createCDATASection( string $data ) : CDATASection {
+		if ( $this->_isHTMLDocument() ) {
+			Util::error( 'NotSupportedError' );
+		}
+		if ( strpos( $data, ']]>' ) !== false ) {
+			Util::error( 'InvalidCharacterError' );
+		}
+		return new CDATASection( $this, $data );
 	}
 
 	/** @inheritDoc */
@@ -836,10 +853,10 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		$shallow = new Document(
 			$this,
 			$this->_typeIsHtml ? 'html' : 'xml',
+			$this->_contentType,
 			$this->_URL
 		);
 		$shallow->_mode = $this->_mode;
-		$shallow->_contentType = $this->_contentType;
 		return $shallow;
 	}
 
@@ -870,6 +887,10 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 				throw new BadXMLException();
 			}
 		}
+		// Emitting the XML declaration is not yet in the spec:
+		// https://github.com/w3c/DOM-Parsing/issues/50
+		$markup[] = '<?xml version="1.0" encoding="UTF-8"?>';
+
 		for ( $child = $this->getFirstChild(); $child !== null; $child = $child->getNextSibling() ) {
 			$child->_xmlSerialize(
 				$namespace, $prefixMap, $prefixIndex, $requireWellFormed,

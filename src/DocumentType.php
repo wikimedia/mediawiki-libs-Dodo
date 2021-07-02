@@ -141,6 +141,7 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 			if ( $this->_publicId === '' ) {
 				$markup[] = " SYSTEM";
 			}
+			// https://github.com/w3c/DOM-Parsing/issues/71
 			$quote = strpos( $this->_systemId, '"' ) === false ? '"' : "'";
 			$markup[] = ' ' . $quote . $this->_systemId . $quote;
 		}

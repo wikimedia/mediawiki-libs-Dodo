@@ -1,5 +1,6 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\WPT\Dom\Nodes;
+use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DocumentType;
 use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/DocumentType-literal.html.

@@ -482,6 +482,7 @@ class WhatWG {
 		case Node::DOCUMENT_TYPE_NODE:
 		case Node::ELEMENT_NODE:
 		case Node::TEXT_NODE:
+		case Node::CDATA_SECTION_NODE: // also a Text node
 		case Node::PROCESSING_INSTRUCTION_NODE:
 		case Node::COMMENT_NODE:
 			break;
@@ -492,10 +493,11 @@ class WhatWG {
 		/*
 		 * DOM-LS #5. If either:
 		 *      -node is a Text and parent is a Document
+		 *          (CDATA counts as a Text node)
 		 *      -node is a DocumentType and parent is not a Document
 		 * throw a HierarchyRequestError
 		 */
-		if ( ( $node->getNodeType() === Node::TEXT_NODE && $parent->getNodeType() === Node::DOCUMENT_NODE )
+		if ( ( ( $node->getNodeType() === Node::TEXT_NODE || $node->getNodeType() === Node::CDATA_SECTION_NODE ) && $parent->getNodeType() === Node::DOCUMENT_NODE )
 			 || ( $node->getNodeType() === Node::DOCUMENT_TYPE_NODE && $parent->getNodeType() !== Node::DOCUMENT_NODE ) ) {
 			Util::error( "HierarchyRequestError" );
 		}
@@ -519,7 +521,7 @@ class WhatWG {
 			$count_element = 0;
 
 			for ( $n = $node->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-				if ( $n->getNodeType() === Node::TEXT_NODE ) {
+				if ( $n->getNodeType() === Node::TEXT_NODE || $n->getNodeType() === Node::CDATA_SECTION_NODE ) {
 					$count_text++;
 				}
 				if ( $n->getNodeType() === Node::ELEMENT_NODE ) {
@@ -668,6 +670,7 @@ class WhatWG {
 		case Node::DOCUMENT_TYPE_NODE:
 		case Node::ELEMENT_NODE:
 		case Node::TEXT_NODE:
+		case Node::CDATA_SECTION_NODE: // this is also a Text node
 		case Node::PROCESSING_INSTRUCTION_NODE:
 		case Node::COMMENT_NODE:
 			break;
@@ -678,10 +681,11 @@ class WhatWG {
 		/*
 		 * DOM-LS #5. If either:
 		 *      -node is a Text and parent is a Document
+		 *          (CDATA counts as a Text node)
 		 *      -node is a DocumentType and parent is not a Document
 		 * throw a HierarchyRequestError
 		 */
-		if ( ( $node->getNodeType() === Node::TEXT_NODE && $parent->getNodeType() === Node::DOCUMENT_NODE )
+		if ( ( ( $node->getNodeType() === Node::TEXT_NODE || $node->getNodeType() === Node::CDATA_SECTION_NODE ) && $parent->getNodeType() === Node::DOCUMENT_NODE )
 			 || ( $node->getNodeType() === Node::DOCUMENT_TYPE_NODE && $parent->getNodeType() !== Node::DOCUMENT_NODE ) ) {
 			Util::error( "HierarchyRequestError" );
 		}
@@ -705,7 +709,7 @@ class WhatWG {
 			$count_element = 0;
 
 			for ( $n = $node->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-				if ( $n->getNodeType() === Node::TEXT_NODE ) {
+				if ( $n->getNodeType() === Node::TEXT_NODE || $n->getNodeType() === Node::CDATA_SECTION_NODE ) {
 					$count_text++;
 				}
 				if ( $n->getNodeType() === Node::ELEMENT_NODE ) {
@@ -968,7 +972,12 @@ class WhatWG {
 			$markup[] = $qualifiedName;
 		} else {
 			$prefix = $el->getPrefix();
-			$candidatePrefix = $map->retrievePreferredPrefix( $ns, $prefix );
+			if ( $prefix === null && $ns === $localDefaultNamespace ) {
+				// https://github.com/w3c/DOM-Parsing/issues/52
+				$candidatePrefix = null;
+			} else {
+				$candidatePrefix = $map->retrievePreferredPrefix( $ns, $prefix );
+			}
 			if ( $prefix === 'xmlns' ) {
 				if ( $requireWellFormed ) {
 					throw new BadXMLException();
@@ -1007,7 +1016,8 @@ class WhatWG {
 				}
 			} elseif (
 				$localDefaultNamespace === null ||
-				$localDefaultNamespace !== $ns
+				// https://github.com/w3c/DOM-Parsing/issues/47
+				$localDefaultNamespace !== ( $ns ?? '' )
 			) {
 				// The namespace still needs to be serialized, but there's
 				// no prefix or candidate prefix available.  Use the default
@@ -1114,7 +1124,11 @@ class WhatWG {
 						continue;
 					}
 					if ( $attr->getPrefix() === null ) {
-						if ( $ignoreNamespaceDefinitionAttribute ) {
+						if (
+							$ignoreNamespaceDefinitionAttribute &&
+							// https://github.com/w3c/DOM-Parsing/issues/47
+							( $attr->getValue() ?? '' ) !== ( $attr->getOwnerElement()->getNamespaceURI() ?? '' )
+						) {
 							continue;
 						}
 					} elseif (
@@ -1131,14 +1145,25 @@ class WhatWG {
 						if ( $attr->getValue() === Util::NAMESPACE_XMLNS ) {
 							throw new BadXMLException();
 						}
-						if ( $attr->getValue() === '' ) {
+						if (
+							// https://github.com/w3c/DOM-Parsing/issues/48
+							$attr->getPrefix() !== null &&
+							$attr->getValue() === ''
+						) {
 							throw new BadXMLException();
 						}
 					}
 					if ( $attr->getPrefix() === 'xmlns' ) {
 						$candidatePrefix = 'xmlns';
 					}
-				} else {
+				} elseif ( $candidatePrefix === null ) {
+					// The above condition is not (yet) in the spec.
+					// Firefox also tries to preserve the attributes
+					// existing prefix (if any) in this case, which isn't
+					// (yet?) reflected in the spec or the test case.
+					// See discussion at
+					// https://github.com/w3c/DOM-Parsing/issues/29
+
 					// attribute namespace is not the XMLNS namespace
 					$candidatePrefix = $map->generatePrefix(
 						$attrNs, $prefixIndex
@@ -1197,6 +1222,11 @@ class WhatWG {
 				'"' => '&quot;',
 				'<' => '&lt;',
 				'>' => '&gt;',
+				// These aren't in the spec, but should be:
+				// https://github.com/w3c/DOM-Parsing/issues/59
+				"\t" => '&#x9;',
+				"\n" => '&#xA;',
+				"\r" => '&#xD;',
 			]
 		);
 	}

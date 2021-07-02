@@ -27,10 +27,16 @@
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentFragmentGetElementByIdTest
     files: /tests/WPT/Dom/Nodes/DocumentFragmentGetElementByIdTest.php
 'Failed asserting that two strings are equal.':
-    _total: 1
+    _total: 3
     _comment: ''
-    testcases: Wikimedia\Dodo\Tests\WPT\Domparsing\DOMParserParseFromStringHtmlTest
-    files: /tests/WPT/Domparsing/DOMParserParseFromStringHtmlTest.php
+    testcases: |-
+        Wikimedia\Dodo\Tests\DodoTest
+        Wikimedia\Dodo\Tests\WPT\Domparsing\DOMParserParseFromStringHtmlTest
+        Wikimedia\Dodo\Tests\WPT\Domparsing\XMLSerializerSerializeToStringTest
+    files: |-
+        /tests/DodoTest.php
+        /tests/WPT/Domparsing/DOMParserParseFromStringHtmlTest.php
+        /tests/WPT/Domparsing/XMLSerializerSerializeToStringTest.php
 'HTMLCollection-Failed asserting that false is true.':
     _total: 1
     _comment: ''

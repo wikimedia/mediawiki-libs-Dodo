@@ -287,7 +287,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 
 		$oldAttr = $this->getNamedItemNS( $attr->getNamespaceURI(), $attr->getLocalName() );
 
-		if ( $oldAttr == $attr ) {
+		if ( $oldAttr === $attr ) {
 			return $attr;
 		}
 

@@ -433,7 +433,9 @@ class ParserTask extends BaseTask {
 	 * Removes disparity after js2php.
 	 */
 	protected function preProcessWPTTest() : void {
-		$find_replace = [ '$document' => '$this->doc',
+		$find_replace = [
+			'$document::URL' => '$this->doc->URL',
+			'$document' => '$this->doc',
 			'= create(' => '= $this->create(',
 			'$TypeError' => '$this->type_error',
 			'Object::keys( $testExtensions )->' => '$testExtensions->',
@@ -722,6 +724,10 @@ class ParserTask extends BaseTask {
 						'myCloneContents',
 						'nestRangeInOuterContainer',
 						'restoreIframe',
+						'createXmlDoc',
+						'parse',
+						'serialize',
+						'checkMetadata',
 						// These are helper functions defined in classes
 						// which unfortunately begin with 'test' and so
 						// PHPUnit will think that they are standalone
@@ -872,6 +878,7 @@ class ParserTask extends BaseTask {
 			'HTMLElement' => 'Wikimedia\Dodo\HTMLElement',
 			'NodeFilter' => 'Wikimedia\Dodo\NodeFilter',
 			'new Document' => 'Wikimedia\Dodo\Document',
+			'instanceof Document' => 'Wikimedia\Dodo\Document',
 			'XMLDocument' => 'Wikimedia\IDLeDOM\XMLDocument',
 			'Element' => 'Wikimedia\Dodo\Element',
 			'Attr' => 'Wikimedia\Dodo\Attr',
@@ -897,18 +904,23 @@ class ParserTask extends BaseTask {
 			'DOMException' => 'Wikimedia\Dodo\DOMException',
 			'DOMImplementation' => 'Wikimedia\Dodo\DOMImplementation',
 			'DOMParser' => 'Wikimedia\Dodo\DOMParser',
+			'XMLSerializer' => 'Wikimedia\Dodo\XMLSerializer',
 			'Range' => 'Wikimedia\Dodo\Range',
 			'AbstractRange' => 'Wikimedia\Dodo\AbstractRange',
 			'StaticRange' => 'Wikimedia\Dodo\StaticRange',
 			'Common' => 'Wikimedia\Dodo\Tests\Harness\Utils\Common',
 		];
 
+		$notAdded = [];
 		foreach ( $list_ns as $use => $namespace ) {
 			if (
 				strpos( $this->test, $use ) !== false ||
 				( $extraUses[$use] ?? false ) !== false
 			) {
-				$stmts[] = $this->factory->use( $namespace );
+				if ( $notAdded[$namespace] ?? true ) {
+					$stmts[] = $this->factory->use( $namespace );
+					$notAdded[$namespace] = false;
+				}
 			}
 		}
 

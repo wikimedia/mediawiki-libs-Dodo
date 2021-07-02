@@ -1,5 +1,6 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\WPT\Domparsing;
+use Wikimedia\Dodo\Document;
 use Wikimedia\IDLeDOM\XMLDocument;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\URL;
@@ -11,9 +12,9 @@ class DOMParserParseFromStringXmlTest extends WPTTestHarness
     public function checkMetadata($doc, $contentType)
     {
         $this->wptAssertTrue($doc instanceof Document, 'Should be Document');
-        $this->wptAssertEquals($doc->URL, $this->doc::URL, 'URL');
-        $this->wptAssertEquals($doc->documentURI, $this->doc::URL, 'documentURI');
-        $this->wptAssertEquals($doc->baseURI, $this->doc::URL, 'baseURI');
+        $this->wptAssertEquals($doc->URL, $this->doc->URL, 'URL');
+        $this->wptAssertEquals($doc->documentURI, $this->doc->URL, 'documentURI');
+        $this->wptAssertEquals($doc->baseURI, $this->doc->URL, 'baseURI');
         $this->wptAssertEquals($doc->characterSet, 'UTF-8', 'characterSet');
         $this->wptAssertEquals($doc->charset, 'UTF-8', 'charset');
         $this->wptAssertEquals($doc->inputEncoding, 'UTF-8', 'inputEncoding');
@@ -29,7 +30,7 @@ class DOMParserParseFromStringXmlTest extends WPTTestHarness
                 $p = new DOMParser();
                 $doc = $p->parseFromString('<foo/>', $type);
                 $this->wptAssertTrue($doc instanceof Document, 'Should be Document');
-                checkMetadata($doc, $type);
+                $this->checkMetadata($doc, $type);
                 $this->wptAssertEquals($doc->documentElement->namespaceURI, null);
                 $this->wptAssertEquals($doc->documentElement->localName, 'foo');
                 $this->wptAssertEquals($doc->documentElement->tagName, 'foo');
@@ -42,7 +43,7 @@ class DOMParserParseFromStringXmlTest extends WPTTestHarness
             $this->assertTest(function () use(&$type) {
                 $p = new DOMParser();
                 $doc = $p->parseFromString('<foo>', $type);
-                checkMetadata($doc, $type);
+                $this->checkMetadata($doc, $type);
                 $this->wptAssertEquals($doc->documentElement->namespaceURI, 'http://www.mozilla.org/newlayout/xml/parsererror.xml');
                 $this->wptAssertEquals($doc->documentElement->localName, 'parsererror');
                 $this->wptAssertEquals($doc->documentElement->tagName, 'parsererror');

@@ -108,9 +108,6 @@ class NamespacePrefixMap {
 		?string $namespace,
 		?string $preferredPrefix
 	) : ?string {
-		if ( $preferredPrefix === null ) {
-			return null;
-		}
 		$last = null;
 		$candidatesList = $this->map[self::makeKey( $namespace )] ?? [];
 		foreach ( $candidatesList as $prefix ) {
@@ -149,5 +146,4 @@ class NamespacePrefixMap {
 		$this->add( $newNamespace, $generatedPrefix );
 		return $generatedPrefix;
 	}
-
 }

@@ -288,11 +288,6 @@
     _comment: ''
     testcases: testHcNodereplacechildnewchildexists
     files: /tests/W3C/Level1/Core/HcNodereplacechildnewchildexistsTest.php
-'Error: Call to undefined function Wikimedia\Dodo\Tests\WPT\Domparsing\createXmlDoc()':
-    _total: 1
-    _comment: ''
-    testcases: testXMLSerializerSerializeToString
-    files: /tests/WPT/Domparsing/XMLSerializerSerializeToStringTest.php
 'Error: Call to undefined function Wikimedia\Dodo\Tests\WPT\Domparsing\testIsChild()':
     _total: 1
     _comment: ''
@@ -459,6 +454,11 @@
     _comment: ''
     testcases: testDocumentConstructor
     files: /tests/WPT/Dom/Nodes/DocumentConstructorTest.php
+'Undefined property via __get(): readyState in /src/Document.php on line 69':
+    _total: 1
+    _comment: ''
+    testcases: testXmldomparser
+    files: /tests/WPT/Domparsing/XmldomparserTest.php
 'Undefined property via __get(): role in /tests/WPT/Dom/Nodes/AriaAttributeReflectionTentativeTest.php on line 15':
     _total: 1
     _comment: ''
@@ -642,22 +642,6 @@
     _comment: ''
     testcases: testDocumentCreateTextNode
     files: /tests/WPT/Dom/Nodes/DocumentCreateTextNodeTest.php
-'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\DOMParser::parseFromString( ''application/xhtml+xml'' )':
-    _total: 1
-    _comment: ''
-    testcases: testDOMParserParseFromStringXmlDoctype
-    files: /tests/WPT/Domparsing/DOMParserParseFromStringXmlDoctypeTest.php
-'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\DOMParser::parseFromString( ''text/xml'' )':
-    _total: 3
-    _comment: ''
-    testcases: |-
-        testDOMParserParseFromStringXml
-        testNodeNormalize
-        testXmldomparser
-    files: |-
-        /tests/WPT/Dom/Nodes/NodeNormalizeTest.php
-        /tests/WPT/Domparsing/DOMParserParseFromStringXmlTest.php
-        /tests/WPT/Domparsing/XmldomparserTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::_createElementNS':
     _total: 7
     _comment: ''
@@ -682,11 +666,6 @@
     _comment: ''
     testcases: testAppendOnDocument
     files: /tests/WPT/Dom/Nodes/AppendOnDocumentTest.php
-'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::createCDATASection':
-    _total: 1
-    _comment: ''
-    testcases: testDocumentCreateCDATASection
-    files: /tests/WPT/Dom/Nodes/DocumentCreateCDATASectionTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::createTreeWalker':
     _total: 7
     _comment: ''
@@ -1129,6 +1108,11 @@
         /tests/WPT/Dom/Collections/HTMLCollectionEmptyNameTest.php
         /tests/WPT/Dom/Collections/HTMLCollectionIteratorTest.php
         /tests/WPT/Dom/Collections/HTMLCollectionOwnPropsTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Node::getBaseURI':
+    _total: 1
+    _comment: ''
+    testcases: testDOMParserParseFromStringXml
+    files: /tests/WPT/Domparsing/DOMParserParseFromStringXmlTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Text::getWholeText':
     _total: 1
     _comment: ''
