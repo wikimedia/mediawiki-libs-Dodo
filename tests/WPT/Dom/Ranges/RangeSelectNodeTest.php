@@ -84,6 +84,6 @@ class RangeSelectNodeTest extends WPTTestHarness
             $this->testTree($this->window[$otherTests[$i]], $otherTests[$i]);
         }
         $this->generateTests($testSelectNode, $tests);
-        $testDiv->style->display = 'none';
+        $this->getCommon()->testDiv->style->display = 'none';
     }
 }

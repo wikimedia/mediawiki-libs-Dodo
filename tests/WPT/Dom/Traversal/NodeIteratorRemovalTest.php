@@ -9,8 +9,8 @@ class NodeIteratorRemovalTest extends WPTTestHarness
     public function testNodeIteratorRemoval()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/traversal/NodeIterator-removal.html');
-        for ($i = 0; $i < count($this->testNodes); $i++) {
-            $node = eval($this->testNodes[$i]);
+        for ($i = 0; $i < count($this->getCommon()->testNodes); $i++) {
+            $node = $this->wptEvalNode($this->getCommon()->testNodes[$i]);
             if (!$node->parentNode) {
                 // Nothing to test
                 continue;
@@ -20,8 +20,8 @@ class NodeIteratorRemovalTest extends WPTTestHarness
                 $descs = [];
                 $expectedReferenceNodes = [];
                 $expectedPointers = [];
-                for ($j = 0; $j < count($this->testNodes); $j++) {
-                    $root = eval($this->testNodes[$j]);
+                for ($j = 0; $j < count($this->getCommon()->testNodes); $j++) {
+                    $root = $this->wptEvalNode($this->getCommon()->testNodes[$j]);
                     // Add all distinct iterators with this root, calling nextNode()
                     // repeatedly until it winds up with the same iterator.
                     for ($k = 0; true; $k++) {
@@ -33,7 +33,7 @@ class NodeIteratorRemovalTest extends WPTTestHarness
                             break;
                         } else {
                             $iters[] = $iter;
-                            $descs[] = 'document.createNodeIterator(' . $this->testNodes[$j] . ') advanced ' . $k . ' times';
+                            $descs[] = 'document.createNodeIterator(' . $this->getCommon()->testNodes[$j] . ') advanced ' . $k . ' times';
                             $expectedReferenceNodes[] = $iter->referenceNode;
                             $expectedPointers[] = $iter->pointerBeforeReferenceNode;
                             $idx = count($iters) - 1;
@@ -78,8 +78,8 @@ class NodeIteratorRemovalTest extends WPTTestHarness
                     $this->wptAssertEquals($iter->pointerBeforeReferenceNode, $expectedPointers[$j], '.pointerBeforeReferenceNode of ' . $descs[$j]);
                 }
                 $oldParent->insertBefore($node, $oldSibling);
-            }, 'Test removing node ' . $this->testNodes[$i]);
+            }, 'Test removing node ' . $this->getCommon()->testNodes[$i]);
         }
-        $testDiv->style->display = 'none';
+        $this->getCommon()->testDiv->style->display = 'none';
     }
 }

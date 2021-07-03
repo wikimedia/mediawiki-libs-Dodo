@@ -134,24 +134,24 @@ class RangeSetTest extends WPTTestHarness
         $endAfterTests = [];
         // Don't want to eval() each point a bazillion times
         $testPointsCached = $this->arrayMap($testPoints, $eval);
-        $this->testNodesCached = $this->arrayMap($this->testNodesShort, $eval);
-        for ($i = 0; $i < count($this->testRangesShort); $i++) {
-            $endpoints = eval($this->testRangesShort[$i]);
+        $this->getCommon()->testNodesCached = $this->arrayMap($this->getCommon()->testNodesShort, $eval);
+        for ($i = 0; $i < count($this->getCommon()->testRangesShort); $i++) {
+            $endpoints = $this->wptEvalNode($this->getCommon()->testRangesShort[$i]);
             $range = null;
             $this->assertTest(function () use(&$endpoints) {
                 $range = Common::ownerDocument($endpoints[0])->createRange();
                 $range->setStart($endpoints[0], $endpoints[1]);
                 $range->setEnd($endpoints[2], $endpoints[3]);
-            }, 'Set up range ' . $i . ' ' . $this->testRangesShort[$i]);
+            }, 'Set up range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i]);
             for ($j = 0; $j < count($testPoints); $j++) {
-                $startTests[] = ['setStart() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
-                $endTests[] = ['setEnd() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
+                $startTests[] = ['setStart() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
+                $endTests[] = ['setEnd() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
             }
-            for ($j = 0; $j < count($this->testNodesShort); $j++) {
-                $startBeforeTests[] = ['setStartBefore() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
-                $startAfterTests[] = ['setStartAfter() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
-                $endBeforeTests[] = ['setEndBefore() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
-                $endAfterTests[] = ['setEndAfter() with range ' . $i . ' ' . $this->testRangesShort[$i] . ', node ' . $j . ' ' . $this->testNodesShort[$j], $range, $this->testNodesCached[$j]];
+            for ($j = 0; $j < count($this->getCommon()->testNodesShort); $j++) {
+                $startBeforeTests[] = ['setStartBefore() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', node ' . $j . ' ' . $this->getCommon()->testNodesShort[$j], $range, $this->getCommon()->testNodesCached[$j]];
+                $startAfterTests[] = ['setStartAfter() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', node ' . $j . ' ' . $this->getCommon()->testNodesShort[$j], $range, $this->getCommon()->testNodesCached[$j]];
+                $endBeforeTests[] = ['setEndBefore() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', node ' . $j . ' ' . $this->getCommon()->testNodesShort[$j], $range, $this->getCommon()->testNodesCached[$j]];
+                $endAfterTests[] = ['setEndAfter() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', node ' . $j . ' ' . $this->getCommon()->testNodesShort[$j], $range, $this->getCommon()->testNodesCached[$j]];
             }
         }
         $this->generateTests($testSetStart, $startTests);
@@ -160,6 +160,6 @@ class RangeSetTest extends WPTTestHarness
         $this->generateTests($testSetStartAfter, $startAfterTests);
         $this->generateTests($testSetEndBefore, $endBeforeTests);
         $this->generateTests($testSetEndAfter, $endAfterTests);
-        $testDiv->style->display = 'none';
+        $this->getCommon()->testDiv->style->display = 'none';
     }
 }

@@ -13,13 +13,13 @@ class RangeStringifierTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-stringifier.html');
         $this->assertTest(function () {
             $r = new Range();
-            $testDiv = $this->doc->getElementById('test');
-            $this->assertTest(function () use(&$r, &$testDiv) {
-                $r->selectNodeContents($testDiv);
+            $this->getCommon()->testDiv = $this->doc->getElementById('test');
+            $this->assertTest(function () use(&$r) {
+                $r->selectNodeContents($this->getCommon()->testDiv);
                 $this->wptAssertEquals($r->collapsed, false);
-                $this->wptAssertEquals($r, $testDiv->textContent);
+                $this->wptAssertEquals($r, $this->getCommon()->testDiv->textContent);
             }, 'Node contents of a single div');
-            $textNode = $testDiv->childNodes[0];
+            $textNode = $this->getCommon()->testDiv->childNodes[0];
             $this->assertTest(function () use(&$r, &$textNode) {
                 $r->setStart($textNode, 5);
                 $r->setEnd($textNode, 7);
@@ -27,8 +27,8 @@ class RangeStringifierTest extends WPTTestHarness
                 $this->wptAssertEquals($r, 'di');
             }, 'Text node with offsets');
             $anotherDiv = $this->doc->getElementById('another');
-            $this->assertTest(function () use(&$r, &$testDiv, &$anotherDiv) {
-                $r->setStart($testDiv, 0);
+            $this->assertTest(function () use(&$r, &$anotherDiv) {
+                $r->setStart($this->getCommon()->testDiv, 0);
                 $r->setEnd($anotherDiv, 0);
                 $this->wptAssertEquals($r, "Test div\n");
             }, 'Two nodes, each with a text node');

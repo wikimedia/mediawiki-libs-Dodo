@@ -7,10 +7,12 @@ declare( strict_types = 1 );
 namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\NamespacePrefixMap;
+use Wikimedia\Dodo\Internal\UnimplementedException;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Internal\WhatWG;
 use Wikimedia\IDLeDOM\ChildNode as IChildNode;
+use Wikimedia\IDLeDOM\GetRootNodeOptions;
 use Wikimedia\IDLeDOM\Node as INode;
 
 /**
@@ -265,6 +267,33 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			return $this->_parentNode;
 		}
 		return null;
+	}
+
+	/**
+	 * Return this' shadow-including root if options['composed'] is true;
+	 * otherwise return this' root.  NOTE that the root of a node
+	 * is not (necessarily) the ownerDocument or node document
+	 * of the node!
+	 * @see https://dom.spec.whatwg.org/#dom-node-getrootnode
+	 * @see https://dom.spec.whatwg.org/#concept-tree-root
+	 * @param GetRootNodeOptions|associative-array|null $options
+	 * @return \Wikimedia\IDLeDOM\Node
+	 */
+	public function getRootNode( /* ?mixed */ $options = null ) {
+		$composed = false;
+		if ( $options !== null ) {
+			$options = GetRootNodeOptions::cast( $options );
+			$composed = $options->getComposed();
+		}
+		if ( $composed ) {
+			throw new UnimplementedException( __METHOD__ . ' (composed)' );
+		}
+		$root = $this;
+		while ( $root->getParentNode() !== null ) {
+			$root = $root->getParentNode();
+			'@phan-var Node $root'; // guaranteed to be non-null
+		}
+		return $root;
 	}
 
 	/** @inheritDoc */
@@ -567,7 +596,9 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		'@phan-var Node $that'; // @var Node $that
 		/*
 		 * CAUTION
-		 * The order of these args matters
+		 * These arguments seem backwards, but that's how the
+		 * specification defines it.
+		 * https://dom.spec.whatwg.org/#dom-node-comparedocumentposition
 		 */
 		return WhatWG::compare_document_position( $that, $this );
 	}

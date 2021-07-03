@@ -207,7 +207,7 @@ class RangeCloneContentsTest extends WPTTestHarness
         }
         $iframe->getOwnerDocument()->appendChild($referenceDoc->documentElement->cloneNode(true));
         $iframe->contentWindow->setupRangeTests();
-        $iframe->contentWindow->testRangeInput = $testRanges[$i];
+        $iframe->contentWindow->testRangeInput = $this->getCommon()->testRanges[$i];
         $iframe->contentWindow->run();
     }
     public function testCloneContents($i)
@@ -334,7 +334,7 @@ class RangeCloneContentsTest extends WPTTestHarness
     public function testRangeCloneContents()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-cloneContents.html');
-        $testDiv->parentNode->removeChild($testDiv);
+        $this->getCommon()->testDiv->parentNode->removeChild($this->getCommon()->testDiv);
         $actualIframe = $this->doc->createElement('iframe');
         $actualIframe->style->display = 'none';
         $this->doc->body->appendChild($actualIframe);
@@ -348,7 +348,7 @@ class RangeCloneContentsTest extends WPTTestHarness
             $this->wptAssertArrayEquals($range->cloneContents()->childNodes, []);
         }, 'Range.detach()');
         $iStart = 0;
-        $iStop = count($testRanges);
+        $iStop = count($this->getCommon()->testRanges);
         if (preg_match('/subtest=[0-9]+/', $location->search)) {
             $matches = preg_match('/subtest=([0-9]+)/', $location->search, $FIXME);
             $iStart = intval($matches[1]);
@@ -358,9 +358,9 @@ class RangeCloneContentsTest extends WPTTestHarness
         $positionTests = [];
         $fragTests = [];
         for ($i = $iStart; $i < $iStop; $i++) {
-            $domTests[$i] = $this->asyncTest('Resulting DOM for range ' . $i . ' ' . $testRanges[$i]);
-            $positionTests[$i] = $this->asyncTest('Resulting cursor position for range ' . $i . ' ' . $testRanges[$i]);
-            $fragTests[$i] = $this->asyncTest('Returned fragment for range ' . $i . ' ' . $testRanges[$i]);
+            $domTests[$i] = $this->asyncTest('Resulting DOM for range ' . $i . ' ' . $this->getCommon()->testRanges[$i]);
+            $positionTests[$i] = $this->asyncTest('Resulting cursor position for range ' . $i . ' ' . $this->getCommon()->testRanges[$i]);
+            $fragTests[$i] = $this->asyncTest('Returned fragment for range ' . $i . ' ' . $this->getCommon()->testRanges[$i]);
         }
         $referenceDoc = $this->doc->implementation->createHTMLDocument('');
         $referenceDoc->removeChild($referenceDoc->documentElement);

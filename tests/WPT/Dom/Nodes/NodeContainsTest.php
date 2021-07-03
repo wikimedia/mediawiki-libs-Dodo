@@ -8,13 +8,13 @@ class NodeContainsTest extends WPTTestHarness
     public function testNodeContains()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-contains.html');
-        foreach ($this->testNodes as $referenceName) {
-            $reference = eval($referenceName);
+        foreach ($this->getCommon()->testNodes as $referenceName) {
+            $reference = $this->wptEvalNode($referenceName);
             $this->assertTest(function () use(&$reference) {
                 $this->wptAssertFalse($reference->contains(null));
             }, $referenceName . '.contains(null)');
-            foreach ($this->testNodes as $otherName) {
-                $other = eval($otherName);
+            foreach ($this->getCommon()->testNodes as $otherName) {
+                $other = $this->wptEvalNode($otherName);
                 $this->assertTest(function () use(&$other, &$reference) {
                     $ancestor = $other;
                     while ($ancestor && $ancestor !== $reference) {
@@ -28,6 +28,6 @@ class NodeContainsTest extends WPTTestHarness
                 }, $referenceName . '.contains(' . $otherName . ')');
             }
         }
-        $testDiv->parentNode->removeChild($testDiv);
+        $this->getCommon()->testDiv->parentNode->removeChild($this->getCommon()->testDiv);
     }
 }

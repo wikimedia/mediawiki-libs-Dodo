@@ -32,7 +32,7 @@ class Common {
 	// all the variables before use to make sure they can be reused.
 
 	/** @var Document */
-	public $doc = null;
+	public $document = null;
 	/** @var Element */
 	public $testDiv = null;
 	/** @var Element[] */
@@ -109,14 +109,14 @@ class Common {
 	 * @param Document $doc
 	 */
 	public function __construct( $doc ) {
-		$this->doc = $doc;
+		$this->document = $doc;
 	}
 
 	/**
 	 * Set up some shared state for range tests.
 	 */
 	public function setupRangeTests() {
-		$document = $this->doc;
+		$document = $this->document;
 		$this->testDiv = $document->querySelector( '#test' );
 		if ( $this->testDiv ) {
 			$this->testDiv->parentNode->removeChild( $this->testDiv );
@@ -246,7 +246,8 @@ class Common {
 		);
 		$this->foreignDoc->body->appendChild( $this->foreignTextNode );
 
-		$doctype = $document->doctype;
+		$this->doctype = $document->doctype;
+		Assert::assertNotNull( $this->doctype, "this shouldn't be null" );
 		$this->foreignDoctype = $this->foreignDoc->doctype;
 
 		$this->testRangesShort = [ // Various ranges within the text node children of different

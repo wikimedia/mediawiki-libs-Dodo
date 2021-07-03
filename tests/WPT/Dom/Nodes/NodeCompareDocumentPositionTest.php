@@ -9,10 +9,10 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
     public function testNodeCompareDocumentPosition()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-compareDocumentPosition.html');
-        foreach ($this->testNodes as $referenceName) {
-            $reference = eval($referenceName);
-            foreach ($this->testNodes as $otherName) {
-                $other = eval($otherName);
+        foreach ($this->getCommon()->testNodes as $referenceName) {
+            $reference = $this->wptEvalNode($referenceName);
+            foreach ($this->getCommon()->testNodes as $otherName) {
+                $other = $this->wptEvalNode($otherName);
                 $this->assertTest(function () use(&$reference, &$other) {
                     $result = $reference->compareDocumentPosition($other);
                     // "If other and reference are the same object, return zero and
@@ -69,6 +69,6 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
                 }, $referenceName . '.compareDocumentPosition(' . $otherName . ')');
             }
         }
-        $testDiv->parentNode->removeChild($testDiv);
+        $this->getCommon()->testDiv->parentNode->removeChild($this->getCommon()->testDiv);
     }
 }

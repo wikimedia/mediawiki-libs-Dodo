@@ -39,12 +39,12 @@ class RangeCollapseTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-collapse.html');
         $tests = [];
-        for ($i = 0; $i < count($testRanges); $i++) {
-            $tests[] = ['Range ' . $i . ' ' . $testRanges[$i] . ', toStart true', eval($testRanges[$i]), true];
-            $tests[] = ['Range ' . $i . ' ' . $testRanges[$i] . ', toStart false', eval($testRanges[$i]), false];
-            $tests[] = ['Range ' . $i . ' ' . $testRanges[$i] . ', toStart omitted', eval($testRanges[$i]), null];
+        for ($i = 0; $i < count($this->getCommon()->testRanges); $i++) {
+            $tests[] = ['Range ' . $i . ' ' . $this->getCommon()->testRanges[$i] . ', toStart true', eval($this->getCommon()->testRanges[$i]), true];
+            $tests[] = ['Range ' . $i . ' ' . $this->getCommon()->testRanges[$i] . ', toStart false', eval($this->getCommon()->testRanges[$i]), false];
+            $tests[] = ['Range ' . $i . ' ' . $this->getCommon()->testRanges[$i] . ', toStart omitted', eval($this->getCommon()->testRanges[$i]), null];
         }
         $this->generateTests($testCollapse, $tests);
-        $testDiv->style->display = 'none';
+        $this->getCommon()->testDiv->style->display = 'none';
     }
 }

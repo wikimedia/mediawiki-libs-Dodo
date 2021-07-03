@@ -273,16 +273,16 @@
     _comment: ''
     testcases: testRangeAdoptTest
     files: /tests/WPT/Dom/Ranges/RangeAdoptTestTest.php
+'Error: Call to a member function detach() on null':
+    _total: 1
+    _comment: ''
+    testcases: testRangeCompareBoundaryPoints
+    files: /tests/WPT/Dom/Ranges/RangeCompareBoundaryPointsTest.php
 'Error: Call to a member function getImplementation() on null':
     _total: 1
     _comment: ''
     testcases: testHasFeature01
     files: /tests/W3C/Level1/Html/HasFeature01Test.php
-'Error: Call to a member function lookupNamespaceURI() on null':
-    _total: 1
-    _comment: ''
-    testcases: testNodeLookupNamespaceURI
-    files: /tests/WPT/Dom/Nodes/NodeLookupNamespaceURITest.php
 'Error: Call to protected method Wikimedia\Dodo\Element::_remove() from context ''Wikimedia\Dodo\Internal\WhatWG''':
     _total: 1
     _comment: ''
@@ -389,21 +389,6 @@
     _comment: ''
     testcases: testDocumentAdoptNode
     files: /tests/WPT/Dom/Nodes/DocumentAdoptNodeTest.php
-'Trying to get property ''nodeValue'' of non-object':
-    _total: 1
-    _comment: ''
-    testcases: testNodeNodeValue
-    files: /tests/WPT/Dom/Nodes/NodeNodeValueTest.php
-'Trying to get property ''parentElement'' of non-object':
-    _total: 1
-    _comment: ''
-    testcases: testNodeParentElement
-    files: /tests/WPT/Dom/Nodes/NodeParentElementTest.php
-'Trying to get property ''parentNode'' of non-object':
-    _total: 1
-    _comment: ''
-    testcases: testNodeParentNode
-    files: /tests/WPT/Dom/Nodes/NodeParentNodeTest.php
 'TypeError: Argument 1 passed to Wikimedia\Dodo\CharacterData::appendData() must be of the type string, null given, called in /tests/WPT/Dom/Nodes/CharacterDataAppendDataTest.php on line 34':
     _total: 1
     _comment: ''
@@ -419,6 +404,11 @@
     _comment: ''
     testcases: testDocumentCreateAttribute
     files: /tests/WPT/Dom/Nodes/DocumentCreateAttributeTest.php
+'TypeError: Argument 1 passed to Wikimedia\Dodo\Tests\Harness\WPTTestHarness::asyncTest() must be callable, string given, called in /tests/WPT/Dom/Nodes/NodeParentNodeTest.php on line 38':
+    _total: 1
+    _comment: ''
+    testcases: testNodeParentNode
+    files: /tests/WPT/Dom/Nodes/NodeParentNodeTest.php
 'TypeError: Argument 2 passed to Wikimedia\Dodo\Document::importNode() must be of the type bool, null given, called in /tests/WPT/Dom/Nodes/DocumentImportNodeTest.php on line 31':
     _total: 1
     _comment: ''
@@ -429,6 +419,15 @@
     _comment: ''
     testcases: testNamednodemapSupportedPropertyNames
     files: /tests/WPT/Dom/Collections/NamednodemapSupportedPropertyNamesTest.php
+'Undefined property via __get(): _end in /src/Range.php on line 67':
+    _total: 2
+    _comment: ''
+    testcases: |-
+        testRangeCommonAncestorContainer
+        testRangeIntersectsNode
+    files: |-
+        /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php
+        /tests/WPT/Dom/Ranges/RangeIntersectsNodeTest.php
 'Undefined property via __get(): _start in /src/Range.php on line 300':
     _total: 1
     _comment: ''
@@ -464,6 +463,26 @@
     _comment: ''
     testcases: testAriaAttributeReflectionTentative
     files: /tests/WPT/Dom/Nodes/AriaAttributeReflectionTentativeTest.php
+'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeCloneContentsTest.php on line 339':
+    _total: 1
+    _comment: ''
+    testcases: testRangeCloneContents
+    files: /tests/WPT/Dom/Ranges/RangeCloneContentsTest.php
+'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeDeleteContentsTest.php on line 232':
+    _total: 1
+    _comment: ''
+    testcases: testRangeDeleteContents
+    files: /tests/WPT/Dom/Ranges/RangeDeleteContentsTest.php
+'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeExtractContentsTest.php on line 162':
+    _total: 1
+    _comment: ''
+    testcases: testRangeExtractContents
+    files: /tests/WPT/Dom/Ranges/RangeExtractContentsTest.php
+'Undefined property via __get(): style in /tests/WPT/Dom/Traversal/NodeIteratorRemovalTest.php on line 83':
+    _total: 1
+    _comment: ''
+    testcases: testNodeIteratorRemoval
+    files: /tests/WPT/Dom/Traversal/NodeIteratorRemovalTest.php
 'Undefined property via __get(): style in /tests/WPT/Domparsing/StyleAttributeHtmlTest.php on line 19':
     _total: 1
     _comment: ''
@@ -499,31 +518,6 @@
     _comment: ''
     testcases: testHcNodevalue06
     files: /tests/W3C/Level1/Core/HcNodevalue06Test.php
-'Undefined property: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\NodeCompareDocumentPositionTest::$testNodes':
-    _total: 1
-    _comment: ''
-    testcases: testNodeCompareDocumentPosition
-    files: /tests/WPT/Dom/Nodes/NodeCompareDocumentPositionTest.php
-'Undefined property: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\NodeContainsTest::$testNodes':
-    _total: 1
-    _comment: ''
-    testcases: testNodeContains
-    files: /tests/WPT/Dom/Nodes/NodeContainsTest.php
-'Undefined property: Wikimedia\Dodo\Tests\WPT\Dom\Ranges\RangeCompareBoundaryPointsTest::$testRangesShort':
-    _total: 1
-    _comment: ''
-    testcases: testRangeCompareBoundaryPoints
-    files: /tests/WPT/Dom/Ranges/RangeCompareBoundaryPointsTest.php
-'Undefined property: Wikimedia\Dodo\Tests\WPT\Dom\Ranges\RangeIntersectsNodeTest::$testNodes':
-    _total: 1
-    _comment: ''
-    testcases: testRangeIntersectsNode
-    files: /tests/WPT/Dom/Ranges/RangeIntersectsNodeTest.php
-'Undefined property: Wikimedia\Dodo\Tests\WPT\Dom\Traversal\NodeIteratorRemovalTest::$testNodes':
-    _total: 1
-    _comment: ''
-    testcases: testNodeIteratorRemoval
-    files: /tests/WPT/Dom/Traversal/NodeIteratorRemovalTest.php
 'Undefined variable: aliases':
     _total: 1
     _comment: ''
@@ -589,23 +583,14 @@
         /tests/WPT/Dom/Nodes/DOMImplementationCreateHTMLDocumentTest.php
         /tests/WPT/Dom/Nodes/NodeCloneNodeOnInactiveDocumentCrashTest.php
 'Undefined variable: location':
-    _total: 1
-    _comment: ''
-    testcases: testNodeCloneNodeExternalStylesheetNoBcSub
-    files: /tests/WPT/Dom/Nodes/NodeCloneNodeExternalStylesheetNoBcSubTest.php
-'Undefined variable: testDiv':
-    _total: 5
+    _total: 3
     _comment: ''
     testcases: |-
-        testRangeCloneContents
-        testRangeDeleteContents
-        testRangeExtractContents
+        testNodeCloneNodeExternalStylesheetNoBcSub
         testRangeInsertNode
         testRangeSurroundContents
     files: |-
-        /tests/WPT/Dom/Ranges/RangeCloneContentsTest.php
-        /tests/WPT/Dom/Ranges/RangeDeleteContentsTest.php
-        /tests/WPT/Dom/Ranges/RangeExtractContentsTest.php
+        /tests/WPT/Dom/Nodes/NodeCloneNodeExternalStylesheetNoBcSubTest.php
         /tests/WPT/Dom/Ranges/RangeInsertNodeTest.php
         /tests/WPT/Dom/Ranges/RangeSurroundContentsTest.php
 'Undefined variable: testPoints':
@@ -613,15 +598,6 @@
     _comment: ''
     testcases: testRangeSet
     files: /tests/WPT/Dom/Ranges/RangeSetTest.php
-'Undefined variable: testRanges':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testRangeCloneRange
-        testRangeCollapse
-    files: |-
-        /tests/WPT/Dom/Ranges/RangeCloneRangeTest.php
-        /tests/WPT/Dom/Ranges/RangeCollapseTest.php
 'Use of undefined constant Comment - assumed ''Comment'' (this will throw an Error in a future version of PHP)':
     _total: 1
     _comment: ''
@@ -1118,8 +1094,3 @@
     _comment: ''
     testcases: testTextWholeText
     files: /tests/WPT/Dom/Nodes/TextWholeTextTest.php
-'array_unshift() expects parameter 1 to be array, null given':
-    _total: 1
-    _comment: ''
-    testcases: testRangeCommonAncestorContainer
-    files: /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php

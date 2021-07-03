@@ -66,10 +66,10 @@ class RangeCloneRangeTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-cloneRange.html');
         $tests = [];
-        for ($i = 0; $i < count($testRanges); $i++) {
-            $tests[] = ['Range ' . $i . ' ' . $testRanges[$i], eval($testRanges[$i])];
+        for ($i = 0; $i < count($this->getCommon()->testRanges); $i++) {
+            $tests[] = ['Range ' . $i . ' ' . $this->getCommon()->testRanges[$i], eval($this->getCommon()->testRanges[$i])];
         }
         $this->generateTests($testCloneRange, $tests);
-        $testDiv->style->display = 'none';
+        $this->getCommon()->testDiv->style->display = 'none';
     }
 }

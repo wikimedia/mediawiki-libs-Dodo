@@ -10,15 +10,15 @@ class RangeCommonAncestorContainerTest extends WPTTestHarness
     public function testRangeCommonAncestorContainer()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-commonAncestorContainer.html');
-        array_unshift($testRanges, '[detached]');
-        for ($i = 0; $i < count($testRanges); $i++) {
+        array_unshift($this->getCommon()->testRanges, '[detached]');
+        for ($i = 0; $i < count($this->getCommon()->testRanges); $i++) {
             $this->assertTest(function () use(&$i) {
                 $range = null;
                 if ($i == 0) {
                     $range = $this->doc->createRange();
                     $range->detach();
                 } else {
-                    $range = Common::rangeFromEndpoints(eval($testRanges[$i]));
+                    $range = Common::rangeFromEndpoints($this->wptEvalNode($this->getCommon()->testRanges[$i]));
                 }
                 // "Let container be start node."
                 $container = $range->startContainer;
@@ -29,8 +29,8 @@ class RangeCommonAncestorContainerTest extends WPTTestHarness
                 }
                 // "Return container."
                 $this->wptAssertEquals($range->commonAncestorContainer, $container);
-            }, $i . ': range ' . $testRanges[$i]);
+            }, $i . ': range ' . $this->getCommon()->testRanges[$i]);
         }
-        $testDiv->style->display = 'none';
+        $this->getCommon()->testDiv->style->display = 'none';
     }
 }

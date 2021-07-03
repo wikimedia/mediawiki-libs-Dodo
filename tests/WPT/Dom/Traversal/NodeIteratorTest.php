@@ -169,15 +169,15 @@ class NodeIteratorTest extends WPTTestHarness
         }, 'Recursive filters need to throw');
         $whatToShows = ['0', '0xFFFFFFFF', 'NodeFilter.SHOW_ELEMENT', 'NodeFilter.SHOW_ATTRIBUTE', 'NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_DOCUMENT'];
         $callbacks = ['null', '(function(node) { return true })', '(function(node) { return false })', "(function(node) { return node.nodeName[0] == '#' })"];
-        for ($i = 0; $i < count($this->testNodes); $i++) {
+        for ($i = 0; $i < count($this->getCommon()->testNodes); $i++) {
             for ($j = 0; $j < count($whatToShows); $j++) {
                 for ($k = 0; $k < count($callbacks); $k++) {
                     $this->assertTest(function () use(&$i, &$whatToShows, &$j, &$callbacks, &$k) {
-                        $this->testIterator(eval($this->testNodes[$i]), eval($whatToShows[$j]), eval($callbacks[$k]));
-                    }, 'document.createNodeIterator(' . $this->testNodes[$i] . ', ' . $whatToShows[$j] . ', ' . $callbacks[$k] . ')');
+                        $this->testIterator($this->wptEvalNode($this->getCommon()->testNodes[$i]), eval($whatToShows[$j]), eval($callbacks[$k]));
+                    }, 'document.createNodeIterator(' . $this->getCommon()->testNodes[$i] . ', ' . $whatToShows[$j] . ', ' . $callbacks[$k] . ')');
                 }
             }
         }
-        $testDiv->style->display = 'none';
+        $this->getCommon()->testDiv->style->display = 'none';
     }
 }

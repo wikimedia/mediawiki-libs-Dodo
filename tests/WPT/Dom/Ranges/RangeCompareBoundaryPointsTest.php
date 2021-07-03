@@ -1,5 +1,6 @@
 <?php 
 namespace Wikimedia\Dodo\Tests\WPT\Dom\Ranges;
+use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Range;
 use Wikimedia\Dodo\Tests\Harness\Utils\Common;
@@ -10,12 +11,12 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
     public function testRangeCompareBoundaryPoints()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-compareBoundaryPoints.html');
-        $testRangesCached = [];
+        $testRangesCached = array_pad([], count($this->getCommon()->testRanges), null);
         $testRangesCached[] = $this->doc->createRange();
         $testRangesCached[0]->detach();
-        for ($i = 0; $i < count($this->testRangesShort); $i++) {
+        for ($i = 0; $i < count($this->getCommon()->testRangesShort); $i++) {
             try {
-                $testRangesCached[] = Common::rangeFromEndpoints(eval($this->testRangesShort[$i]));
+                $testRangesCached[] = Common::rangeFromEndpoints($this->wptEvalNode($this->getCommon()->testRangesShort[$i]));
             } catch (Exception $e) {
                 $testRangesCached[] = null;
             }
@@ -36,14 +37,14 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
         $extraTests = [
             0,
             // detached
-            1 + array_search('[paras[0].firstChild, 2, paras[0].firstChild, 8]', $testRanges),
-            1 + array_search('[paras[0].firstChild, 3, paras[3], 1]', $testRanges),
-            1 + array_search('[testDiv, 0, comment, 5]', $testRanges),
-            1 + array_search('[foreignDoc.documentElement, 0, foreignDoc.documentElement, 1]', $testRanges),
+            1 + array_search('[paras[0].firstChild, 2, paras[0].firstChild, 8]', $this->getCommon()->testRanges),
+            1 + array_search('[paras[0].firstChild, 3, paras[3], 1]', $this->getCommon()->testRanges),
+            1 + array_search('[testDiv, 0, comment, 5]', $this->getCommon()->testRanges),
+            1 + array_search('[foreignDoc.documentElement, 0, foreignDoc.documentElement, 1]', $this->getCommon()->testRanges),
         ];
         for ($i = 0; $i < count($testRangesCached); $i++) {
             $range1 = $testRangesCached[$i];
-            $range1Desc = $i . ' ' . ($i == 0 ? '[detached]' : $testRanges[$i - 1]);
+            $range1Desc = $i . ' ' . ($i == 0 ? '[detached]' : $this->getCommon()->testRanges[$i - 1]);
             for ($j = 0; $j <= count($testRangesCachedClones); $j++) {
                 $range2 = null;
                 $range2Desc = null;
@@ -52,7 +53,7 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
                     $range2Desc = 'same as first range';
                 } else {
                     $range2 = $testRangesCachedClones[$j];
-                    $range2Desc = $j . ' ' . ($j == 0 ? '[detached]' : $testRanges[$j - 1]);
+                    $range2Desc = $j . ' ' . ($j == 0 ? '[detached]' : $this->getCommon()->testRanges[$j - 1]);
                 }
                 $hows = [Range\START_TO_START, Range\START_TO_END, Range\END_TO_END, Range\END_TO_START];
                 if (array_search($i, $extraTests) != -1 && array_search($j, $extraTests) != -1) {
@@ -154,6 +155,6 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
                 }
             }
         }
-        $testDiv->style->display = 'none';
+        $this->getCommon()->testDiv->style->display = 'none';
     }
 }

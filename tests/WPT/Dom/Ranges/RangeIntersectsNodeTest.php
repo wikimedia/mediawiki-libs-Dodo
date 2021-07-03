@@ -11,14 +11,14 @@ class RangeIntersectsNodeTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode.html');
         // Will be filled in on the first run for that range
-        $testRangesCached = [];
-        for ($i = 0; $i < count($this->testNodes); $i++) {
-            $node = eval($this->testNodes[$i]);
-            for ($j = 0; $j < count($testRanges); $j++) {
+        $testRangesCached = array_pad([], count($this->getCommon()->testRanges), null);
+        for ($i = 0; $i < count($this->getCommon()->testNodes); $i++) {
+            $node = $this->wptEvalNode($this->getCommon()->testNodes[$i]);
+            for ($j = 0; $j < count($this->getCommon()->testRanges); $j++) {
                 $this->assertTest(function () use(&$testRangesCached, &$j, &$i, &$node) {
                     if ($testRangesCached[$j] === null) {
                         try {
-                            $testRangesCached[$j] = Common::rangeFromEndpoints(eval($testRanges[$i]));
+                            $testRangesCached[$j] = Common::rangeFromEndpoints($this->wptEvalNode($this->getCommon()->testRanges[$i]));
                         } catch (Exception $e) {
                             $testRangesCached[$j] = null;
                         }
@@ -48,9 +48,9 @@ class RangeIntersectsNodeTest extends WPTTestHarness
                     }
                     // "Return false."
                     $this->wptAssertEquals($range->intersectsNode($node), false, 'Must return false if (parent, offset) is not before range end or (parent, offset + 1) is not after range start');
-                }, 'Node ' . $i . ' ' . $this->testNodes[$i] . ', range ' . $j . ' ' . $testRanges[$j]);
+                }, 'Node ' . $i . ' ' . $this->getCommon()->testNodes[$i] . ', range ' . $j . ' ' . $this->getCommon()->testRanges[$j]);
             }
         }
-        $testDiv->style->display = 'none';
+        $this->getCommon()->testDiv->style->display = 'none';
     }
 }

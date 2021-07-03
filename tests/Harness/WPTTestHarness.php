@@ -13,6 +13,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 use Wikimedia\Dodo\Internal\Util;
+use Wikimedia\Dodo\Tests\Harness\Utils\Common;
 use Wikimedia\Dodo\Tests\Harness\Utils\Selectors;
 use Wikimedia\Dodo\Tools\TestsGenerator\Helpers;
 use Wikimedia\IDLeDOM\Attr;
@@ -86,6 +87,11 @@ abstract class WPTTestHarness extends TestCase {
 	 * @var callable[]
 	 */
 	protected $cleanupFuncs;
+
+	/**
+	 * @var ?Common
+	 */
+	protected $common;
 
 	/**
 	 * TODO implement this
@@ -818,9 +824,9 @@ abstract class WPTTestHarness extends TestCase {
 	 */
 	protected function arrayMap( $array, callable $callback ) : array {
 		if ( is_array( $array ) ) {
-			// array could be an object implementing ArrayAccess
 			return array_map( $callback, $array );
 		}
+		// but array could be an object implementing ArrayAccess...
 		$result = [];
 		foreach ( $array as $v ) {
 			$result[] = $callback( $v );
@@ -828,4 +834,59 @@ abstract class WPTTestHarness extends TestCase {
 		return $result;
 	}
 
+	/**
+	 * The test cases use eval on strings in a somewhat-sketchy way to
+	 * select one of a number of different nodes in a shared document.
+	 * Hack around to pull out the right node, even though we're not
+	 * actually evaluating JavaScript. Luckily, none of these expressions
+	 * are particularly complicated.
+	 *
+	 * @param string $nodeExpr
+	 * @return mixed
+	 */
+	protected function wptEvalNode( string $nodeExpr ) {
+		// Some of these are arrays
+		if ( substr( $nodeExpr, 0, 1 ) === '[' ) {
+			$result = [];
+			foreach ( explode( ',', substr( $nodeExpr, 1, -1 ) ) as $item ) {
+				$result[] = $this->wptEvalNode( trim( $item ) );
+			}
+			return $result;
+		}
+		// Some nodes are pure numbers
+		if ( preg_match( '/^[-+]?[0-9]+$/', $nodeExpr ) === 1 ) {
+			return intval( $nodeExpr );
+		}
+		// Handle property accessors
+		if ( strpos( $nodeExpr, '.' ) !== false ) {
+			$props = explode( '.', $nodeExpr );
+			$obj = $this->wptEvalNode( array_shift( $props ) );
+			foreach ( $props as $p ) {
+				$obj = $obj->{$p};
+			}
+			return $obj;
+		}
+		// Handle array accessors
+		if ( substr( $nodeExpr, -1 ) === ']' ) {
+			$pos = strrpos( $nodeExpr, '[' );
+			$lhs = $this->wptEvalNode( substr( $nodeExpr, 0, $pos ) );
+			$rhs = $this->wptEvalNode( substr( $nodeExpr, $pos + 1, -1 ) );
+			return $lhs[$rhs];
+		}
+		// ok, this *should* be a named field of Common
+		return $this->getCommon()->{$nodeExpr};
+	}
+
+	/**
+	 * Return the 'Common' singleton, which contains a fixture used for
+	 * range tests, document position tests, etc.
+	 * @return Common
+	 */
+	protected function getCommon() {
+		if ( $this->common === null ) {
+			$this->common = new Common( $this->doc );
+			$this->common->setupRangeTests();
+		}
+		return $this->common;
+	}
 }

@@ -437,6 +437,8 @@ class ParserTask extends BaseTask {
 			'$document::URL' => '$this->doc->URL',
 			'$document' => '$this->doc',
 			'= create(' => '= $this->create(',
+			'= eval(' => '= $this->wptEvalNode(',
+			'( eval(' => '( $this->wptEvalNode(',
 			'$TypeError' => '$this->type_error',
 			'Object::keys( $testExtensions )->' => '$testExtensions->',
 			'new DOMParser()' => '(new DOMParser())',
@@ -520,15 +522,27 @@ class ParserTask extends BaseTask {
 	 * @return array|false
 	 */
 	protected function convertVarToClassVar( array $list ) {
-		$list_values = $list;
+		$result = [];
+		foreach ( $list as $value ) {
+			$result[$value] = '$this->' . ltrim( $value, '$' );
+		}
+		return $result;
+	}
 
-		array_walk( $list_values,
-			static function ( &$value, $key ) {
-				$value = '$this->' . ltrim( $value,
-						'$' );
-			} );
-		return array_combine( $list,
-			$list_values );
+	/**
+	 * Converts variable to static property of Common class
+	 * eg. converts $_v to Common::_v.
+	 *
+	 * @param array $list
+	 *
+	 * @return array|false
+	 */
+	protected function convertVarToCommonVar( array $list ) {
+		$result = [];
+		foreach ( $list as $value ) {
+			$result[$value] = '$this->getCommon()->' . ltrim( $value, '$' );
+		}
+		return $result;
 	}
 
 	/**
@@ -963,12 +977,18 @@ class ParserTask extends BaseTask {
 			'$new_el[$pair[\'attr\']]' => '$new_el->{$pair[\'attr\']}',
 			'[$method]' => '->{$method}',
 			// 'new Range()' => '$this->doc->createRange()',
-			// '$testDiv' => '$this->testDiv',
 			'Number(' => 'intval(',
-			'$testRangesShort' => '$this->testRangesShort' ];
+			// workaround reference to uninitialized array
+			'$testRangesCached = [];' =>
+				'$testRangesCached = array_pad([], count($this->getCommon()->testRanges), null);',
+			# keep testRangesCached from being matched by the $testRanges
+			# replacement (since strtr will use the longest match)
+			'$testRangesCached' => '$testRangesCached',
+		];
 
 		// convert $_x to $this->_x.
-		$convert_list = $this->convertVarToClassVar( [ '$i2',
+		$convert_list = $this->convertVarToClassVar( [
+			'$i2',
 			'$i1',
 			'$parentListbox2',
 			'$parentListbox',
@@ -978,17 +998,44 @@ class ParserTask extends BaseTask {
 			'$invalid_names',
 			'$invalid_qnames',
 			'$valid_names',
-			'$testNodes',
 			'$validSelectors',
 			'$invalidSelectors',
 			'$window',
 			'$outerShadowHost',
-			'$outerShadowHost' ] );
+			'$outerShadowHost',
+		] );
+		// convert $_x to $this->_x.
+		$convert_list = array_merge( $this->convertVarToCommonVar( [
+			'$testNodes',
+			'$testNodesShort',
+			'$testRanges',
+			'$testRangesShort',
+			'$testDiv',
+		] ), $convert_list );
 
 		$find_replace = array_merge( $find_replace, $convert_list );
 
-		$this->test = strtr( $this->test,
-			$find_replace );
+		$this->test = strtr( $this->test, $find_replace );
+
+		// Now fix up some unnecessary use statements
+		do {
+			$this->test = preg_replace_callback(
+				'/(use[(][^)]*)' .
+				preg_quote( '&$this->getCommon()->', '/' ) .
+				'[A-Za-z]+(, |\))/D',
+				static function ( $matches ) {
+					if ( $matches[2] === ')' ) {
+						if ( $matches[1] === 'use(' ) {
+							return ''; // No more use variables!
+						}
+						// trim the ", " off the end of $matches[1]
+						return substr( $matches[1], 0, -2 ) . $matches[2];
+					}
+					return $matches[1];
+				},
+				$this->test, -1, $count
+			);
+		} while ( $count > 0 ); // repeat as necessary
 
 		// Remove unnecessary empty lines.
 		$this->test = preg_replace( '/^[ \t]*[\r\n]+/m',

@@ -84,11 +84,26 @@ class WhatWG {
 		}
 
 		/* #6 */
-		if ( $node1 === null || $node2 === null || $node1->_nodeDocument !== $node2->_nodeDocument || $node1->getIsConnected() !== $node2->getIsConnected() ) {
-			/* UHH, in the spec this is supposed to add DOCUMENT_POSITION_PRECEDING or DOCUMENT_POSITION_FOLLOWING
-			 * in some consistent way, usually based on pointer comparison, which we can't do here. Hmm. Domino
-			 * just straight up omits it. This is stupid, the spec shouldn't ask this. */
-			return ( Node::DOCUMENT_POSITION_DISCONNECTED + Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC );
+		if ( $node1 === null || $node2 === null || $node1->getRootNode() !== $node2->getRootNode() ) {
+			/* In the spec this is supposed to add
+			* DOCUMENT_POSITION_PRECEDING or
+			* DOCUMENT_POSITION_FOLLOWING in some consistent way,
+			* "usually based on pointer comparison". Great.  Domino
+			* just straight up omits it, but that causes us to fail
+			* WPT tests.  Use spl_object_hash() to give us a
+			* "consistent" (but arbitrary) ordering, as the spec
+			* requests.
+			 */
+			$a = spl_object_hash( $node1 === null ? $attr1 : $node1 );
+			$b = spl_object_hash( $node2 === null ? $attr2 : $node2 );
+			$arbitrary = ( $a < $b ) ?
+				Node::DOCUMENT_POSITION_PRECEDING :
+				Node::DOCUMENT_POSITION_FOLLOWING;
+			return (
+				Node::DOCUMENT_POSITION_DISCONNECTED +
+				Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC +
+				$arbitrary
+			);
 		}
 
 		/* #7 */
@@ -101,14 +116,14 @@ class WhatWG {
 			$node2_ancestors[] = $n;
 		}
 
-		if ( in_array( $node1, $node2_ancestors ) && $attr1 === null ) {
+		if ( in_array( $node1, $node2_ancestors, true ) && $attr1 === null ) {
 			return Node::DOCUMENT_POSITION_CONTAINS + Node::DOCUMENT_POSITION_PRECEDING;
 		} elseif ( $node1 === $node2 && $attr2 !== null ) {
 			return Node::DOCUMENT_POSITION_CONTAINS + Node::DOCUMENT_POSITION_PRECEDING;
 		}
 
 		/* #8 */
-		if ( in_array( $node2, $node1_ancestors ) && $attr2 === null ) {
+		if ( in_array( $node2, $node1_ancestors, true ) && $attr2 === null ) {
 			return Node::DOCUMENT_POSITION_CONTAINED_BY + Node::DOCUMENT_POSITION_FOLLOWING;
 		} elseif ( $node1 === $node2 && $attr1 !== null ) {
 			return Node::DOCUMENT_POSITION_CONTAINED_BY + Node::DOCUMENT_POSITION_FOLLOWING;
@@ -117,20 +132,28 @@ class WhatWG {
 		/* #9 */
 		$node1_ancestors = array_reverse( $node1_ancestors );
 		$node2_ancestors = array_reverse( $node2_ancestors );
+		// Make these "inclusive" ancestor lists
+		$node1_ancestors[] = $node1;
+		$node2_ancestors[] = $node2;
 		$len = min( count( $node1_ancestors ), count( $node2_ancestors ) );
 		'@phan-var Node[] $node1_ancestors'; // @var Node[] $node1_ancestors
 		'@phan-var Node[] $node2_ancestors'; // @var Node[] $node2_ancestors
 
 		for ( $i = 1; $i < $len; $i++ ) {
 			if ( $node1_ancestors[$i] !== $node2_ancestors[$i] ) {
+				// We found two different ancestors, so compare their positions
+				// (By definition they must share the same parent)
 				if ( $node1_ancestors[$i]->_getSiblingIndex() < $node2_ancestors[$i]->_getSiblingIndex() ) {
 					return Node::DOCUMENT_POSITION_PRECEDING;
+				} else {
+					return Node::DOCUMENT_POSITION_FOLLOWING;
 				}
 			}
 		}
-
-		# 10
-		return Node::DOCUMENT_POSITION_FOLLOWING;
+		// If we get to here, then one of the nodes (the one with the
+		// shorter list of ancestors) contains the other one.
+		// But that should have been caught in step #8!
+		throw new \Exception( "should be unreachable" );
 	}
 
 	/*

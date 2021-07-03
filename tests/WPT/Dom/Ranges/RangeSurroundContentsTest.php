@@ -82,8 +82,8 @@ class RangeSurroundContentsTest extends WPTTestHarness
         }
         $iframe->getOwnerDocument()->appendChild($referenceDoc->documentElement->cloneNode(true));
         $iframe->contentWindow->setupRangeTests();
-        $iframe->contentWindow->testRangeInput = $this->testRangesShort[$i];
-        $iframe->contentWindow->testNodeInput = $this->testNodesShort[$j];
+        $iframe->contentWindow->testRangeInput = $this->getCommon()->testRangesShort[$i];
+        $iframe->contentWindow->testNodeInput = $this->getCommon()->testNodesShort[$j];
         $iframe->contentWindow->run();
     }
     public function testSurroundContents($i, $j)
@@ -219,11 +219,11 @@ class RangeSurroundContentsTest extends WPTTestHarness
     public function testRangeSurroundContents()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-surroundContents.html');
-        $testDiv->parentNode->removeChild($testDiv);
+        $this->getCommon()->testDiv->parentNode->removeChild($this->getCommon()->testDiv);
         $iStart = 0;
-        $iStop = count($this->testRangesShort);
+        $iStop = count($this->getCommon()->testRangesShort);
         $jStart = 0;
-        $jStop = count($this->testNodesShort);
+        $jStop = count($this->getCommon()->testNodesShort);
         if (preg_match('/subtest=[0-9]+,[0-9]+/', $location->search)) {
             $matches = preg_match('/subtest=([0-9]+),([0-9]+)/', $location->search, $FIXME);
             $iStart = intval($matches[1]);
@@ -237,8 +237,8 @@ class RangeSurroundContentsTest extends WPTTestHarness
             $domTests[$i] = [];
             $positionTests[$i] = [];
             for ($j = $jStart; $j < $jStop; $j++) {
-                $domTests[$i][$j] = $this->asyncTest($i . ',' . $j . ': resulting DOM for range ' . $this->testRangesShort[$i] . ', node ' . $this->testNodesShort[$j]);
-                $positionTests[$i][$j] = $this->asyncTest($i . ',' . $j . ': resulting range position for range ' . $this->testRangesShort[$i] . ', node ' . $this->testNodesShort[$j]);
+                $domTests[$i][$j] = $this->asyncTest($i . ',' . $j . ': resulting DOM for range ' . $this->getCommon()->testRangesShort[$i] . ', node ' . $this->getCommon()->testNodesShort[$j]);
+                $positionTests[$i][$j] = $this->asyncTest($i . ',' . $j . ': resulting range position for range ' . $this->getCommon()->testRangesShort[$i] . ', node ' . $this->getCommon()->testNodesShort[$j]);
             }
         }
         $actualIframe = $this->doc->createElement('iframe');
