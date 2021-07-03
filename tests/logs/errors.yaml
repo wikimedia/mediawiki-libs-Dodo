@@ -569,6 +569,11 @@
     _comment: ''
     testcases: testDocumentCreateTextNode
     files: /tests/WPT/Dom/Nodes/DocumentCreateTextNodeTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\CSSStyleDeclaration::getCssText':
+    _total: 1
+    _comment: ''
+    testcases: testStyleAttributeHtml
+    files: /tests/WPT/Domparsing/StyleAttributeHtmlTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::_createElementNS':
     _total: 7
     _comment: ''
@@ -739,25 +744,6 @@
     _comment: ''
     testcases: testDomstringmapSupportedPropertyNames
     files: /tests/WPT/Dom/Collections/DomstringmapSupportedPropertyNamesTest.php
-'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLElement::getStyle':
-    _total: 7
-    _comment: ''
-    testcases: |-
-        testNodeIteratorRemoval
-        testRangeCloneContents
-        testRangeCommonAncestorContainer
-        testRangeDeleteContents
-        testRangeExtractContents
-        testRangeIntersectsNode
-        testStyleAttributeHtml
-    files: |-
-        /tests/WPT/Dom/Ranges/RangeCloneContentsTest.php
-        /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php
-        /tests/WPT/Dom/Ranges/RangeDeleteContentsTest.php
-        /tests/WPT/Dom/Ranges/RangeExtractContentsTest.php
-        /tests/WPT/Dom/Ranges/RangeIntersectsNodeTest.php
-        /tests/WPT/Dom/Traversal/NodeIteratorRemovalTest.php
-        /tests/WPT/Domparsing/StyleAttributeHtmlTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLElement::getTabIndex':
     _total: 10
     _comment: ''
@@ -1064,6 +1050,21 @@
     _comment: ''
     testcases: testDOMParserParseFromStringXml
     files: /tests/WPT/Domparsing/DOMParserParseFromStringXmlTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Range::cloneContents':
+    _total: 1
+    _comment: ''
+    testcases: testRangeCloneContents
+    files: /tests/WPT/Dom/Ranges/RangeCloneContentsTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Range::deleteContents':
+    _total: 1
+    _comment: ''
+    testcases: testRangeDeleteContents
+    files: /tests/WPT/Dom/Ranges/RangeDeleteContentsTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Range::extractContents':
+    _total: 1
+    _comment: ''
+    testcases: testRangeExtractContents
+    files: /tests/WPT/Dom/Ranges/RangeExtractContentsTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Text::getWholeText':
     _total: 1
     _comment: ''
