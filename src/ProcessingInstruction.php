@@ -14,6 +14,9 @@ use Wikimedia\Dodo\Internal\WhatWG;
  * ProcessingInstruction node
  */
 class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\ProcessingInstruction {
+	// DOM mixins
+	use LinkStyle;
+
 	// Stub out methods not yet implemented.
 	use \Wikimedia\IDLeDOM\Stub\ProcessingInstruction;
 	use UnimplementedTrait;

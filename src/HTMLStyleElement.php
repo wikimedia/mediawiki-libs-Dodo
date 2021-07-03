@@ -7,6 +7,9 @@ namespace Wikimedia\Dodo;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
 class HTMLStyleElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLStyleElement {
+	// DOM mixins
+	use LinkStyle;
+
 	// Stub out methods not yet implemented.
 	use \Wikimedia\IDLeDOM\Stub\HTMLStyleElement;
 	use UnimplementedTrait;

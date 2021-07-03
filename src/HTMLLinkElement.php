@@ -7,6 +7,8 @@ namespace Wikimedia\Dodo;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
 class HTMLLinkElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLLinkElement {
+	// DOM mixins
+	use LinkStyle;
 	use ReferrerPolicy;
 
 	// Stub out methods not yet implemented.

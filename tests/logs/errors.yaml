@@ -429,11 +429,6 @@
     _comment: ''
     testcases: testHTMLStyleElement01
     files: /tests/W3C/Level1/Html/HTMLStyleElement01Test.php
-'Undefined property via __get(): location in /src/Document.php on line 69':
-    _total: 1
-    _comment: ''
-    testcases: testDocumentConstructor
-    files: /tests/WPT/Dom/Nodes/DocumentConstructorTest.php
 'Undefined property via __get(): readyState in /src/Document.php on line 69':
     _total: 1
     _comment: ''
@@ -444,42 +439,7 @@
     _comment: ''
     testcases: testAriaAttributeReflectionTentative
     files: /tests/WPT/Dom/Nodes/AriaAttributeReflectionTentativeTest.php
-'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeCloneContentsTest.php on line 339':
-    _total: 1
-    _comment: ''
-    testcases: testRangeCloneContents
-    files: /tests/WPT/Dom/Ranges/RangeCloneContentsTest.php
-'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php on line 34':
-    _total: 1
-    _comment: ''
-    testcases: testRangeCommonAncestorContainer
-    files: /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php
-'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeDeleteContentsTest.php on line 232':
-    _total: 1
-    _comment: ''
-    testcases: testRangeDeleteContents
-    files: /tests/WPT/Dom/Ranges/RangeDeleteContentsTest.php
-'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeExtractContentsTest.php on line 162':
-    _total: 1
-    _comment: ''
-    testcases: testRangeExtractContents
-    files: /tests/WPT/Dom/Ranges/RangeExtractContentsTest.php
-'Undefined property via __get(): style in /tests/WPT/Dom/Ranges/RangeIntersectsNodeTest.php on line 54':
-    _total: 1
-    _comment: ''
-    testcases: testRangeIntersectsNode
-    files: /tests/WPT/Dom/Ranges/RangeIntersectsNodeTest.php
-'Undefined property via __get(): style in /tests/WPT/Dom/Traversal/NodeIteratorRemovalTest.php on line 83':
-    _total: 1
-    _comment: ''
-    testcases: testNodeIteratorRemoval
-    files: /tests/WPT/Dom/Traversal/NodeIteratorRemovalTest.php
-'Undefined property via __get(): style in /tests/WPT/Domparsing/StyleAttributeHtmlTest.php on line 19':
-    _total: 1
-    _comment: ''
-    testcases: testStyleAttributeHtml
-    files: /tests/WPT/Domparsing/StyleAttributeHtmlTest.php
-'Undefined property via offsetGet(): length in /vendor/wikimedia/idle-dom/src/Helper/DOMTokenList.php on line 121':
+'Undefined property via offsetGet(): length in /home/cananian/Projects/Wikimedia/IDLeDOM/src/Helper/DOMTokenList.php on line 121':
     _total: 1
     _comment: ''
     testcases: testDOMTokenListIterable
@@ -652,6 +612,11 @@
         /tests/WPT/Dom/Traversal/TreeWalkerTraversalSkipMostTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerTraversalSkipTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerWalkingOutsideATreeTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::getLocation':
+    _total: 1
+    _comment: ''
+    testcases: testDocumentConstructor
+    files: /tests/WPT/Dom/Nodes/DocumentConstructorTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::prepend':
     _total: 1
     _comment: ''
@@ -774,6 +739,25 @@
     _comment: ''
     testcases: testDomstringmapSupportedPropertyNames
     files: /tests/WPT/Dom/Collections/DomstringmapSupportedPropertyNamesTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLElement::getStyle':
+    _total: 7
+    _comment: ''
+    testcases: |-
+        testNodeIteratorRemoval
+        testRangeCloneContents
+        testRangeCommonAncestorContainer
+        testRangeDeleteContents
+        testRangeExtractContents
+        testRangeIntersectsNode
+        testStyleAttributeHtml
+    files: |-
+        /tests/WPT/Dom/Ranges/RangeCloneContentsTest.php
+        /tests/WPT/Dom/Ranges/RangeCommonAncestorContainerTest.php
+        /tests/WPT/Dom/Ranges/RangeDeleteContentsTest.php
+        /tests/WPT/Dom/Ranges/RangeExtractContentsTest.php
+        /tests/WPT/Dom/Ranges/RangeIntersectsNodeTest.php
+        /tests/WPT/Dom/Traversal/NodeIteratorRemovalTest.php
+        /tests/WPT/Domparsing/StyleAttributeHtmlTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLElement::getTabIndex':
     _total: 10
     _comment: ''
