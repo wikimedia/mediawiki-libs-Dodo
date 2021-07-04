@@ -131,9 +131,7 @@ class ParserTask extends BaseTask {
 			}
 		}
 
-		return ltrim( substr( $path,
-			$i ),
-			'/' );
+		return ltrim( substr( $path, $i ), '/' );
 	}
 
 	/**
@@ -178,9 +176,7 @@ class ParserTask extends BaseTask {
 	 */
 	protected function preprocessTest() {
 		$find_replace = [ 'new Array()' => '[]' ];
-
-		$this->test = strtr( $this->test,
-			$find_replace );
+		$this->test = strtr( $this->test, $find_replace );
 	}
 
 	/**
@@ -213,11 +209,8 @@ class ParserTask extends BaseTask {
 	 */
 	protected function parseW3CTest( array $ast ) : void {
 		$ast = $this->prepareAst( $ast );
-
 		$traverser = new NodeTraverser;
-
-		$visitor = new class( $this->test_name, $this->parser, $this->factory ) extends NodeVisitorAbstract
-		{
+		$visitor = new class( $this->test_name, $this->parser, $this->factory ) extends NodeVisitorAbstract {
 			use Helpers;
 
 			/**
@@ -262,7 +255,6 @@ class ParserTask extends BaseTask {
 				$node_type = $node->getType();
 				if ( $node instanceof Function_ && $node->name->toString() === $this->test_name ) {
 					$test_method = $this->snakeToCamel( 'test ' . $node->name );
-
 					return $this->factory->method( $test_method )->makePublic()->addStmts( $node->getStmts() )
 						->getNode();
 				}
@@ -330,13 +322,9 @@ class ParserTask extends BaseTask {
 				}
 
 				if ( $node instanceof Function_ ) {
-					$remove = [ 'toASCIIUppercase',
-						'toASCIILowercase' ];
+					$remove = [ 'toASCIIUppercase', 'toASCIILowercase' ];
 					$func_name = $node->name->name;
-
-					if ( preg_match( '(' . implode( '|',
-								$remove ) . ')',
-							$func_name ) === 1 ) {
+					if ( preg_match( '(' . implode( '|', $remove ) . ')', $func_name ) === 1 ) {
 						return NodeTraverser::REMOVE_NODE;
 					}
 
@@ -424,9 +412,7 @@ class ParserTask extends BaseTask {
 	 */
 	protected function removeW3CDisparity() : void {
 		// Remove unnecessary empty lines.
-		$this->test = preg_replace( '/^[ \t]*[\r\n]+/m',
-			'',
-			$this->test );
+		$this->test = preg_replace( '/^[ \t]*[\r\n]+/m', '', $this->test );
 	}
 
 	/**
@@ -504,13 +490,10 @@ class ParserTask extends BaseTask {
 			'->setAttribute( \'id\', NULL )' => '->setAttribute( \'id\', "null" )',
 		];
 
-		$this->test = strtr( $this->test,
-			$find_replace );
+		$this->test = strtr( $this->test, $find_replace );
 
 		// Remove unnecessary empty lines.
-		$this->test = preg_replace( '/^[ \t]*[\r\n]+/m',
-			'',
-			$this->test );
+		$this->test = preg_replace( '/^[ \t]*[\r\n]+/m', '', $this->test );
 	}
 
 	/**
@@ -557,8 +540,7 @@ class ParserTask extends BaseTask {
 
 		// $dump = $this->dumper->dump( $stmts ) . "n";
 
-		$visitor = new class( $this->test_name, $this->parser, $this->factory ) extends NodeVisitorAbstract
-		{
+		$visitor = new class( $this->test_name, $this->parser, $this->factory ) extends NodeVisitorAbstract {
 			use Helpers;
 
 			/**
@@ -808,9 +790,7 @@ class ParserTask extends BaseTask {
 						// or mb_convert_case MB_CASE_UPPER.
 						'toASCIILowercase' => 'mb_strtolower' ];
 
-					if ( preg_match( '(' . implode( '|',
-								$replace_list ) . ')',
-							$expr_name ) === 1 ) {
+					if ( preg_match( '(' . implode( '|', $replace_list ) . ')', $expr_name ) === 1 ) {
 						$node->name->parts[0] = $replace_list[$expr_name];
 					}
 
@@ -818,13 +798,10 @@ class ParserTask extends BaseTask {
 				}
 
 				if ( $node instanceof Function_ ) {
-					$remove = [ 'toASCIIUppercase',
-						'toASCIILowercase' ];
+					$remove = [ 'toASCIIUppercase', 'toASCIILowercase' ];
 					$func_name = $node->name->name;
 
-					if ( preg_match( '(' . implode( '|',
-								$remove ) . ')',
-							$func_name ) === 1 ) {
+					if ( preg_match( '(' . implode( '|', $remove ) . ')', $func_name ) === 1 ) {
 						return NodeTraverser::REMOVE_NODE;
 					}
 
@@ -841,8 +818,7 @@ class ParserTask extends BaseTask {
 
 		if ( !$this->compact ) {
 			// create test class
-			if ( strpos( $this->test_name,
-					'Test' ) === false ) {
+			if ( strpos( $this->test_name, 'Test' ) === false ) {
 				$this->test_name .= 'Test';
 			}
 
@@ -850,7 +826,8 @@ class ParserTask extends BaseTask {
 			$pkg = implode(
 				'\\',
 				array_map(
-					function ( $s ) { return $this->snakeToPascal( $s );
+					function ( $s ) {
+						return $this->snakeToPascal( $s );
 					},
 					array_slice(
 						explode( '/', $this->test_path ),
@@ -1038,14 +1015,10 @@ class ParserTask extends BaseTask {
 		} while ( $count > 0 ); // repeat as necessary
 
 		// Remove unnecessary empty lines.
-		$this->test = preg_replace( '/^[ \t]*[\r\n]+/m',
-			'',
-			$this->test );
+		$this->test = preg_replace( '/^[ \t]*[\r\n]+/m', '', $this->test );
 
 		// Replace constructs like $object = Object::create($collection) with clone.
-		preg_match( '/Object::create\((.*)\)/',
-			$this->test,
-			$matches );
+		preg_match( '/Object::create\((.*)\)/', $this->test, $matches );
 		if ( isset( $matches[1] ) ) {
 			$this->test = preg_replace( '/Object::create\((.*)\)/',
 				'clone ' . $matches[1],
@@ -1053,9 +1026,7 @@ class ParserTask extends BaseTask {
 		}
 
 		// Replace constructs like String($span->classList).
-		preg_replace( '/String\((.*)\)/',
-			'$this->toString($1)',
-			$this->test );
+		preg_replace( '/String\((.*)\)/', '$this->toString($1)', $this->test );
 	}
 
 	/**
@@ -1064,8 +1035,7 @@ class ParserTask extends BaseTask {
 	 * @return Node\Expr\MethodCall
 	 */
 	protected function markTestAsSkipped() : Node\Expr\MethodCall {
-		return new Node\Expr\MethodCall( new Variable( 'this' ),
-			'markTestSkipped' );
+		return new Node\Expr\MethodCall( new Variable( 'this' ), 'markTestSkipped' );
 	}
 
 	/**
@@ -1093,9 +1063,7 @@ class ParserTask extends BaseTask {
 	 * @return string
 	 */
 	protected function makeFuncPublic( string $code ) : string {
-		return str_replace( 'function',
-			"public function",
-			$code );
+		return str_replace( 'function', "public function", $code );
 	}
 
 	/**
@@ -1105,7 +1073,6 @@ class ParserTask extends BaseTask {
 	 */
 	protected function dumpAst( $ast ) : string {
 		$dumper = new NodeDumper;
-
 		return $dumper->dump( $ast ) . "n";
 	}
 
@@ -1124,8 +1091,7 @@ class ParserTask extends BaseTask {
 			'count( $childValue )' => 'strlen($childValue)',
 			'toLowerArray(' => 'array_map(\'strtolower\',', ];
 
-		$this->test = strtr( $this->test,
-			$find_replace );
+		$this->test = strtr( $this->test, $find_replace );
 	}
 
 	/**
@@ -1164,8 +1130,7 @@ class ParserTask extends BaseTask {
 				'shadowHost' ];
 
 			foreach ( $additional_elements as $el ) {
-				if ( strpos( $this->test,
-						'$' . $el ) !== false ) {
+				if ( strpos( $this->test, '$' . $el ) !== false ) {
 					$_lb = $this->parser->parse( sprintf( '<?php $this->%1$s = $this->doc->getElementById("%1$s");',
 						$el ) );
 					$additional_stmts[] = reset( $_lb );
@@ -1208,16 +1173,14 @@ class ParserTask extends BaseTask {
 				$additional_stmts )
 				->addStmts( $ast )->getNode();
 
-			$stmts = array_merge( $functions,
-				[ $node ] );
+			$stmts = array_merge( $functions, [ $node ] );
 		}
 
 		if ( in_array( $main_method,
 			[ 'testAppendOnDocument',
 				'testPrependOnDocument' ] ) ) {
 			if ( isset( $functions[0] ) ) {
-				$functions[0]->stmts = array_merge( $additional_stmts,
-					$functions[0]->stmts );
+				$functions[0]->stmts = array_merge( $additional_stmts, $functions[0]->stmts );
 			}
 
 			$stmts = $functions;
