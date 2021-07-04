@@ -1095,6 +1095,18 @@ class ParserTask extends BaseTask {
 	}
 
 	/**
+	 * 1. Collect all function nodes (at all levels of nesting) in an array
+	 * 2. Walk the tree and remove all function nodes.
+	 * 3. Process flattened array of function nodes from 1. into the tree.
+	 *    This effectively hoists all nested functions to the top level.
+	 *    FIXME: This doesn't properly handle captured variables from
+	 *    parent closures in nested functions. So, there are some hacks
+	 *    to special cases some scenarios, but it is not good enough.
+	 *    This causes several test failures because of function calls with
+	 *    mismatched arguments.
+	 * 4. There are some undocumented special cases to handle some specific
+	 *    scenarios encountered in tests.
+	 *
 	 * @param array $ast
 	 *
 	 * @return Node[]|Node\Stmt\ClassMethod[]
@@ -1102,14 +1114,16 @@ class ParserTask extends BaseTask {
 	private function prepareAst( array $ast ) {
 		$main_method = $this->snakeToCamel( 'test ' . $this->test_name );
 
+		// Collect all function nodes (at all levels of nesting) in a flat array
 		$functions = $this->finder->find( $ast, static function ( $node ) {
 			return $node instanceof Function_;
 		} );
 
+		// Collect all non-function nodes
 		$ast = array_filter( $ast,
-			static function ( $smtm ) {
-				if ( !$smtm instanceof Function_ ) {
-					return $smtm;
+			static function ( $stmt ) {
+				if ( !$stmt instanceof Function_ ) {
+					return $stmt;
 				}
 
 				return null;
@@ -1118,28 +1132,31 @@ class ParserTask extends BaseTask {
 		$additional_stmts = [];
 
 		if ( $this->test_type === TestsGenerator::WPT ) {
-			$source_file = $this->parser->parse( '<?php $this->doc = $this->loadHtmlFile (\'' . $this->test_path .
-				'\');' );
+			$source_file = $this->parser->parse(
+				'<?php $this->doc = $this->loadHtmlFile (\'' . $this->test_path . '\');' );
 			$additional_stmts[] = reset( $source_file );
-			$additional_elements = [ 'i1',
+			// FIXME: Where does this list come from?
+			$additional_elements = [
+				'i1',
 				'i2',
 				'parentListbox',
 				'parentListbox2',
 				'blankIdParent',
 				'lightParagraph',
-				'shadowHost' ];
+				'shadowHost'
+			];
 
 			foreach ( $additional_elements as $el ) {
 				if ( strpos( $this->test, '$' . $el ) !== false ) {
-					$_lb = $this->parser->parse( sprintf( '<?php $this->%1$s = $this->doc->getElementById("%1$s");',
-						$el ) );
+					$_lb = $this->parser->parse(
+						sprintf( '<?php $this->%1$s = $this->doc->getElementById("%1$s");', $el ) );
 					$additional_stmts[] = reset( $_lb );
 				}
 			}
 		}
 
+		// Add a visitor to delete all function nodes
 		$traverser = new NodeTraverser;
-		// removes nested functions.
 		$traverser->addVisitor( new class() extends NodeVisitorAbstract {
 			/**
 			 * @param mixed $node
@@ -1153,12 +1170,13 @@ class ParserTask extends BaseTask {
 			}
 		} );
 
+		// Strip all functions (and hence nested functions)
 		foreach ( $functions as $function ) {
 			$function->stmts = $traverser->traverse( $function->stmts );
 		}
-
 		$ast = $traverser->traverse( $ast );
 
+		// Add back the functions at the top level
 		if ( $this->test_type === TestsGenerator::W3C ) {
 			$stmts = array_filter( $functions, function ( &$node ) use ( $ast ) {
 				if ( $node->name->name === $this->test_name ) {
@@ -1169,16 +1187,17 @@ class ParserTask extends BaseTask {
 				return false;
 			} );
 		} else {
-			$node = $this->factory->method( $main_method )->makePublic()->addStmts(
-				$additional_stmts )
-				->addStmts( $ast )->getNode();
+			$node = $this->factory->method( $main_method )
+				->makePublic()
+				->addStmts( $additional_stmts )
+				->addStmts( $ast )
+				->getNode();
 
 			$stmts = array_merge( $functions, [ $node ] );
 		}
 
-		if ( in_array( $main_method,
-			[ 'testAppendOnDocument',
-				'testPrependOnDocument' ] ) ) {
+		// FIXME: What is this special case for?
+		if ( in_array( $main_method, [ 'testAppendOnDocument', 'testPrependOnDocument' ] ) ) {
 			if ( isset( $functions[0] ) ) {
 				$functions[0]->stmts = array_merge( $additional_stmts, $functions[0]->stmts );
 			}
