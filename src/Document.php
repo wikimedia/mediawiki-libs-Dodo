@@ -707,6 +707,10 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * to the Document interface.
 	 *
 	 * Note: appendChild is not extended, because it calls insertBefore.
+	 * But _unsafeAppendChild() needs to be extended.
+	 *
+	 * XXX: we could hook Document::_modify() or Document::_mutateInsert()
+	 * instead?
 	 */
 
 	/**
@@ -714,6 +718,15 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 	public function insertBefore( $node, $refChild ) : Node {
 		$ret = parent::insertBefore( $node, $refChild );
+		$this->_updateDoctypeAndDocumentElement();
+		return $ret;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function _unsafeAppendChild( Node $node ): Node {
+		$ret = parent::_unsafeAppendChild( $node );
 		$this->_updateDoctypeAndDocumentElement();
 		return $ret;
 	}
@@ -919,7 +932,8 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 	public function getHead() : ?HTMLHeadElement {
 		$html = $this->getDocumentElement();
-		if ( $html === null ) { return null;
+		if ( $html === null ) {
+			return null;
 		}
 		for ( $kid = $html->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
 			if ( $kid instanceof HTMLHeadElement ) {

@@ -167,6 +167,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$doc = $this->parse(
 			'<a>123<b>456<script>alert(1)</script></b></a>789'
 		);
+		$this->assertNotNull( $doc->getDocumentElement() );
 		$body = $doc->getBody();
 		$this->assertTrue( $body !== null );
 		'@phan-var HTMLBodyElement $body'; // @phan-var HTMLBodyElement $body

@@ -451,7 +451,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @param Node $node
 	 * @return Node
 	 */
-	final public function _unsafeAppendChild( Node $node ): Node {
+	public function _unsafeAppendChild( Node $node ): Node {
 		WhatWG::insert_before_or_replace( $node, $this, null, false );
 		return $node;
 	}
