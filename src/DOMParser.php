@@ -119,6 +119,10 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 	 * @return Document
 	 */
 	private function _parseXML( string $s, string $contentType ) {
+		# The XMLReader class is cranky about empty strings.
+		if ( $s === '' ) {
+			throw new \Exception( "no root element found" );
+		}
 		$reader = new XMLReader();
 		$reader->XML(
 			$s, 'utf-8',
