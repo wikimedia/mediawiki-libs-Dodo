@@ -293,29 +293,11 @@
     _comment: ''
     testcases: testInsertAdjacentHtml
     files: /tests/WPT/Domparsing/InsertAdjacentHtmlTest.php
-'Error: Call to undefined method Wikimedia\Dodo\DocumentFragment::getElementsByTagName()':
-    _total: 1
-    _comment: ''
-    testcases: testDocumentFragmentQuerySelectorAllAfterModification
-    files: /tests/WPT/Dom/Nodes/DocumentFragmentQuerySelectorAllAfterModificationTest.php
 'Error: Call to undefined method Wikimedia\Dodo\HTMLAnchorElement::focus()':
     _total: 1
     _comment: ''
     testcases: testHTMLAnchorElement14
     files: /tests/W3C/Level1/Html/HTMLAnchorElement14Test.php
-'Error: Cannot access private property Wikimedia\Dodo\NodeList::$_list':
-    _total: 4
-    _comment: ''
-    testcases: |-
-        testGetElementsByClassNameWhitespaceClassNames
-        testNodeListIterable
-        testParentNodeQuerySelectorCaseInsensitive
-        testParentNodeQuerySelectorsExclusive
-    files: |-
-        /tests/WPT/Dom/Nodes/GetElementsByClassNameWhitespaceClassNamesTest.php
-        /tests/WPT/Dom/Nodes/NodeListIterableTest.php
-        /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorCaseInsensitiveTest.php
-        /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorsExclusiveTest.php
 'Error: Cannot use object of type Wikimedia\Dodo\HTMLParagraphElement as array':
     _total: 1
     _comment: ''
@@ -382,6 +364,11 @@
     _comment: ''
     testcases: testDocumentAdoptNode
     files: /tests/WPT/Dom/Nodes/DocumentAdoptNodeTest.php
+'Trying to get property ''textContent'' of non-object':
+    _total: 1
+    _comment: ''
+    testcases: testGetElementsByClassNameWhitespaceClassNames
+    files: /tests/WPT/Dom/Nodes/GetElementsByClassNameWhitespaceClassNamesTest.php
 'TypeError: Argument 1 passed to Wikimedia\Dodo\CharacterData::appendData() must be of the type string, null given, called in /tests/WPT/Dom/Nodes/CharacterDataAppendDataTest.php on line 34':
     _total: 1
     _comment: ''
@@ -442,6 +429,11 @@
     _comment: ''
     testcases: testDOMTokenListIterable
     files: /tests/WPT/Dom/Lists/DOMTokenListIterableTest.php
+'Undefined property via offsetExists(): length in /tests/WPT/Dom/Nodes/NodeListIterableTest.php on line 17':
+    _total: 1
+    _comment: ''
+    testcases: testNodeListIterable
+    files: /tests/WPT/Dom/Nodes/NodeListIterableTest.php
 'Undefined property via offsetUnset(): 0 in /tests/WPT/Dom/Collections/HTMLCollectionDeleteTest.php on line 19':
     _total: 1
     _comment: ''
@@ -684,13 +676,15 @@
     testcases: testElementInsertAdjacentText
     files: /tests/WPT/Dom/Nodes/ElementInsertAdjacentTextTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Element::setInnerHTML':
-    _total: 2
+    _total: 3
     _comment: ''
     testcases: |-
         testDocumentGetElementById
         testInnerhtml07
+        testParentNodeQuerySelectorsExclusive
     files: |-
         /tests/WPT/Dom/Nodes/DocumentGetElementByIdTest.php
+        /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorsExclusiveTest.php
         /tests/WPT/Domparsing/Innerhtml07Test.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Element::setOuterHTML':
     _total: 2

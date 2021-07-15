@@ -54,7 +54,7 @@ trait ParentNode /* implements \Wikimedia\IDLeDOM\ParentNode */ {
 	public function querySelectorAll( string $selectors ) {
 		'@phan-var \Wikimedia\IDLeDOM\ParentNode $this'; // @var \Wikimedia\IDLeDOM\ParentNode $this
 		$nl = new NodeList();
-		$nl->_list = Zest::find( $selectors, $this );
+		$nl->_splice( 0, 0, Zest::find( $selectors, $this ) );
 		return $nl;
 	}
 
