@@ -189,9 +189,9 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 					$tokenHandler, $reader->readOuterXml(), []
 				) )->execute( [] );
 				$nn = $doc->getImplementation()->createDocumentType(
-					$tokenHandler->name,
-					$tokenHandler->publicId,
-					$tokenHandler->systemId
+					$tokenHandler->name ?? '',
+					$tokenHandler->publicId ?? '',
+					$tokenHandler->systemId ?? ''
 				);
 				$node->appendChild( $nn );
 				break;
