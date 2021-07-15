@@ -955,4 +955,59 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @return bool Whether this node is considered empty.
 	 */
 	abstract public function _empty(): bool;
+
+	// -------------------------------------------------------------
+
+	// The next few functions define a standard "extension point" to
+	// allow you to hang your own data off a node.  It uses dynamic
+	// properties so no extra space is allocated for the Node object
+	// unless/until you attach data.
+
+	private const EXTENSION_PREFIX = '_extension_';
+
+	/** @inheritDoc */
+	protected function _setMissingProp( string $name, $value ): void {
+		if ( substr_compare( $name, self::EXTENSION_PREFIX, 0, strlen( self::EXTENSION_PREFIX ) ) == 0 ) {
+			$this->{$name} = $value;
+			return;
+		}
+		parent::_setMissingProp( $name, $value );
+	}
+
+	/** @inheritDoc */
+	protected function _getMissingProp( string $name ) {
+		if ( substr_compare( $name, self::EXTENSION_PREFIX, 0, strlen( self::EXTENSION_PREFIX ) ) == 0 ) {
+			return $this->{$name};
+		}
+		return parent::_getMissingProp( $name );
+	}
+
+	/**
+	 * Get "extension data" associate with this node, using the given $key.
+	 * @param string $key Distinguishes between various types of extension data.
+	 * @param mixed $defaultValue The value to return if the extension data is
+	 *   not present on this node; defaults to `null`.
+	 * @return mixed The extension data associated with $key on this node.
+	 */
+	public function getExtensionData( string $key, $defaultValue = null ) {
+		// Prefix the key to ensure it doesn't conflict with existing Dodo
+		// private properties/
+		$key = self::EXTENSION_PREFIX . $key;
+		if ( !property_exists( $this, $key ) ) {
+			return $defaultValue; // don't allocate in this case
+		}
+		return $this->{$key};
+	}
+
+	/**
+	 * Set "extension data" associate with this node, using the given $key.
+	 * @param string $key Distinguishes between various types of extension data.
+	 * @param mixed $value The value to store under this $key on this node.
+	 */
+	public function setExtensionData( string $key, $value ) {
+		// Prefix the key to ensure it doesn't conflict with existing Dodo
+		// private properties/
+		$key = self::EXTENSION_PREFIX . $key;
+		$this->{$key} = $value;
+	}
 }
