@@ -177,6 +177,12 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		// "HTML document" and the other not) which would change the
 		// case of the value returned here.  You will need to add code
 		// to _resetNodeDocument() to invalidate your cache.
+
+		// On the other hand, a cache just of the toAsciiUppercase conversion
+		// (taking advantage of the limited # of possible values seen here)
+		// should be perfecty safe.
+		static $upperCache = [];
+
 		$prefix = $this->getPrefix();
 		$lname = $this->getLocalName();
 		/*
@@ -186,7 +192,10 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		 */
 		$qname = ( $prefix === null ) ? $lname : ( $prefix . ':' . $lname );
 		if ( $this->_isHTMLElement() ) {
-			$qname = Util::toAsciiUppercase( $qname );
+			if ( !array_key_exists( $qname, $upperCache ) ) {
+				$upperCache[$qname] = Util::toAsciiUppercase( $qname );
+			}
+			return $upperCache[$qname];
 		}
 		return $qname;
 	}
