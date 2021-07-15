@@ -22,22 +22,7 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	use UnimplementedTrait;
 
 	// Helper functions from IDLeDOM
-	use \Wikimedia\IDLeDOM\Helper\Text {
-		__get as protected _getHelper;
-	}
-
-	/**
-	 * HACK! For compatibilty with W3C test suite, which assumes that an
-	 * access to 'attributes' will return null.
-	 * @param string $name
-	 * @return mixed
-	 */
-	public function __get( string $name ) {
-		if ( $name === 'attributes' ) {
-			return null;
-		}
-		return $this->_getHelper( $name );
-	}
+	use \Wikimedia\IDLeDOM\Helper\Text;
 
 	/**
 	 * @param Document $nodeDocument

@@ -130,9 +130,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	use UnimplementedTrait;
 
 	// Helper functions from IDLeDOM
-	use \Wikimedia\IDLeDOM\Helper\Attr {
-		__get as protected _getHelper;
-	}
+	use \Wikimedia\IDLeDOM\Helper\Attr;
 
 	/**
 	 * HACK! For compatibilty with W3C test suite, which assumes that an
@@ -140,11 +138,11 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	 * @param string $name
 	 * @return mixed
 	 */
-	public function __get( string $name ) {
+	protected function _getMissingProp( string $name ) {
 		if ( $name === 'attributes' ) {
 			return null;
 		}
-		return $this->_getHelper( $name );
+		return parent::_getMissingProp( $name );
 	}
 
 	/**

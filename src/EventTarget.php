@@ -11,4 +11,6 @@ class EventTarget implements \Wikimedia\IDLeDOM\EventTarget {
 	use \Wikimedia\IDLeDOM\Stub\EventTarget;
 	use UnimplementedTrait;
 
+	// Helper functions from IDLeDOM
+	use \Wikimedia\IDLeDOM\Helper\EventTarget;
 }

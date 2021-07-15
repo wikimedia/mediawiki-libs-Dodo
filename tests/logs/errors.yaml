@@ -427,7 +427,7 @@
     _comment: ''
     testcases: testHTMLStyleElement01
     files: /tests/W3C/Level1/Html/HTMLStyleElement01Test.php
-'Undefined property via __get(): readyState in /src/Document.php on line 69':
+'Undefined property via __get(): readyState in /tests/WPT/Domparsing/XmldomparserTest.php on line 12':
     _total: 1
     _comment: ''
     testcases: testXmldomparser
@@ -437,7 +437,7 @@
     _comment: ''
     testcases: testAriaAttributeReflectionTentative
     files: /tests/WPT/Dom/Nodes/AriaAttributeReflectionTentativeTest.php
-'Undefined property via offsetGet(): length in /home/cananian/Projects/Wikimedia/IDLeDOM/src/Helper/DOMTokenList.php on line 121':
+'Undefined property via offsetExists(): length in /tests/WPT/Dom/Lists/DOMTokenListIterableTest.php on line 14':
     _total: 1
     _comment: ''
     testcases: testDOMTokenListIterable

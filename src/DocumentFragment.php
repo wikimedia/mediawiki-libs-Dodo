@@ -20,9 +20,7 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	use UnimplementedTrait;
 
 	// Helper functions from IDLeDOM
-	use \Wikimedia\IDLeDOM\Helper\DocumentFragment {
-		__get as protected _getHelper;
-	}
+	use \Wikimedia\IDLeDOM\Helper\DocumentFragment;
 
 	/**
 	 * HACK! For compatibilty with W3C test suite, which assumes that an
@@ -30,11 +28,11 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	 * @param string $name
 	 * @return mixed
 	 */
-	public function __get( string $name ) {
+	protected function _getMissingProp( string $name ) {
 		if ( $name === 'attributes' ) {
 			return null;
 		}
-		return $this->_getHelper( $name );
+		return parent::_getMissingProp( $name );
 	}
 
 	/** @inheritDoc */

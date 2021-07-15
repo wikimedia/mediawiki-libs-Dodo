@@ -52,9 +52,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	use UnimplementedTrait;
 
 	// Helper functions from IDLeDOM
-	use \Wikimedia\IDLeDOM\Helper\Document {
-		__get as protected _getHelper;
-	}
+	use \Wikimedia\IDLeDOM\Helper\Document;
 
 	/**
 	 * HACK! For compatibilty with W3C test suite, which assumes that an
@@ -62,11 +60,11 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @param string $name
 	 * @return mixed
 	 */
-	public function __get( string $name ) {
+	protected function _getMissingProp( string $name ) {
 		if ( $name === 'attributes' ) {
 			return null;
 		}
-		return $this->_getHelper( $name );
+		return parent::_getMissingProp( $name );
 	}
 
 	/**********************************************************************

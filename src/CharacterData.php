@@ -29,6 +29,19 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	protected $_isUtf16;
 
 	/**
+	 * HACK! For compatibilty with W3C test suite, which assumes that an
+	 * access to 'attributes' will return null.
+	 * @param string $name
+	 * @return mixed
+	 */
+	protected function _getMissingProp( string $name ) {
+		if ( $name === 'attributes' ) {
+			return null;
+		}
+		return parent::_getMissingProp( $name );
+	}
+
+	/**
 	 * Create a CharacterData with data (in UTF-8 encoding).
 	 * @param Document $nodeDocument the owner document
 	 * @param string $data contents, in UTF-8 encoding
