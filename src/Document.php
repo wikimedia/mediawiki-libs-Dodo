@@ -915,7 +915,8 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 	public function getBody() : ?HTMLElement {
 		$html = $this->getDocumentElement();
-		if ( $html === null ) { return null;
+		if ( $html === null ) {
+			return null;
 		}
 		for ( $kid = $html->getFirstChild(); $kid !== null; $kid = $kid->getNextSibling() ) {
 			if ( $kid instanceof HTMLBodyElement || $kid instanceof HTMLFrameSetElement ) {
