@@ -295,4 +295,16 @@ HTML;
 		);
 	}
 
+	public function testXmlParse2() {
+		$doc = ( new DOMParser() )->parseFromString(
+			'<!DOCTYPE html><html><body></body></html>',
+			"text/html"
+		);
+		$this->assertEquals(
+			'<?xml version="1.0" encoding="UTF-8"?>' .
+			"<!DOCTYPE html><html xmlns=\"http://www.w3.org/1999/xhtml\"><head></head><body></body></html>",
+			( new XMLSerializer() )->serializeToString( $doc )
+		);
+	}
+
 }

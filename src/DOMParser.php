@@ -59,6 +59,14 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 				) {
 					// Force this to be an HTML document (not an XML document)
 					$this->doc = new Document( null, 'html', 'text/html' );
+					if ( $doctypeName !== null && $doctypeName !== '' ) {
+						$this->doc->appendChild( new DocumentType(
+							$this->doc,
+							$doctypeName,
+							$public ?? '',
+							$system ?? ''
+						) );
+					}
 					return $this->doc;
 				}
 

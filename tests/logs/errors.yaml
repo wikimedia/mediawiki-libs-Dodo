@@ -337,7 +337,7 @@
     testcases: testElementMatchesNamespacedElements
     files: /tests/WPT/Dom/Nodes/ElementMatchesNamespacedElementsTest.php
 'This test did not perform any assertions':
-    _total: 19
+    _total: 18
     _comment: ''
     testcases: |-
         testElementGetElementsByTagNameChangeDocumentHTMLNess
@@ -349,7 +349,6 @@
         testHTMLInputElement13
         testHTMLObjectElement11
         testHTMLObjectElement16
-        testHcDocumentgetdoctype
         testHcEntitiesremovenameditem1
         testHcEntitiessetnameditem1
         testHcNodevalue07
@@ -360,7 +359,6 @@
         testObject13
         testRangeDetach
     files: |-
-        /tests/W3C/Level1/Core/HcDocumentgetdoctypeTest.php
         /tests/W3C/Level1/Core/HcEntitiesremovenameditem1Test.php
         /tests/W3C/Level1/Core/HcEntitiessetnameditem1Test.php
         /tests/W3C/Level1/Core/HcNodevalue07Test.php
