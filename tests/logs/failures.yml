@@ -25,15 +25,13 @@
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentFragmentGetElementByIdTest
     files: /tests/WPT/Dom/Nodes/DocumentFragmentGetElementByIdTest.php
 'Failed asserting that two strings are equal.':
-    _total: 4
+    _total: 3
     _comment: ''
     testcases: |-
-        Wikimedia\Dodo\Tests\DodoTest
         Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentTypeLiteralTest
         Wikimedia\Dodo\Tests\WPT\Domparsing\DOMParserParseFromStringHtmlTest
         Wikimedia\Dodo\Tests\WPT\Domparsing\XMLSerializerSerializeToStringTest
     files: |-
-        /tests/DodoTest.php
         /tests/WPT/Dom/Nodes/DocumentTypeLiteralTest.php
         /tests/WPT/Domparsing/DOMParserParseFromStringHtmlTest.php
         /tests/WPT/Domparsing/XMLSerializerSerializeToStringTest.php

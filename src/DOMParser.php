@@ -155,6 +155,7 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 					$reader->namespaceURI, $qname, $reader->value
 				);
 				break;
+			case XMLReader::SIGNIFICANT_WHITESPACE:
 			case XMLReader::TEXT:
 				$nn = $doc->createTextNode( $reader->value );
 				$node->appendChild( $nn );

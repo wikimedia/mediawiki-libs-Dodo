@@ -276,7 +276,20 @@ HTML;
 			$root->outerHTML
 		);
 		$this->assertEquals(
+			'<?xml version="1.0" encoding="UTF-8"?>' .
 			'<root><child1>value1</child1></root>',
+			( new XMLSerializer() )->serializeToString( $doc )
+		);
+	}
+
+	public function testXmlParse() {
+		$doc = ( new DOMParser() )->parseFromString(
+			"<!DOCTYPE html><html><body><pre>\n</pre></body></html>",
+			"text/xml"
+		);
+		$this->assertEquals(
+			'<?xml version="1.0" encoding="UTF-8"?>' .
+			"<!DOCTYPE html><html><body><pre>\n</pre></body></html>",
 			( new XMLSerializer() )->serializeToString( $doc )
 		);
 	}
