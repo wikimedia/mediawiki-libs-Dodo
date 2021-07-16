@@ -463,6 +463,7 @@ class ParserTask extends BaseTask {
 			'instanceof $HTMLTitleElement' => 'instanceof HTMLTitleElement',
 			'instanceof $HTMLHtmlElement' => 'instanceof HTMLHtmlElement',
 			'+= strtoupper' => '.= strtoupper',
+			'count( $className )' => 'mb_strlen( $className )',
 			'Object::keys' => 'get_object_vars',
 			'$Text' => 'Text',
 			'$Comment' => 'Comment',
@@ -488,6 +489,9 @@ class ParserTask extends BaseTask {
 			// strict typing.  WPT/Dom/Nodes/DocumentGetElementByIdTest.php
 			'->getElementById( null )' => '->getElementById( "null" )',
 			'->setAttribute( \'id\', NULL )' => '->setAttribute( \'id\', "null" )',
+			// This seems to be a bug in how js2php is translating foreach
+			// statements in JS; this is an hacky workaround
+			' => $___ ) {' => ' ) {',
 		];
 
 		$this->test = strtr( $this->test, $find_replace );

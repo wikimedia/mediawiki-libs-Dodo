@@ -28,7 +28,7 @@ class ElementChildrenTest extends WPTTestHarness
             $container = $this->doc->getElementById('test');
             $list = $container->children;
             $result = [];
-            foreach ($list as $p => $___) {
+            foreach ($list as $p) {
                 if ($list->hasOwnProperty($p)) {
                     $result[] = $p;
                 }
@@ -38,7 +38,7 @@ class ElementChildrenTest extends WPTTestHarness
             $this->wptAssertArrayEquals($result, ['0', '1', '2', '3', '4', '5', 'foo', 'bar', 'baz']);
             // Mapping of exposed names to their indices in the list.
             $exposedNames = ['foo' => 1, 'bar' => 3, 'baz' => 4];
-            foreach ($exposedNames as $exposedName => $___) {
+            foreach ($exposedNames as $exposedName) {
                 $this->wptAssertTrue(isset($list[$exposedName]));
                 $this->wptAssertTrue($list->hasOwnProperty($exposedName));
                 $this->wptAssertEquals($list[$exposedName], $list->namedItem($exposedName));
@@ -46,7 +46,7 @@ class ElementChildrenTest extends WPTTestHarness
                 $this->wptAssertTrue($list[$exposedName] instanceof Element);
             }
             $unexposedNames = ['qux'];
-            foreach ($unexposedNames as $unexposedName => $___) {
+            foreach ($unexposedNames as $unexposedName) {
                 $this->wptAssertFalse(isset($list[$unexposedName]));
                 $this->wptAssertFalse($list->hasOwnProperty($unexposedName));
                 $this->wptAssertEquals($list[$unexposedName], null);

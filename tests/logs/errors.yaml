@@ -313,7 +313,7 @@
     _comment: ''
     testcases: testInnerhtmlMxssSub
     files: /tests/WPT/Domparsing/InnerhtmlMxssSubTest.php
-'Error: Method name must be a string':
+'InvalidArgumentException: Bad combinator: |':
     _total: 1
     _comment: ''
     testcases: testElementMatchesNamespacedElements
@@ -364,11 +364,6 @@
     _comment: ''
     testcases: testDocumentAdoptNode
     files: /tests/WPT/Dom/Nodes/DocumentAdoptNodeTest.php
-'Trying to get property ''textContent'' of non-object':
-    _total: 1
-    _comment: ''
-    testcases: testGetElementsByClassNameWhitespaceClassNames
-    files: /tests/WPT/Dom/Nodes/GetElementsByClassNameWhitespaceClassNamesTest.php
 'TypeError: Argument 1 passed to Wikimedia\Dodo\CharacterData::appendData() must be of the type string, null given, called in /tests/WPT/Dom/Nodes/CharacterDataAppendDataTest.php on line 34':
     _total: 1
     _comment: ''

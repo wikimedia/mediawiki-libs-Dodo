@@ -28,7 +28,7 @@ class HTMLCollectionIteratorTest extends WPTTestHarness
         $this->assertTest(function () use(&$paragraphs) {
             $ids = '12345';
             $idx = 0;
-            foreach ($paragraphs as $element => $___) {
+            foreach ($paragraphs as $element) {
                 $this->wptAssertEquals($element->getAttribute('id'), $ids[$idx++]);
             }
         }, 'HTMLCollection is iterable via for-of loop.');

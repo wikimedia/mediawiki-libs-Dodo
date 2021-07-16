@@ -20,7 +20,7 @@ class NodeIsConnectedShadowDomTest extends WPTTestHarness
     public function testNodeIsConnectedShadowDom()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-isConnected-shadow-dom.html');
-        foreach (['closed', 'open'] as $mode => $___) {
+        foreach (['closed', 'open'] as $mode) {
             $this->testIsConnected($mode);
         }
     }

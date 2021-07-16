@@ -27,7 +27,7 @@ class DOMTokenListIterableTest extends WPTTestHarness
         }, 'DOMTokenList has Symbol.iterator.');
         $this->assertTest(function () use(&$elementClasses) {
             $classList = [];
-            foreach ($elementClasses as $className => $___) {
+            foreach ($elementClasses as $className) {
                 $classList[] = $className;
             }
             $this->wptAssertArrayEquals($classList, ['foo', 'Foo']);

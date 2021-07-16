@@ -26,7 +26,7 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
     public function testDocumentCreateEventHttps()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createEvent.https.html');
-        foreach ($aliases as $alias => $___) {
+        foreach ($aliases as $alias) {
             $iface = $aliases[$alias];
             $this->testAlias($alias, $iface);
             $this->testAlias(strtolower($alias), $iface);

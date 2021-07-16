@@ -22,7 +22,7 @@ class NodeRemoveChildTest extends WPTTestHarness
         foreach ($docs as $d) {
             $get = $d[0];
             $description = $d[1];
-            foreach ($creators as $p => $___) {
+            foreach ($creators as $p) {
                 $creator = $creators[$p];
                 $this->assertTest(function () use(&$get, &$creator) {
                     $doc = $get();

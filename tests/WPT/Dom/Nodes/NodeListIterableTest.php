@@ -31,7 +31,7 @@ class NodeListIterableTest extends WPTTestHarness
         $this->assertTest(function () use(&$paragraphs) {
             $ids = '12345';
             $idx = 0;
-            foreach ($paragraphs as $node => $___) {
+            foreach ($paragraphs as $node) {
                 $this->wptAssertEquals($node->getAttribute('id'), $ids[$idx++]);
             }
         }, 'NodeList is iterable via for-of loop.');
@@ -42,7 +42,7 @@ class NodeListIterableTest extends WPTTestHarness
             $container = $this->doc->getElementById('live');
             $nodeList = $container->childNodes;
             $ids = [];
-            foreach ($nodeList as $el => $___) {
+            foreach ($nodeList as $el) {
                 $ids[] = $el->id;
                 $this->wptAssertEquals($el->localName, 'b');
                 if (count($ids) < 3) {
