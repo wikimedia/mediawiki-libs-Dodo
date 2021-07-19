@@ -904,14 +904,14 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$quirks = $el->_nodeDocument->getCompatMode() === 'BackCompat';
 			if ( !$quirks ) {
 				foreach ( $names as $name ) {
-					if ( $el->classList->contains( $name ) ) {
+					if ( $el->getClassList()->contains( $name ) ) {
 						return true;
 					}
 				}
 			} else {
 				// This is inefficient, but it is rarely used
 				foreach ( $names as $c1 ) {
-					foreach ( $el->classList as $c2 ) {
+					foreach ( $el->getClassList() as $c2 ) {
 						if ( Util::toAsciiLowercase( $c1 ) === Util::toAsciiLowercase( $c2 ) ) {
 							return true;
 						}

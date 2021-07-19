@@ -116,7 +116,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 
 		// Test liveness!
 		$body->appendChild( $doc->createElement( "p" ) );
-		$this->assertSame( 4, $all_elements->length );
+		$this->assertSame( 5, $all_elements->length );
 
 		$this->assertSame( 2, $p_tags->length );
 		$second_p_tag = $p_tags->item( 1 );
@@ -139,6 +139,14 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$first_el = $els_by_class->item( 0 );
 		$this->assertInstanceOf( HTMLImageElement::class, $first_el );
 		$this->assertEqualsIgnoringCase( 'IMG', $first_el->tagName );
+
+		// documentElement should match too
+		$doc->documentElement->setAttribute( 'class', "test1\ttest2\t" );
+		$els_by_class = $doc->getElementsByClassName( 'test2' );
+		$this->assertNotNull( $els_by_class );
+		$this->assertInstanceOf( HTMLCollection::class, $els_by_class );
+		$this->assertSame( 1, $els_by_class->length );
+		$this->assertSame( $doc->documentElement, $els_by_class[0] );
 	}
 
 	/** @dataProvider provideFixture */

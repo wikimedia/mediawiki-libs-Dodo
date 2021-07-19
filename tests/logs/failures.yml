@@ -63,11 +63,6 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ParentNodeQuerySelectorScopeTest
     files: /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorScopeTest.php
-'tagNames-Failed asserting that two arrays are equal.':
-    _total: 1
-    _comment: ''
-    testcases: Wikimedia\Dodo\Tests\W3C\HcDocumentgetelementsbytagnametotallengthTest
-    files: /tests/W3C/Level1/Core/HcDocumentgetelementsbytagnametotallengthTest.php
 'the meta charset must be in effect, making the main document windows-1252-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''

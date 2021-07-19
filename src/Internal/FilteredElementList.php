@@ -76,6 +76,14 @@ class FilteredElementList extends HTMLCollection {
 				$this->done = true;
 				return;
 			}
+			// traversal should include the document element, so see if it
+			// matches the filter
+			if ( ( $this->filter )( $start ) ) {
+				$this->cache[] = $start;
+				if ( $n && count( $this->cache ) === $n ) {
+					return;
+				}
+			}
 		} else {
 			$start = $this->root;
 		}
