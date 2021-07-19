@@ -763,6 +763,40 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 */
 
 	/**
+	 * Get an XPath for a node.
+	 * This is a PHP-compatibility extension to the DOM spec.
+	 * @return ?string
+	 */
+	public function getNodePath() {
+		if ( !$this->getIsConnected() ) {
+			return null;
+		}
+		$parent = $this->getParentNode();
+		if ( $parent === null ) {
+			return '';
+		}
+		$name = Util::toAsciiLowercase( $this->getNodeName() );
+		$count = 0;
+		$idx = 0;
+		for ( $n = $parent->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
+			if (
+				$n->getNodeType() === $this->getNodeType() &&
+				Util::toAsciiLowercase( $n->getNodeName() ) === $name
+			) {
+				$count++;
+			}
+			if ( $n === $this ) {
+				$idx = $count;
+			}
+		}
+		$s = $parent->getNodePath() . '/' . $name;
+		if ( $count > 1 ) {
+			$s .= '[' . $idx . ']';
+		}
+		return $s;
+	}
+
+	/**
 	 * Set the ownerDocument reference on a subtree rooted at $this.
 	 *
 	 * Called by Document::adoptNode()

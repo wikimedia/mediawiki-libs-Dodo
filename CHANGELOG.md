@@ -8,6 +8,7 @@
   methods to allow end-users to associate additional non-spec data off of
   Nodes.
 * Implement DocumentFragment::querySelector() and ::querySelectorAll()
+* Implement Node::getNodePath() for PHP compatibility
 
 # Dodo 0.1.0 (2021-07-04)
 Initial release.
