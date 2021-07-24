@@ -26,7 +26,7 @@ class XMLSerializer implements \Wikimedia\IDLeDOM\XMLSerializer {
 	 * @param INode $root
 	 * @return string
 	 */
-	public function serializeToString( $root ) : string {
+	public function serializeToString( $root ): string {
 		'@phan-var Node $root';
 		$result = [];
 		WhatWG::xmlSerialize( $root, false, $result );

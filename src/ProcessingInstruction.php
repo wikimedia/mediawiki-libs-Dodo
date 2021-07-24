@@ -42,14 +42,14 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeType() : int {
+	final public function getNodeType(): int {
 		return Node::PROCESSING_INSTRUCTION_NODE;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeName() : string {
+	final public function getNodeName(): string {
 		return $this->_target;
 	}
 
@@ -74,7 +74,7 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		$data = $this->getData();
 		if ( $requireWellFormed ) {
 			if (

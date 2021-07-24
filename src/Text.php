@@ -35,14 +35,14 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	/**
 	 * @inheritDoc
 	 */
-	public function getNodeType() : int {
+	public function getNodeType(): int {
 		return Node::TEXT_NODE;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getNodeName() : string {
+	public function getNodeName(): string {
 		return "#text";
 	}
 
@@ -65,7 +65,7 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		$data = $this->getData();
 		if ( $requireWellFormed ) {
 			if ( !WhatWG::is_valid_xml_chars( $data ) ) {

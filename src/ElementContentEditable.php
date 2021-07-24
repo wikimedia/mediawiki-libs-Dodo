@@ -11,7 +11,7 @@ trait ElementContentEditable /* implements \Wikimedia\IDLeDOM\ElementContentEdit
 	use \Wikimedia\IDLeDOM\Stub\ElementContentEditable;
 
 	/** @inheritDoc */
-	public function getContentEditable() : string {
+	public function getContentEditable(): string {
 		'@phan-var Element $this'; /** @var Element $this */
 		$val = $this->getAttribute( 'contenteditable' );
 		$state = 'inherit';
@@ -27,7 +27,7 @@ trait ElementContentEditable /* implements \Wikimedia\IDLeDOM\ElementContentEdit
 	}
 
 	/** @inheritDoc */
-	public function setContentEditable( string $val ) : void {
+	public function setContentEditable( string $val ): void {
 		'@phan-var Element $this'; /** @var Element $this */
 		$val = strtr( $val, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz' );
 		switch ( $val ) {

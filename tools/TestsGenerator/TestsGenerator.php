@@ -88,7 +88,7 @@ class TestsGenerator extends Tasks {
 			'phpcbf' => true,
 			'run' => false,
 			'compact' => false,
-	] ) : void {
+	] ): void {
 		try {
 			$compact_tests = '';
 			// Init and check for dependencies.
@@ -241,7 +241,7 @@ class TestsGenerator extends Tasks {
 	 *
 	 * @throws TaskException
 	 */
-	public function initDependencies( bool $rewrite = false ) : void {
+	public function initDependencies( bool $rewrite = false ): void {
 		// Check if js2php was installed.
 		if ( !$this->taskExecStack()->stopOnFail()->dir( $this->root_folder )->exec( 'npm list | grep js2php' )
 			->printOutput( false )->run()->getMessage() ) {
@@ -279,7 +279,7 @@ class TestsGenerator extends Tasks {
 	 * @return string
 	 * @throws Exception
 	 */
-	protected function transpileFile( SplFileInfo $file ) : string {
+	protected function transpileFile( SplFileInfo $file ): string {
 		$file_path = $file->getRealPath();
 		$remove = false;
 		$other_scripts = [];
@@ -348,7 +348,7 @@ class TestsGenerator extends Tasks {
 	 *
 	 * @return Result
 	 */
-	public function writeTest( string $test_name, string $test_code ) : Result {
+	public function writeTest( string $test_name, string $test_code ): Result {
 		return $this->taskWriteToFile( $test_name )->text( $test_code )->run();
 	}
 
@@ -357,7 +357,7 @@ class TestsGenerator extends Tasks {
 	 *
 	 * @return Result
 	 */
-	public function copyFiles() : Result {
+	public function copyFiles(): Result {
 		$w3c_core = $this->root_folder . self::W3C_TESTS . '/level1/core/files/*.html';
 		$w3c_html = $this->root_folder . self::W3C_TESTS . '/level1/html/files/*.html';
 
@@ -371,7 +371,7 @@ class TestsGenerator extends Tasks {
 	/**
 	 * Converts file paths to relative.
 	 */
-	public function logProcess() : void {
+	public function logProcess(): void {
 		$log_folder = $this->root_folder . '/tests/logs/';
 		$log_file_original = $log_folder . 'log.xml';
 		$log_file_proc = $log_folder . 'log.yml';
@@ -569,7 +569,7 @@ class TestsGenerator extends Tasks {
 	/**
 	 * @param DOMNodeList $test_suites
 	 */
-	protected function removeSuites( DOMNodeList $test_suites ) : void {
+	protected function removeSuites( DOMNodeList $test_suites ): void {
 		foreach ( $test_suites as $suite ) {
 			$parent = $suite->parentNode;
 
@@ -587,7 +587,7 @@ class TestsGenerator extends Tasks {
 	 *
 	 * @return Result
 	 */
-	protected function runTest( string $test, string $method ) : Result {
+	protected function runTest( string $test, string $method ): Result {
 		return $this->taskPhpUnit()->file( $test )->filter( $method )->run();
 	}
 }

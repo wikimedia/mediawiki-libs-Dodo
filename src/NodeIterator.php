@@ -71,21 +71,21 @@ class NodeIterator implements \Wikimedia\IDLeDOM\NodeIterator {
 	/**
 	 * @return bool
 	 */
-	public function getPointerBeforeReferenceNode() : bool {
+	public function getPointerBeforeReferenceNode(): bool {
 		return $this->_pointerBeforeReferenceNode;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getWhatToShow() : int {
+	public function getWhatToShow(): int {
 		return $this->_whatToShow;
 	}
 
 	/**
 	 * @return ?NodeFilter
 	 */
-	public function getFilter() : ?NodeFilter {
+	public function getFilter(): ?NodeFilter {
 		return $this->_filter;
 	}
 
@@ -122,7 +122,7 @@ class NodeIterator implements \Wikimedia\IDLeDOM\NodeIterator {
 	 * @param Node $toBeRemovedNode the Node about to be removed
 	 * @return void
 	 */
-	public function _preremove( Node $toBeRemovedNode ) : void {
+	public function _preremove( Node $toBeRemovedNode ): void {
 		if ( self::_isInclusiveAncestor( $toBeRemovedNode, $this->_root ) ) {
 			return;
 		}
@@ -164,7 +164,7 @@ class NodeIterator implements \Wikimedia\IDLeDOM\NodeIterator {
 	 * @spec http://www.w3.org/TR/dom/#dom-nodeiterator-nextnode
 	 * @return ?Node|null
 	 */
-	public function nextNode() : ?Node {
+	public function nextNode(): ?Node {
 		return $this->_traverse( true );
 	}
 
@@ -172,7 +172,7 @@ class NodeIterator implements \Wikimedia\IDLeDOM\NodeIterator {
 	 * @spec http://www.w3.org/TR/dom/#dom-nodeiterator-previousnode
 	 * @return ?Node
 	 */
-	public function previousNode() : ?Node {
+	public function previousNode(): ?Node {
 		return $this->_traverse( false );
 	}
 
@@ -180,7 +180,7 @@ class NodeIterator implements \Wikimedia\IDLeDOM\NodeIterator {
 	 * @spec http://www.w3.org/TR/dom/#dom-nodeiterator-detach
 	 * @return void
 	 */
-	public function detach() : void {
+	public function detach(): void {
 		/* "The detach() method must do nothing.
 		* Its functionality (disabling a NodeIterator object) was removed,
 		* but the method itself is preserved for compatibility.
@@ -188,7 +188,7 @@ class NodeIterator implements \Wikimedia\IDLeDOM\NodeIterator {
 	}
 
 	/** @return string */
-	public function toString() : string {
+	public function toString(): string {
 		// For compatibility with web-platform-tests
 		return '[object NodeIterator]';
 	}
@@ -203,7 +203,7 @@ class NodeIterator implements \Wikimedia\IDLeDOM\NodeIterator {
 	 * @param bool $directionIsNext
 	 * @return ?Node
 	 */
-	private static function _move( Node $node, Node $stayWithin, bool $directionIsNext ) : ?Node {
+	private static function _move( Node $node, Node $stayWithin, bool $directionIsNext ): ?Node {
 		if ( $directionIsNext ) {
 			return NodeTraversal::next( $node, $stayWithin );
 		} else {

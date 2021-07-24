@@ -55,28 +55,28 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeValue() : ?string {
+	final public function getNodeValue(): ?string {
 		return $this->getData();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	final public function setNodeValue( ?string $value ) : void {
+	final public function setNodeValue( ?string $value ): void {
 		$this->setData( $value ?? '' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	final public function getTextContent() : ?string {
+	final public function getTextContent(): ?string {
 		return $this->getData();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	final public function setTextContent( ?string $value ) : void {
+	final public function setTextContent( ?string $value ): void {
 		$this->setData( $value ?? '' );
 	}
 
@@ -109,7 +109,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 * @param int $count
 	 * @return string
 	 */
-	public function substringData( int $offset, int $count ) : string {
+	public function substringData( int $offset, int $count ): string {
 		$data = $this->_getDataUTF16();
 		// Silly conversion to an int32 to make our test suites happy
 		$offset &= 0xFFFFFFFF;
@@ -133,7 +133,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 *
 	 * @param string $data
 	 */
-	public function appendData( string $data ) : void {
+	public function appendData( string $data ): void {
 		$oldData = $this->getData(); // convert to UTF8 representation
 		$this->_data = $oldData . $data;
 		if ( $this->getIsConnected() ) {
@@ -155,7 +155,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 * @param int $offset
 	 * @param string $data
 	 */
-	public function insertData( int $offset, string $data ) : void {
+	public function insertData( int $offset, string $data ): void {
 		$this->replaceData( $offset, 0, $data );
 	}
 
@@ -176,7 +176,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 * @param int $offset
 	 * @param int $count
 	 */
-	public function deleteData( int $offset, int $count ) : void {
+	public function deleteData( int $offset, int $count ): void {
 		$this->replaceData( $offset, $count, '' );
 	}
 
@@ -194,7 +194,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 * @param int $count
 	 * @param string $data
 	 */
-	public function replaceData( int $offset, int $count, string $data ) : void {
+	public function replaceData( int $offset, int $count, string $data ): void {
 		$curtext = $this->_getDataUTF16();
 		$len = strlen( $curtext ) / 2;
 		// convert next text to UTF16 as well
@@ -232,7 +232,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	}
 
 	/** @inheritDoc */
-	public function getData() : string {
+	public function getData(): string {
 		if ( $this->_isUtf16 ) {
 			$this->_data = mb_convert_encoding(
 				$this->_data, "utf8", "utf16"
@@ -247,7 +247,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 * return that.
 	 * @return string a UTF-16 representation of `data`
 	 */
-	public function _getDataUTF16() : string {
+	public function _getDataUTF16(): string {
 		if ( !$this->_isUtf16 ) {
 			$this->_data = mb_convert_encoding(
 				$this->_data, "utf16", "utf8"
@@ -258,7 +258,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	}
 
 	/** @inheritDoc */
-	public function setData( ?string $value ) : void {
+	public function setData( ?string $value ): void {
 		$this->_data = $value ?? '';
 		$this->_isUtf16 = false;
 		if ( $this->getIsConnected() ) {

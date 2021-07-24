@@ -53,7 +53,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	 * @param INode $node
 	 * @param int $offset
 	 */
-	public function setStart( $node, int $offset ) : void {
+	public function setStart( $node, int $offset ): void {
 		'@phan-var Node $node'; // @var Node $node
 		if ( $node instanceof \Wikimedia\IDLeDOM\DocumentType ) {
 			throw Util::error( 'InvalidNodeTypeError' );
@@ -75,7 +75,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	 * @param INode $node
 	 * @param int $offset
 	 */
-	public function setEnd( $node, int $offset ) : void {
+	public function setEnd( $node, int $offset ): void {
 		'@phan-var Node $node'; // @var Node $node
 		if ( $node instanceof \Wikimedia\IDLeDOM\DocumentType ) {
 			throw Util::error( 'InvalidNodeTypeError' );
@@ -122,7 +122,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	/**
 	 * @param INode $node
 	 */
-	public function setStartBefore( $node ) : void {
+	public function setStartBefore( $node ): void {
 		'@phan-var Node $node'; // @var Node $node
 		$parent = $node->getParentNode();
 		if ( $parent === null ) {
@@ -134,7 +134,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	/**
 	 * @param INode $node
 	 */
-	public function setStartAfter( $node ) : void {
+	public function setStartAfter( $node ): void {
 		'@phan-var Node $node'; // @var Node $node
 		$parent = $node->getParentNode();
 		if ( $parent === null ) {
@@ -146,7 +146,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	/**
 	 * @param INode $node
 	 */
-	public function setEndBefore( $node ) : void {
+	public function setEndBefore( $node ): void {
 		'@phan-var Node $node'; // @var Node $node
 		$parent = $node->getParentNode();
 		if ( $parent === null ) {
@@ -158,7 +158,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	/**
 	 * @param INode $node
 	 */
-	public function setEndAfter( $node ) : void {
+	public function setEndAfter( $node ): void {
 		'@phan-var Node $node'; // @var Node $node
 		$parent = $node->getParentNode();
 		if ( $parent === null ) {
@@ -170,7 +170,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	/**
 	 * @param bool $toStart
 	 */
-	public function collapse( bool $toStart = false ) : void {
+	public function collapse( bool $toStart = false ): void {
 		if ( $toStart ) {
 			$this->_end = $this->_start;
 		} else {
@@ -181,7 +181,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	/**
 	 * @param INode $node
 	 */
-	public function selectNode( $node ) : void {
+	public function selectNode( $node ): void {
 		'@phan-var Node $node'; // @var Node $node
 		$parent = $node->getParentNode();
 		if ( $parent === null ) {
@@ -195,7 +195,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	/**
 	 * @param INode $node
 	 */
-	public function selectNodeContents( $node ) : void {
+	public function selectNodeContents( $node ): void {
 		'@phan-var Node $node'; // @var Node $node
 		if ( $node instanceof \Wikimedia\IDLeDOM\DocumentType ) {
 			throw Util::error( 'InvalidNodeTypeError' );
@@ -211,7 +211,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	 *
 	 * @return int
 	 */
-	public function compareBoundaryPoints( int $how, $sourceRange ) : int {
+	public function compareBoundaryPoints( int $how, $sourceRange ): int {
 		'@phan-var Range $sourceRange'; // @var Range $sourceRange
 		$thisPoint = null;
 		$otherPoint = null;
@@ -250,7 +250,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	 * @see https://dom.spec.whatwg.org/#dom-range-clonerange
 	 * @return Range
 	 */
-	public function cloneRange() : Range {
+	public function cloneRange(): Range {
 		$doc = $this->getStartContainer()->_nodeDocument;
 		$r = $doc->createRange();
 		$r->setStart( $this->getStartContainer(), $this->getStartOffset() );
@@ -261,7 +261,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	/**
 	 * @inheritDoc
 	 */
-	public function detach() : void {
+	public function detach(): void {
 		/* do nothing */
 	}
 
@@ -271,7 +271,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	 *
 	 * @return bool
 	 */
-	public function isPointInRange( $node, int $offset ) : bool {
+	public function isPointInRange( $node, int $offset ): bool {
 		'@phan-var Node $node'; // @var Node $node
 		if ( self::_nodeRoot( $node ) !== $this->_root() ) {
 			return false;
@@ -298,7 +298,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	 *
 	 * @return int
 	 */
-	public function comparePoint( $node, int $offset ) : int {
+	public function comparePoint( $node, int $offset ): int {
 		'@phan-var Node $node'; // @var Node $node
 		if ( self::_nodeRoot( $node ) !== $this->_root() ) {
 			throw Util::error( 'WrongDocumentError' );
@@ -324,7 +324,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	 *
 	 * @return bool
 	 */
-	public function intersectsNode( $node ) : bool {
+	public function intersectsNode( $node ): bool {
 		'@phan-var Node $node'; // @var Node $node
 		if ( self::_nodeRoot( $node ) !== $this->_root() ) {
 			return false;
@@ -345,7 +345,7 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	/**
 	 * @return string
 	 */
-	public function toString() : string {
+	public function toString(): string {
 		return $this->extractContents()->getTextContent() ?? '';
 	}
 }

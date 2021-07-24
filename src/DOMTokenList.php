@@ -63,7 +63,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	/**
 	 * Fetch the attribute value and parse it into an ordered set.
 	 */
-	public function _getList() : void {
+	public function _getList(): void {
 		$value = $this->getValue();
 		if ( $value === $this->_lastStringValue ) {
 			return;
@@ -75,7 +75,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	 * @param string $value
 	 * @see https://dom.spec.whatwg.org/#concept-ordered-set-parser
 	 */
-	private function _parse( string $value ) : void {
+	private function _parse( string $value ): void {
 		$this->_list = [];
 		$this->_lastStringValue = $value;
 		$seen = [ '' => true ];
@@ -106,7 +106,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	 * ASCII whitespace in it.
 	 * @param string $token
 	 */
-	private function _validate( string $token ) : void {
+	private function _validate( string $token ): void {
 			if ( $token === '' ) {
 				Util::error( "SyntaxError" );
 			}
@@ -118,7 +118,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	/**
 	 * @param string ...$tokens
 	 */
-	public function add( string ...$tokens ) : void {
+	public function add( string ...$tokens ): void {
 		foreach ( $tokens as $token ) {
 			$this->_validate( $token );
 		}
@@ -137,7 +137,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	 *
 	 * @return bool
 	 */
-	public function contains( string $token ) : bool {
+	public function contains( string $token ): bool {
 		// No error checking on $token validity, as per spec
 		return in_array( $token, $this->_list, true );
 	}
@@ -146,7 +146,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	 *
 	 * @param string ...$tokens
 	 */
-	public function remove( string ...$tokens ) : void {
+	public function remove( string ...$tokens ): void {
 		foreach ( $tokens as $token ) {
 			$this->_validate( $token );
 		}
@@ -167,7 +167,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	 *
 	 * @return bool
 	 */
-	public function replace( string $token, string $newToken ) : bool {
+	public function replace( string $token, string $newToken ): bool {
 		// Note that the spec says SyntaxErrors must be thrown *before*
 		// InvalidCharacterErrors
 		if ( $newToken === '' ) {
@@ -202,14 +202,14 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	/**
 	 * @return string
 	 */
-	public function getValue() : string {
+	public function getValue(): string {
 		return $this->_element->getAttribute( $this->_name ) ?? '';
 	}
 
 	/**
 	 * @param string $val
 	 */
-	public function setValue( string $val ) : void {
+	public function setValue( string $val ): void {
 		$this->_element->setAttribute( $this->_name, $val );
 	}
 
@@ -218,7 +218,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	 *
 	 * @return int
 	 */
-	public function getLength() : int {
+	public function getLength(): int {
 		return count( $this->_list );
 	}
 
@@ -227,7 +227,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	 *
 	 * @return string|null
 	 */
-	public function item( int $index ) : ?string {
+	public function item( int $index ): ?string {
 		return $this->_list[ $index ] ?? null;
 	}
 
@@ -238,7 +238,7 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	 *
 	 * @return bool
 	 */
-	public function toggle( string $token, ?bool $force = null ) : bool {
+	public function toggle( string $token, ?bool $force = null ): bool {
 		$this->_validate( $token );
 		if ( $this->contains( $token ) ) {
 			if ( $force !== true ) {

@@ -65,14 +65,14 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeType() : int {
+	final public function getNodeType(): int {
 		return Node::DOCUMENT_TYPE_NODE;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeName() : string {
+	final public function getNodeName(): string {
 		return $this->_name;
 	}
 
@@ -128,7 +128,7 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		if ( $requireWellFormed ) {
 			if (
 				preg_match(

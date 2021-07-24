@@ -44,14 +44,14 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeType() : int {
+	final public function getNodeType(): int {
 		return Node::DOCUMENT_FRAGMENT_NODE;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeName() : string {
+	final public function getNodeName(): string {
 		return "#document-fragment";
 	}
 
@@ -71,7 +71,7 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		for ( $child = $this->getFirstChild(); $child !== null; $child = $child->getNextSibling() ) {
 			$child->_xmlSerialize(
 				$namespace, $prefixMap, $prefixIndex, $requireWellFormed,
@@ -126,7 +126,7 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	// Non-standard, but useful (github issue #73)
 
 	/** @return string the inner HTML of this DocumentFragment */
-	public function getInnerHTML() : string {
+	public function getInnerHTML(): string {
 		$result = [];
 		$this->_htmlSerialize( $result );
 		return implode( '', $result );

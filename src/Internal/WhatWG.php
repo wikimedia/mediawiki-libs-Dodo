@@ -795,7 +795,7 @@ class WhatWG {
 	 * @param Node $node
 	 * @param string[] &$bits the result is returned in this array
 	 */
-	public static function descendantTextContent( Node $node, array &$bits ) : void {
+	public static function descendantTextContent( Node $node, array &$bits ): void {
 		if ( $node instanceof \Wikimedia\IDLeDOM\Text ) {
 			$bits[] = $node->getData();
 		} else {
@@ -936,7 +936,7 @@ class WhatWG {
 	 */
 	public static function xmlSerialize(
 		Node $node, bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		$contextNamespace = null;
 		$prefixMap = new NamespacePrefixMap();
 		$prefixMap->add( Util::NAMESPACE_XML, 'xml' );
@@ -1229,7 +1229,7 @@ class WhatWG {
 	 */
 	public static function xmlSerializeAttrValue(
 		?string $value, bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		if ( $value === null ) {
 			return; // "The empty string"
 		}
@@ -1261,7 +1261,7 @@ class WhatWG {
 	 * @param ?Node $parent This is null when evaluating outerHtml
 	 * @param array<string> &$result
 	 */
-	public static function htmlSerialize( Node $child, ?Node $parent, array &$result ) : void {
+	public static function htmlSerialize( Node $child, ?Node $parent, array &$result ): void {
 		switch ( $child->getNodeType() ) {
 		case Node::ELEMENT_NODE:
 			'@phan-var Element $child'; // @var Element $child

@@ -113,7 +113,7 @@ class LocatorTask extends BaseTask {
 	/**
 	 * @return Result
 	 */
-	public function run() : Result {
+	public function run(): Result {
 		$exclude_dirs = [ 'obsolete',
 			'nyi' ];
 		$w3c_tests_path = $this->folder . self::W3C_TESTS;

@@ -14,17 +14,17 @@ class HTMLCollection implements \Wikimedia\IDLeDOM\HTMLCollection {
 	}
 
 	/** @inheritDoc */
-	public function getLength() : int {
+	public function getLength(): int {
 		return 0;
 	}
 
 	/** @inheritDoc */
-	public function item( int $n ) : ?Element {
+	public function item( int $n ): ?Element {
 		return null;
 	}
 
 	/** @inheritDoc */
-	public function namedItem( string $name ) : ?Element {
+	public function namedItem( string $name ): ?Element {
 		return null;
 	}
 }

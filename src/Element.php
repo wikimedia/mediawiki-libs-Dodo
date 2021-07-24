@@ -163,14 +163,14 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeType() : int {
+	final public function getNodeType(): int {
 		return Node::ELEMENT_NODE;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeName() : string {
+	final public function getNodeName(): string {
 		// NOTE that if you're tempted to cache this, keep in mind that
 		// $this->_isHTMLElement() below *can change* when this node is
 		// adopted into a different document (one document can be an
@@ -203,7 +203,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	/**
 	 * @return NamedNodeMap
 	 */
-	public function getAttributes() : NamedNodeMap {
+	public function getAttributes(): NamedNodeMap {
 		if ( $this->_attributes === null ) {
 			$this->_attributes = new NamedNodeMap( $this );
 		}
@@ -333,7 +333,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		// Relocated to WhatWG::xmlSerializeElement because this method
 		// was huge!
 		WhatWG::xmlSerializeElement(
@@ -373,7 +373,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @inheritDoc
 	 */
-	public function setAttribute( string $qname, string $value ) : void {
+	public function setAttribute( string $qname, string $value ): void {
 		if ( !WhatWG::is_valid_xml_name( $qname ) ) {
 			Util::error( "InvalidCharacterError" );
 		}
@@ -487,7 +487,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @inheritDoc
 	 */
-	public function setAttributeNS( ?string $ns, string $qname, string $value ) : void {
+	public function setAttributeNS( ?string $ns, string $qname, string $value ): void {
 		$lname = null;
 		$prefix = null;
 
@@ -510,7 +510,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @inheritDoc
 	 */
-	public function removeAttributeNS( ?string $ns, string $lname ) : void {
+	public function removeAttributeNS( ?string $ns, string $lname ): void {
 		if ( $this->_attributes !== null ) {
 			$attr = $this->_attributes->getNamedItemNS( $ns, $lname );
 			if ( $attr !== null ) {
@@ -559,7 +559,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @inheritDoc
 	 */
-	public function setAttributeNode( $attr ) : ?Attr {
+	public function setAttributeNode( $attr ): ?Attr {
 		return $this->getAttributes()->setNamedItem( $attr );
 	}
 
@@ -570,7 +570,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @inheritDoc
 	 */
-	public function removeAttributeNode( $attr ) : Attr {
+	public function removeAttributeNode( $attr ): Attr {
 		'@phan-var Attr $attr'; // @var Attr $attr
 		$this->getAttributes()->_remove( $attr );
 		return $attr;
@@ -663,7 +663,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @param string $selectors
 	 * @return bool
 	 */
-	public function matches( string $selectors ) : bool {
+	public function matches( string $selectors ): bool {
 		return Zest::matches( $this, $selectors );
 	}
 
@@ -690,7 +690,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * Calls isHTMLDocument() on ownerDocument
 	 * @return bool
 	 */
-	public function _isHTMLElement() : bool {
+	public function _isHTMLElement(): bool {
 		if ( $this->getNamespaceURI() === Util::NAMESPACE_HTML
 			 && $this->_nodeDocument->_isHTMLDocument() ) {
 			return true;
@@ -749,7 +749,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return HTMLCollection
 	 */
-	public function getElementsByTagName( string $lname ) : HTMLCollection {
+	public function getElementsByTagName( string $lname ): HTMLCollection {
 		return self::_getElementsByTagName( $this, $lname );
 	}
 
@@ -761,7 +761,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @param string $lname
 	 * @return HTMLCollection
 	 */
-	public static function _getElementsByTagName( $root, string $lname ) : HTMLCollection {
+	public static function _getElementsByTagName( $root, string $lname ): HTMLCollection {
 		$filter = null;
 		if ( !$lname ) {
 			return new HTMLCollection();
@@ -813,7 +813,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return callable(Element):bool
 	 */
-	private static function _htmlLocalNameElementFilter( string $lname ) : callable {
+	private static function _htmlLocalNameElementFilter( string $lname ): callable {
 		$lclname = Util::toAsciiLowercase( $lname );
 		if ( $lclname === $lname ) {
 			return self::_localNameElementFilter( $lname );
@@ -829,7 +829,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return callable(Element):bool
 	 */
-	private static function _localNameElementFilter( string $lname ) : callable {
+	private static function _localNameElementFilter( string $lname ): callable {
 		return static function ( $el ) use ( $lname ) {
 			return $el->localName === $lname;
 		};
@@ -841,7 +841,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return HTMLCollection
 	 */
-	public function getElementsByTagNameNS( ?string $ns, string $lname ) : HTMLCollection {
+	public function getElementsByTagNameNS( ?string $ns, string $lname ): HTMLCollection {
 		return self::_getElementsByTagNameNS( $this, $ns, $lname );
 	}
 
@@ -851,7 +851,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @param string $lname
 	 * @return HTMLCollection
 	 */
-	public static function _getElementsByTagNameNS( $root, ?string $ns, string $lname ) : HTMLCollection {
+	public static function _getElementsByTagNameNS( $root, ?string $ns, string $lname ): HTMLCollection {
 		$filter = null;
 		if ( $ns === '' ) {
 			$ns = null;
@@ -876,7 +876,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return callable(Element):bool
 	 */
-	private static function _namespaceElementFilter( ?string $ns ) : callable {
+	private static function _namespaceElementFilter( ?string $ns ): callable {
 		return static function ( $el ) use ( $ns ) {
 			return $el->namespaceURI === $ns;
 		};
@@ -888,7 +888,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return callable(Element):bool
 	 */
-	private static function _namespaceLocalNameElementFilter( ?string $ns, string $lname ) : callable {
+	private static function _namespaceLocalNameElementFilter( ?string $ns, string $lname ): callable {
 		return static function ( $el ) use ( $ns, $lname ) {
 			return $el->namespaceURI === $ns && $el->localName === $lname;
 		};
@@ -899,7 +899,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 *
 	 * @return callable(Element):bool
 	 */
-	private static function _classNamesElementFilter( array $names ) : callable {
+	private static function _classNamesElementFilter( array $names ): callable {
 		return static function ( $el ) use ( $names ) {
 			$quirks = $el->_nodeDocument->getCompatMode() === 'BackCompat';
 			if ( !$quirks ) {

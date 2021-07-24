@@ -32,7 +32,7 @@ class NamespacePrefixMap {
 	 * @param ?string $key Key to a namespace prefix map
 	 * @return string Key that can be used for a PHP associative array
 	 */
-	private static function makeKey( ?string $key ) : string {
+	private static function makeKey( ?string $key ): string {
 		return $key === null ? 'null' : "!$key";
 	}
 
@@ -83,7 +83,7 @@ class NamespacePrefixMap {
 	 */
 	public function recordNamespaceInformation(
 		Element $element, array &$localPrefixMap
-	) : ?string {
+	): ?string {
 		$result = null;
 
 		foreach ( $element->getAttributes() as $attr ) {
@@ -123,7 +123,7 @@ class NamespacePrefixMap {
 	public function retrievePreferredPrefix(
 		?string $namespace,
 		?string $preferredPrefix
-	) : ?string {
+	): ?string {
 		$key = self::makeKey( $namespace );
 		if (
 			$preferredPrefix !== null &&
@@ -145,7 +145,7 @@ class NamespacePrefixMap {
 	 * @see https://w3c.github.io/DOM-Parsing/#dfn-copy-a-namespace-prefix-map
 	 * @return NamespacePrefixMap
 	 */
-	public function clone() : NamespacePrefixMap {
+	public function clone(): NamespacePrefixMap {
 		$c = new NamespacePrefixMap();
 		// Let PHP handle the deep array copy for us
 		$c->map = $this->map;

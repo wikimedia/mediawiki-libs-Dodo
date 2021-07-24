@@ -76,7 +76,7 @@ abstract class ContainerNode extends Node {
 	 *
 	 * @inheritDoc
 	 */
-	public function getChildNodes() : NodeList {
+	public function getChildNodes(): NodeList {
 		if ( $this->_childNodes === null ) {
 			// If childNodes has never been created, we've now created it.
 			$this->_childNodes = new NodeList();
@@ -105,7 +105,7 @@ abstract class ContainerNode extends Node {
 	 *
 	 * @inheritDoc
 	 */
-	public function getFirstChild() : ?Node {
+	public function getFirstChild(): ?Node {
 		$kids = $this->_childNodes;
 		if ( $kids === null ) {
 			/*
@@ -121,7 +121,7 @@ abstract class ContainerNode extends Node {
 	/**
 	 * @inheritDoc
 	 */
-	public function getLastChild() : ?Node {
+	public function getLastChild(): ?Node {
 		$kids = $this->_childNodes;
 		if ( $kids !== null ) {
 			// We are using the NodeList representation.
@@ -147,7 +147,7 @@ abstract class ContainerNode extends Node {
 	 * @see https://dom.spec.whatwg.org/#dom-node-textcontent
 	 * @return ?string
 	 */
-	public function getTextContent() : ?string {
+	public function getTextContent(): ?string {
 		$text = [];
 		WhatWG::descendantTextContent( $this, $text );
 		return implode( "", $text );
@@ -159,7 +159,7 @@ abstract class ContainerNode extends Node {
 	 * @see https://dom.spec.whatwg.org/#dom-node-textcontent
 	 * @param ?string $value
 	 */
-	public function setTextContent( ?string $value ) : void {
+	public function setTextContent( ?string $value ): void {
 		$value = $value ?? '';
 		$this->_removeChildren();
 		if ( $value !== "" ) {

@@ -30,12 +30,12 @@ class HTMLTemplateElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTML
 	}
 
 	/** @inheritDoc */
-	public function getContent() : DocumentFragment {
+	public function getContent(): DocumentFragment {
 		return $this->_contentFragment;
 	}
 
 	/** @inheritDoc */
-	public function _htmlSerialize( array &$result ) : void {
+	public function _htmlSerialize( array &$result ): void {
 		$this->_contentFragment->_htmlSerialize( $result );
 	}
 }

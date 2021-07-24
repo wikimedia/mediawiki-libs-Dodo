@@ -37,7 +37,7 @@ class NodeList implements \Wikimedia\IDLeDOM\NodeList {
 	 * For internal use only: append a node to the backing array.
 	 * @param Node $n
 	 */
-	public function _append( Node $n ) : void {
+	public function _append( Node $n ): void {
 		$this->_list[] = $n;
 	}
 
@@ -46,7 +46,7 @@ class NodeList implements \Wikimedia\IDLeDOM\NodeList {
 	 * @param int $index
 	 * @param Node $n
 	 */
-	public function _set( int $index, Node $n ) : void {
+	public function _set( int $index, Node $n ): void {
 		$this->_list[$index] = $n;
 	}
 
@@ -56,7 +56,7 @@ class NodeList implements \Wikimedia\IDLeDOM\NodeList {
 	 * @param int $length
 	 * @param Node[] $replacement
 	 */
-	public function _splice( int $offset, int $length, array $replacement = [] ) : void {
+	public function _splice( int $offset, int $length, array $replacement = [] ): void {
 		array_splice( $this->_list, $offset, $length, $replacement );
 	}
 }

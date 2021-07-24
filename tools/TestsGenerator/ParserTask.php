@@ -121,7 +121,7 @@ class ParserTask extends BaseTask {
 	 *
 	 * @return string The stripped path
 	 */
-	private function getRealpath( string $path ) : string {
+	private function getRealpath( string $path ): string {
 		$path = realpath( $path );
 		$base = realpath( __DIR__ . '/../..' );
 		$min = ( strlen( $path ) < strlen( $base ) ) ? strlen( $path ) : strlen( $base );
@@ -137,7 +137,7 @@ class ParserTask extends BaseTask {
 	/**
 	 * @return Result
 	 */
-	public function run() : Result {
+	public function run(): Result {
 		try {
 			$this->preprocessTest();
 
@@ -207,7 +207,7 @@ class ParserTask extends BaseTask {
 	/**
 	 * @param array $ast
 	 */
-	protected function parseW3CTest( array $ast ) : void {
+	protected function parseW3CTest( array $ast ): void {
 		$ast = $this->prepareAst( $ast );
 		$traverser = new NodeTraverser;
 		$visitor = new class( $this->test_name, $this->parser, $this->factory ) extends NodeVisitorAbstract {
@@ -410,7 +410,7 @@ class ParserTask extends BaseTask {
 	/**
 	 * Removes disparity for W3C tests.
 	 */
-	protected function removeW3CDisparity() : void {
+	protected function removeW3CDisparity(): void {
 		// Remove unnecessary empty lines.
 		$this->test = preg_replace( '/^[ \t]*[\r\n]+/m', '', $this->test );
 	}
@@ -418,7 +418,7 @@ class ParserTask extends BaseTask {
 	/**
 	 * Removes disparity after js2php.
 	 */
-	protected function preProcessWPTTest() : void {
+	protected function preProcessWPTTest(): void {
 		$find_replace = [
 			'$document::URL' => '$this->doc->URL',
 			'$document' => '$this->doc',
@@ -537,7 +537,7 @@ class ParserTask extends BaseTask {
 	 *
 	 * @param array $ast
 	 */
-	protected function parseWPTTest( array $ast ) : void {
+	protected function parseWPTTest( array $ast ): void {
 		$stmts = $this->prepareAst( $ast );
 
 		$traverser = new NodeTraverser;
@@ -865,7 +865,7 @@ class ParserTask extends BaseTask {
 	 * @param array<string,bool> $extraUses
 	 * @return array
 	 */
-	private function getUseStmts( $extraUses ) : array {
+	private function getUseStmts( $extraUses ): array {
 		$stmts = [];
 		$list_ns = [
 			'Node' => 'Wikimedia\Dodo\Node',
@@ -931,7 +931,7 @@ class ParserTask extends BaseTask {
 	/**
 	 * Removes disparity after parsing.
 	 */
-	protected function postProcessWPTTest() : void {
+	protected function postProcessWPTTest(): void {
 		$find_replace = [ 'Node::prototype::insertBefore' =>
 			'(new \ReflectionClass(Node::class))->hasMethod( "insertBefore" )',
 			'Node::prototype::replaceChild' =>
@@ -1038,7 +1038,7 @@ class ParserTask extends BaseTask {
 	 *
 	 * @return Node\Expr\MethodCall
 	 */
-	protected function markTestAsSkipped() : Node\Expr\MethodCall {
+	protected function markTestAsSkipped(): Node\Expr\MethodCall {
 		return new Node\Expr\MethodCall( new Variable( 'this' ), 'markTestSkipped' );
 	}
 
@@ -1049,7 +1049,7 @@ class ParserTask extends BaseTask {
 	 *
 	 * @return null|Node
 	 */
-	protected function findFuncCall( array $ast, string $name ) : ?Node {
+	protected function findFuncCall( array $ast, string $name ): ?Node {
 		return $this->finder->findFirst( $ast,
 			static function ( $node ) use ( $name ) {
 				if ( isset( $node->expr ) && isset( $node->expr->name ) && $node->expr instanceof FuncCall ) {
@@ -1066,7 +1066,7 @@ class ParserTask extends BaseTask {
 	 *
 	 * @return string
 	 */
-	protected function makeFuncPublic( string $code ) : string {
+	protected function makeFuncPublic( string $code ): string {
 		return str_replace( 'function', "public function", $code );
 	}
 
@@ -1075,7 +1075,7 @@ class ParserTask extends BaseTask {
 	 *
 	 * @return string
 	 */
-	protected function dumpAst( $ast ) : string {
+	protected function dumpAst( $ast ): string {
 		$dumper = new NodeDumper;
 		return $dumper->dump( $ast ) . "n";
 	}
@@ -1083,7 +1083,7 @@ class ParserTask extends BaseTask {
 	/**
 	 * Preprocess W3C test
 	 */
-	private function preProcessW3CTest() : void {
+	private function preProcessW3CTest(): void {
 		$find_replace = [
 			'global $builder;' => '',
 			'$builder = null;' => '$builder = $this->getBuilder();',

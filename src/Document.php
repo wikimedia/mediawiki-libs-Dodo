@@ -314,7 +314,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @copydoc Node::getNodeType()
 	 * @inheritDoc
 	 */
-	public function getNodeType() : int {
+	public function getNodeType(): int {
 		return Node::DOCUMENT_NODE;
 	}
 
@@ -322,7 +322,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @copydoc Node::getNodeName()
 	 * @inheritDoc
 	 */
-	final public function getNodeName() : string {
+	final public function getNodeName(): string {
 		return "#document";
 	}
 
@@ -352,7 +352,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @param string $encoding
 	 */
-	public function setEncoding( string $encoding ) : void {
+	public function setEncoding( string $encoding ): void {
 		// This is a PHP-specific extension, for compatibility with
 		// DOMDocument.  The PHP docs say: "Encoding of the document, as
 		// specified by the XML declaration. This attribute is not
@@ -368,17 +368,17 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/** @inheritDoc */
-	public function getDocumentURI() : string {
+	public function getDocumentURI(): string {
 		return $this->_URL;
 	}
 
 	/** @return string */
-	public function getURL() : string {
+	public function getURL(): string {
 		return $this->getDocumentURI(); /** Alias for HTMLDocuments */
 	}
 
 	/** @inheritDoc */
-	public function getCompatMode() : string {
+	public function getCompatMode(): string {
 		return $this->_mode === "quirks" ? "BackCompat" : "CSS1Compat";
 	}
 
@@ -388,12 +388,12 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/** @inheritDoc */
-	public function getDoctype() : ?DocumentType {
+	public function getDoctype(): ?DocumentType {
 		return $this->_doctype;
 	}
 
 	/** @inheritDoc */
-	public function getDocumentElement() : ?Element {
+	public function getDocumentElement(): ?Element {
 		return $this->_documentElement;
 	}
 
@@ -421,7 +421,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @see https://html.spec.whatwg.org/#the-title-element-2
 	 * @return ?HTMLTitleElement
 	 */
-	private function _getTitleElement() : ?Element {
+	private function _getTitleElement(): ?Element {
 		$els = $this->getElementsByTagName( 'title' );
 		'@phan-var FilteredElementList $els'; // @var FilteredElementList $els
 		$els->_traverse( 0 ); // performance hack, halt after finding first title
@@ -432,7 +432,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @see https://html.spec.whatwg.org/#document.title
 	 * @param string $val
 	 */
-	public function setTitle( string $val ) : void {
+	public function setTitle( string $val ): void {
 		// XXX This doesn't handle the case where the document element is SVG
 		$elt = $this->_getTitleElement();
 		$head = $this->getHead();
@@ -451,12 +451,12 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	// and DocumentFragment
 
 	/** @inheritDoc */
-	public function getTextContent() : ?string {
+	public function getTextContent(): ?string {
 		return null;
 	}
 
 	/** @inheritDoc */
-	public function setTextContent( ?string $value ) : void {
+	public function setTextContent( ?string $value ): void {
 		/* do nothing */
 	}
 
@@ -465,12 +465,12 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 
 	/** @inheritDoc */
-	public function createTextNode( string $data ) : Text {
+	public function createTextNode( string $data ): Text {
 		return new Text( $this, $data );
 	}
 
 	/** @inheritDoc */
-	public function createCDATASection( string $data ) : CDATASection {
+	public function createCDATASection( string $data ): CDATASection {
 		if ( $this->_isHTMLDocument() ) {
 			Util::error( 'NotSupportedError' );
 		}
@@ -481,7 +481,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/** @inheritDoc */
-	public function createComment( string $data ) : Comment {
+	public function createComment( string $data ): Comment {
 		return new Comment( $this, $data );
 	}
 
@@ -561,7 +561,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @param ?string $prefix
 	 * @return Element
 	 */
-	public function _createElementNS( string $lname, ?string $ns, ?string $prefix ) : Element {
+	public function _createElementNS( string $lname, ?string $ns, ?string $prefix ): Element {
 		// https://dom.spec.whatwg.org/#concept-element-interface
 		// "The element interface for any name and namespace is Element,
 		// unless stated otherwise."
@@ -714,7 +714,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @inheritDoc
 	 */
-	public function insertBefore( $node, $refChild ) : Node {
+	public function insertBefore( $node, $refChild ): Node {
 		$ret = parent::insertBefore( $node, $refChild );
 		$this->_updateDoctypeAndDocumentElement();
 		return $ret;
@@ -732,7 +732,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @inheritDoc
 	 */
-	public function replaceChild( $node, $child ) : Node {
+	public function replaceChild( $node, $child ): Node {
 		$ret = parent::replaceChild( $node, $child );
 		$this->_updateDoctypeAndDocumentElement();
 		return $ret;
@@ -741,7 +741,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @inheritDoc
 	 */
-	public function removeChild( $child ) : Node {
+	public function removeChild( $child ): Node {
 		$ret = parent::removeChild( $child );
 		$this->_updateDoctypeAndDocumentElement();
 		return $ret;
@@ -762,7 +762,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @param bool $deep if true, clone entire document
 	 * @return Document
 	 */
-	public function cloneNode( bool $deep = false ) : Node {
+	public function cloneNode( bool $deep = false ): Node {
 		/* Make a shallow clone  */
 		$clone = parent::cloneNode( false );
 		'@phan-var Document $clone'; // @var Document $clone
@@ -814,7 +814,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 *
 	 * @return HTMLCollection
 	 */
-	public function getElementsByTagName( string $lname ) : HTMLCollection {
+	public function getElementsByTagName( string $lname ): HTMLCollection {
 		return Element::_getElementsByTagName( $this, $lname );
 	}
 
@@ -824,7 +824,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 *
 	 * @return HTMLCollection
 	 */
-	public function getElementsByTagNameNS( ?string $ns, string $lname ) : HTMLCollection {
+	public function getElementsByTagNameNS( ?string $ns, string $lname ): HTMLCollection {
 		return Element::_getElementsByTagNameNS( $this, $ns, $lname );
 	}
 
@@ -892,7 +892,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		if ( $requireWellFormed ) {
 			if ( $this->getDocumentElement() === null ) {
 				throw new BadXMLException();
@@ -913,7 +913,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @return HTMLElement|null
 	 */
-	public function getBody() : ?HTMLElement {
+	public function getBody(): ?HTMLElement {
 		$html = $this->getDocumentElement();
 		if ( $html === null ) {
 			return null;
@@ -929,7 +929,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/**
 	 * @return HTMLHeadElement|null
 	 */
-	public function getHead() : ?HTMLHeadElement {
+	public function getHead(): ?HTMLHeadElement {
 		$html = $this->getDocumentElement();
 		if ( $html === null ) {
 			return null;

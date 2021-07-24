@@ -27,14 +27,14 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeType() : int {
+	final public function getNodeType(): int {
 		return Node::COMMENT_NODE;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeName() : string {
+	final public function getNodeName(): string {
 		return "#comment";
 	}
 
@@ -53,7 +53,7 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		$data = $this->getData();
 		if ( $requireWellFormed ) {
 			if (

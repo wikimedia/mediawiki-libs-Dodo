@@ -203,12 +203,12 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @see https://dom.spec.whatwg.org/#dom-node-nodevalue
 	 * @return ?string
 	 */
-	public function getNodeValue() : ?string {
+	public function getNodeValue(): ?string {
 		return null; // Override in subclasses
 	}
 
 	/** @inheritDoc */
-	public function setNodeValue( ?string $val ) : void {
+	public function setNodeValue( ?string $val ): void {
 		/* Any other node: Do nothing */
 	}
 
@@ -217,12 +217,12 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @see https://dom.spec.whatwg.org/#dom-node-textcontent
 	 * @return ?string
 	 */
-	public function getTextContent() : ?string {
+	public function getTextContent(): ?string {
 		return null; // Override in subclasses
 	}
 
 	/** @inheritDoc */
-	public function setTextContent( ?string $val ) : void {
+	public function setTextContent( ?string $val ): void {
 		/* Any other node: Do nothing */
 	}
 
@@ -235,7 +235,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * @inheritDoc
 	 */
-	public function getOwnerDocument() : ?Document {
+	public function getOwnerDocument(): ?Document {
 		return $this->_nodeDocument;
 	}
 
@@ -259,7 +259,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * @inheritDoc
 	 */
-	final public function getParentElement() : ?Element {
+	final public function getParentElement(): ?Element {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
@@ -297,7 +297,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	}
 
 	/** @inheritDoc */
-	final public function getPreviousSibling() : ?Node {
+	final public function getPreviousSibling(): ?Node {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
@@ -312,7 +312,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	}
 
 	/** @inheritDoc */
-	final public function getNextSibling() : ?Node {
+	final public function getNextSibling(): ?Node {
 		if ( $this->_parentNode === null ) {
 			return null;
 		}
@@ -330,7 +330,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * This should be overridden in ContainerNode and Leaf.
 	 * @inheritDoc
 	 */
-	abstract public function getChildNodes() : NodeList;
+	abstract public function getChildNodes(): NodeList;
 
 	/**
 	 * This should be overridden in ContainerNode and Leaf.
@@ -395,7 +395,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @return Node Newly inserted Node or empty DocumentFragment
 	 * @throws DOMException "HierarchyRequestError" or "NotFoundError"
 	 */
-	public function insertBefore( $node, $refNode ) : Node {
+	public function insertBefore( $node, $refNode ): Node {
 		'@phan-var Node $node'; // @var Node $node
 		'@phan-var ?Node $refNode'; // @var ?Node $refNode
 		/*
@@ -457,7 +457,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	}
 
 	/** @inheritDoc */
-	public function replaceChild( $new, $old ) : Node {
+	public function replaceChild( $new, $old ): Node {
 		'@phan-var Node $new'; // @var Node $new
 		'@phan-var Node $old'; // @var Node $old
 		/*
@@ -509,7 +509,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	}
 
 	/** @inheritDoc */
-	public function removeChild( $node ) : Node {
+	public function removeChild( $node ): Node {
 		if ( $this === $node->getParentNode() ) {
 			/* Defined on ChildNode class */
 			'@phan-var IChildNode $node'; // @var IChildNode $node
@@ -538,7 +538,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @see https://dom.spec.whatwg.org/#dom-node-normalize
 	 * @inheritDoc
 	 */
-	final public function normalize() : void {
+	final public function normalize(): void {
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $next ) {
 			// $n might get removed, so save the next sibling that we'll visit
 			$next = $n->getNextSibling();
@@ -699,7 +699,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @param bool $deep if true, clone entire subtree
 	 * @return Node (clone of $this)
 	 */
-	public function cloneNode( bool $deep = false ) : Node {
+	public function cloneNode( bool $deep = false ): Node {
 		/* Make a shallow clone using the delegated method */
 		$clone = $this->_subclassCloneNodeShallow();
 
@@ -880,7 +880,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * modification.)
 	 * @return int
 	 */
-	public function _lastModTime() : int {
+	public function _lastModTime(): int {
 		// In domino we'd first consult the per-node counter and return that
 		// if present.  But we're saving space in our Nodes by keeping only
 		// the document-level modclock.
@@ -897,7 +897,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * against, so only update nodes that already have a
 	 * _lastModTime property.]
 	 */
-	public function _modify() : void {
+	public function _modify(): void {
 		$this->_nodeDocument->_modclock++;
 		// In domino, we keep a per-node modification counter as well,
 		// and we would now set the per-node counter to the document
@@ -953,7 +953,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @see https://html.spec.whatwg.org/#html-fragment-serialisation-algorithm
 	 * @param string[] &$result The result is accumulated here
 	 */
-	public function _htmlSerialize( array &$result ) : void {
+	public function _htmlSerialize( array &$result ): void {
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			WhatWG::htmlSerialize( $n, $this, $result );
 		}
@@ -974,7 +974,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		throw new TypeError( "can't serialize to XML" );
 	}
 

@@ -25,7 +25,7 @@ trait Helpers {
 	 *
 	 * @return string
 	 */
-	protected function snakeToCamel( string $input ) : string {
+	protected function snakeToCamel( string $input ): string {
 		$patterns = [ '_' => ' ',
 			'-' => ' ',
 			'.' => ' ' ];
@@ -43,7 +43,7 @@ trait Helpers {
 	 *
 	 * @return string
 	 */
-	protected function snakeToPascal( string $input ) : string {
+	protected function snakeToPascal( string $input ): string {
 		$patterns = [ '_' => ' ',
 			'-' => ' ',
 			'.' => ' ' ];
@@ -63,7 +63,7 @@ trait Helpers {
 	 *
 	 * @return Expression
 	 */
-	protected function addExpectation( string $type, array $args = [], array $attributes = [] ) : Expression {
+	protected function addExpectation( string $type, array $args = [], array $attributes = [] ): Expression {
 		return new Expression( new MethodCall( new Variable( 'this' ),
 			$type,
 			[ new Arg( new String_( Throwable::class ) ) ],
@@ -77,7 +77,7 @@ trait Helpers {
 	 *
 	 * @return DOMNode
 	 */
-	protected function parseHtmlToDom( string $file_path ) : DOMNode {
+	protected function parseHtmlToDom( string $file_path ): DOMNode {
 		$html = file_get_contents( $file_path );
 		$parser = new DOMParser();
 
@@ -91,7 +91,7 @@ trait Helpers {
 	 *
 	 * @return DOMNode
 	 */
-	protected function parseXMLToDom( string $file_path ) : DOMNode {
+	protected function parseXMLToDom( string $file_path ): DOMNode {
 		$html = file_get_contents( $file_path );
 		$parser = new DOMParser();
 
@@ -105,7 +105,7 @@ trait Helpers {
 	 *
 	 * @return DodoDOMDocument|null
 	 */
-	protected function loadHtmlFile( $docRef ) : ?DOMNode {
+	protected function loadHtmlFile( $docRef ): ?DOMNode {
 		$doc = $this->parseHtmlToDom( realpath( '.' ) . '/' . $docRef );
 		// HACK: Ensure there's a DOCTYPE
 		if ( $doc->doctype === null ) {

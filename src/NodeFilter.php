@@ -18,5 +18,5 @@ abstract class NodeFilter implements \Wikimedia\IDLeDOM\NodeFilter {
 	/**
 	 * @inheritDoc
 	 */
-	abstract public function acceptNode( /* Node */ $node ) : int;
+	abstract public function acceptNode( /* Node */ $node ): int;
 }

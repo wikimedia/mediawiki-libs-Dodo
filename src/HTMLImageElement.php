@@ -17,35 +17,35 @@ class HTMLImageElement extends HTMLElement implements \Wikimedia\IDLeDOM\HTMLIma
 	use \Wikimedia\IDLeDOM\Helper\HTMLImageElement;
 
 	/** @inheritDoc */
-	public function getWidth() : int {
+	public function getWidth(): int {
 		return (int)$this->getAttribute( 'width' );
 	}
 
 	/** @inheritDoc */
-	public function getHeight() : int {
+	public function getHeight(): int {
 		return (int)$this->getAttribute( 'height' );
 	}
 
 	/** @inheritDoc */
-	public function getNaturalWidth() : int {
+	public function getNaturalWidth(): int {
 		// "image is not available"
 		return 0;
 	}
 
 	/** @inheritDoc */
-	public function getNaturalHeight() : int {
+	public function getNaturalHeight(): int {
 		// "image is not available"
 		return 0;
 	}
 
 	/** @inheritDoc */
-	public function setWidth( int $w ) : void {
+	public function setWidth( int $w ): void {
 		$this->setAttribute( 'width',
 			(string)$w );
 	}
 
 	/** @inheritDoc */
-	public function setHeight( int $h ) : void {
+	public function setHeight( int $h ): void {
 		$this->setAttribute( 'height',
 			(string)$h );
 	}

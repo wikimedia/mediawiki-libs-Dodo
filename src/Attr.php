@@ -243,7 +243,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	 * @copydoc Node::getNodeType()
 	 * @inheritDoc
 	 */
-	final public function getNodeType() : int {
+	final public function getNodeType(): int {
 		return Node::ATTRIBUTE_NODE;
 	}
 
@@ -251,17 +251,17 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	 * @copydoc Node::getNodeName()
 	 * @inheritDoc
 	 */
-	final public function getNodeName() : string {
+	final public function getNodeName(): string {
 		return $this->_name;
 	}
 
 	/** @inheritDoc */
-	final public function getNodeValue() : ?string {
+	final public function getNodeValue(): ?string {
 		return $this->_value;
 	}
 
 	/** @inheritDoc */
-	final public function setNodeValue( ?string $value ) : void {
+	final public function setNodeValue( ?string $value ): void {
 		$this->setValue( $value ?? '' );
 	}
 
@@ -296,12 +296,12 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	}
 
 	/** @inheritDoc */
-	public function getValue() : string {
+	public function getValue(): string {
 		return $this->_value;
 	}
 
 	/** @inheritDoc */
-	public function setValue( string $value = null ) : void {
+	public function setValue( string $value = null ): void {
 		$value = $value ?? '';
 
 		if ( $this->_value === $value ) {
@@ -358,14 +358,14 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	/**
 	 * @inheritDoc
 	 */
-	public function getTextContent() : ?string {
+	public function getTextContent(): ?string {
 		return $this->getValue();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setTextContent( ?string $val ) : void {
+	public function setTextContent( ?string $val ): void {
 		$this->setValue( $val ?? '' );
 	}
 
@@ -415,7 +415,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		return; // Serialization is the empty string
 	}
 }

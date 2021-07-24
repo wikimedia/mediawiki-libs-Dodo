@@ -105,7 +105,7 @@ class FilteredElementList extends HTMLCollection {
 	 *
 	 * @return Element|null
 	 */
-	private function _next( Element $start ) : ?Element {
+	private function _next( Element $start ): ?Element {
 		$root = ( $this->root instanceof Document ) ? null : $this->root;
 		$elt = $start->_nextElement( $root );
 
@@ -123,7 +123,7 @@ class FilteredElementList extends HTMLCollection {
 	/**
 	 * @return int
 	 */
-	public function getLength() : int {
+	public function getLength(): int {
 		$this->checkcache();
 		if ( !$this->done ) {
 			$this->_traverse();
@@ -148,7 +148,7 @@ class FilteredElementList extends HTMLCollection {
 	 *
 	 * @return Element|null
 	 */
-	public function item( int $n ) : ?Element {
+	public function item( int $n ): ?Element {
 		$this->checkcache();
 		if ( !$this->done && $n >= count( $this->cache ) ) {
 			// This can lead to O(N^2) behavior if we stop when we get to n
@@ -161,7 +161,7 @@ class FilteredElementList extends HTMLCollection {
 	}
 
 	/** @inheritDoc */
-	public function namedItem( string $name ) : ?Element {
+	public function namedItem( string $name ): ?Element {
 		throw $this->_unimplemented();
 	}
 }

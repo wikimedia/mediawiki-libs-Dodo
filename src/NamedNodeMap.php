@@ -159,7 +159,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 	 * @internal
 	 * @param Attr $a
 	 */
-	public function _remove( Attr $a ) : void {
+	public function _remove( Attr $a ): void {
 		$qname = $a->getName();
 		$key = $a->getNamespaceURI() . '|' . $a->getLocalName();
 
@@ -226,7 +226,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 	}
 
 	/** @inheritDoc */
-	public function getNamedItem( string $qname ) : ?Attr {
+	public function getNamedItem( string $qname ): ?Attr {
 		/*
 		 * Per HTML spec, we normalize qname before lookup,
 		 * even though XML itself is case-sensitive.
@@ -247,7 +247,7 @@ class NamedNodeMap implements \Wikimedia\IDLeDOM\NamedNodeMap {
 	}
 
 	/** @inheritDoc */
-	public function getNamedItemNS( ?string $ns, string $lname ) : ?Attr {
+	public function getNamedItemNS( ?string $ns, string $lname ): ?Attr {
 		$ns = $ns ?? "";
 		return $this->_lname_to_attr["$ns|$lname"] ?? null;
 	}

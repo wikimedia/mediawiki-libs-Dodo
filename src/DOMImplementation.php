@@ -54,7 +54,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	 *
 	 * @return bool Always returns true.
 	 */
-	public function hasFeature( string $feature = "", ?string $version = "" ) : bool {
+	public function hasFeature( string $feature = "", ?string $version = "" ): bool {
 		// hasFeature() originally would report whether the user agent
 		// claimed to support a given DOM feature, but experience
 		// proved it was not nearly as reliable or granular as simply
@@ -82,7 +82,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	 * @param string $qualifiedName
 	 * @return bool
 	 */
-	private function isValidQName( string $qualifiedName ) : bool {
+	private function isValidQName( string $qualifiedName ): bool {
 		// $qualifiedName = $this->checkEncoding($qualifiedName);
 		return (bool)preg_match(
 			'/^([a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*:)?[a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*$/i',

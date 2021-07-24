@@ -98,14 +98,14 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param ?callable $func
 	 * @param mixed $this_obj
 	 */
-	public function step_func_done( ?callable $func = null, $this_obj = null ) : void {
+	public function step_func_done( ?callable $func = null, $this_obj = null ): void {
 	}
 
 	/**
 	 * Add a cleanup function to run after assertTest() completes.
 	 * @param callable $func
 	 */
-	public function add_cleanup( callable $func ) : void {
+	public function add_cleanup( callable $func ): void {
 		$this->cleanupFuncs[] = $func;
 	}
 
@@ -137,7 +137,7 @@ abstract class WPTTestHarness extends TestCase {
 	/**
 	 *
 	 */
-	protected function setUp() : void {
+	protected function setUp(): void {
 		$this->invalid_names = [ "",
 			"invalid^Name",
 			"\\",
@@ -158,7 +158,7 @@ abstract class WPTTestHarness extends TestCase {
 	/**
 	 *
 	 */
-	protected function tearDown() : void {
+	protected function tearDown(): void {
 		$this->doc = null;
 	}
 
@@ -225,7 +225,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param bool $actual
 	 * @param string $message
 	 */
-	protected function wptAssertTrue( bool $actual, string $message = '' ) : void {
+	protected function wptAssertTrue( bool $actual, string $message = '' ): void {
 		Assert::assertTrue( $actual, $message );
 	}
 
@@ -233,7 +233,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param bool $actual
 	 * @param string $message
 	 */
-	protected function wptAssertFalse( bool $actual, string $message = '' ) : void {
+	protected function wptAssertFalse( bool $actual, string $message = '' ): void {
 		Assert::assertFalse( $actual, $message );
 	}
 
@@ -242,7 +242,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param mixed $expected
 	 * @param string $message
 	 */
-	protected function wptAssertEquals( $actual, $expected, string $message = '' ) : void {
+	protected function wptAssertEquals( $actual, $expected, string $message = '' ): void {
 		Assert::assertEquals( $expected, $actual, $message );
 	}
 
@@ -251,7 +251,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param mixed $expected
 	 * @param string $message
 	 */
-	protected function wptAssertNotEquals( $actual, $expected, $message = '' ) : void {
+	protected function wptAssertNotEquals( $actual, $expected, $message = '' ): void {
 		Assert::assertNotEquals( $expected, $actual, $message );
 	}
 
@@ -260,7 +260,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param array $haystack
 	 * @param string $description
 	 */
-	protected function wptAssertInArray( $needle, $haystack, string $description = '' ) : void {
+	protected function wptAssertInArray( $needle, $haystack, string $description = '' ): void {
 		Assert::assertContains( $needle, $haystack, $description );
 	}
 
@@ -271,7 +271,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param array $expected
 	 * @param string $description
 	 */
-	protected function wptAssertArrayEquals( $actual, array $expected, string $description = '' ) : void {
+	protected function wptAssertArrayEquals( $actual, array $expected, string $description = '' ): void {
 		// $actual may be a collection, not a literal array
 		Assert::assertThat(
 			$actual,
@@ -306,7 +306,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @todo rewrite this
 	 *
 	 */
-	protected function wptAssertClassString( $object, string $class_string, string $description = '' ) : void {
+	protected function wptAssertClassString( $object, string $class_string, string $description = '' ): void {
 		if ( $class_string === 'String' ) {
 			Assert::assertIsString( $object, $description );
 		} else {
@@ -327,7 +327,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param string $property_name
 	 * @param string $description
 	 */
-	protected function wptAssertIdlAttribute( $object, string $property_name, string $description = '' ) : void {
+	protected function wptAssertIdlAttribute( $object, string $property_name, string $description = '' ): void {
 		// This isn't 100% accurate, since isset returns false if the
 		// property is null, but it will do for a first draft.
 		Assert::assertTrue( isset( $object->$property_name ), $description );
@@ -338,7 +338,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param string $propertyName
 	 * @param string $description
 	 */
-	protected function wptAssertReadonly( $object, $propertyName, $description = '' ) : void {
+	protected function wptAssertReadonly( $object, $propertyName, $description = '' ): void {
 		$initialValue = $object->$propertyName;
 		try {
 			try {
@@ -371,7 +371,7 @@ abstract class WPTTestHarness extends TestCase {
 	 *
 	 * @throws Exception
 	 */
-	protected function wptAssertThrowsJs( string $constructor, callable $func, string $description = '' ) : void {
+	protected function wptAssertThrowsJs( string $constructor, callable $func, string $description = '' ): void {
 		// In practice $constructor always seems to be TypeError
 		try {
 			$func();
@@ -429,7 +429,7 @@ abstract class WPTTestHarness extends TestCase {
 		$funcOrConstructor,
 		$descriptionOrFunc = null,
 		string $maybeDescription = ''
-	) : void {
+	): void {
 		// Most callers call like this:
 		//   wptAssertThrowsDom( $codeOrName, $func, $message )
 		// But some weird callers do this:
@@ -541,7 +541,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param callable $func
 	 * @param string $description
 	 */
-	protected function wptAssertThrowsExactly( Throwable $exception, callable $func, string $description = '' ) : void {
+	protected function wptAssertThrowsExactly( Throwable $exception, callable $func, string $description = '' ): void {
 		try {
 			$func();
 			$this->wptAssertUnreached( "Function did not throw." );
@@ -556,7 +556,7 @@ abstract class WPTTestHarness extends TestCase {
 	/**
 	 * @param string $description
 	 */
-	protected function wptAssertUnreached( string $description = '' ) : void {
+	protected function wptAssertUnreached( string $description = '' ): void {
 		// @phan-suppress-next-line PhanAccessMethodInternal
 		throw new ExpectationFailedException(
 			"Reached unreachable code: $description"
@@ -573,7 +573,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param mixed $actual
 	 * @param array $expected
 	 */
-	public function wptAssertNode( $actual, array $expected ) : void {
+	public function wptAssertNode( $actual, array $expected ): void {
 		Assert::assertInstanceOf( $expected['type'], $actual );
 		if ( ( $expected['id'] ?? null ) !== null ) {
 			Assert::assertEquals(
@@ -641,7 +641,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param ?string $name
 	 * @param ?array $properties
 	 */
-	protected function asyncTest( callable $func, ?string $name = null, ?array $properties = null ) : void {
+	protected function asyncTest( callable $func, ?string $name = null, ?array $properties = null ): void {
 		// XXX To do!
 
 		$func();
@@ -699,7 +699,7 @@ abstract class WPTTestHarness extends TestCase {
 	 *
 	 * @return bool
 	 */
-	protected function sameValue( $x, $y ) : bool {
+	protected function sameValue( $x, $y ): bool {
 		if ( $x === 0 && $y === 0 ) {
 			// Distinguish +0 and -0
 			return var_export( $x, true ) === var_export( $y, true );
@@ -711,14 +711,14 @@ abstract class WPTTestHarness extends TestCase {
 	/**
 	 * STUB
 	 */
-	protected function done() : void {
+	protected function done(): void {
 	}
 
 	/**
 	 * @param callable|array $func_or_properties
 	 * @param ?array $maybe_properties
 	 */
-	protected function setupData( $func_or_properties, ?array $maybe_properties = null ) : void {
+	protected function setupData( $func_or_properties, ?array $maybe_properties = null ): void {
 		$func = null;
 		$properties = [];
 		if ( is_callable( $func_or_properties ) ) {
@@ -781,7 +781,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param array $args
 	 * @param array &$properties
 	 */
-	protected function generateTests( $func, $args, &$properties ) : void {
+	protected function generateTests( $func, $args, &$properties ): void {
 		foreach ( $args as $i => $x ) {
 			$name = array_shift( $x );
 			$this->assertTest(
@@ -803,7 +803,7 @@ abstract class WPTTestHarness extends TestCase {
 		callable $closure,
 		string $message = '',
 		array $properties = []
-	) : void {
+	): void {
 		$this->cleanupFuncs = [];
 		try {
 			$closure( null );
@@ -822,7 +822,7 @@ abstract class WPTTestHarness extends TestCase {
 	 *
 	 * @return array
 	 */
-	protected function arrayMap( $array, callable $callback ) : array {
+	protected function arrayMap( $array, callable $callback ): array {
 		if ( is_array( $array ) ) {
 			return array_map( $callback, $array );
 		}

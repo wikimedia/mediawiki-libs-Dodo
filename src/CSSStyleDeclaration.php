@@ -21,7 +21,7 @@ class CSSStyleDeclaration implements \Wikimedia\IDLeDOM\CSSStyleDeclaration {
 	 * @param string $name
 	 * @param mixed $value
 	 */
-	public function __set( string $name, $value ) : void {
+	public function __set( string $name, $value ): void {
 		switch ( $name ) {
 		case 'cssText':
 		case 'cssFloat':

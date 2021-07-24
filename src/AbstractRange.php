@@ -50,7 +50,7 @@ class AbstractRange implements \Wikimedia\IDLeDOM\AbstractRange {
 	/**
 	 * @return int
 	 */
-	public function getStartOffset() : int {
+	public function getStartOffset(): int {
 		return $this->_start->getOffset();
 	}
 
@@ -64,14 +64,14 @@ class AbstractRange implements \Wikimedia\IDLeDOM\AbstractRange {
 	/**
 	 * @return int
 	 */
-	public function getEndOffset() : int {
+	public function getEndOffset(): int {
 		return $this->_end->getOffset();
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function getCollapsed() : bool {
+	public function getCollapsed(): bool {
 		return $this->_start->equals( $this->_end );
 	}
 }

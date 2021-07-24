@@ -12,7 +12,7 @@ trait ParentNode /* implements \Wikimedia\IDLeDOM\ParentNode */ {
 	/**
 	 * @return ?Element
 	 */
-	public function getFirstElementChild() : ?Element {
+	public function getFirstElementChild(): ?Element {
 		'@phan-var Node $this'; // @var Node $this
 		for ( $kid = $this->getFirstChild();  $kid !== null;  $kid = $kid->getNextSibling() ) {
 			if ( $kid->getNodeType() === Node::ELEMENT_NODE ) {
@@ -26,7 +26,7 @@ trait ParentNode /* implements \Wikimedia\IDLeDOM\ParentNode */ {
 	/**
 	 * @return ?Element
 	 */
-	public function getLastElementChild() : ?Element {
+	public function getLastElementChild(): ?Element {
 		'@phan-var Node $this'; // @var Node $this
 		for ( $kid = $this->getLastChild();  $kid !== null;  $kid = $kid->getPreviousSibling() ) {
 			if ( $kid->getNodeType() === Node::ELEMENT_NODE ) {

@@ -43,7 +43,7 @@ abstract class W3CTestHarness extends TestCase {
 	 * @param mixed $expected
 	 * @param mixed $actual
 	 */
-	public function w3cAssertEquals( string $message, $expected, $actual ) : void {
+	public function w3cAssertEquals( string $message, $expected, $actual ): void {
 		Assert::assertEquals( $expected, $actual, $message );
 	}
 
@@ -51,7 +51,7 @@ abstract class W3CTestHarness extends TestCase {
 	 * @param string $message
 	 * @param bool $actual
 	 */
-	public function w3cAssertTrue( string $message, bool $actual ) : void {
+	public function w3cAssertTrue( string $message, bool $actual ): void {
 		Assert::assertTrue( $actual, $message );
 	}
 
@@ -60,7 +60,7 @@ abstract class W3CTestHarness extends TestCase {
 	 * @param string $message
 	 * @param bool $actual
 	 */
-	public function w3cAssertFalse( string $message, bool $actual ) : void {
+	public function w3cAssertFalse( string $message, bool $actual ): void {
 		Assert::assertFalse( $actual, $message );
 	}
 
@@ -68,7 +68,7 @@ abstract class W3CTestHarness extends TestCase {
 	 * @param string $message
 	 * @param mixed $actual
 	 */
-	public function w3cAssertNull( string $message, $actual ) : void {
+	public function w3cAssertNull( string $message, $actual ): void {
 		Assert::assertNull( $actual, $message );
 	}
 
@@ -77,7 +77,7 @@ abstract class W3CTestHarness extends TestCase {
 	 * @param string $message
 	 * @param mixed $actual
 	 */
-	public function w3cAssertNotNull( string $message, $actual ) : void {
+	public function w3cAssertNotNull( string $message, $actual ): void {
 		Assert::assertNotNull( $actual, $message );
 	}
 
@@ -89,7 +89,7 @@ abstract class W3CTestHarness extends TestCase {
 	 * @param int $expected
 	 * @param mixed $actual
 	 */
-	public function w3cAssertSize( string $descr, int $expected, $actual ) : void {
+	public function w3cAssertSize( string $descr, int $expected, $actual ): void {
 		Assert::assertCount( $expected, $actual, $descr );
 	}
 
@@ -101,7 +101,7 @@ abstract class W3CTestHarness extends TestCase {
 	 */
 	public function w3cAssertEqualsAutoCase(
 		string $context, string $descr, string $expected, $actual
-	) : void {
+	): void {
 		if ( $this->contentType === 'text/html' ) {
 			if ( $context === 'attribute' ) {
 				Assert::assertEqualsIgnoringCase( $expected, $actual, $descr );
@@ -121,7 +121,7 @@ abstract class W3CTestHarness extends TestCase {
 	 */
 	public function w3cAssertEqualsCollectionAutoCase(
 		string $context, string $descr, array $expected, $actual
-	) : void {
+	): void {
 		// This version of the assertion doesn't care about item order
 		if ( $this->contentType !== 'text/html' ) {
 			Assert::assertEqualsCanonicalizing( $expected, $actual, $descr );
@@ -159,7 +159,7 @@ abstract class W3CTestHarness extends TestCase {
 	 */
 	public function w3cAssertEqualsCollection(
 		string $descr, array $expected, $actual
-	) : void {
+	): void {
 		// This version of the assertion doesn't care about item order
 		Assert::assertEqualsCanonicalizing( $expected, $actual, $descr );
 	}
@@ -172,7 +172,7 @@ abstract class W3CTestHarness extends TestCase {
 	 */
 	public function w3cAssertEqualsListAutoCase(
 		string $context, string $descr, array $expected, $actual
-	) : void {
+	): void {
 		// This version of the assertion requires the items to match in order
 		if ( $this->contentType !== 'text/html' ) {
 			Assert::assertEquals( $expected, $actual, $descr );
@@ -195,7 +195,7 @@ abstract class W3CTestHarness extends TestCase {
 	 */
 	public function w3cAssertEqualsList(
 		string $descr, array $expected, $actual
-	) : void {
+	): void {
 		// This version of the assertion requires the items to match in order
 		Assert::assertEquals( $expected, $actual, $descr );
 	}
@@ -209,7 +209,7 @@ abstract class W3CTestHarness extends TestCase {
 	 */
 	public function w3cAssertSame(
 		string $descr, Node $expected, Node $actual
-	) : void {
+	): void {
 		if ( $actual === $expected ) {
 			// This should always succeed, but we need to make sure our
 			// framework knows an assertion test was performed.
@@ -244,7 +244,7 @@ abstract class W3CTestHarness extends TestCase {
 		string $descr, ?string $scheme, ?string $path, ?string $host,
 		?string $file, ?string $name, ?string $query, ?string $fragment,
 		?bool $isAbsolute, $actual
-	) : void {
+	): void {
 		//
 		// URI must be non-null
 		Assert::assertNotNull( $actual, $descr );
@@ -344,7 +344,7 @@ abstract class W3CTestHarness extends TestCase {
 	}
 
 	/** @inheritDoc */
-	protected function tearDown() : void {
+	protected function tearDown(): void {
 		parent::tearDown();
 	}
 
@@ -374,7 +374,7 @@ abstract class W3CTestHarness extends TestCase {
 	/**
 	 * @return DOMImplementation
 	 */
-	protected function getImplementation() : DOMImplementation {
+	protected function getImplementation(): DOMImplementation {
 		return $this->doc->getImplementation();
 	}
 
@@ -387,7 +387,7 @@ abstract class W3CTestHarness extends TestCase {
 	 *
 	 * @return DodoDOMDocument|null
 	 */
-	protected function load( $docRef = null, ?string $name = null, ?string $href = null ) : ?Node {
+	protected function load( $docRef = null, ?string $name = null, ?string $href = null ): ?Node {
 		$this->contentType = 'text/html';
 		$realpath = realpath( '.' );
 		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/W3C' )

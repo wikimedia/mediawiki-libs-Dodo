@@ -19,14 +19,14 @@ class CDATASection extends Text implements \Wikimedia\IDLeDOM\CDATASection {
 	/**
 	 * @inheritDoc
 	 */
-	final public function getNodeType() : int {
+	final public function getNodeType(): int {
 		return Node::CDATA_SECTION_NODE;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getNodeName() : string {
+	public function getNodeName(): string {
 		return "#cdata-section";
 	}
 
@@ -34,7 +34,7 @@ class CDATASection extends Text implements \Wikimedia\IDLeDOM\CDATASection {
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		bool $requireWellFormed, array &$markup
-	) : void {
+	): void {
 		// See https://github.com/w3c/DOM-Parsing/issues/38
 		$data = $this->getData();
 		if ( $requireWellFormed ) {

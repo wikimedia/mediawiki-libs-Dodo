@@ -51,7 +51,7 @@ class HTMLElement extends Element implements \Wikimedia\IDLeDOM\HTMLElement {
 	 * @param string $lname
 	 * @return class-string
 	 */
-	private static function _lookupClass( string $lname ):string {
+	private static function _lookupClass( string $lname ): string {
 		switch ( $lname ) {
 		case 'applet':
 		case 'bgsound':

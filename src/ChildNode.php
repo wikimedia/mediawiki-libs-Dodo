@@ -62,7 +62,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 *
 	 * @inheritDoc
 	 */
-	public function after( ...$args /* DOMStrings and/or Nodes */ ) : void {
+	public function after( ...$args /* DOMStrings and/or Nodes */ ): void {
 		'@phan-var Node $this'; // @var Node $this
 		$parentNode = $this->_parentNode;
 		$nextSibling = $this->getNextSibling();
@@ -108,7 +108,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 *
 	 * @inheritDoc
 	 */
-	public function before( ...$args /* DOMStrings and/or Nodes */ ) : void {
+	public function before( ...$args /* DOMStrings and/or Nodes */ ): void {
 		'@phan-var Node $this'; // @var Node $this
 		$parentNode = $this->_parentNode;
 		$prevSibling = $this->getPreviousSibling();
@@ -149,7 +149,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 * Remove $this from its parent.
 	 * @inheritDoc
 	 */
-	public function remove() : void {
+	public function remove(): void {
 		'@phan-var Node $this'; // @var Node $this
 		if ( $this->_parentNode === null ) {
 			/*
@@ -210,7 +210,7 @@ trait ChildNode /* implements \Wikimedia\IDLeDOM\ChildNode */ {
 	 * Replace this node with the nodes or strings provided as arguments.
 	 * @inheritDoc
 	 */
-	public function replaceWith( ...$args /* Nodes or DOMStrings */ ) : void {
+	public function replaceWith( ...$args /* Nodes or DOMStrings */ ): void {
 		'@phan-var Node $this'; // @var Node $this
 		$parentNode = $this->getParentNode();
 		$nextSibling = $this->getNextSibling();
