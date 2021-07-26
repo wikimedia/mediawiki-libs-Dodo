@@ -58,11 +58,6 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\W3C\HTMLDocument17Test
     files: /tests/W3C/Level1/Html/HTMLDocument17Test.php
-'null does not match expected type "object".':
-    _total: 1
-    _comment: ''
-    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ParentNodeQuerySelectorScopeTest
-    files: /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorScopeTest.php
 'the meta charset must be in effect, making the main document windows-1252-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''

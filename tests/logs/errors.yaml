@@ -313,11 +313,6 @@
     _comment: ''
     testcases: testInnerhtmlMxssSub
     files: /tests/WPT/Domparsing/InnerhtmlMxssSubTest.php
-'InvalidArgumentException: Bad combinator: |':
-    _total: 1
-    _comment: ''
-    testcases: testElementMatchesNamespacedElements
-    files: /tests/WPT/Dom/Nodes/ElementMatchesNamespacedElementsTest.php
 'ParseError: syntax error, unexpected end of file':
     _total: 2
     _comment: ''

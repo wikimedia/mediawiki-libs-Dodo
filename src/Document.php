@@ -818,6 +818,25 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/**
+	 * This is a non-standard Dodo extension that interfaces with the Zest
+	 * CSS selector library to allow quick lookup by ID *even if there are
+	 * multiple nodes in the document with the same ID*.
+	 * @param string $id
+	 * @return array<Element>
+	 */
+	public function _getElementsById( string $id ): array {
+		$n = $this->_id_to_element[$id] ?? null;
+		if ( $n === null ) {
+			return [];
+		}
+		if ( $n instanceof MultiId ) {
+			/* there was more than one element with this id */
+			return $n->table;
+		}
+		return [ $n ];
+	}
+
+	/**
 	 * A number of methods of Document act as if the Document were an
 	 * Element.  Return a fake element class to make these work.
 	 * @return FakeElement

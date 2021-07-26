@@ -14,6 +14,7 @@ $cfg['directory_list'] = [
 	'vendor/wikimedia/remex-html/RemexHtml/Serializer',
 	'vendor/wikimedia/remex-html/RemexHtml/Tokenizer',
 	'vendor/wikimedia/remex-html/RemexHtml/TreeBuilder',
+	'vendor/wikimedia/zest-css/src',
 	'.phan/stubs',
 ];
 $cfg['suppress_issue_types'] = [];

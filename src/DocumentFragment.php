@@ -106,6 +106,11 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 		return $nl->getLength() > 0 ? $nl->item( 0 ) : null;
 	}
 
+	/** @inheritDoc */
+	public function _getElementsById( string $id ): array {
+		return $this->_fakeElement()->_getElementsById( $id );
+	}
+
 	/**
 	 * Create a FakeElement so that we can invoke methods of Element on
 	 * DocumentFragment "as if it were an element".

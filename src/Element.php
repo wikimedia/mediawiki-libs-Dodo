@@ -9,8 +9,8 @@ use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Internal\WhatWG;
+use Wikimedia\Dodo\Internal\Zest;
 use Wikimedia\IDLeDOM\Attr as IAttr;
-use Wikimedia\Zest\Zest;
 
 /**
  * Element.php
@@ -669,6 +669,14 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 
 	/**
 	 * @param string $selectors
+	 * @return bool
+	 */
+	public function webkitMatchesSelector( string $selectors ): bool {
+		return $this->matches( $selectors );
+	}
+
+	/**
+	 * @param string $selectors
 	 * @return ?Element
 	 */
 	public function closest( string $selectors ) {
@@ -784,6 +792,27 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$this,
 			self::_classNamesElementFilter( $names )
 		);
+	}
+
+	/**
+	 * This is a non-standard Dodo extension that interfaces with the Zest
+	 * CSS selector library to allow quick lookup by ID *even if there are
+	 * multiple nodes in the document with the same ID*.
+	 * @param string $id
+	 * @return array<Element>
+	 */
+	public function _getElementsById( string $id ): array {
+		// XXX: We could potentially speed this up by starting with
+		// $this->_nodeDocument->_getElementsById($id) and then filtering
+		// to include only those with $this as an exclusive ancestor, since
+		// we expect only 0 or 1 results from Document::_getElementsById()
+		// (only if $this->isConnected though!)
+		return iterator_to_array( new FilteredElementList(
+			$this,
+			static function ( Element $el ) use ( $id ): bool {
+				return $el->getAttribute( 'id' ) === $id;
+			}
+		) );
 	}
 
 	/**
