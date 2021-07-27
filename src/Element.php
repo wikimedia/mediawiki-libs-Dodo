@@ -265,6 +265,15 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	}
 
 	/*
+	* PHP compatibility
+	*/
+
+	/** @inheritDoc */
+	public function setIdAttribute( string $qualifiedName, bool $isId ): void {
+		/* Ignore this method, it is not necessary in an HTML DOM. */
+	}
+
+	/*
 	 * METHODS DELEGATED FROM NODE
 	 */
 
