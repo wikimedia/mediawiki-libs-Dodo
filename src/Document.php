@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Wikimedia\Dodo;
 
 use Wikimedia\Dodo\Internal\BadXMLException;
+use Wikimedia\Dodo\Internal\FakeElement;
 use Wikimedia\Dodo\Internal\FilteredElementList;
 use Wikimedia\Dodo\Internal\MultiId;
 use Wikimedia\Dodo\Internal\Mutate;
@@ -55,16 +56,23 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	use \Wikimedia\IDLeDOM\Helper\Document;
 
 	/**
-	 * HACK! For compatibilty with W3C test suite, which assumes that an
-	 * access to 'attributes' will return null.
 	 * @param string $name
 	 * @return mixed
 	 */
 	protected function _getMissingProp( string $name ) {
-		if ( $name === 'attributes' ) {
-			return null;
+		switch ( $name ) {
+			case 'attributes':
+				// HACK! For compatibilty with W3C test suite, which
+				// assumes that an access to 'attributes' will return
+				// null.
+				return null;
+			case 'innerHTML':
+				return $this->getInnerHTML(); // nonstandard but handy
+			case 'outerHTML':
+				return $this->getOuterHTML();  // nonstandard but handy
+			default:
+				return parent::_getMissingProp( $name );
 		}
-		return parent::_getMissingProp( $name );
 	}
 
 	/**********************************************************************
@@ -810,12 +818,23 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/**
+	 * A number of methods of Document act as if the Document were an
+	 * Element.  Return a fake element class to make these work.
+	 * @return FakeElement
+	 */
+	public function _fakeElement(): FakeElement {
+		return new FakeElement( $this, function () {
+			return $this->getFirstChild();
+		} );
+	}
+
+	/**
 	 * @param string $lname
 	 *
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagName( string $lname ): HTMLCollection {
-		return Element::_getElementsByTagName( $this, $lname );
+		return $this->_fakeElement()->getElementsByTagName( $lname );
 	}
 
 	/**
@@ -825,7 +844,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagNameNS( ?string $ns, string $lname ): HTMLCollection {
-		return Element::_getElementsByTagNameNS( $this, $ns, $lname );
+		return $this->_fakeElement()->getElementsByTagNameNs( $ns, $lname );
 	}
 
 	/**
@@ -834,7 +853,19 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByClassName( string $names ) {
-		return Element::_getElementsByClassName( $this, $names );
+		return $this->_fakeElement()->getElementsByClassName( $names );
+	}
+
+	/* These are non-standard but still handy, especially for debugging */
+
+	/** @return string the inner HTML of this Document */
+	public function getInnerHTML(): string {
+		return $this->_fakeElement()->getInnerHTML();
+	}
+
+	/** @return string the outer HTML of this Document */
+	public function getOuterHTML(): string {
+		return $this->getInnerHTML();
 	}
 
 	/*

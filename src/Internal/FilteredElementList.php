@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace Wikimedia\Dodo\Internal;
 
-use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\HTMLCollection;
 
@@ -29,7 +28,7 @@ class FilteredElementList extends HTMLCollection {
 	 */
 	private $filter;
 	/**
-	 * @var Document|Element
+	 * @var Element
 	 */
 	private $root;
 	/**
@@ -44,7 +43,7 @@ class FilteredElementList extends HTMLCollection {
 	/**
 	 * FilteredElementList constructor.
 	 *
-	 * @param Document|Element $root
+	 * @param Element $root
 	 * @param callable(Element):bool $filter
 	 */
 	public function __construct( $root, callable $filter ) {
@@ -69,24 +68,7 @@ class FilteredElementList extends HTMLCollection {
 			$n++;
 		}
 
-		if ( $this->root instanceof Document ) {
-			$start = $this->root->getDocumentElement();
-			if ( $start === null ) {
-				// No elements in this document yet!
-				$this->done = true;
-				return;
-			}
-			// traversal should include the document element, so see if it
-			// matches the filter
-			if ( ( $this->filter )( $start ) ) {
-				$this->cache[] = $start;
-				if ( $n && count( $this->cache ) === $n ) {
-					return;
-				}
-			}
-		} else {
-			$start = $this->root;
-		}
+		$start = $this->root;
 		$elt = $this->_next( $start );
 		while ( $elt !== null ) {
 			$this->cache[] = $elt;
@@ -106,15 +88,14 @@ class FilteredElementList extends HTMLCollection {
 	 * @return Element|null
 	 */
 	private function _next( Element $start ): ?Element {
-		$root = ( $this->root instanceof Document ) ? null : $this->root;
-		$elt = $start->_nextElement( $root );
+		$elt = $start->_nextElement( $this->root );
 
 		while ( $elt ) {
 			if ( ( $this->filter )( $elt ) ) {
 				return $elt;
 			}
 
-			$elt = $elt->_nextElement( $root );
+			$elt = $elt->_nextElement( $this->root );
 		}
 
 		return null;

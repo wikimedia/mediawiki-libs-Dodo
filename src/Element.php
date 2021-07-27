@@ -750,18 +750,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagName( string $lname ): HTMLCollection {
-		return self::_getElementsByTagName( $this, $lname );
-	}
-
-	/**
-	 * Root can be either a Document or an Element; in order to avoid
-	 * code duplication this helper method is a static method on Element
-	 * which is invoked by virtual methods on both Document and Element.
-	 * @param Document|Element $root
-	 * @param string $lname
-	 * @return HTMLCollection
-	 */
-	public static function _getElementsByTagName( $root, string $lname ): HTMLCollection {
 		$filter = null;
 		if ( !$lname ) {
 			return new HTMLCollection();
@@ -770,13 +758,13 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$filter = static function ( $el ) {
 				return true;
 			};
-		} elseif ( $root->_nodeDocument->_isHTMLDocument() ) {
+		} elseif ( $this->_nodeDocument->_isHTMLDocument() ) {
 			$filter = self::_htmlLocalNameElementFilter( $lname );
 		} else {
 			$filter = self::_localNameElementFilter( $lname );
 		}
 
-		return new FilteredElementList( $root, $filter );
+		return new FilteredElementList( $this, $filter );
 	}
 
 	/**
@@ -785,16 +773,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByClassName( string $names ) {
-		return self::_getElementsByClassName( $this, $names );
-	}
-
-	/**
-	 * @param Document|Element $root
-	 * @param string $names
-	 *
-	 * @return HTMLCollection
-	 */
-	public static function _getElementsByClassName( $root, string $names ) {
 		if ( empty( $names ) ) {
 			return new HTMLCollection();
 		}
@@ -803,7 +781,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$names ); // Split on ASCII whitespace
 
 		return new FilteredElementList(
-			$root,
+			$this,
 			self::_classNamesElementFilter( $names )
 		);
 	}
@@ -842,16 +820,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagNameNS( ?string $ns, string $lname ): HTMLCollection {
-		return self::_getElementsByTagNameNS( $this, $ns, $lname );
-	}
-
-	/**
-	 * @param Document|Element $root
-	 * @param ?string $ns
-	 * @param string $lname
-	 * @return HTMLCollection
-	 */
-	public static function _getElementsByTagNameNS( $root, ?string $ns, string $lname ): HTMLCollection {
 		$filter = null;
 		if ( $ns === '' ) {
 			$ns = null;
@@ -868,7 +836,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$filter = self::_namespaceLocalNameElementFilter( $ns, $lname );
 		}
 
-		return new FilteredElementList( $root, $filter );
+		return new FilteredElementList( $this, $filter );
 	}
 
 	/**

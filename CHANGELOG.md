@@ -7,7 +7,8 @@
 * EXPERIMENTAL: Added Node::getExtensionData() and Node::setExtensionData()
   methods to allow end-users to associate additional non-spec data off of
   Nodes.
-* Implement DocumentFragment::querySelector() and ::querySelectorAll().
+* Implement DocumentFragment::querySelector(), ::querySelectorAll(), and
+  ::getElementById().
 * Implement Node::getNodePath() for PHP compatibility.
 * Don't export .phan directory in composer package.
 

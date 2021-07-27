@@ -11,6 +11,7 @@ use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\HTMLBodyElement;
 use Wikimedia\Dodo\HTMLCollection;
 use Wikimedia\Dodo\HTMLImageElement;
+use Wikimedia\Dodo\Node;
 use Wikimedia\Dodo\NodeFilter;
 use Wikimedia\Dodo\XMLDocument;
 use Wikimedia\Dodo\XMLSerializer;
@@ -183,7 +184,8 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$ni = $doc->createNodeIterator(
 			$body,
 			NodeFilter::SHOW_ELEMENT | NodeFilter::SHOW_COMMENT | NodeFilter::SHOW_TEXT,
-			static function ( $n ) { return NodeFilter::FILTER_ACCEPT;
+			static function ( $n ) {
+				return NodeFilter::FILTER_ACCEPT;
 			}
 		);
 		$node = $ni->nextNode();
@@ -211,6 +213,19 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNull( $node );
 		$this->assertEquals( '<a>123456</a>789', $doc->body->innerHTML );
 		*/
+	}
+
+	public function testDocumentFragmentGetElementById() {
+		$doc = $this->parse( '<p id=x>test<span id=x>' );
+		$p1 = $doc->querySelector( 'p' );
+		$this->assertNotNull( $p1 );
+		'@phan-var Node $p1'; // @phan-var Node $p1
+		$p2 = $doc->getElementById( 'x' );
+		$this->assertSame( $p1, $p2 );
+		$docFrag = $doc->createDocumentFragment();
+		$docFrag->appendChild( $p1 );
+		$p3 = $docFrag->getElementById( 'x' );
+		$this->assertSame( $p1, $p3 );
 	}
 
 	/**
