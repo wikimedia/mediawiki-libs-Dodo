@@ -27,7 +27,9 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testDodo() {
 		/* Instantiate the nodes */
-		$doc = new Document( null, 'html', 'text/html' );
+		$doc = new Document();
+		// @phan-suppress-next-line PhanAccessMethodInternal
+		$doc->_setContentType( 'text/html', true );
 
 		$all_elements = $doc->getElementsByTagName( '*' );
 		$this->assertSame( 0, $all_elements->length );

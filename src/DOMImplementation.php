@@ -146,7 +146,9 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 
 	/** @inheritDoc */
 	public function createHTMLDocument( ?string $titleText = null ) {
-		$d = new Document( $this->_contextObject, 'html', 'text/html', null );
+		$d = new Document();
+		$d->_setOrigin( $this->_contextObject );
+		$d->_setContentType( 'text/html', true );
 
 		$d->appendChild( new DocumentType( $d, "html" ) );
 

@@ -237,35 +237,27 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	private $_nodeIterators = null;
 
 	/**
-	 * @param ?Document $originDoc
-	 * @param string $type
-	 * @param string $contentType
-	 * @param ?string $url
+	 * @var string Non-standard: the XML version.
 	 */
-	public function __construct(
-		?Document $originDoc = null,
-		string $type = "xml",
-		string $contentType = 'text/xml',
-		?string $url = null
-	) {
+	private $_xmlVersion;
+
+	/**
+	 * These constructor arguments are not given by the DOM spec, but are
+	 * instead chosen to match the PHP constructor arguments for compatibility
+	 * with the DOM extension.
+	 * @see https://www.php.net/manual/en/domdocument.construct.php
+	 * @param string $version
+	 *  The version number of the document as part of the XML declaration.
+	 * @param string $encoding
+	 *  The encoding of the document as part of the XML declaration.
+	 */
+	public function __construct( string $version = "1.0", string $encoding = "" ) {
 		parent::__construct( $this );
-
-		/** DOM-LS */
-		$this->_origin = $originDoc ? $originDoc->_origin : null; // default
-
-		/* Having an HTML Document affects some APIs */
-		if ( $type === 'html' ) {
-			$this->_contentType = 'text/html';
-			$this->_typeIsHtml = true;
-		} else {
-			$this->_contentType = $contentType;
-			$this->_typeIsHtml = false;
-		}
-
-		/* DOM-LS: used by the documentURI and URL method */
-		if ( $url !== null ) {
-			$this->_URL = $url;
-		}
+		$this->_setOrigin( null );
+		$this->_setContentType( "text/xml", false );
+		$this->_setURL( null );
+		$this->setEncoding( $encoding ?: "UTF-8" );
+		$this->_xmlVersion = $version;
 
 		/* DOM-LS: DOMImplementation associated with document */
 		$this->_implementation = new DOMImplementation( $this );
@@ -279,6 +271,46 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		$this->_index_to_element[1] = $this;
 	}
 
+	// These private methods are used during construction. They are all
+	// internal to the Dodo implementation.
+
+	/**
+	 * @param ?Document $originDoc
+	 * @internal
+	 */
+	public function _setOrigin( ?Document $originDoc ): void {
+		$this->_origin = $originDoc ? $originDoc->_origin : null;
+	}
+
+	/**
+	 * @param string $contentType
+	 * @param bool $isHtml Whether this is to be an "HTML document"
+	 * @internal
+	 */
+	public function _setContentType( string $contentType, bool $isHtml ): void {
+		/* Having an HTML Document affects some APIs */
+		if ( $isHtml ) {
+			$this->_contentType = 'text/html';
+			$this->_typeIsHtml = true;
+		} else {
+			$this->_contentType = $contentType;
+			$this->_typeIsHtml = false;
+		}
+	}
+
+	/**
+	 * @param ?string $url
+	 * @internal
+	 */
+	public function _setURL( ?string $url ): void {
+		/* DOM-LS: used by the documentURI and URL method */
+		if ( $url !== null ) {
+			$this->_URL = $url;
+		} else {
+			$this->_URL = 'about:blank';
+		}
+	}
+
 	/**
 	 * The children of a <template> element aren't part of the element's
 	 * node document; instead they are children of an "associated inert
@@ -289,11 +321,15 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		if ( !$this->_templateDocCache ) {
 			/* "associated inert template document" */
 			$newDoc = new Document(
-				$this,
-				$this->_typeIsHtml ? 'html' : 'xml',
-				$this->_contentType,
-				$this->_URL
+				$this->_xmlVersion,
+				$this->_encoding
 			);
+			$newDoc->_setOrigin( $this );
+			$newDoc->_setContentType(
+				$this->_contentType,
+				$this->_typeIsHtml
+			);
+			$newDoc->_setURL( $this->_URL );
 			$this->_templateDocCache = $newDoc->_templateDocCache = $newDoc;
 		}
 		return $this->_templateDocCache;
@@ -912,11 +948,15 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 */
 	protected function _subclassCloneNodeShallow(): Node {
 		$shallow = new Document(
-			$this,
-			$this->_typeIsHtml ? 'html' : 'xml',
-			$this->_contentType,
-			$this->_URL
+			$this->_xmlVersion,
+			$this->_encoding
 		);
+		$shallow->_setOrigin( $this );
+		$shallow->_setContentType(
+			$this->_contentType,
+			$this->_typeIsHtml
+		);
+		$shallow->_setURL( $this->_URL );
 		$shallow->_mode = $this->_mode;
 		return $shallow;
 	}
@@ -950,7 +990,11 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		}
 		// Emitting the XML declaration is not yet in the spec:
 		// https://github.com/w3c/DOM-Parsing/issues/50
-		$markup[] = '<?xml version="1.0" encoding="UTF-8"?>';
+		$markup[] = '<?xml version="';
+		$markup[] = $this->_xmlVersion;
+		$markup[] = '" encoding="';
+		$markup[] = $this->_encoding;
+		$markup[] = '"?>';
 
 		for ( $child = $this->getFirstChild(); $child !== null; $child = $child->getNextSibling() ) {
 			$child->_xmlSerialize(

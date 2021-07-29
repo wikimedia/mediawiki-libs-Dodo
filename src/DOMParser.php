@@ -58,7 +58,8 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 					string $system = null
 				) {
 					// Force this to be an HTML document (not an XML document)
-					$this->doc = new Document( null, 'html', 'text/html' );
+					$this->doc = new Document();
+					$this->doc->_setContentType( 'text/html', true );
 					if ( $doctypeName !== null && $doctypeName !== '' ) {
 						$this->doc->appendChild( new DocumentType(
 							$this->doc,
@@ -129,7 +130,8 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 			LIBXML_NOERROR | LIBXML_NONET | LIBXML_NOWARNING | LIBXML_PARSEHUGE
 		);
 		# According to spec, this is a Document not an XMLDocument
-		$doc = new Document( null, 'xml', $contentType );
+		$doc = new Document();
+		$doc->_setContentType( $contentType, false );
 		$node = $doc;
 		$attrNode = null;
 		while ( $reader->moveToNextAttribute() || $reader->read() ) {
