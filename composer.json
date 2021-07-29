@@ -12,6 +12,18 @@
 		{
 			"name": "Jason Linehan",
 			"email": "jlinehan@wikimedia.org"
+		},
+		{
+			"name": "C. Scott Ananian",
+			"email": "cananian@wikimedia.org"
+		},
+		{
+			"name": "Tim Abdullin",
+			"email": "tim.abdullin@speedandfunction.com"
+		},
+		{
+			"name": "Wikimedia Parsing Team and the broader MediaWiki community",
+			"homepage": "https://www.mediawiki.org/wiki/Parsoid"
 		}
 	],
 	"repositories": [
