@@ -1040,6 +1040,30 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/**
+	 * Loads an XML document from a string.
+	 *
+	 * Non-standard: PHP extension.
+	 * @see https://www.php.net/manual/en/domdocument.loadxml.php
+	 *
+	 * @param string $source
+	 *   The string containing the XML.
+	 * @param int $options
+	 *   Bitwise OR of the libxml option constants.
+	 * @return bool
+	 *   Returns `true` on success or `false` on failure.
+	 */
+	public function loadXML( string $source, int $options = 0 ): bool {
+		try {
+			// XXX we're ignoring the options here, but they'd get passed
+			// in the options array in the _parseXml call
+			DOMParser::_parseXml( $this, $source, [] );
+			return true;
+		} catch ( BadXMLException $e ) {
+			return false;
+		}
+	}
+
+	/**
 	 * @return HTMLElement|null
 	 */
 	public function getBody(): ?HTMLElement {

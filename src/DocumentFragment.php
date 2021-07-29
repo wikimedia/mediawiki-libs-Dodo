@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
+use Wikimedia\Dodo\Internal\BadXMLException;
 use Wikimedia\Dodo\Internal\FakeElement;
 use Wikimedia\Dodo\Internal\FilteredElementList;
 use Wikimedia\Dodo\Internal\NamespacePrefixMap;
@@ -120,6 +121,37 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 		return new FakeElement( $this->_nodeDocument, function () {
 			return $this->getFirstChild();
 		} );
+	}
+
+	// Non-standard methods for PHP compatibility
+
+	/**
+	 * Appends raw XML data to a DOMDocumentFragment.
+	 *
+	 * This method is not part of the DOM standard.
+	 * @see https://www.php.net/manual/en/domdocumentfragment.appendxml.php
+	 *
+	 * @param string $data XML to append.
+	 * @return bool `true` on success or `false` on failure.
+	 */
+	public function appendXML( string $data ): bool {
+		try {
+			// the ::appendXML method allow multiple elements, whereas
+			// ::_parseXml notionally only allows a single element.
+			// So we need to wrap the data as a single element, then
+			// unwrap it. (Ugh)
+			$uniqueName = "DodoUniqueRootName";
+			for ( $i = 0; ; $i++ ) {
+				if ( strpos( $data, "$uniqueName$i" ) === false ) {
+					break;
+				}
+			}
+			$data = "<$uniqueName$i>$data</$uniqueName$i>";
+			DOMParser::_parseXml( $this, $data, [ 'skipRoot' => true ] );
+			return true;
+		} catch ( BadXMLException $e ) {
+			return false;
+		}
 	}
 
 	// Non-standard, but useful (github issue #73)

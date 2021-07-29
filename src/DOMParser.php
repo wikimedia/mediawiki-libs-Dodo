@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
-use Exception;
 use RemexHtml\DOM\DOMBuilder;
 use RemexHtml\Tokenizer\NullTokenHandler;
 use RemexHtml\Tokenizer\Tokenizer;
 use RemexHtml\TreeBuilder\Dispatcher;
 use RemexHtml\TreeBuilder\TreeBuilder;
+use Wikimedia\Dodo\Internal\BadXMLException;
 use Wikimedia\IDLeDOM\DOMParserSupportedType;
 use XMLReader;
 
@@ -30,10 +30,14 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 		case DOMParserSupportedType::text_html:
 			return $this->_parseHtml( $string );
 		default:
+			# According to spec, this is a Document not an XMLDocument
+			$doc = new Document();
+			$doc->_setContentType( $type, false );
 			// XXX if we throw an XML well-formedness error here, we're
 			/// supposed to make a document describing it, instead of
 			// throwing an exception.
-			return $this->_parseXml( $string, $type );
+			self::_parseXml( $doc, $string, [] );
+			return $doc;
 		}
 	}
 
@@ -115,24 +119,22 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 	 *
 	 * @see https://html.spec.whatwg.org/multipage/xhtml.html#xml-parser
 	 *
+	 * @param Node $node A node to which to append the parsed XML
 	 * @param string $s The string to parse
-	 * @param string $contentType
-	 * @return Document
+	 * @param array $options
+	 * @internal
 	 */
-	private function _parseXML( string $s, string $contentType ) {
+	public static function _parseXml( Node $node, string $s, array $options ): void {
 		# The XMLReader class is cranky about empty strings.
 		if ( $s === '' ) {
-			throw new \Exception( "no root element found" );
+			throw new BadXMLException( "no root element found" );
 		}
 		$reader = new XMLReader();
 		$reader->XML(
 			$s, 'utf-8',
 			LIBXML_NOERROR | LIBXML_NONET | LIBXML_NOWARNING | LIBXML_PARSEHUGE
 		);
-		# According to spec, this is a Document not an XMLDocument
-		$doc = new Document();
-		$doc->_setContentType( $contentType, false );
-		$node = $doc;
+		$doc = $node->_nodeDocument;
 		$attrNode = null;
 		while ( $reader->moveToNextAttribute() || $reader->read() ) {
 			switch ( $reader->nodeType ) {
@@ -151,6 +153,10 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 				$qname .= $reader->localName;
 				// This will be the node we'll attach attributes to!
 				$attrNode = $doc->createElementNS( $reader->namespaceURI, $qname );
+				if ( $options['skipRoot'] ?? false ) {
+					$options['skipRoot'] = false;
+					break;
+				}
 				$node->appendChild( $attrNode );
 				// We don't get an END_ELEMENT from the reader if this is
 				// an empty element (sigh)
@@ -211,9 +217,8 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 				$node->appendChild( $nn );
 				break;
 			default:
-				throw new Exception( "Unknown node type: " . $reader->nodeType );
+				throw new BadXMLException( "Unknown node type: " . $reader->nodeType );
 			}
 		}
-		return $doc;
 	}
 }
