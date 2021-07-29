@@ -968,12 +968,12 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @param ?string $namespace
 	 * @param NamespacePrefixMap $prefixMap
 	 * @param int &$prefixIndex
-	 * @param bool $requireWellFormed
+	 * @param array $options
 	 * @param string[] &$markup accumulator for the result
 	 */
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
-		bool $requireWellFormed, array &$markup
+		array $options, array &$markup
 	): void {
 		throw new TypeError( "can't serialize to XML" );
 	}

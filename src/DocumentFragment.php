@@ -78,11 +78,11 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 	/** @inheritDoc */
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
-		bool $requireWellFormed, array &$markup
+		array $options, array &$markup
 	): void {
 		for ( $child = $this->getFirstChild(); $child !== null; $child = $child->getNextSibling() ) {
 			$child->_xmlSerialize(
-				$namespace, $prefixMap, $prefixIndex, $requireWellFormed,
+				$namespace, $prefixMap, $prefixIndex, $options,
 				$markup
 			);
 		}

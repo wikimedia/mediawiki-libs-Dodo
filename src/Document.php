@@ -981,9 +981,9 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	/** @inheritDoc */
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
-		bool $requireWellFormed, array &$markup
+		array $options, array &$markup
 	): void {
-		if ( $requireWellFormed ) {
+		if ( $options['requireWellFormed'] ?? false ) {
 			if ( $this->getDocumentElement() === null ) {
 				throw new BadXMLException();
 			}
@@ -992,15 +992,50 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		// https://github.com/w3c/DOM-Parsing/issues/50
 		$markup[] = '<?xml version="';
 		$markup[] = $this->_xmlVersion;
-		$markup[] = '" encoding="';
-		$markup[] = $this->_encoding;
-		$markup[] = '"?>';
+		if ( $options['phpCompat'] ?? false ) {
+			$markup[] = '"?>' . "\n";
+		} else {
+			$markup[] = '" encoding="';
+			$markup[] = $this->_encoding;
+			$markup[] = '"?>';
+		}
 
 		for ( $child = $this->getFirstChild(); $child !== null; $child = $child->getNextSibling() ) {
 			$child->_xmlSerialize(
-				$namespace, $prefixMap, $prefixIndex, $requireWellFormed,
+				$namespace, $prefixMap, $prefixIndex, $options,
 				$markup
 			);
+		}
+
+		if ( $options['phpCompat'] ?? false ) {
+			$markup[] = "\n";
+		}
+	}
+
+	/**
+	 * Creates an XML document from the DOM representation.
+	 *
+	 * Non-standard: PHP extension.
+	 * @see https://www.php.net/manual/en/domdocument.savexml.php
+	 *
+	 * @param Node|null $node
+	 *   Output only a specific node rather than the entire document.
+	 * @param int $options
+	 *   Additional options. Only LIBXML_NOEMPTYTAG is supported.
+	 * @return string|bool
+	 *   Returns the XML, or `false` if an error occurred.
+	 */
+	public function saveXML( $node = null, int $options = 0 ) {
+		try {
+			$result = [];
+			WhatWG::xmlSerialize( $node ?? $this, [
+				'requireWellFormed' => true,
+				'noEmptyTag' => ( $options & LIBXML_NOEMPTYTAG ) !== 0,
+				'phpCompat' => true,
+			], $result );
+			return implode( '', $result );
+		} catch ( BadXMLException $e ) {
+			return false;
 		}
 	}
 

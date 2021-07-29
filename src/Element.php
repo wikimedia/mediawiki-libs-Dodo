@@ -241,8 +241,9 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$this->_htmlSerialize( $result );
 		} else {
 			// see https://github.com/w3c/DOM-Parsing/issues/28
+			$options = [ 'requireWellFormed' => true ];
 			for ( $node = $this->getFirstChild(); $node !== null; $node = $node->getNextSibling() ) {
-				WhatWG::xmlSerialize( $node, true, $result );
+				WhatWG::xmlSerialize( $node, $options, $result );
 			}
 		}
 		return implode( '', $result );
@@ -259,7 +260,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			WhatWG::htmlSerialize( $this, null, $result );
 		} else {
 			// see https://github.com/w3c/DOM-Parsing/issues/28
-			WhatWG::xmlSerialize( $this, true, $result );
+			WhatWG::xmlSerialize( $this, [ 'requireWellFormed' => true ], $result );
 		}
 		return implode( '', $result );
 	}
@@ -341,13 +342,13 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	/** @inheritDoc */
 	public function _xmlSerialize(
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
-		bool $requireWellFormed, array &$markup
+		array $options, array &$markup
 	): void {
 		// Relocated to WhatWG::xmlSerializeElement because this method
 		// was huge!
 		WhatWG::xmlSerializeElement(
 			$this, $namespace, $prefixMap, $prefixIndex,
-			$requireWellFormed, $markup
+			$options, $markup
 		);
 	}
 

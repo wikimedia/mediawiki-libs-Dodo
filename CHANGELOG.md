@@ -1,6 +1,8 @@
 # Dodo x.x.x (not yet released)
 * Update to wikimedia/zest-css 2.0.0.
-* Stub out Element::setIdAttribute() for PHP compatibility.
+* Implement the following non-standard methods for PHP compatibility:
+  * Element::setIdAttribute() (stubbed out)
+  * Document::saveXML()
 
 # Dodo 0.2.0 (2021-07-26)
 * Update to IDLeDOM 0.7.2.
