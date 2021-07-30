@@ -23,9 +23,10 @@ ALIASES                = "type{1}=<b> \1 </b>:" \
                          "phan=" \
                          "suppress=" \
                          "stable=Stable"
-INPUT                  = README.md src/
+INPUT                  = README.md CHANGELOG.md CODE_OF_CONDUCT.md src/
 TAGFILES               = tags/idledom.xml=https://doc.wikimedia.org/mediawiki-libs-IDLeDOM/main/
-FILE_PATTERNS          = *.php
+FILE_PATTERNS          = *.php *.md
+MARKDOWN_SUPPORT       = YES
 RECURSIVE              = YES
 USE_MDFILE_AS_MAINPAGE = README.md
 FILTER_PATTERNS        = *md=build/doxygen_escape.sh *.php="php build/doxygen_php_filters.php"

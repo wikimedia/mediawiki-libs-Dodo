@@ -105,6 +105,9 @@
 			"@robo log:process"
 		],
 		"phpcbf": "phpcbf",
+		"update-changelog": [
+			"bin/update-changelog"
+		],
 		"update-tests": "@robo build",
 		"update-tags": [
 			"php -r \"copy('https://doc.wikimedia.org/mediawiki-libs-IDLeDOM/main/tagfile.xml', 'tags/idledom.xml');\""
