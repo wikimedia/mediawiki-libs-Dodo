@@ -395,7 +395,10 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @return Node Newly inserted Node or empty DocumentFragment
 	 * @throws DOMException "HierarchyRequestError" or "NotFoundError"
 	 */
-	public function insertBefore( $node, $refNode ): Node {
+	public function insertBefore(
+		// phpcs:ignore MediaWiki.Commenting.FunctionComment.PHP71NullableDocOptionalArg
+		$node, $refNode = null
+	): Node {
 		'@phan-var Node $node'; // @var Node $node
 		'@phan-var ?Node $refNode'; // @var ?Node $refNode
 		/*
