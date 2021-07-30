@@ -952,10 +952,11 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 *
 	 * @see https://html.spec.whatwg.org/#html-fragment-serialisation-algorithm
 	 * @param string[] &$result The result is accumulated here
+	 * @param array $options Format options passed to WhatWG::htmlSerialize
 	 */
-	public function _htmlSerialize( array &$result ): void {
+	public function _htmlSerialize( array &$result, array $options ): void {
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
-			WhatWG::htmlSerialize( $n, $this, $result );
+			WhatWG::htmlSerialize( $result, $n, $this, $options );
 		}
 	}
 

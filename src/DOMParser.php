@@ -26,12 +26,14 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 	 */
 	public function parseFromString( string $string, /* DOMParserSupportedType */ string $type ) {
 		$type = DOMParserSupportedType::cast( $type );
+		$doc = new Document();
 		switch ( $type ) {
 		case DOMParserSupportedType::text_html:
-			return $this->_parseHtml( $string );
+			$doc->_setContentType( 'text/html', true );
+			self::_parseHtml( $doc, $string, [] );
+			return $doc;
 		default:
 			# According to spec, this is a Document not an XMLDocument
-			$doc = new Document();
 			$doc->_setContentType( $type, false );
 			// XXX if we throw an XML well-formedness error here, we're
 			/// supposed to make a document describing it, instead of
@@ -43,17 +45,38 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 
 	/**
 	 * Create an HTML parser, parsing the string as UTF-8.
+	 * @param Document $doc
 	 * @param string $string
+	 * @param array $options
 	 * @return Document
+	 * @internal
 	 */
-	private function _parseHtml( string $string ) {
-		$domBuilder = new class( [
-			'suppressHtmlNamespace' => true,
-			'suppressIdAttribute' => true,
-			'domExceptionClass' => DOMException::class,
-		] ) extends DOMBuilder {
+	public static function _parseHtml( Document $doc, string $string, array $options ) {
+		$domBuilder = new class( $doc, $options ) extends DOMBuilder {
 				/** @var Document */
-				private $doc;
+				public $doc;
+				/** @var array */
+				private $options;
+				/** @var bool */
+				public $sawRealHead = false;
+				/** @var bool */
+				public $sawRealBody = false;
+
+				/**
+				 * Create a new DOMBuilder and store the document and
+				 * options array.
+				 * @param Document $doc
+				 * @param array $options
+				 */
+				public function __construct( Document $doc, array $options ) {
+					parent::__construct( [
+						'suppressHtmlNamespace' => false,
+						'suppressIdAttribute' => true,
+						'domExceptionClass' => DOMException::class,
+					] );
+					$this->doc = $doc;
+					$this->options = $options;
+				}
 
 				/** @inheritDoc */
 				protected function createDocument(
@@ -62,22 +85,49 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 					string $system = null
 				) {
 					// Force this to be an HTML document (not an XML document)
-					$this->doc = new Document();
 					$this->doc->_setContentType( 'text/html', true );
-					if ( $doctypeName !== null && $doctypeName !== '' ) {
-						$this->doc->appendChild( new DocumentType(
-							$this->doc,
-							$doctypeName,
-							$public ?? '',
-							$system ?? ''
-						) );
+					$this->maybeRemoveDoctype();
+					if ( $this->options['phpCompat'] ?? false ) {
+						$this->setDoctype(
+							'html',
+							'-//W3C//DTD HTML 4.0 Transitional//EN',
+							'http://www.w3.org/TR/REC-html40/loose.dtd'
+						);
 					}
 					return $this->doc;
 				}
 
+				/**
+				 * Remove a DocumentType from the given document if one
+				 * is present.
+				 */
+				private function maybeRemoveDoctype() {
+					$doctype = $this->doc->getDoctype();
+					if ( $doctype !== null ) {
+						$doctype->remove();
+					}
+				}
+
+				/**
+				 * Replace any existing doctype for this document with
+				 * new one.
+				 * @param ?string $name
+				 * @param ?string $public
+				 * @param ?string $system
+				 */
+				private function setDoctype( $name, $public, $system ): void {
+					$this->maybeRemoveDoctype();
+					if ( $name !== '' && $name !== null ) {
+						$doctype = new DocumentType(
+							$this->doc, $name, $public ?? '', $system ?? ''
+						);
+						$this->doc->appendChild( $doctype );
+					}
+				}
+
 				/** @inheritDoc */
 				public function doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength ) {
-					parent::doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength );
+					$this->setDoctype( $name, $public, $system );
 					// Set quirks mode on our document.
 					switch ( $quirks ) {
 					case TreeBuilder::NO_QUIRKS:
@@ -91,6 +141,24 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 						break;
 					}
 				}
+
+				/** @inheritDoc */
+				public function insertElement(
+					$preposition, $refElement,
+					\RemexHtml\TreeBuilder\Element $element,
+					$void, $sourceStart, $sourceLength
+				) {
+					if ( $element->name === 'head' && $sourceLength > 0 ) {
+						$this->sawRealHead = true;
+					}
+					if ( $element->name === 'body' && $sourceLength > 0 ) {
+						$this->sawRealBody = true;
+					}
+					parent::insertElement(
+						$preposition, $refElement, $element, $void,
+						$sourceStart, $sourceLength
+					);
+				}
 		};
 		$treeBuilder = new TreeBuilder( $domBuilder, [
 			'ignoreErrors' => true
@@ -100,6 +168,24 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 			'ignoreErrors' => true ]
 		);
 		$tokenizer->execute( [] );
+
+		// For compatibility with PHP's DOMDocument::loadHTML() -- if we didn't
+		// see an actual <head> element during the parse, remove the head;
+		// and if we didn't see an actual <body> during the parse, remove it.
+		if ( $options['phpCompat'] ?? false ) {
+			$head = $doc->getHead();
+			if (
+				( !$domBuilder->sawRealHead ) && $head && $head->_empty()
+			) {
+				$head->remove();
+			}
+			$body = $doc->getBody();
+			if (
+				( !$domBuilder->sawRealBody ) && $body && $body->_empty()
+			) {
+				$body->remove();
+			}
+		}
 
 		$result = $domBuilder->getFragment();
 		return $result;

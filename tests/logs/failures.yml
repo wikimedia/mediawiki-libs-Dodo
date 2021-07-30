@@ -33,11 +33,6 @@
     files: |-
         /tests/WPT/Domparsing/DOMParserParseFromStringHtmlTest.php
         /tests/WPT/Domparsing/XMLSerializerSerializeToStringTest.php
-'Failed asserting that two variables reference the same object.':
-    _total: 1
-    _comment: ''
-    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentDoctypeTest
-    files: /tests/WPT/Dom/Nodes/DocumentDoctypeTest.php
 'HTMLCollection-Failed asserting that false is true.':
     _total: 1
     _comment: ''

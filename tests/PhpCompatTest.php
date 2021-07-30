@@ -69,4 +69,61 @@ class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 			[ '<root/>', "<foo>text</foo><bar>text2</bar>" ],
 		];
 	}
+
+	/**
+	 * Test compatibility with PHP's non-standard methods.
+	 * @dataProvider providePhpLoadSaveHtml
+	 * @covers \Wikimedia\Dodo\Document::loadHTML
+	 * @covers \Wikimedia\Dodo\Document::saveHTML
+	 */
+	public function testPhpLoadSaveHtml( string $load, $options = 0 ) {
+		// First do things with PHP's native DOM
+		$doc = new \DOMDocument();
+		$doc->appendChild( $doc->createElement( 'p' ) );
+		$doc->loadHTML( $load, $options );
+		$expectedDocument = $doc->saveHTML();
+		$expectedElement = $doc->saveHTML( $doc->documentElement );
+		$expectedHasDoctype = ( $doc->doctype !== null );
+		$expectedHasHead = count( $doc->getElementsByTagName( 'head' ) );
+		$expectedHasBody = count( $doc->getElementsByTagName( 'body' ) );
+
+		// Now repeat the test with Dodo's DOM
+		$doc = new Document();
+		$doc->appendChild( $doc->createElement( 'p' ) );
+		$doc->loadHTML( $load, $options );
+		$actualDocument = $doc->saveHTML();
+		$actualElement = $doc->saveHTML( $doc->documentElement );
+		$actualHasDoctype = ( $doc->doctype !== null );
+		$actualHasHead = count( $doc->getElementsByTagName( 'head' ) );
+		$actualHasBody = count( $doc->getElementsByTagName( 'body' ) );
+
+		// Verify that trees are similar
+		$this->assertEquals( $expectedHasDoctype, $actualHasDoctype, "has doctype" );
+		$this->assertEquals( $expectedHasHead, $actualHasHead, "has <head>" );
+		$this->assertEquals( $expectedHasBody, $actualHasBody, "has <body>" );
+		if ( $expectedHasHead > 0 ) {
+			$this->assertNotNull( $doc->getHead(), "head not null" );
+		}
+		if ( $expectedHasBody > 0 ) {
+			$this->assertNotNull( $doc->getBody(), "body not null" );
+		}
+
+		// Okay, domino should provide identical output.
+		$this->assertEquals( $expectedDocument, $actualDocument, "Serializing Document" );
+		$this->assertEquals( $expectedElement, $actualElement, "Serializing Element" );
+	}
+
+	public function providePhpLoadSaveHtml() {
+		return [
+			// Simple load/save tests
+			[ '<html><hr/><br/></html>' ],
+			[ '<html><head><title>This is the title' ],
+			[ '<!DOCTYPE html><p>foo' ],
+			[ '<html><head></head></html>' ],
+			[ '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><p>bar' ],
+			// This test is temporarily disabled because it requires Remex > 2.3.1
+			// See: https://gerrit.wikimedia.org/r/c/mediawiki/libs/RemexHtml/+/709222
+			//[ '<html><body></body></html>' ],
+		];
+	}
 }

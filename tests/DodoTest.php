@@ -72,7 +72,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 
 		/* Print the tree again (<img> should have attributes now) */
 		$result = [];
-		$doc->_htmlSerialize( $result );
+		$doc->_htmlSerialize( $result, [] );
 		$this->assertEquals(
 			'<html><body><!--Hello, world!--><img id="foo" alt="Incredible Vision" width="100" class="abc foo def bar" height="200"><p>Lorem ipsum</p></body></html>',
 			implode( '', $result )
@@ -241,7 +241,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	public function testDOMParser( $html, $expected ) {
 		$node = $this->parse( $html );
 		$result = [];
-		$node->_htmlSerialize( $result );
+		$node->_htmlSerialize( $result, [] );
 		$this->assertEquals( $expected, implode( '', $result ) );
 	}
 

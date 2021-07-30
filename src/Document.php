@@ -1064,6 +1064,61 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	}
 
 	/**
+	 * @see https://www.php.net/manual/en/domdocument.loadhtml.php
+	 *
+	 * @param string $source
+	 *   The HTML string
+	 * @param int $options
+	 *   Additional libxml parameters
+	 * @return bool
+	 *   Returns `true` on success or `false` on failure
+	 */
+	public function loadHTML( string $source, int $options = 0 ): bool {
+		// Empty out this document
+		while ( $this->getFirstChild() !== null ) {
+			$child = $this->getFirstChild();
+			'@phan-var \Wikimedia\IDLeDOM\ChildNode $child';
+			$child->remove();
+		}
+		$this->_setContentType( 'text/html', true );
+		// XXX we should do something with $options
+		DOMParser::_parseHtml( $this, $source, [
+			'phpCompat' => true,
+		] );
+		return true;
+	}
+
+	/**
+	 * Dumps the internal document into a string using HTML formatting.
+	 * @see https://www.php.net/manual/en/domdocument.savehtml.php
+	 *
+	 * @param Node|null $node
+	 *   Optional parameter to output a subset of the document
+	 * @return string|bool
+	 *   Returns the HTML string, or `false` if an error occurred
+	 */
+	public function saveHTML( $node = null ) {
+		if ( $node === null ) {
+			$node = $this;
+		}
+		if ( $node instanceof Document || $node instanceof DocumentFragment ) {
+			$element = $node->_fakeElement();
+		} else {
+			$element = new FakeElement( $this, static function () use ( $node ) {
+				return $node;
+			} );
+		}
+		$result = [];
+		$element->_htmlSerialize( $result, [
+			'phpCompat' => true
+		] );
+		if ( $node instanceof Document ) {
+			$result[] = "\n";
+		}
+		return implode( '', $result );
+	}
+
+	/**
 	 * @return HTMLElement|null
 	 */
 	public function getBody(): ?HTMLElement {

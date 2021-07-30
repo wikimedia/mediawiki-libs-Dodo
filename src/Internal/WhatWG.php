@@ -1259,11 +1259,12 @@ class WhatWG {
 	/**
 	 * This is part of the "HTML fragment serialization algorithm".
 	 * @see https://html.spec.whatwg.org/#html-fragment-serialisation-algorithm
+	 * @param array<string> &$result
 	 * @param Node $child
 	 * @param ?Node $parent This is null when evaluating outerHtml
-	 * @param array<string> &$result
+	 * @param array $options
 	 */
-	public static function htmlSerialize( Node $child, ?Node $parent, array &$result ): void {
+	public static function htmlSerialize( array &$result, Node $child, ?Node $parent, array $options = [] ): void {
 		switch ( $child->getNodeType() ) {
 		case Node::ELEMENT_NODE:
 			'@phan-var Element $child'; // @var Element $child
@@ -1295,7 +1296,7 @@ class WhatWG {
 			if ( !( $html && isset( self::$emptyElements[$tagname] ) ) ) {
 				$i = count( $result );
 				$result[] = ''; // save a space
-				$child->_htmlSerialize( $result );
+				$child->_htmlSerialize( $result, $options );
 				if ( $html && isset( self::$extraNewLine[$tagname] ) &&
 					 ( $result[$i + 1][0] ?? '' ) === "\n" ) {
 					$result[$i] = "\n"; // insert a newline
@@ -1352,15 +1353,20 @@ class WhatWG {
 			$result[] = '<!DOCTYPE ' . $child->getName();
 
 			// Latest HTML serialization spec omits the public/system ID
-			// if ( $child->getPublicID() !== '' ) {
-			//	$result[] = ' PUBLIC "' . $child->getPublicId() . '"';
-			// }
+			if ( $options['phpCompat'] ?? false ) {
+			 if ( $child->getPublicID() !== '' ) {
+				$result[] = ' PUBLIC "' . $child->getPublicId() . '"';
+			 }
 
-			// if ( $child->getSystemId() !== '' ) {
-			//	$result[] = ' "' . $child->getSystemId() . '"';
-			// }
+			 if ( $child->getSystemId() !== '' ) {
+				$result[] = ' "' . $child->getSystemId() . '"';
+			 }
+			}
 
 			$result[] = '>';
+			if ( $options['phpCompat'] ?? false ) {
+				$result[] = "\n";
+			}
 			break;
 		default:
 			Util::error( "InvalidStateError" );

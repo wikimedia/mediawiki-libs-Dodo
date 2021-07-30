@@ -238,7 +238,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$result = [];
 		if ( $this->_nodeDocument->_isHTMLDocument() ) {
 			// "HTML fragment serialization algorithm"
-			$this->_htmlSerialize( $result );
+			$this->_htmlSerialize( $result, [] );
 		} else {
 			// see https://github.com/w3c/DOM-Parsing/issues/28
 			$options = [ 'requireWellFormed' => true ];
@@ -257,7 +257,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$result = [];
 		if ( $this->_nodeDocument->_isHTMLDocument() ) {
 			// "HTML fragment serialization algorithm"
-			WhatWG::htmlSerialize( $this, null, $result );
+			WhatWG::htmlSerialize( $result, $this, null, [] );
 		} else {
 			// see https://github.com/w3c/DOM-Parsing/issues/28
 			WhatWG::xmlSerialize( $this, [ 'requireWellFormed' => true ], $result );

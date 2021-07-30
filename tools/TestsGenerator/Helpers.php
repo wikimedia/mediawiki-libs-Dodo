@@ -106,12 +106,6 @@ trait Helpers {
 	 * @return DodoDOMDocument|null
 	 */
 	protected function loadHtmlFile( $docRef ): ?DOMNode {
-		$doc = $this->parseHtmlToDom( realpath( '.' ) . '/' . $docRef );
-		// HACK: Ensure there's a DOCTYPE
-		if ( $doc->doctype === null ) {
-			$doctype = $doc->implementation->createDocumentType( 'html', '', '' );
-			$doc->insertBefore( $doctype, $doc->firstChild );
-		}
-		return $doc;
+		return $this->parseHtmlToDom( realpath( '.' ) . '/' . $docRef );
 	}
 }
