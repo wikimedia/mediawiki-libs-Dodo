@@ -2,6 +2,7 @@
 
 ## Dodo x.x.x (not yet released)
 * Update to wikimedia/zest-css 2.0.0.
+* Update to wikimedia/idle-dom 0.8.0.
 * Implement the following non-standard methods for PHP compatibility:
   * Document::loadXML()
   * Document::saveXML()

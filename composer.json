@@ -67,7 +67,7 @@
 	},
 	"require": {
 		"php": ">=7.2.9|^8.0",
-		"wikimedia/idle-dom": "0.7.2",
+		"wikimedia/idle-dom": "0.8.0",
 		"wikimedia/remex-html": "^2.3.1",
 		"wikimedia/zest-css": "^2.0.0"
 	},
