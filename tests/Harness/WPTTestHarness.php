@@ -243,6 +243,11 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param string $message
 	 */
 	protected function wptAssertEquals( $actual, $expected, string $message = '' ): void {
+		if ( $expected instanceof Node ) {
+			// If we were to let this fall through, assertEquals would
+			// convert the Node to a string!
+			Assert::assertSame( $expected, $actual, $message );
+		}
 		Assert::assertEquals( $expected, $actual, $message );
 	}
 
