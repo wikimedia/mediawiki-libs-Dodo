@@ -62,7 +62,7 @@ class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 		return [
 			// Simple load/save tests
 			[ '<root><foo>text</foo><bar>text2</bar></root>' ],
-			[ '<html><hr/><br/></html>' ],
+			[ '<html><!--foo--><hr/><br/><!--bar--></html>' ],
 			[ '<root/>', "<foo>text</foo>" ],
 			// Based on Example #1 from
 			// https://www.php.net/manual/en/domdocumentfragment.appendxml.php

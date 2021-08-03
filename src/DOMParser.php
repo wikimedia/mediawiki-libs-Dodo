@@ -270,6 +270,10 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 				$nn = $doc->createCDATASection( $reader->value );
 				$node->appendChild( $nn );
 				break;
+			case XMLReader::COMMENT:
+				$nn = $doc->createComment( $reader->value );
+				$node->appendChild( $nn );
+				break;
 			case XMLReader::DOC_TYPE:
 				# This is a hack: the PHP XMLReader interface provides no
 				# way to extract the contents of a DOC_TYPE node!  So we're
