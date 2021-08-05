@@ -243,6 +243,11 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	private $_xmlVersion;
 
 	/**
+	 * @var bool Non-standard: whether the encoding has been explicitly set
+	 */
+	private $_xmlEncodingSet;
+
+	/**
 	 * These constructor arguments are not given by the DOM spec, but are
 	 * instead chosen to match the PHP constructor arguments for compatibility
 	 * with the DOM extension.
@@ -257,7 +262,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		$this->_setOrigin( null );
 		$this->_setContentType( "text/xml", false );
 		$this->_setURL( null );
-		$this->setEncoding( $encoding ?: "UTF-8" );
+		$this->setEncoding( $encoding );
 		$this->_xmlVersion = $version;
 
 		/* DOM-LS: DOMImplementation associated with document */
@@ -404,7 +409,8 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		// present in the final DOM Level 3 specification, but is the
 		// only way of manipulating XML document encoding in this
 		// implementation."
-		$this->_encoding = $encoding;
+		$this->_encoding = $encoding ?: "UTF-8";
+		$this->_xmlEncodingSet = ( $encoding !== '' );
 	}
 
 	/** @return DOMImplementation */
@@ -1016,14 +1022,17 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		}
 		// Emitting the XML declaration is not yet in the spec:
 		// https://github.com/w3c/DOM-Parsing/issues/50
-		$markup[] = '<?xml version="';
-		$markup[] = $this->_xmlVersion;
-		if ( $options['phpCompat'] ?? false ) {
-			$markup[] = '"?>' . "\n";
-		} else {
-			$markup[] = '" encoding="';
-			$markup[] = $this->_encoding;
+		if ( !( $options['htmlCompat'] ?? false ) ) {
+			$markup[] = '<?xml version="';
+			$markup[] = $this->_xmlVersion;
+			if ( $this->_xmlEncodingSet || !( $options['phpCompat'] ?? false ) ) {
+				$markup[] = '" encoding="';
+				$markup[] = $this->_encoding;
+			}
 			$markup[] = '"?>';
+			if ( $options['phpCompat'] ?? false ) {
+				$markup[] = "\n";
+			}
 		}
 
 		for ( $child = $this->getFirstChild(); $child !== null; $child = $child->getNextSibling() ) {
@@ -1106,6 +1115,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			'@phan-var \Wikimedia\IDLeDOM\ChildNode $child';
 			$child->remove();
 		}
+		$this->setEncoding( '' );
 		$this->_setContentType( 'text/html', true );
 		// XXX we should do something with $options
 		DOMParser::_parseHtml( $this, $source, [
