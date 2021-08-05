@@ -13,6 +13,7 @@ use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 use Wikimedia\Dodo\Internal\Util;
 use Wikimedia\Dodo\Internal\WhatWG;
+use Wikimedia\IDLeDOM\ElementCreationOptions;
 
 /**
  * The Document class.
@@ -569,11 +570,23 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 
 	/** @inheritDoc */
 	public function createElement( string $lname, $options = null ) {
+		if ( $options !== null ) {
+			if ( is_string( $options ) ) {
+				// For PHP-compatibility, treat this as a Text $value
+				$el = $this->createElement( $lname );
+				$el->setTextContent( $options );
+				return $el;
+			}
+			// This checks $options for validity and throws if bad
+			$options = ElementCreationOptions::cast( $options );
+		}
+
 		if ( !WhatWG::is_valid_xml_name( $lname ) ) {
 			Util::error( "InvalidCharacterError" );
 		}
 
-		// We don't support the "is" option at this time.
+		// This is where we would use $options, but
+		// we don't support the "is" option at this time.
 
 		if ( $this->_typeIsHtml ) {
 			// Performance optimization: create a new string only if we need to
@@ -591,8 +604,21 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 
 	/** @inheritDoc */
 	public function createElementNS( ?string $ns, string $qname, $options = null ) {
+		if ( $options !== null ) {
+			if ( is_string( $options ) ) {
+				// For PHP-compatibility, treat this as a Text $value
+				$el = $this->createElementNS( $ns, $qname );
+				$el->setTextContent( $options );
+				return $el;
+			}
+			// This checks $options for validity and throws if bad
+			$options = ElementCreationOptions::cast( $options );
+		}
 		WhatWG::validate_and_extract( $ns, $qname, $prefix, $lname );
-		// We don't support the "is" option at this time.
+
+		// This is where we would use $options, but
+		// we don't support the "is" option at this time.
+
 		return $this->_createElementNS( $lname, $ns, $prefix );
 	}
 
