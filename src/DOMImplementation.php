@@ -41,10 +41,10 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	private $_contextObject;
 
 	/**
-	 * @param Document $contextObject
+	 * @param Document|null $contextObject
 	 */
-	public function __construct( Document $contextObject ) {
-		$this->_contextObject = $contextObject;
+	public function __construct( ?Document $contextObject = null ) {
+		$this->_contextObject = $contextObject ?? new Document();
 	}
 
 	/**
