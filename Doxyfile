@@ -1,13 +1,10 @@
-# Doxyfile for Dodo
-#
-# See <https://www.doxygen.nl/manual/config.html>
-# for help on how to use this file to configure Doxygen.
-
+# Doxyfile <https://www.doxygen.nl/manual/config.html>
 PROJECT_NAME           = "Dodo"
 PROJECT_BRIEF          = "DOm DOcument implementation"
 OUTPUT_DIRECTORY       = doc
 JAVADOC_AUTOBRIEF      = YES
 QT_AUTOBRIEF           = YES
+QUIET                  = YES
 WARN_NO_PARAMDOC       = YES
 ALIASES                = "type{1}=<b> \1 </b>:" \
                          "types{2}=<b> \1 </b> or <b> \2 </b>:" \
@@ -23,22 +20,15 @@ ALIASES                = "type{1}=<b> \1 </b>:" \
                          "phan=" \
                          "suppress=" \
                          "stable=Stable"
-INPUT                  = README.md CHANGELOG.md CODE_OF_CONDUCT.md src/
+INPUT                  = README.md CODE_OF_CONDUCT.md HISTORY.md WebIDL.md src/
 TAGFILES               = tags/idledom.xml=https://doc.wikimedia.org/mediawiki-libs-IDLeDOM/main/
 FILE_PATTERNS          = *.php *.md
 MARKDOWN_SUPPORT       = YES
 RECURSIVE              = YES
 USE_MDFILE_AS_MAINPAGE = README.md
-FILTER_PATTERNS        = *md=build/doxygen_escape.sh *.php="php build/doxygen_php_filters.php"
+FILTER_PATTERNS        = *.php="php build/doxygen_php_filters.php"
 HTML_DYNAMIC_SECTIONS  = YES
 GENERATE_TREEVIEW      = YES
 TREEVIEW_WIDTH         = 250
 GENERATE_LATEX         = NO
-HAVE_DOT               = YES
-DOT_FONTNAME           = Helvetica
-DOT_FONTSIZE           = 10
-TEMPLATE_RELATIONS     = YES
-CALL_GRAPH             = NO
-CALLER_GRAPH           = NO
-DOT_MULTI_TARGETS      = YES
 GENERATE_TAGFILE       = doc/html/tagfile.xml

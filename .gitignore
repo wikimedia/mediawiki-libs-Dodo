@@ -1,9 +1,9 @@
-/coverage
-/doc
-/vendor
-/composer.lock
+/coverage/
+/doc/
+/vendor/
 /.idea
 /.phpunit.result.cache
+/composer.lock
 /node_modules
 /.docksal
 /tests/logs/log.xml
