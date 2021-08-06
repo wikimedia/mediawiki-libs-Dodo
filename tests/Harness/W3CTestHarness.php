@@ -69,6 +69,10 @@ abstract class W3CTestHarness extends TestCase {
 	 * @param mixed $actual
 	 */
 	public function w3cAssertNull( string $message, $actual ): void {
+		if ( is_object( $actual ) ) {
+			// Make the exception message cleaner
+			$actual = "[object " . get_class( $actual ) . "]";
+		}
 		Assert::assertNull( $actual, $message );
 	}
 
