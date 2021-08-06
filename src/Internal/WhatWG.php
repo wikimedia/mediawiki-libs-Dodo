@@ -941,6 +941,12 @@ class WhatWG {
 		$prefixMap = new NamespacePrefixMap();
 		$prefixMap->add( Util::NAMESPACE_XML, 'xml' );
 		$prefixIndex = 1;
+		if (
+			( $options['phpCompat'] ?? false ) &&
+			$node->_nodeDocument->_isHTMLDocument()
+		) {
+			$contextNamespace = Util::NAMESPACE_HTML;
+		}
 		try {
 				$node->_xmlSerialize(
 					$contextNamespace, $prefixMap, $prefixIndex,

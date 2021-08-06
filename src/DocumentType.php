@@ -159,6 +159,9 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 			$markup[] = ' ' . $quote . $this->_systemId . $quote;
 		}
 		$markup[] = '>';
+		if ( $options['phpCompat'] ?? false ) {
+			$markup[] = "\n";
+		}
 	}
 
 }

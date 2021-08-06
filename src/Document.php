@@ -1031,6 +1031,12 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 				$markup[] = '" encoding="';
 				$markup[] = $this->_encoding;
 			}
+			if ( ( $options['phpCompat'] ?? false ) &&
+				$this->getDoctype() &&
+				$this->getDoctype()->getPublicId() !== '' &&
+				$this->getDoctype()->getSystemId() !== '' ) {
+				$markup[] = '" standalone="yes';
+			}
 			$markup[] = '"?>';
 			if ( $options['phpCompat'] ?? false ) {
 				$markup[] = "\n";

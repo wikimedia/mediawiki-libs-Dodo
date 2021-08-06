@@ -7,6 +7,7 @@ namespace Wikimedia\Dodo\Tests;
 
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DocumentFragment;
+use Wikimedia\Dodo\DOMImplementation;
 
 /**
  * Test the various PHP-compatibility methods added to the IDL
@@ -67,6 +68,7 @@ class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 			// Based on Example #1 from
 			// https://www.php.net/manual/en/domdocumentfragment.appendxml.php
 			[ '<root/>', "<foo>text</foo><bar>text2</bar>" ],
+			[ '<html xmlns="http://www.w3.org/1999/xhtml"><body xmlns="http://www.w3.org/1999/xhtml"><div>4</div><!-- 5 -->6</body></html>' ],
 		];
 	}
 
@@ -124,4 +126,83 @@ class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 			[ '<html><body></body></html>' ],
 		];
 	}
+
+	public function testPhpHtmlNamespace() {
+		// Serializing documents with an HTML namespace.
+		$htmlNs = "http://www.w3.org/1999/xhtml";
+		$results = [ 'name' => [], 'actual' => [], 'expected' => [] ];
+		'@phan-var array{name:string[],actual:string[],expected:string[]} $results';
+		for ( $i = 0; $i < 2; $i++ ) {
+			$which = $i == 0 ? 'expected' : 'actual';
+			$addResult = static function ( string $testName, string $value ) use ( $which, &$results ) {
+				$results['name'][count( $results[$which] )] = $testName;
+				$results[$which][] = $value;
+			};
+			$impl = $i == 0 ?
+				// PHP dom extension
+				  new \DOMImplementation() :
+				// Dodo
+				  new DOMImplementation();
+			$doc = $impl->createDocument(
+				$htmlNs, 'html',
+				// XXX next IDLeDOM release will make 2nd/3rd args optional
+				$impl->createDocumentType( 'html', '', '' )
+			);
+			$body = $doc->createElementNS(
+				$htmlNs, 'body', 'This is a weird PHP feature'
+			);
+			$doc->documentElement->appendChild( $body );
+			// Document #1
+			$addResult( "1 Document element namespace",
+					   $doc->documentElement->namespaceURI ?? '<null>' );
+			$addResult( "1 Body element namespace",
+					   $body->namespaceURI ?? '<null>' );
+			$addResult( "1 saveXML", $doc->saveXML() );
+			// This result will vary, because we used createElementNS()
+			#$addResult( "1 saveHTML", $doc->saveHTML() );
+
+			// Document #2
+			$doc->loadHTML( "<body>This is a weird PHP feature</body>" );
+			$doc->encoding = "UTF-8";
+			// This result will vary, because we used a namespace when
+			// creating the Document
+			#$addResult( "2 Document element namespace",
+			#		   $doc->documentElement->namespaceURI ?? '<null>' );
+			$addResult( "2 Body element namespace",
+					   $body->namespaceURI ?? '<null>' );
+			$addResult( "2 saveXML", $doc->saveXML() );
+			$addResult( "2 saveHTML", $doc->saveHTML() );
+
+			// Document #3
+			$doc->loadHTML( "<html></html>" );
+			$body = $doc->createElement(
+				'body', 'This is a weird PHP feature'
+			);
+			$doc->documentElement->appendChild( $body );
+			// This result will vary, because PHP assigns a null namespace
+			// when ::createElement is used while spec says NS should be HTML
+			#$addResult( "3 Body element namespace",
+			#		   $body->namespaceURI ?? '<null>' );
+			$addResult( "3 saveXML", $doc->saveXML() );
+			$addResult( "3 saveHTML", $doc->saveHTML() );
+		}
+		$numDiff = 0;
+		for ( $i = 0; $i < count( $results['name'] ); $i++ ) {
+			if ( $results['expected'][$i] !== $results['actual'][$i] ) {
+				$numDiff++;
+				error_log( "== Difference: " . $results['name'][$i] . " ==" );
+				error_log( "  Expect: " . $results['expected'][$i] );
+				error_log( "  Actual: " . $results['actual'][$i] );
+			}
+			// Comment this out for easier human debugging (ie, see all the
+			// results instead of stopping at the first failure)
+			$this->assertEquals(
+				$results['expected'][$i],
+				$results['actual'][$i],
+				$results['name'][$i]
+			);
+		}
+		$this->assertSame( 0, $numDiff );
+	}
+
 }
