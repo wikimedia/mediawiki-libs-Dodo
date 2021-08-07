@@ -391,7 +391,16 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		if ( !ctype_lower( $qname ) && $this->_isHTMLElement() ) {
 			$qname = Util::toAsciiLowercase( $qname );
 		}
+		$this->_setAttribute( $qname, $value );
+	}
 
+	/**
+	 * Internal version of ::setAttribute() which bypasses checks and
+	 * lowercasing; used by Remex when tree building.
+	 * @param string $qname
+	 * @param string $value
+	 */
+	public function _setAttribute( string $qname, string $value ): void {
 		$attributes = $this->getAttributes();
 		$attr = $attributes->getNamedItem( $qname );
 		if ( $attr === null ) {
@@ -502,9 +511,20 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$prefix = null;
 
 		WhatWG::validate_and_extract( $ns, $qname, $prefix, $lname );
+		$this->_setAttributeNS( $ns, $prefix, $lname, $value );
+	}
 
+	/**
+	 * Internal version of ::setAttributeNS which bypasses checks and prefix
+	 * parsing; used by Remex when tree building.
+	 * @param ?string $ns
+	 * @param ?string $prefix
+	 * @param string $lname
+	 * @param string $value
+	 */
+	public function _setAttributeNS( ?string $ns, ?string $prefix, string $lname, string $value ) {
 		$attributes = $this->getAttributes();
-		$attr = $attributes->getNamedItemNS( $ns, $qname );
+		$attr = $attributes->getNamedItemNS( $ns, $lname );
 		if ( $attr === null ) {
 			$attr = new Attr( $this->_nodeDocument, $this, $lname, $prefix, $ns, $value );
 			$attributes->setNamedItemNS( $attr );

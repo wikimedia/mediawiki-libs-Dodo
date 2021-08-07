@@ -73,6 +73,11 @@
     _comment: ''
     testcases: testReplaceWith
     files: /tests/WPT/Dom/Nodes/ChildNodeReplaceWithTest.php
+'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentCreateElementNamespaceTest::Wikimedia\Dodo\Tests\WPT\Dom\Nodes\{closure}(), 0 passed in /tests/Harness/WPTTestHarness.php on line 652 and exactly 1 expected':
+    _total: 1
+    _comment: ''
+    testcases: testDocumentCreateElementNamespace
+    files: /tests/WPT/Dom/Nodes/DocumentCreateElementNamespaceTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentCreateElementNamespaceTest::testDoc(), 0 passed in /vendor/phpunit/phpunit/src/Framework/TestCase.php on line 1472 and exactly 2 expected':
     _total: 1
     _comment: ''
@@ -363,11 +368,11 @@
         /tests/W3C/Level1/Html/Object13Test.php
         /tests/WPT/Dom/Nodes/ElementGetElementsByTagNameChangeDocumentHTMLNessTest.php
         /tests/WPT/Dom/Ranges/RangeDetachTest.php
-'Trying to get property ''firstChild'' of non-object':
+'Trying to get property ''sup'' of non-object':
     _total: 1
     _comment: ''
-    testcases: testDocumentAdoptNode
-    files: /tests/WPT/Dom/Nodes/DocumentAdoptNodeTest.php
+    testcases: testDOMTokenListCoverageForAttributes
+    files: /tests/WPT/Dom/Lists/DOMTokenListCoverageForAttributesTest.php
 'TypeError: Argument 1 passed to Wikimedia\Dodo\CharacterData::appendData() must be of the type string, null given, called in /tests/WPT/Dom/Nodes/CharacterDataAppendDataTest.php on line 34':
     _total: 1
     _comment: ''
@@ -558,30 +563,16 @@
     _comment: ''
     testcases: testDocumentCreateTextNode
     files: /tests/WPT/Dom/Nodes/DocumentCreateTextNodeTest.php
+'Wikimedia\Dodo\DOMException: Invalid selector.':
+    _total: 1
+    _comment: ''
+    testcases: testParentNodeQuerySelectorsNamespaces
+    files: /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorsNamespacesTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\CSSStyleDeclaration::getCssText':
     _total: 1
     _comment: ''
     testcases: testStyleAttributeHtml
     files: /tests/WPT/Domparsing/StyleAttributeHtmlTest.php
-'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::_createElementNS':
-    _total: 7
-    _comment: ''
-    testcases: |-
-        testDOMTokenListCoverageForAttributes
-        testDocumentCreateElementNamespace
-        testElementTagName
-        testNodeCloneNodeSvg
-        testNodeNodeName
-        testParentNodeQuerySelectorsNamespaces
-        testSvgTemplateQuerySelector
-    files: |-
-        /tests/WPT/Dom/Lists/DOMTokenListCoverageForAttributesTest.php
-        /tests/WPT/Dom/Nodes/DocumentCreateElementNamespaceTest.php
-        /tests/WPT/Dom/Nodes/ElementTagNameTest.php
-        /tests/WPT/Dom/Nodes/NodeCloneNodeSvgTest.php
-        /tests/WPT/Dom/Nodes/NodeNodeNameTest.php
-        /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorsNamespacesTest.php
-        /tests/WPT/Dom/Nodes/SvgTemplateQuerySelectorTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::append':
     _total: 1
     _comment: ''

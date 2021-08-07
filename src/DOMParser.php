@@ -8,6 +8,7 @@ use RemexHtml\DOM\DOMBuilder;
 use RemexHtml\Tokenizer\NullTokenHandler;
 use RemexHtml\Tokenizer\Tokenizer;
 use RemexHtml\TreeBuilder\Dispatcher;
+use RemexHtml\TreeBuilder\Element as TreeElement;
 use RemexHtml\TreeBuilder\TreeBuilder;
 use Wikimedia\Dodo\Internal\BadXMLException;
 use Wikimedia\IDLeDOM\DOMParserSupportedType;
@@ -158,6 +159,38 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 						$preposition, $refElement, $element, $void,
 						$sourceStart, $sourceLength
 					);
+				}
+
+				/** @inheritDoc */
+				protected function createNode( TreeElement $element ) {
+					// Simplified version of this method which eliminates
+					// the various workarounds necessary when using the
+					// PHP dom extension
+
+					// It also deliberately bypasses some character validity
+					// checking done in Document::createElementNS(), which
+					// is per-spec. (We need to prevent createElementNS from
+					// trying to parse `name` as a `qname`.)
+					$node = $this->doc->_createElementNS(
+							$element->name,
+							$element->namespace,
+							null /* prefix */
+					);
+					foreach ( $element->attrs->getObjects() as $attr ) {
+						// This also bypasses checks & prefix parsing
+						if ( $attr->namespaceURI === null ) {
+							$node->_setAttribute(
+								$attr->qualifiedName, $attr->value
+							);
+						} else {
+							$node->_setAttributeNS(
+								$attr->namespaceURI, $attr->prefix,
+								$attr->localName, $attr->value
+							);
+						}
+					}
+					$element->userData = $node;
+					return $node;
 				}
 		};
 		$treeBuilder = new TreeBuilder( $domBuilder, [

@@ -648,7 +648,9 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			return HTMLElement::_createElement( $this, $lname, $prefix );
 		} elseif ( $ns === Util::NAMESPACE_SVG ) {
 			// Similarly in the SVG spec
-			throw $this->_unimplemented();
+			// XXX replace with SVGElement
+			return new Element( $this, $lname, $ns, $prefix );
+			// @phan-suppress-next-line PhanPluginDuplicateIfStatements
 		} else {
 			return new Element( $this, $lname, $ns, $prefix );
 		}
@@ -732,7 +734,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		'@phan-var Node $node'; // @var Node $node
 		if ( $node->getNodeType() === Node::DOCUMENT_NODE ) {
 			// A Document cannot adopt another Document. Throw a "NotSupported" exception.
-			Util::error( "NotSupported" );
+			Util::error( "NotSupportedError" );
 		}
 		if ( $node->getNodeType() === Node::ATTRIBUTE_NODE ) {
 			// Attributes do not have an ownerDocument, so do nothing.

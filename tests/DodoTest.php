@@ -329,4 +329,77 @@ HTML;
 		);
 	}
 
+	public function testForeignElements() {
+		$doc = ( new DOMParser() )->parseFromString(
+			'<svg CLIPPATHunits="px" xlink:href="#foo"></svg>' .
+			'<math definitionurl="#bar" xml:lang="en"></math>',
+			"text/html"
+		);
+		// Check that case was adjusted in the attribute names
+		$this->assertEquals(
+			'<body><svg clipPathUnits="px" xlink:href="#foo"></svg>' .
+			'<math definitionURL="#bar" xml:lang="en"></math></body>',
+			$doc->body->outerHTML
+		);
+		$svg = $doc->body->firstElementChild;
+		$math = $svg->nextElementSibling;
+		$this->assertEquals(
+			'clipPathUnits',
+			$svg->attributes[0]->name
+		);
+		$this->assertEquals(
+			'xlink:href',
+			$svg->attributes[1]->name
+		);
+		$this->assertEquals(
+			'xlink',
+			$svg->attributes[1]->prefix
+		);
+		$this->assertEquals(
+			'href',
+			$svg->attributes[1]->localName
+		);
+
+		$this->assertEquals(
+			'definitionURL',
+			$math->attributes[0]->name
+		);
+		$this->assertEquals(
+			'xml:lang',
+			$math->attributes[1]->name
+		);
+		$this->assertEquals(
+			'xml',
+			$math->attributes[1]->prefix
+		);
+		$this->assertEquals(
+			'lang',
+			$math->attributes[1]->localName
+		);
+
+		// Check that namespace was set correctly
+		$this->assertEquals(
+			'http://www.w3.org/2000/svg',
+			$svg->namespaceURI
+		);
+		$this->assertNull(
+			$svg->attributes[0]->namespaceURI
+		);
+		$this->assertEquals(
+			'http://www.w3.org/1999/xlink',
+			$svg->attributes[1]->namespaceURI
+		);
+
+		$this->assertEquals(
+			'http://www.w3.org/1998/Math/MathML',
+			$math->namespaceURI
+		);
+		$this->assertNull(
+			$math->attributes[0]->namespaceURI
+		);
+		$this->assertEquals(
+			'http://www.w3.org/XML/1998/namespace',
+			$math->attributes[1]->namespaceURI
+		);
+	}
 }

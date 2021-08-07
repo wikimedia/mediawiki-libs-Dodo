@@ -19,6 +19,11 @@
         /tests/WPT/Dom/Nodes/DocumentGetElementsByClassNameTest.php
         /tests/WPT/Dom/Nodes/DocumentTypeRemoveTest.php
         /tests/WPT/Dom/Nodes/ElementRemoveTest.php
+'Failed asserting that null is not equal to null.':
+    _total: 1
+    _comment: ''
+    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\SvgTemplateQuerySelectorTest
+    files: /tests/WPT/Dom/Nodes/SvgTemplateQuerySelectorTest.php
 'Failed asserting that true matches expected ''It must exist on the prototype''.':
     _total: 1
     _comment: ''
