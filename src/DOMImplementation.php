@@ -66,7 +66,7 @@ class DOMImplementation implements \Wikimedia\IDLeDOM\DOMImplementation {
 	}
 
 	/** @inheritDoc */
-	public function createDocumentType( string $qualifiedName, string $publicId, string $systemId ) {
+	public function createDocumentType( string $qualifiedName, string $publicId = '', string $systemId = '' ) {
 		if ( !$this->isValidQName( $qualifiedName ) ) {
 			Util::error( 'Invalid qualified name.', 'InvalidCharacterError' );
 		}
