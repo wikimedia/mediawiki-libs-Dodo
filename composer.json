@@ -69,7 +69,7 @@
 		"php": ">=7.2.9|^8.0",
 		"wikimedia/idle-dom": "0.9.0",
 		"wikimedia/remex-html": "2.3.2",
-		"wikimedia/zest-css": "^2.0.0"
+		"wikimedia/zest-css": "^2.0.1"
 	},
 	"require-dev": {
 		"consolidation/robo": "^3@alpha",
