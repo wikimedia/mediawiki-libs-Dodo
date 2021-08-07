@@ -11,9 +11,9 @@ $cfg['directory_list'] = [
 	'vendor/phpunit/phpunit/src/Framework',
 	'vendor/symfony',
 	'vendor/wikimedia/idle-dom/src',
-	'vendor/wikimedia/remex-html/RemexHtml/Serializer',
-	'vendor/wikimedia/remex-html/RemexHtml/Tokenizer',
-	'vendor/wikimedia/remex-html/RemexHtml/TreeBuilder',
+	'vendor/wikimedia/remex-html/src/Serializer',
+	'vendor/wikimedia/remex-html/src/Tokenizer',
+	'vendor/wikimedia/remex-html/src/TreeBuilder',
 	'vendor/wikimedia/zest-css/src',
 	'.phan/stubs',
 ];

@@ -121,9 +121,7 @@ class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 			[ '<!DOCTYPE html><p>foo' ],
 			[ '<html><head></head></html>' ],
 			[ '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><p>bar' ],
-			// This test is temporarily disabled because it requires Remex > 2.3.1
-			// See: https://gerrit.wikimedia.org/r/c/mediawiki/libs/RemexHtml/+/709222
-			//[ '<html><body></body></html>' ],
+			[ '<html><body></body></html>' ],
 		];
 	}
 }
