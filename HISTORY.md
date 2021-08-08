@@ -13,6 +13,8 @@
   * Element::setIdAttribute() (stubbed out)
 * Allow a final string argument to Document::createElement() and
   Document::createElementNS() for PHP compatibility.
+* Bug fixes to element attribute maintenance; improved compliance with
+  DOM specifications.
 
 ## Dodo 0.2.0 (2021-07-26)
 * Update to IDLeDOM 0.7.2.

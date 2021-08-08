@@ -402,4 +402,59 @@ HTML;
 			$math->attributes[1]->namespaceURI
 		);
 	}
+
+	public function testAttributes() {
+		$doc = ( new DOMParser() )->parseFromString(
+			'<p foo=bar>x',
+			"text/html"
+		);
+		$p = $doc->body->firstElementChild;
+		// Add two attributes with the same qname (but different namespace)
+		$p->setAttributeNS( 'http://example/one', 'p1:a', 'b' );
+		$p->setAttributeNS( 'http://example/two', 'p1:a', 'c' );
+		// As far as I can tell, it's not possible to add two attributes
+		// with the same namespace/localname but different qnames.
+		// This is how you *would* do it -- but note that the spec
+		// sets the prefix of this attribute to 'null' and the localname
+		// to 'p2:foo' to keep the namespace/localname unique.
+		$p->setAttribute( 'p2:foo', 'd' );
+		// All four of these should be present on the element now.
+		$this->assertEquals(
+			'<p foo="bar" p1:a="b" p1:a="c" p2:foo="d">x</p>',
+			$p->outerHTML
+		);
+		// Verify the first of two elements with 'p1:a' qname
+		$this->assertEquals(
+			'b', $p->getAttribute( 'p1:a' )
+		);
+		// Verify the second of two elements with null ns/foo localName
+		$p->removeAttribute( 'p1:a' );
+		$this->assertEquals(
+			'<p foo="bar" p1:a="c" p2:foo="d">x</p>',
+			$p->outerHTML
+		);
+		$this->assertEquals(
+			'c', $p->getAttribute( 'p1:a' )
+		);
+
+		// Verify the first (and only) element with null ns/foo localName
+		$this->assertEquals(
+			'bar', $p->getAttributeNS( null, 'foo' )
+		);
+		$p->removeAttributeNS( null, 'foo' );
+		$this->assertEquals(
+			'<p p1:a="c" p2:foo="d">x</p>',
+			$p->outerHTML
+		);
+		$this->assertNull(
+			$p->getAttributeNS( null, 'foo' )
+		);
+		// And the last element
+		$this->assertEquals(
+			'd', $p->getAttributeNS( null, 'p2:foo' )
+		);
+		$this->assertEquals(
+			'd', $p->getAttribute( 'p2:foo' )
+		);
+	}
 }

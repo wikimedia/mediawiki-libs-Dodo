@@ -112,7 +112,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 				},
 				"class" => static function ( $elem, $old, $new ) {
 					if ( $elem->_classList !== null ) {
-						$elem->_classList->_getList();
+						$elem->_classList->_getList( $new );
 					}
 				},
 			];
@@ -405,7 +405,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$attr = $attributes->getNamedItem( $qname );
 		if ( $attr === null ) {
 			$attr = new Attr( $this->_nodeDocument, $this, $qname, null, null, $value );
-			$attributes->setNamedItem( $attr );
+			$attributes->_append( $attr );
 		} else {
 			$attr->setValue( $value ); /* Triggers _handleAttributeChanges */
 		}
@@ -423,7 +423,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$attr = $this->_attributes->getNamedItem( $qname );
 			if ( $attr !== null ) {
 				// This throws an exception if the attribute is not found!
-				$this->_attributes->removeNamedItem( $qname );
+				$this->_attributes->_remove( $attr );
 			}
 		}
 	}
@@ -527,7 +527,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		$attr = $attributes->getNamedItemNS( $ns, $lname );
 		if ( $attr === null ) {
 			$attr = new Attr( $this->_nodeDocument, $this, $lname, $prefix, $ns, $value );
-			$attributes->setNamedItemNS( $attr );
+			$attributes->_append( $attr );
 		} else {
 			$attr->setValue( $value );
 		}
@@ -545,7 +545,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 			$attr = $this->_attributes->getNamedItemNS( $ns, $lname );
 			if ( $attr !== null ) {
 				// This throws an exception if the attribute is not found!
-				$this->_attributes->removeNamedItemNS( $ns, $lname );
+				$this->_attributes->_remove( $attr );
 			}
 		}
 	}
@@ -602,7 +602,11 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 */
 	public function removeAttributeNode( $attr ): Attr {
 		'@phan-var Attr $attr'; // @var Attr $attr
-		$this->getAttributes()->_remove( $attr );
+		$attributes = $this->getAttributes();
+		if ( !$attributes->_hasNamedItemNode( $attr ) ) {
+			Util::error( "NotFoundError" );
+		}
+		$attributes->_remove( $attr );
 		return $attr;
 	}
 
