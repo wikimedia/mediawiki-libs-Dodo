@@ -4,14 +4,14 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo;
 
-use RemexHtml\DOM\DOMBuilder;
-use RemexHtml\Tokenizer\NullTokenHandler;
-use RemexHtml\Tokenizer\Tokenizer;
-use RemexHtml\TreeBuilder\Dispatcher;
-use RemexHtml\TreeBuilder\Element as TreeElement;
-use RemexHtml\TreeBuilder\TreeBuilder;
 use Wikimedia\Dodo\Internal\BadXMLException;
 use Wikimedia\IDLeDOM\DOMParserSupportedType;
+use Wikimedia\RemexHtml\DOM\DOMBuilder;
+use Wikimedia\RemexHtml\Tokenizer\NullTokenHandler;
+use Wikimedia\RemexHtml\Tokenizer\Tokenizer;
+use Wikimedia\RemexHtml\TreeBuilder\Dispatcher;
+use Wikimedia\RemexHtml\TreeBuilder\Element as TreeElement;
+use Wikimedia\RemexHtml\TreeBuilder\TreeBuilder;
 use XMLReader;
 
 /**
@@ -146,7 +146,7 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 				/** @inheritDoc */
 				public function insertElement(
 					$preposition, $refElement,
-					\RemexHtml\TreeBuilder\Element $element,
+					\Wikimedia\RemexHtml\TreeBuilder\Element $element,
 					$void, $sourceStart, $sourceLength
 				) {
 					if ( $element->name === 'head' && $sourceLength > 0 ) {

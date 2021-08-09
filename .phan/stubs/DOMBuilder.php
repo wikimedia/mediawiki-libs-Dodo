@@ -1,12 +1,12 @@
 <?php
 
-namespace RemexHtml\DOM;
+namespace Wikimedia\RemexHtml\DOM;
 
-use RemexHtml\HTMLData;
-use RemexHtml\Tokenizer\Attributes;
-use RemexHtml\TreeBuilder\Element;
-use RemexHtml\TreeBuilder\TreeBuilder;
-use RemexHtml\TreeBuilder\TreeHandler;
+use Wikimedia\RemexHtml\HTMLData;
+use Wikimedia\RemexHtml\Tokenizer\Attributes;
+use Wikimedia\RemexHtml\TreeBuilder\Element;
+use Wikimedia\RemexHtml\TreeBuilder\TreeBuilder;
+use Wikimedia\RemexHtml\TreeBuilder\TreeHandler;
 
 use Wikimedia\Dodo\Document as DOMDocument;
 use Wikimedia\Dodo\Node as DOMNode;
