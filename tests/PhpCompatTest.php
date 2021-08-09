@@ -145,8 +145,7 @@ class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 				  new DOMImplementation();
 			$doc = $impl->createDocument(
 				$htmlNs, 'html',
-				// XXX next IDLeDOM release will make 2nd/3rd args optional
-				$impl->createDocumentType( 'html', '', '' )
+				$impl->createDocumentType( 'html' )
 			);
 			$body = $doc->createElementNS(
 				$htmlNs, 'body', 'This is a weird PHP feature'
