@@ -8,6 +8,7 @@ namespace Wikimedia\Dodo\Tests;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\DOMImplementation;
+use Wikimedia\Dodo\Text;
 
 /**
  * Test the various PHP-compatibility methods added to the IDL
@@ -204,4 +205,107 @@ class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( 0, $numDiff );
 	}
 
+	/**
+	 * Test the offset & length units on the CharacterData APIs.
+	 */
+	public function testPhpCharacterData() {
+		$results = [ 'name' => [], 'actual' => [], 'expected' => [] ];
+		'@phan-var array{name:string[],actual:string[],expected:string[]} $results';
+		for ( $i = 0; $i < 2; $i++ ) {
+			$which = $i == 0 ? 'expected' : 'actual';
+			$addResult = static function ( string $testName, string $value ) use ( $which, &$results ) {
+				$results['name'][count( $results[$which] )] = $testName;
+				$results[$which][] = $value;
+			};
+			$impl = $i == 0 ?
+				// PHP dom extension
+				  new \DOMImplementation() :
+				// Dodo
+				  new DOMImplementation();
+			$doc = $impl->createDocument(
+				"http://www.w3.org/1999/xhtml", 'html',
+				$impl->createDocumentType( 'html' )
+			);
+			$doc->encoding = 'UTF-8';
+			$body = $doc->createElement( 'body' );
+			$doc->documentElement->appendChild( $body );
+
+			$p1 = $doc->createElement( 'p', 'ASCII' );
+			$p1->setAttribute( 'id', 'one-byte' );
+			$body->appendChild( $p1 );
+
+			$p2 = $doc->createElement( 'p', '¢£½߉ߝ߶' );
+			$p1->setAttribute( 'id', 'two-byte' );
+			$body->appendChild( $p2 );
+
+			$p3 = $doc->createElement( 'p', 'ࠀ€—‖～' );
+			$p1->setAttribute( 'id', 'three-byte' );
+			$body->appendChild( $p3 );
+
+			$p4 = $doc->createElement( 'p', '𐐷🠂😀💩' );
+			$p1->setAttribute( 'id', 'four-byte' );
+			$body->appendChild( $p4 );
+
+			// Make phan happy (this is actually a DOMText in 'expected')
+			$t1 = $p1->firstChild;
+			'@phan-var Text $t1';
+			$t2 = $p2->firstChild;
+			'@phan-var Text $t2';
+			$t3 = $p3->firstChild;
+			'@phan-var Text $t3';
+			$t4 = $p4->firstChild;
+			'@phan-var Text $t4';
+
+			$addResult( '1 byte length', strval( $t1->length ) );
+			$addResult( '2 byte length', strval( $t2->length ) );
+			$addResult( '3 byte length', strval( $t3->length ) );
+			$addResult( '4 byte length', strval( $t4->length ) );
+
+			$addResult( '1 byte substr', $t1->substringData( 1, 1 ) );
+			$addResult( '2 byte substr', $t2->substringData( 1, 1 ) );
+			$addResult( '3 byte substr', $t3->substringData( 1, 1 ) );
+			$addResult( '4 byte substr', $t4->substringData( 1, 1 ) );
+
+			$t1->insertData( 1, ' ' );
+			$t2->insertData( 1, ' ' );
+			$t3->insertData( 1, ' ' );
+			$t4->insertData( 1, ' ' );
+			$addResult( 'insertData', $doc->saveHTML( $body ) );
+
+			$t1->deleteData( 2, 1 );
+			$t2->deleteData( 2, 1 );
+			$t3->deleteData( 2, 1 );
+			$t4->deleteData( 2, 1 );
+			$addResult( 'deleteData', $doc->saveHTML( $body ) );
+
+			$t1->replaceData( 0, 2, '!' );
+			$t2->replaceData( 0, 2, '!' );
+			$t3->replaceData( 0, 2, '!' );
+			$t4->replaceData( 0, 2, '!' );
+			$addResult( 'replaceData', $doc->saveHTML( $body ) );
+
+			$t1->splitText( 2 );
+			$t2->splitText( 2 );
+			$t3->splitText( 2 );
+			$t4->splitText( 2 );
+			$addResult( 'splitText', $doc->saveHTML( $body ) );
+		}
+		$numDiff = 0;
+		for ( $i = 0; $i < count( $results['name'] ); $i++ ) {
+			if ( $results['expected'][$i] !== $results['actual'][$i] ) {
+				$numDiff++;
+				error_log( "== Difference: " . $results['name'][$i] . " ==" );
+				error_log( "  Expect: " . $results['expected'][$i] );
+				error_log( "  Actual: " . $results['actual'][$i] );
+			}
+			// Comment this out for easier human debugging (ie, see all the
+			// results instead of stopping at the first failure)
+			$this->assertEquals(
+				$results['expected'][$i],
+				$results['actual'][$i],
+				$results['name'][$i]
+			);
+		}
+		$this->assertSame( 0, $numDiff );
+	}
 }
