@@ -647,7 +647,7 @@ class WhatWG {
 		 * DOM-LS: #1: If parent is not a Document, DocumentFragment,
 		 * or Element node, throw a HierarchyRequestError.
 		 */
-		switch ( $parent->nodeType ) {
+		switch ( $parent->getNodeType() ) {
 		case Node::DOCUMENT_NODE:
 		case Node::DOCUMENT_FRAGMENT_NODE:
 		case Node::ELEMENT_NODE:
@@ -1285,7 +1285,7 @@ class WhatWG {
 
 			$result[] = '<' . $tagname;
 
-			foreach ( $child->attributes as $a ) {
+			foreach ( $child->getAttributes() as $a ) {
 				$result[] = ' ' . self::_helper_attrname( $a );
 
 				/*

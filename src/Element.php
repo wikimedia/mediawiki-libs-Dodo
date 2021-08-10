@@ -872,7 +872,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 */
 	private static function _localNameElementFilter( string $lname ): callable {
 		return static function ( $el ) use ( $lname ) {
-			return $el->localName === $lname;
+			return $el->getLocalName() === $lname;
 		};
 	}
 
