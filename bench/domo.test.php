@@ -32,10 +32,9 @@ function prof_print() {
  * This is just a demo to show basic invocation.
  * It is not intended to provide test coverage of any kind.
  */
-require_once '../src/dodo.php';
-require_once '../src/html_elements.php';
+require_once '../vendor/autoload.php';
 
-$dom = new Dodo\Document( 'html' );
+$dom = new Wikimedia\Dodo\Document();
 
 $html = $dom->createElement( "html" );
 $body = $dom->createElement( "body" );
@@ -51,12 +50,24 @@ for ( $i = 0; $i < 10000; $i++ ) {
 prof_flag( "append" );
 
 for ( $i = 0; $i < 10000 - 1; $i++ ) {
-		$p[$i]->__unsafe_appendChild( $p[$i + 1] );
+		$p[$i]->appendChild( $p[$i + 1] );
+}
+
+$p2 = [];
+for ( $i = 0; $i < 10000; $i++ ) {
+		$p2[] = $dom->createElement( "p" );
+}
+
+prof_flag( "unsafeappend" );
+
+for ( $i = 0; $i < 10000 - 1; $i++ ) {
+		$p2[$i]->_unsafeAppendChild( $p2[$i + 1] );
 }
 
 prof_flag( "append final" );
 
 $body->appendChild( $p[0] );
+$body->appendChild( $p2[0] );
 $html->appendChild( $body );
 $dom->appendChild( $html );
 
@@ -65,6 +76,7 @@ prof_flag( "done" );
 echo prof_print();
 
 /* Print the tree */
-$result = [];
-$dom->_serialize( $result );
-echo implode( '', $result );
+//echo $dom->getOuterHTML();
+//$result = [];
+//$dom->_serialize( $result );
+//echo implode( '', $result );
