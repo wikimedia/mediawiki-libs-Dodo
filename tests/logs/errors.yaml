@@ -13,11 +13,6 @@
     _comment: ''
     testcases: testRangeStringifier
     files: /tests/WPT/Dom/Ranges/RangeStringifierTest.php
-'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentCreateElementNamespaceTest::Wikimedia\Dodo\Tests\WPT\Dom\Nodes\{closure}(), 0 passed in /tests/Harness/WPTTestHarness.php on line 652 and exactly 1 expected':
-    _total: 1
-    _comment: ''
-    testcases: testDocumentCreateElementNamespace
-    files: /tests/WPT/Dom/Nodes/DocumentCreateElementNamespaceTest.php
 'ArgumentCountError: Too few arguments to function Wikimedia\Dodo\Tests\WPT\Dom\Nodes\NodeInsertBeforeTest::insert(), 2 passed in /tests/WPT/Dom/Nodes/NodeInsertBeforeTest.php on line 55 and exactly 3 expected':
     _total: 1
     _comment: ''
@@ -123,6 +118,20 @@
         /tests/W3C/Level1/Html/Object13Test.php
         /tests/WPT/Dom/Nodes/ElementGetElementsByTagNameChangeDocumentHTMLNessTest.php
         /tests/WPT/Dom/Ranges/RangeDetachTest.php
+'Trying to get property ''href'' of non-object':
+    _total: 1
+    _comment: ''
+    testcases: testNodeCloneNodeExternalStylesheetNoBcSub
+    files: /tests/WPT/Dom/Nodes/NodeCloneNodeExternalStylesheetNoBcSubTest.php
+'Trying to get property ''search'' of non-object':
+    _total: 2
+    _comment: ''
+    testcases: |-
+        testRangeInsertNode
+        testRangeSurroundContents
+    files: |-
+        /tests/WPT/Dom/Ranges/RangeInsertNodeTest.php
+        /tests/WPT/Dom/Ranges/RangeSurroundContentsTest.php
 'Trying to get property ''sup'' of non-object':
     _total: 1
     _comment: ''
@@ -232,6 +241,11 @@
     files: |-
         /tests/WPT/Dom/Nodes/NodeRemoveChildTest.php
         /tests/WPT/Dom/Nodes/NodeTextContentTest.php
+'Undefined variable: eval':
+    _total: 1
+    _comment: ''
+    testcases: testRangeSet
+    files: /tests/WPT/Dom/Ranges/RangeSetTest.php
 'Undefined variable: filter':
     _total: 3
     _comment: ''
@@ -282,22 +296,6 @@
     files: |-
         /tests/WPT/Dom/Nodes/DOMImplementationCreateHTMLDocumentTest.php
         /tests/WPT/Dom/Nodes/NodeCloneNodeOnInactiveDocumentCrashTest.php
-'Undefined variable: location':
-    _total: 3
-    _comment: ''
-    testcases: |-
-        testNodeCloneNodeExternalStylesheetNoBcSub
-        testRangeInsertNode
-        testRangeSurroundContents
-    files: |-
-        /tests/WPT/Dom/Nodes/NodeCloneNodeExternalStylesheetNoBcSubTest.php
-        /tests/WPT/Dom/Ranges/RangeInsertNodeTest.php
-        /tests/WPT/Dom/Ranges/RangeSurroundContentsTest.php
-'Undefined variable: testPoints':
-    _total: 1
-    _comment: ''
-    testcases: testRangeSet
-    files: /tests/WPT/Dom/Ranges/RangeSetTest.php
 'Use of undefined constant Comment - assumed ''Comment'' (this will throw an Error in a future version of PHP)':
     _total: 1
     _comment: ''
@@ -541,6 +539,11 @@
     _comment: ''
     testcases: testHTMLIFrameElement09
     files: /tests/W3C/Level1/Html/HTMLIFrameElement09Test.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLIFrameElement::setSrc':
+    _total: 1
+    _comment: ''
+    testcases: testDocumentCreateElementNamespace
+    files: /tests/WPT/Dom/Nodes/DocumentCreateElementNamespaceTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\HTMLImageElement::getSrc':
     _total: 1
     _comment: ''

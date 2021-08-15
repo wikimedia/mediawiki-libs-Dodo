@@ -29,7 +29,7 @@ class ElementTagNameTest extends WPTTestHarness
             $this->wptAssertEquals($el2->tagName, 'mixedCase');
         }, 'tagName should not upper-case for other non-HTML namespaces');
         $this->assertTest(function () {
-            if (isset($this->window['DOMParser'])) {
+            if (isset($this->getWindow()['DOMParser'])) {
                 $xmlel = (new DOMParser())->parseFromString('<div xmlns="http://www.w3.org/1999/xhtml">Test</div>', 'text/xml')->documentElement;
                 $this->wptAssertEquals($xmlel->tagName, 'div', 'tagName should be lowercase in XML');
                 $htmlel = $this->doc->importNode($xmlel, true);

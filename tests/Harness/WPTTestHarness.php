@@ -21,10 +21,12 @@ use Wikimedia\IDLeDOM\Comment;
 use Wikimedia\IDLeDOM\Document;
 use Wikimedia\IDLeDOM\DOMException;
 use Wikimedia\IDLeDOM\Element;
+use Wikimedia\IDLeDOM\Location;
 use Wikimedia\IDLeDOM\Node;
 use Wikimedia\IDLeDOM\ProcessingInstruction;
 use Wikimedia\IDLeDOM\SimpleException;
 use Wikimedia\IDLeDOM\Text;
+use Wikimedia\IDLeDOM\Window;
 
 /**
  * WPTTestHarness
@@ -110,6 +112,27 @@ abstract class WPTTestHarness extends TestCase {
 	}
 
 	/**
+	 * @return ?Window
+	 */
+	public function getWindow() {
+		return null; // XXX
+	}
+
+	/**
+	 * @return ?Location
+	 */
+	public function getLocation() {
+		return null; // XXX
+	}
+
+	/**
+	 * @return ?string
+	 */
+	public function getURL() {
+		return $this->doc->getURL();
+	}
+
+	/**
 	 * @param mixed $elt
 	 *
 	 * @return mixed
@@ -180,14 +203,6 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param string $innerHTML
 	 */
 	protected function testAfter( string $child, string $nodeName, string $innerHTML ) {
-	}
-
-	/**
-	 * TODO implement this
-	 *
-	 * @param mixed ...$args
-	 */
-	protected function testConstructor( ...$args ) {
 	}
 
 	/**
@@ -644,13 +659,14 @@ abstract class WPTTestHarness extends TestCase {
 
 	/**
 	 * @param callable $func
-	 * @param ?string $name
-	 * @param ?array $properties
+	 * @param string $name
+	 * @param array $properties
 	 */
-	protected function asyncTest( callable $func, ?string $name = null, ?array $properties = null ): void {
+	protected function asyncTest( callable $func, string $name = '', array $properties = [] ): void {
 		// XXX To do!
-
-		$func();
+		$this->assertTest( function () use ( $func ) {
+			$func( $this );
+		}, $name, $properties );
 		/*		if ( $tests->promise_setup_called ) {
 					$tests->status->status = $tests->status->ERROR;
 					$tests->status->message = '`async_test` invoked after `promise_setup`';
@@ -787,7 +803,7 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param array $args
 	 * @param array &$properties
 	 */
-	protected function generateTests( $func, $args, &$properties ): void {
+	protected function generateTests( $func, $args, &$properties = [] ): void {
 		foreach ( $args as $i => $x ) {
 			$name = array_shift( $x );
 			$this->assertTest(

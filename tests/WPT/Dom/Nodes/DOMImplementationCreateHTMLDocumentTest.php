@@ -72,7 +72,7 @@ class DOMImplementationCreateHTMLDocumentTest extends WPTTestHarness
         });
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('test');
-            $this->wptAssertEquals($doc->URL, 'about:blank');
+            $this->wptAssertEquals($this->getURL(), 'about:blank');
             $this->wptAssertEquals($doc->documentURI, 'about:blank');
             $this->wptAssertEquals($doc->compatMode, 'CSS1Compat');
             $this->wptAssertEquals($doc->characterSet, 'UTF-8');

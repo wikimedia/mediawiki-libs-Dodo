@@ -10,7 +10,7 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
         $ev = null;
         $this->assertTest(function () use(&$arg, &$iface) {
             $ev = $this->doc->createEvent($arg);
-            $this->wptAssertEquals(get_class($ev), $this->window[$iface]->prototype);
+            $this->wptAssertEquals(get_class($ev), $this->getWindow()[$iface]->prototype);
         }, $arg . ' should be an alias for ' . $iface . '.');
         $this->assertTest(function () use(&$ev) {
             $this->wptAssertEquals($ev->type, '', 'type should be initialized to the empty string');

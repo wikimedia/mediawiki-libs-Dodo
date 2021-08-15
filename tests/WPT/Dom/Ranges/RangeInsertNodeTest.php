@@ -192,8 +192,8 @@ class RangeInsertNodeTest extends WPTTestHarness
         $iStop = count($this->getCommon()->testRangesShort);
         $jStart = 0;
         $jStop = count($this->getCommon()->testNodesShort);
-        if (preg_match('/subtest=[0-9]+,[0-9]+/', $location->search)) {
-            $matches = preg_match('/subtest=([0-9]+),([0-9]+)/', $location->search, $FIXME);
+        if (preg_match('/subtest=[0-9]+,[0-9]+/', $this->getLocation()->search)) {
+            $matches = preg_match('/subtest=([0-9]+),([0-9]+)/', $this->getLocation()->search, $FIXME);
             $iStart = intval($matches[1]);
             $iStop = intval($matches[1]) + 1;
             $jStart = intval($matches[2]) + 0;

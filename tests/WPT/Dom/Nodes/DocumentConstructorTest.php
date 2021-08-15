@@ -31,7 +31,7 @@ class DocumentConstructorTest extends WPTTestHarness
         $this->assertTest(function () {
             $doc = new Document();
             $this->wptAssertEquals($doc->location, null);
-            $this->wptAssertEquals($doc->URL, 'about:blank');
+            $this->wptAssertEquals($this->getURL(), 'about:blank');
             $this->wptAssertEquals($doc->documentURI, 'about:blank');
             $this->wptAssertEquals($doc->compatMode, 'CSS1Compat');
             $this->wptAssertEquals($doc->characterSet, 'UTF-8');

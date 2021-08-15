@@ -911,11 +911,12 @@ class ParserTask extends BaseTask {
 				'($deepClone instanceof HTMLUnknownElement)',
 			'HTMLUnknownElement::prototype::isPrototypeOf( $clone )' =>
 				'($clone instanceof HTMLUnknownElement)',
-			'$doc::URL' => '$doc->URL',
+			'$doc::URL' => '$this->getURL()',
+			'$window' => '$this->getWindow()',
+			'$location' => '$this->getLocation()',
 			'\'type\' => $Element' => '\'type\' => Element::class',
 			'\'type\' => $Text' => '\'type\' => Text::class',
 			'\'type\' => $Comment' => '\'type\' => Comment::class',
-			'testConstructor' => 'assertTestConstructor',
 			'Node::class::insertBefore' => '\'insertBefore\'',
 			'$new_el[$pair[\'attr\']]' => '$new_el->{$pair[\'attr\']}',
 			'[$method]' => '->{$method}',
@@ -943,7 +944,6 @@ class ParserTask extends BaseTask {
 			'$valid_names',
 			'$validSelectors',
 			'$invalidSelectors',
-			'$window',
 			'$outerShadowHost',
 			'$outerShadowHost',
 		] );
@@ -954,6 +954,7 @@ class ParserTask extends BaseTask {
 			'$testRanges',
 			'$testRangesShort',
 			'$testDiv',
+			'$testPoints',
 		] ), $convert_list );
 
 		$find_replace = array_merge( $find_replace, $convert_list );

@@ -12,7 +12,7 @@ class DOMParserParseFromStringXmlTest extends WPTTestHarness
     public function checkMetadata($doc, $contentType)
     {
         $this->wptAssertTrue($doc instanceof Document, 'Should be Document');
-        $this->wptAssertEquals($doc->URL, $this->doc->URL, 'URL');
+        $this->wptAssertEquals($this->getURL(), $this->doc->URL, 'URL');
         $this->wptAssertEquals($doc->documentURI, $this->doc->URL, 'documentURI');
         $this->wptAssertEquals($doc->baseURI, $this->doc->URL, 'baseURI');
         $this->wptAssertEquals($doc->characterSet, 'UTF-8', 'characterSet');

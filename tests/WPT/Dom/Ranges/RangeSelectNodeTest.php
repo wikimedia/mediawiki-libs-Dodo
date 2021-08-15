@@ -81,7 +81,7 @@ class RangeSelectNodeTest extends WPTTestHarness
         $this->helperTestTree($detachedDiv, 'detached div in current doc');
         $otherTests = ['xmlDoc', 'xmlElement', 'detachedTextNode', 'foreignTextNode', 'xmlTextNode', 'processingInstruction', 'comment', 'foreignComment', 'xmlComment', 'docfrag', 'foreignDocfrag', 'xmlDocfrag'];
         for ($i = 0; $i < count($otherTests); $i++) {
-            $this->helperTestTree($this->window[$otherTests[$i]], $otherTests[$i]);
+            $this->helperTestTree($this->getWindow()[$otherTests[$i]], $otherTests[$i]);
         }
         $this->generateTests([$this, 'helperTestSelectNode'], $tests);
         $this->getCommon()->testDiv->style->display = 'none';

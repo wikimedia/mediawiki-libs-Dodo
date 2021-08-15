@@ -133,7 +133,7 @@ class RangeSetTest extends WPTTestHarness
         $endBeforeTests = [];
         $endAfterTests = [];
         // Don't want to eval() each point a bazillion times
-        $testPointsCached = $this->arrayMap($testPoints, $eval);
+        $this->getCommon()->testPointsCached = $this->arrayMap($this->getCommon()->testPoints, $eval);
         $this->getCommon()->testNodesCached = $this->arrayMap($this->getCommon()->testNodesShort, $eval);
         for ($i = 0; $i < count($this->getCommon()->testRangesShort); $i++) {
             $endpoints = $this->wptEvalNode($this->getCommon()->testRangesShort[$i]);
@@ -143,9 +143,9 @@ class RangeSetTest extends WPTTestHarness
                 $range->setStart($endpoints[0], $endpoints[1]);
                 $range->setEnd($endpoints[2], $endpoints[3]);
             }, 'Set up range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i]);
-            for ($j = 0; $j < count($testPoints); $j++) {
-                $startTests[] = ['setStart() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
-                $endTests[] = ['setEnd() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', point ' . $j . ' ' . $testPoints[$j], $range, $testPointsCached[$j][0], $testPointsCached[$j][1]];
+            for ($j = 0; $j < count($this->getCommon()->testPoints); $j++) {
+                $startTests[] = ['setStart() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', point ' . $j . ' ' . $this->getCommon()->testPoints[$j], $range, $this->getCommon()->testPointsCached[$j][0], $this->getCommon()->testPointsCached[$j][1]];
+                $endTests[] = ['setEnd() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', point ' . $j . ' ' . $this->getCommon()->testPoints[$j], $range, $this->getCommon()->testPointsCached[$j][0], $this->getCommon()->testPointsCached[$j][1]];
             }
             for ($j = 0; $j < count($this->getCommon()->testNodesShort); $j++) {
                 $startBeforeTests[] = ['setStartBefore() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', node ' . $j . ' ' . $this->getCommon()->testNodesShort[$j], $range, $this->getCommon()->testNodesCached[$j]];

@@ -242,8 +242,8 @@ class RangeDeleteContentsTest extends WPTTestHarness
         }, 'Detached Range');
         $iStart = 0;
         $iStop = count($this->getCommon()->testRanges);
-        if (preg_match('/subtest=[0-9]+/', $location->search)) {
-            $matches = preg_match('/subtest=([0-9]+)/', $location->search, $FIXME);
+        if (preg_match('/subtest=[0-9]+/', $this->getLocation()->search)) {
+            $matches = preg_match('/subtest=([0-9]+)/', $this->getLocation()->search, $FIXME);
             $iStart = intval($matches[1]);
             $iStop = intval($matches[1]) + 1;
         }
