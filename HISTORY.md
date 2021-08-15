@@ -5,6 +5,8 @@
   * This is compatible with modern PHP, which has use 'code point' units
     since PHP5.
 * Window now implements the proper IDLeDOM interfaces.
+* Dodo classes now use @phan-forbid-undeclared-magic-properties.
+  * This may cause new phan warnings in user code.
 
 ## Dodo 0.3.0 (2021-08-08)
 * Update to wikimedia/zest-css 2.0.1.

@@ -73,7 +73,7 @@ class WhatWG {
 			$node2 = $attr2->getOwnerElement();
 
 			if ( $attr1 !== null && $node1 !== null && $node2 === $node1 ) {
-				foreach ( $node2->attributes as $a ) {
+				foreach ( $node2->getAttributes() as $a ) {
 					if ( $a === $attr1 ) {
 						return Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + Node::DOCUMENT_POSITION_PRECEDING;
 					}
@@ -194,7 +194,7 @@ class WhatWG {
 			if ( $node->getNamespaceURI() !== null && $node->getPrefix() === $prefix ) {
 				return $node->getNamespaceURI();
 			}
-			foreach ( $node->attributes as $a ) {
+			foreach ( $node->getAttributes() as $a ) {
 				if ( $a->getNamespaceURI() === Util::NAMESPACE_XMLNS ) {
 					if ( ( $a->getPrefix() === 'xmlns' && $a->getLocalName() === $prefix )
 						 || ( $prefix === null && $a->getPrefix() === null && $a->getLocalName() === 'xmlns' ) ) {
@@ -251,7 +251,7 @@ class WhatWG {
 				return $node->getPrefix();
 			}
 
-			foreach ( $node->attributes as $a ) {
+			foreach ( $node->getAttributes() as $a ) {
 				if ( $a->getPrefix() === "xmlns" && $a->getValue() === $ns ) {
 					return $a->getLocalName();
 				}
@@ -774,7 +774,7 @@ class WhatWG {
 			}
 			/* #6b-2: DocumentType is following child. */
 			for ( $n = $child->getNextSibling(); $n !== null; $n = $n->getNextSibling() ) {
-				if ( $n->nodeType === Node::DOCUMENT_TYPE_NODE ) {
+				if ( $n->getNodeType() === Node::DOCUMENT_TYPE_NODE ) {
 					Util::error( "HierarchyRequestError" );
 				}
 			}

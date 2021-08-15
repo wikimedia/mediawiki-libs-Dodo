@@ -22,4 +22,11 @@ $cfg['exclude_analysis_directory_list'][] = 'vendor/';
 $cfg['exclude_analysis_directory_list'][] = 'tests/W3C/';
 $cfg['exclude_analysis_directory_list'][] = 'tests/WPT/';
 
+if ( getenv( "DODO_CHECK_MAGIC_PROPERTIES" ) ) {
+	// Don't let Dodo itself use magic properties
+	$cfg['read_magic_property_annotations'] = false;
+	// Except in tests, that's fine.
+	$cfg['exclude_analysis_directory_list'][] = 'tests/';
+}
+
 return $cfg;

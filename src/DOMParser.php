@@ -17,6 +17,7 @@ use XMLReader;
 /**
  * DOMParser
  * @see https://dom.spec.whatwg.org/#interface-domparser
+ * @phan-forbid-undeclared-magic-properties
  */
 class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 

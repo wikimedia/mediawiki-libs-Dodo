@@ -22,6 +22,7 @@ use Wikimedia\IDLeDOM\Node as INode;
  *
  * Conforms to W3C Document Object Model (DOM) Level 1 Recommendation
  * (see: https://www.w3.org/TR/2000/WD-DOM-Level-1-20000929)
+ * @phan-forbid-undeclared-magic-properties
  */
 abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	// Stub out methods not yet implemented.

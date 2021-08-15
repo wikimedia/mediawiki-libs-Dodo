@@ -18,6 +18,7 @@ use Wikimedia\Dodo\Internal\UnimplementedTrait;
  * since we are operating in a somewhat "headless" mode.
  *
  * Consider eliminating this, or stubbing it.
+ * @phan-forbid-undeclared-magic-properties
  */
 class Window extends EventTarget implements \Wikimedia\IDLeDOM\Window {
 	// DOM mixins
