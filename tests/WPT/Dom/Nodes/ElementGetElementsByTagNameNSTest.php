@@ -8,7 +8,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Element-getElementsByTagNameNS.html.
 class ElementGetElementsByTagNameNSTest extends WPTTestHarness
 {
-    public function testGetElementsByTagNameNS($context, $element)
+    public function helperTestGetElementsByTagNameNS($context, $element)
     {
         global $element;
         $this->assertTest(function () use(&$context) {
@@ -170,7 +170,7 @@ class ElementGetElementsByTagNameNSTest extends WPTTestHarness
         $p->appendChild($this->doc->createElement('b'))->appendChild($this->doc->createTextNode('bold'));
         $p->appendChild($this->doc->createElement('em'))->appendChild($this->doc->createElement('u'))->appendChild($this->doc->createTextNode('emphasized'));
         $element->appendChild($this->doc->createComment('comment'));
-        $this->testGetElementsByTagNameNS($element, $element);
+        $this->helperTestGetElementsByTagNameNS($element, $element);
         $this->assertTest(function () use(&$element) {
             $this->wptAssertArrayEquals($element->getElementsByTagNameNS('*', $element->localName), []);
         }, 'Matching the context object (wildcard namespace)');

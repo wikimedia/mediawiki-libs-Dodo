@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-createComment.html.
 class DocumentCreateCommentTest extends WPTTestHarness
 {
-    public function assertTestCreate($method, $iface, $nodeType, $nodeName)
+    public function helperTestCreate($method, $iface, $nodeType, $nodeName)
     {
         foreach (["\\u000b", 'a -- b', 'a-', '-b', null, null] as $value) {
             $this->assertTest(function () use(&$method, &$value, &$iface, &$nodeType, &$nodeName) {
@@ -33,6 +33,6 @@ class DocumentCreateCommentTest extends WPTTestHarness
     public function testDocumentCreateComment()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createComment.html');
-        $this->assertTestCreate('createComment', Comment, 8, '#comment');
+        $this->helperTestCreate('createComment', Comment, 8, '#comment');
     }
 }

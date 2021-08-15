@@ -8,7 +8,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/ChildNode-replaceWith.html.
 class ChildNodeReplaceWithTest extends WPTTestHarness
 {
-    public function testReplaceWith($child, $nodeName, $innerHTML)
+    public function helperTestReplaceWith($child, $nodeName, $innerHTML)
     {
         $this->assertTest(function () use(&$child) {
             $parent = $this->doc->createElement('div');
@@ -96,8 +96,8 @@ class ChildNodeReplaceWithTest extends WPTTestHarness
     public function testChildNodeReplaceWith()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ChildNode-replaceWith.html');
-        $this->testReplaceWith($this->doc->createComment('test'), 'Comment', '<!--test-->');
-        $this->testReplaceWith($this->doc->createElement('test'), 'Element', '<test></test>');
-        $this->testReplaceWith($this->doc->createTextNode('test'), 'Text', 'test');
+        $this->helperTestReplaceWith($this->doc->createComment('test'), 'Comment', '<!--test-->');
+        $this->helperTestReplaceWith($this->doc->createElement('test'), 'Element', '<test></test>');
+        $this->helperTestReplaceWith($this->doc->createTextNode('test'), 'Text', 'test');
     }
 }

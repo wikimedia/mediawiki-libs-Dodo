@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-cloneRange.html.
 class RangeCloneRangeTest extends WPTTestHarness
 {
-    public function testCloneRange($rangeEndpoints)
+    public function helperTestCloneRange($rangeEndpoints)
     {
         $range = null;
         if ($rangeEndpoints == 'detached') {
@@ -69,7 +69,7 @@ class RangeCloneRangeTest extends WPTTestHarness
         for ($i = 0; $i < count($this->getCommon()->testRanges); $i++) {
             $tests[] = ['Range ' . $i . ' ' . $this->getCommon()->testRanges[$i], eval($this->getCommon()->testRanges[$i])];
         }
-        $this->generateTests($testCloneRange, $tests);
+        $this->generateTests([$this, 'helperTestCloneRange'], $tests);
         $this->getCommon()->testDiv->style->display = 'none';
     }
 }

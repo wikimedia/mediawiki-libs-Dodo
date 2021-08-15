@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/CharacterData-replaceData.html.
 class CharacterDataReplaceDataTest extends WPTTestHarness
 {
-    public function testNode($create, $type)
+    public function helperTestNode($create, $type)
     {
         // Step 2.
         $this->assertTest(function () use(&$create) {
@@ -135,10 +135,10 @@ class CharacterDataReplaceDataTest extends WPTTestHarness
     public function testCharacterDataReplaceData()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/CharacterData-replaceData.html');
-        $this->testNode(function () {
+        $this->helperTestNode(function () {
             return $this->doc->createTextNode('test');
         }, 'Text');
-        $this->testNode(function () {
+        $this->helperTestNode(function () {
             return $this->doc->createComment('test');
         }, 'Comment');
     }

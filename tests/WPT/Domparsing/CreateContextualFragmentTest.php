@@ -11,7 +11,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/domparsing/createContextualFragment.html.
 class CreateContextualFragmentTest extends WPTTestHarness
 {
-    public function testEquivalence($element1, $fragment1, $element2, $fragment2)
+    public function helperTestEquivalence($element1, $fragment1, $element2, $fragment2)
     {
         $range1 = $element1->ownerDocument->createRange();
         $range1->selectNodeContents($element1);
@@ -29,7 +29,7 @@ class CreateContextualFragmentTest extends WPTTestHarness
             $this->wptAssertEquals($result2->firstChild->ownerDocument, $element2->ownerDocument, 'ownerDocument must be set to that of the reference node');
         }
     }
-    public function assertTestCreateContextualFragment()
+    public function testCreateContextualFragment()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/domparsing/createContextualFragment.html');
         // We are not testing XML documents here, because apparently it's not clear
@@ -133,6 +133,6 @@ class CreateContextualFragmentTest extends WPTTestHarness
         $comment = $this->doc->createComment('~o~');
         $doc_fragment->appendChild($comment);
         $tests = [['<html> and <body> must work the same, 1', $this->doc->documentElement, '<span>Hello world</span>', $this->doc->body, '<span>Hello world</span>'], ['<html> and <body> must work the same, 2', $this->doc->documentElement, '<body><p>Hello world', $this->doc->body, '<body><p>Hello world'], ['Implicit <body> creation', $this->doc->documentElement, '<body><p>', $this->doc->documentElement, '<p>'], ["Namespace generally shouldn't matter", $this->doc->createElementNS('http://fake-namespace', 'div'), '<body><p><span>Foo', $this->doc->createElement('div'), '<body><p><span>Foo'], ["<html> in a different namespace shouldn't be special", $this->doc->createElementNS('http://fake-namespace', 'html'), '<body><p>', $this->doc->createElement('div'), '<body><p>'], ["SVG namespace shouldn't be special", $this->doc->createElementNS('http://www.w3.org/2000/svg', 'div'), '<body><p>', $this->doc->createElement('div'), '<body><p>'], ['null should be stringified', $this->doc->createElement('span'), null, $this->doc->createElement('span'), 'null'], ['undefined should be stringified', $this->doc->createElement('span'), null, $this->doc->createElement('span'), NULL], ["Text nodes shouldn't be special", $this->doc->createTextNode('?'), '<body><p>', $this->doc->createElement('div'), '<body><p>'], ['Non-Element parent should not be special', $comment, '<body><p>', $this->doc->createElement('div'), '<body><p>']];
-        $this->generateTests($testEquivalence, $tests);
+        $this->generateTests([$this, 'helperTestEquivalence'], $tests);
     }
 }

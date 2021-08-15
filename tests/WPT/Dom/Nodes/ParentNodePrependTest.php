@@ -11,7 +11,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/ParentNode-prepend.html.
 class ParentNodePrependTest extends WPTTestHarness
 {
-    public function testPrepend($node, $nodeName)
+    public function helperTestPrepend($node, $nodeName)
     {
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
@@ -157,7 +157,7 @@ class ParentNodePrependTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-prepend.html');
         $this->preInsertionValidateHierarchy('prepend');
-        $this->testPrepend($this->doc->createElement('div'), 'Element');
-        $this->testPrepend($this->doc->createDocumentFragment(), 'DocumentFragment');
+        $this->helperTestPrepend($this->doc->createElement('div'), 'Element');
+        $this->helperTestPrepend($this->doc->createDocumentFragment(), 'DocumentFragment');
     }
 }

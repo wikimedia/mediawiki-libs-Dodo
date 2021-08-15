@@ -11,7 +11,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-insertBefore.html.
 class NodeInsertBeforeTest extends WPTTestHarness
 {
-    public function testLeafNode($nodeName, $createNodeFunction)
+    public function helperTestLeafNode($nodeName, $createNodeFunction)
     {
         $this->assertTest(function () use(&$createNodeFunction) {
             $node = $createNodeFunction();
@@ -158,16 +158,16 @@ class NodeInsertBeforeTest extends WPTTestHarness
                 $this->doc->body->insertBefore(['a' => 'b'], $this->doc->body->firstChild);
             });
         }, 'Calling insertBefore with a non-Node first argument must throw TypeError.');
-        $this->testLeafNode('DocumentType', function () {
+        $this->helperTestLeafNode('DocumentType', function () {
             return $this->doc->doctype;
         });
-        $this->testLeafNode('Text', function () {
+        $this->helperTestLeafNode('Text', function () {
             return $this->doc->createTextNode('Foo');
         });
-        $this->testLeafNode('Comment', function () {
+        $this->helperTestLeafNode('Comment', function () {
             return $this->doc->createComment('Foo');
         });
-        $this->testLeafNode('ProcessingInstruction', function () {
+        $this->helperTestLeafNode('ProcessingInstruction', function () {
             return $this->doc->createProcessingInstruction('foo', 'bar');
         });
         $this->assertTest(function () {

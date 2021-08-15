@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/CharacterData-insertData.html.
 class CharacterDataInsertDataTest extends WPTTestHarness
 {
-    public function testNode($create, $type)
+    public function helperTestNode($create, $type)
     {
         $this->assertTest(function () use(&$create) {
             $node = $create();
@@ -79,10 +79,10 @@ class CharacterDataInsertDataTest extends WPTTestHarness
     public function testCharacterDataInsertData()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/CharacterData-insertData.html');
-        $this->testNode(function () {
+        $this->helperTestNode(function () {
             return $this->doc->createTextNode('test');
         }, 'Text');
-        $this->testNode(function () {
+        $this->helperTestNode(function () {
             return $this->doc->createComment('test');
         }, 'Comment');
     }

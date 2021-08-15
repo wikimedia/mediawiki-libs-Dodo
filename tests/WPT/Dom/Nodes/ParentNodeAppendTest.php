@@ -11,7 +11,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/ParentNode-append.html.
 class ParentNodeAppendTest extends WPTTestHarness
 {
-    public function testAppend($node, $nodeName)
+    public function helperTestAppend($node, $nodeName)
     {
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
@@ -157,7 +157,7 @@ class ParentNodeAppendTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-append.html');
         $this->preInsertionValidateHierarchy('append');
-        $this->testAppend($this->doc->createElement('div'), 'Element');
-        $this->testAppend($this->doc->createDocumentFragment(), 'DocumentFragment');
+        $this->helperTestAppend($this->doc->createElement('div'), 'Element');
+        $this->helperTestAppend($this->doc->createDocumentFragment(), 'DocumentFragment');
     }
 }

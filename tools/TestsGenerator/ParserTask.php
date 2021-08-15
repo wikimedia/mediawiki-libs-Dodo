@@ -622,11 +622,6 @@ class ParserTask extends BaseTask {
 					}
 				}
 
-				// remove all other functions
-				if ( $node instanceof Comment || $node instanceof Doc ) {
-					return NodeTraverser::REMOVE_NODE;
-				}
-
 				if ( $node instanceof FuncCall ) {
 					$expr_name = $node->name->parts[0] ?? '';
 					if ( empty( $expr_name ) ) {
@@ -661,11 +656,9 @@ class ParserTask extends BaseTask {
 						'rangeFromEndpoints',
 					] );
 					$harness_functions = array_flip( [
-						'testNode',
 						'create',
 						'test',
 						'async_test',
-						'testRemove',
 						'assert',
 						'test_',
 						'_test',
@@ -728,35 +721,6 @@ class ParserTask extends BaseTask {
 						'parse',
 						'serialize',
 						'checkMetadata',
-						// These are helper functions defined in classes
-						// which unfortunately begin with 'test' and so
-						// PHPUnit will think that they are standalone
-						// test methods.  We should rename these.
-						'testAlias',
-						'testAttr',
-						'testCloneContents',
-						'testConstants',
-						'testDeepEquality',
-						'testDeleteContents',
-						'testDoc',
-						'testExtractContents',
-						'testIsConnected',
-						'testIterator',
-						'testLeaf',
-						'testLeafNode',
-						'testMatched',
-						'testNeverMatched',
-						'testSetEnd',
-						'testSetStart',
-						'testSurroundContents',
-						'testTree',
-						'test_after', // aka testAfter
-						'test_append', // aka testAppend
-						'test_before', // aka testBefore
-						'test_create', // aka testCreate
-						'test_getElementsByTagNameNS', // aka testGetElementsByTagNameNS
-						'test_prepend', // aka testPrepend
-						'test_replaceWith', // aka testReplaceWith
 					] );
 
 					if ( array_key_exists( $expr_name, $common_functions ) ) {
@@ -943,7 +907,6 @@ class ParserTask extends BaseTask {
 				'// $this->assertTrueData(isset($elementClasses[Symbol::iterator]));',
 			"gettype(DocumentFragment::prototype::getElementById), 'function'" =>
 				"(new \ReflectionClass( DocumentFragment::class))->hasMethod( 'getElementById')",
-			'testRemove' => 'assertTestRemove',
 			'HTMLUnknownElement::prototype::isPrototypeOf( $deepClone )' =>
 				'($deepClone instanceof HTMLUnknownElement)',
 			'HTMLUnknownElement::prototype::isPrototypeOf( $clone )' =>
@@ -953,7 +916,6 @@ class ParserTask extends BaseTask {
 			'\'type\' => $Text' => '\'type\' => Text::class',
 			'\'type\' => $Comment' => '\'type\' => Comment::class',
 			'testConstructor' => 'assertTestConstructor',
-			'testCreate' => 'assertTestCreate',
 			'Node::class::insertBefore' => '\'insertBefore\'',
 			'$new_el[$pair[\'attr\']]' => '$new_el->{$pair[\'attr\']}',
 			'[$method]' => '->{$method}',
@@ -1122,6 +1084,19 @@ class ParserTask extends BaseTask {
 		$functions = $this->finder->find( $ast, static function ( $node ) {
 			return $node instanceof Function_;
 		} );
+		// Rename any of these which start with "test", so they aren't
+		// treated as phpunit entry points -- only the main method should
+		// be any entry point
+		$renamedFunctions = [];
+		foreach ( $functions as $f ) {
+			$name = $f->name->toString();
+			if ( preg_match( '/^test|test$/i', $name ) ) {
+				$newName = preg_match( '/^test/i', $name ) ?
+						 "helper_{$name}" : "{$name}_helper";
+				$renamedFunctions[$name] = $this->snakeToCamel( $newName );
+				$f->name->name = $renamedFunctions[$name];
+			}
+		}
 
 		// Collect all non-function nodes
 		$ast = array_filter( $ast,
@@ -1180,8 +1155,69 @@ class ParserTask extends BaseTask {
 		}
 		$ast = $traverser->traverse( $ast );
 
+		// Rename any other references to the renamed functions
+		$traverser = new NodeTraverser;
+		$traverser->addVisitor( new class( $renamedFunctions ) extends NodeVisitorAbstract {
+			/** @var array<string,string> $renamedFunctions */
+			private $renamedFunctions;
+
+			/**
+			 * @param array $renamedFunctions
+			 */
+			public function __construct( array $renamedFunctions ) {
+				$this->renamedFunctions = $renamedFunctions;
+			}
+
+			/**
+			 * @param mixed $node
+			 *
+			 * @return int|Node|Function_
+			 */
+			public function leaveNode( $node ) {
+				if ( $node instanceof Variable && is_string( $node->name ) ) {
+					$var_name = $node->name;
+					if ( array_key_exists( $var_name, $this->renamedFunctions ) ) {
+						// Direct reference to the function value
+						// We need to replace this with a closure
+						return new Node\Expr\Array_( [
+							new Node\Expr\ArrayItem(
+								new Variable( 'this' )
+							),
+							new Node\Expr\ArrayItem(
+								new Node\Scalar\String_(
+									$this->renamedFunctions[$var_name],
+									[ 'kind' => Node\Scalar\String_::KIND_SINGLE_QUOTED ]
+								)
+							)
+						], [ 'kind' => Node\Expr\Array_::KIND_SHORT ] );
+					}
+				}
+				// Call to the function; replace it with a method call
+				if ( $node instanceof FuncCall ) {
+					$expr_name = $node->name->parts[0] ?? '';
+					if ( empty( $expr_name ) ) {
+						return $node;
+					}
+					if ( array_key_exists( $expr_name, $this->renamedFunctions ) ) {
+						return new Node\Expr\MethodCall(
+							new Variable( 'this' ),
+							$this->renamedFunctions[$expr_name],
+							$node->args,
+							$node->getAttributes()
+						);
+					}
+				}
+				return $node;
+			}
+		} );
+		foreach ( $functions as $function ) {
+			$function->stmts = $traverser->traverse( $function->stmts );
+		}
+		$ast = $traverser->traverse( $ast );
+
 		// Add back the functions at the top level
 		if ( $this->test_type === TestsGenerator::W3C ) {
+			// W3C test
 			$stmts = array_filter( $functions, function ( &$node ) use ( $ast ) {
 				if ( $node->name->name === $this->test_name ) {
 					$node->stmts = array_merge( $ast, $node->stmts );
@@ -1198,15 +1234,6 @@ class ParserTask extends BaseTask {
 				->getNode();
 
 			$stmts = array_merge( $functions, [ $node ] );
-		}
-
-		// FIXME: What is this special case for?
-		if ( in_array( $main_method, [ 'testAppendOnDocument', 'testPrependOnDocument' ] ) ) {
-			if ( isset( $functions[0] ) ) {
-				$functions[0]->stmts = array_merge( $additional_stmts, $functions[0]->stmts );
-			}
-
-			$stmts = $functions;
 		}
 
 		return $stmts;

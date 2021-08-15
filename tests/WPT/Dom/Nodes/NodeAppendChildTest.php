@@ -8,7 +8,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-appendChild.html.
 class NodeAppendChildTest extends WPTTestHarness
 {
-    public function testLeaf($node, $desc)
+    public function helperTestLeaf($node, $desc)
     {
         // WebIDL.
         $this->assertTest(function () use(&$node) {
@@ -37,9 +37,9 @@ class NodeAppendChildTest extends WPTTestHarness
         }, 'WebIDL tests');
         // WebIDL and pre-insert step 1.
         $this->assertTest(function () {
-            $this->testLeaf($this->doc->createTextNode('Foo'), 'text node');
-            $this->testLeaf($this->doc->createComment('Foo'), 'comment');
-            $this->testLeaf($this->doc->doctype, 'doctype');
+            $this->helperTestLeaf($this->doc->createTextNode('Foo'), 'text node');
+            $this->helperTestLeaf($this->doc->createComment('Foo'), 'comment');
+            $this->helperTestLeaf($this->doc->doctype, 'doctype');
         }, 'Appending to a leaf node.');
         // Pre-insert step 5.
         $this->assertTest(function () {

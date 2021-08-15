@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-constants.html.
 class NodeConstantsTest extends WPTTestHarness
 {
-    public function testConstants($objects, $constants, $msg)
+    public function helperTestConstants($objects, $constants, $msg)
     {
         global $objects;
         foreach ($objects as $arr) {
@@ -27,7 +27,7 @@ class NodeConstantsTest extends WPTTestHarness
         $objects = null;
         // setup()
         $objects = [[Node, 'Node interface object'], [Node::class, 'Node prototype object'], [$this->doc->createElement('foo'), 'Element object'], [$this->doc->createTextNode('bar'), 'Text object']];
-        $this->testConstants($objects, [['ELEMENT_NODE', 1], ['ATTRIBUTE_NODE', 2], ['TEXT_NODE', 3], ['CDATA_SECTION_NODE', 4], ['ENTITY_REFERENCE_NODE', 5], ['ENTITY_NODE', 6], ['PROCESSING_INSTRUCTION_NODE', 7], ['COMMENT_NODE', 8], ['DOCUMENT_NODE', 9], ['DOCUMENT_TYPE_NODE', 10], ['DOCUMENT_FRAGMENT_NODE', 11], ['NOTATION_NODE', 12]], 'nodeType');
-        $this->testConstants($objects, [['DOCUMENT_POSITION_DISCONNECTED', 0x1], ['DOCUMENT_POSITION_PRECEDING', 0x2], ['DOCUMENT_POSITION_FOLLOWING', 0x4], ['DOCUMENT_POSITION_CONTAINS', 0x8], ['DOCUMENT_POSITION_CONTAINED_BY', 0x10], ['DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC', 0x20]], 'createDocumentPosition');
+        $this->helperTestConstants($objects, [['ELEMENT_NODE', 1], ['ATTRIBUTE_NODE', 2], ['TEXT_NODE', 3], ['CDATA_SECTION_NODE', 4], ['ENTITY_REFERENCE_NODE', 5], ['ENTITY_NODE', 6], ['PROCESSING_INSTRUCTION_NODE', 7], ['COMMENT_NODE', 8], ['DOCUMENT_NODE', 9], ['DOCUMENT_TYPE_NODE', 10], ['DOCUMENT_FRAGMENT_NODE', 11], ['NOTATION_NODE', 12]], 'nodeType');
+        $this->helperTestConstants($objects, [['DOCUMENT_POSITION_DISCONNECTED', 0x1], ['DOCUMENT_POSITION_PRECEDING', 0x2], ['DOCUMENT_POSITION_FOLLOWING', 0x4], ['DOCUMENT_POSITION_CONTAINS', 0x8], ['DOCUMENT_POSITION_CONTAINED_BY', 0x10], ['DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC', 0x20]], 'createDocumentPosition');
     }
 }

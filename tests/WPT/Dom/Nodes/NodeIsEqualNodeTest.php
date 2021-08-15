@@ -11,7 +11,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-isEqualNode.html.
 class NodeIsEqualNodeTest extends WPTTestHarness
 {
-    public function testDeepEquality($parentFactory)
+    public function helperTestDeepEquality($parentFactory)
     {
         // Some ad-hoc tests of deep equality
         $parentA = $parentFactory();
@@ -116,16 +116,16 @@ class NodeIsEqualNodeTest extends WPTTestHarness
             $this->wptAssertTrue($this->doc3->isEqualNode($this->doc4), 'default HTML documents, created different ways');
         }, 'documents should not be compared based on properties');
         $this->assertTest(function () {
-            $this->testDeepEquality(function () {
+            $this->helperTestDeepEquality(function () {
                 return $this->doc->createElement('foo');
             });
-            $this->testDeepEquality(function () {
+            $this->helperTestDeepEquality(function () {
                 return $this->doc->createDocumentFragment();
             });
-            $this->testDeepEquality(function () {
+            $this->helperTestDeepEquality(function () {
                 return $this->doc->implementation->createDocument('', '');
             });
-            $this->testDeepEquality(function () {
+            $this->helperTestDeepEquality(function () {
                 return $this->doc->implementation->createHTMLDocument();
             });
         }, 'node equality testing should test descendant equality too');

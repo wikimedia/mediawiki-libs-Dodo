@@ -3,11 +3,21 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DOMImplementationCreateDocumentTypeTest
     files: /tests/WPT/Dom/Nodes/DOMImplementationCreateDocumentTypeTest.php
+'Failed asserting that 0 matches expected 9.':
+    _total: 1
+    _comment: ''
+    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\CharacterDataDataTest
+    files: /tests/WPT/Dom/Nodes/CharacterDataDataTest.php
 'Failed asserting that 1 matches expected 0.':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Ranges\RangeAdoptTestTest
     files: /tests/WPT/Dom/Ranges/RangeAdoptTestTest.php
+'Failed asserting that Wikimedia\Dodo\DOMException Object (...) is an instance of interface "Wikimedia\IDLeDOM\TypeError".':
+    _total: 1
+    _comment: ''
+    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\NodeAppendChildTest
+    files: /tests/WPT/Dom/Nodes/NodeAppendChildTest.php
 'Failed asserting that false is true.':
     _total: 3
     _comment: ''
@@ -19,6 +29,11 @@
         /tests/WPT/Dom/Nodes/DocumentGetElementsByClassNameTest.php
         /tests/WPT/Dom/Nodes/DocumentTypeRemoveTest.php
         /tests/WPT/Dom/Nodes/ElementRemoveTest.php
+'Failed asserting that null is identical to an object of class "Wikimedia\Dodo\HTMLSpanElement".':
+    _total: 1
+    _comment: ''
+    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ParentNodeQuerySelectorEscapesTest
+    files: /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorEscapesTest.php
 'Failed asserting that null is not equal to null.':
     _total: 1
     _comment: ''
@@ -30,19 +45,39 @@
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentFragmentGetElementByIdTest
     files: /tests/WPT/Dom/Nodes/DocumentFragmentGetElementByIdTest.php
 'Failed asserting that two strings are equal.':
-    _total: 2
+    _total: 9
     _comment: ''
     testcases: |-
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\CharacterDataDeleteDataTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\CharacterDataInsertDataTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\CharacterDataReplaceDataTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\CharacterDataSurrogatesTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ChildNodeAfterTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ChildNodeBeforeTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ChildNodeReplaceWithTest
         Wikimedia\Dodo\Tests\WPT\Domparsing\DOMParserParseFromStringHtmlTest
         Wikimedia\Dodo\Tests\WPT\Domparsing\XMLSerializerSerializeToStringTest
     files: |-
+        /tests/WPT/Dom/Nodes/CharacterDataDeleteDataTest.php
+        /tests/WPT/Dom/Nodes/CharacterDataInsertDataTest.php
+        /tests/WPT/Dom/Nodes/CharacterDataReplaceDataTest.php
+        /tests/WPT/Dom/Nodes/CharacterDataSurrogatesTest.php
+        /tests/WPT/Dom/Nodes/ChildNodeAfterTest.php
+        /tests/WPT/Dom/Nodes/ChildNodeBeforeTest.php
+        /tests/WPT/Dom/Nodes/ChildNodeReplaceWithTest.php
         /tests/WPT/Domparsing/DOMParserParseFromStringHtmlTest.php
         /tests/WPT/Domparsing/XMLSerializerSerializeToStringTest.php
 'HTMLCollection-Failed asserting that false is true.':
-    _total: 1
+    _total: 3
     _comment: ''
-    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ElementGetElementsByClassNameTest
-    files: /tests/WPT/Dom/Nodes/ElementGetElementsByClassNameTest.php
+    testcases: |-
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentGetElementsByTagNameNSTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ElementGetElementsByClassNameTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ElementGetElementsByTagNameNSTest
+    files: |-
+        /tests/WPT/Dom/Nodes/DocumentGetElementsByTagNameNSTest.php
+        /tests/WPT/Dom/Nodes/ElementGetElementsByClassNameTest.php
+        /tests/WPT/Dom/Nodes/ElementGetElementsByTagNameNSTest.php
 'Reached unreachable code: Function did not throw.':
     _total: 1
     _comment: ''

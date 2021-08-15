@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Element-remove.html.
 class ElementRemoveTest extends WPTTestHarness
 {
-    public function assertTestRemove($node, $parent, $type)
+    public function helperTestRemove($node, $parent, $type)
     {
         global $node;
         $this->assertTest(function () use(&$node) {
@@ -47,6 +47,6 @@ class ElementRemoveTest extends WPTTestHarness
         // setup()
         $node = $this->doc->createElement('div');
         $parentNode = $this->doc->createElement('div');
-        $this->assertTestRemove($node, $parentNode, 'element');
+        $this->helperTestRemove($node, $parentNode, 'element');
     }
 }

@@ -6,7 +6,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-getElementsByTagNameNS.html.
 class DocumentGetElementsByTagNameNSTest extends WPTTestHarness
 {
-    public function testGetElementsByTagNameNS($context, $element)
+    public function helperTestGetElementsByTagNameNS($context, $element)
     {
         $this->assertTest(function () use(&$context) {
             $this->wptAssertFalse($context->getElementsByTagNameNS('http://www.w3.org/1999/xhtml', 'html') instanceof NodeList, 'NodeList');
@@ -158,6 +158,6 @@ class DocumentGetElementsByTagNameNSTest extends WPTTestHarness
     public function testDocumentGetElementsByTagNameNS()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-getElementsByTagNameNS.html');
-        $this->testGetElementsByTagNameNS($this->doc, $this->doc->body);
+        $this->helperTestGetElementsByTagNameNS($this->doc, $this->doc->body);
     }
 }

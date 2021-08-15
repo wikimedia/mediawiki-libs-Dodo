@@ -61,7 +61,7 @@ class ElementWebkitMatchesSelectorTest extends WPTTestHarness
             }
         }
     }
-    public function runMatchesTest($method, $type, $root, $selectors, $docType)
+    public function runMatchesTestHelper($method, $type, $root, $selectors, $docType)
     {
         $nodeType = $this->getNodeType($root);
         for ($i = 0; $i < count($selectors); $i++) {
@@ -183,10 +183,10 @@ class ElementWebkitMatchesSelectorTest extends WPTTestHarness
         $this->runInvalidSelectorTestMatches($method, 'Detached Element', $detached, $this->invalidSelectors);
         $this->runInvalidSelectorTestMatches($method, 'Fragment', $fragment, $this->invalidSelectors);
         $this->runInvalidSelectorTestMatches($method, 'In-document Element', $element, $this->invalidSelectors);
-        $this->runMatchesTest($method, 'In-document', $doc, $this->validSelectors, 'html');
-        $this->runMatchesTest($method, 'Detached', $detached, $this->validSelectors, 'html');
-        $this->runMatchesTest($method, 'Fragment', $fragment, $this->validSelectors, 'html');
-        $this->runMatchesTest($method, 'In-document', $doc, $scopedSelectors, 'html');
+        $this->runMatchesTestHelper($method, 'In-document', $doc, $this->validSelectors, 'html');
+        $this->runMatchesTestHelper($method, 'Detached', $detached, $this->validSelectors, 'html');
+        $this->runMatchesTestHelper($method, 'Fragment', $fragment, $this->validSelectors, 'html');
+        $this->runMatchesTestHelper($method, 'In-document', $doc, $scopedSelectors, 'html');
     }
     public function testElementWebkitMatchesSelector()
     {

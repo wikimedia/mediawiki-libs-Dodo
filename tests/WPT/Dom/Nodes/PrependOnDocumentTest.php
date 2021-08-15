@@ -6,9 +6,8 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/prepend-on-Document.html.
 class PrependOnDocumentTest extends WPTTestHarness
 {
-    public function testPrependOnDocument()
+    public function helperTestPrependOnDocument()
     {
-        $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/prepend-on-Document.html');
         $node = $this->doc->implementation->createDocument(null, null);
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
@@ -47,5 +46,10 @@ class PrependOnDocumentTest extends WPTTestHarness
             });
             $this->wptAssertArrayEquals($parent->childNodes, []);
         }, 'Document.prepend() with two elements as the argument, on a Document having no child.');
+    }
+    public function testPrependOnDocument()
+    {
+        $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/prepend-on-Document.html');
+        $this->helperTestPrependOnDocument();
     }
 }

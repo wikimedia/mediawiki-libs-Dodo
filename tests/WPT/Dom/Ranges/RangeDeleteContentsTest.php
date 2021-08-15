@@ -115,7 +115,7 @@ class RangeDeleteContentsTest extends WPTTestHarness
         $range->setStart($newNode, $newOffset);
         $range->setEnd($newNode, $newOffset);
     }
-    public function testDeleteContents($i)
+    public function helperTestDeleteContents($i)
     {
         global $actualIframe;
         global $expectedIframe;
@@ -258,7 +258,7 @@ class RangeDeleteContentsTest extends WPTTestHarness
         $actualIframe->onload = function () use(&$expectedIframe, &$iStart, &$iStop, &$referenceDoc, &$actualIframe) {
             $expectedIframe->onload = function () use(&$iStart, &$iStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
-                    $this->testDeleteContents($i);
+                    $this->helperTestDeleteContents($i);
                 }
             };
             $expectedIframe->src = 'Range-test-iframe.html';

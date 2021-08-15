@@ -8,7 +8,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/ChildNode-after.html.
 class ChildNodeAfterTest extends WPTTestHarness
 {
-    public function testAfter($child, $nodeName, $innerHTML)
+    public function helperTestAfter($child, $nodeName, $innerHTML)
     {
         $this->assertTest(function () use(&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
@@ -148,8 +148,8 @@ class ChildNodeAfterTest extends WPTTestHarness
     public function testChildNodeAfter()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ChildNode-after.html');
-        $this->testAfter($this->doc->createComment('test'), 'Comment', '<!--test-->');
-        $this->testAfter($this->doc->createElement('test'), 'Element', '<test></test>');
-        $this->testAfter($this->doc->createTextNode('test'), 'Text', 'test');
+        $this->helperTestAfter($this->doc->createComment('test'), 'Comment', '<!--test-->');
+        $this->helperTestAfter($this->doc->createElement('test'), 'Element', '<test></test>');
+        $this->helperTestAfter($this->doc->createTextNode('test'), 'Text', 'test');
     }
 }

@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-set.html.
 class RangeSetTest extends WPTTestHarness
 {
-    public function testSetStart($range, $node, $offset)
+    public function helperTestSetStart($range, $node, $offset)
     {
         if ($node->nodeType == Node::DOCUMENT_TYPE_NODE) {
             $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node, &$offset) {
@@ -35,7 +35,7 @@ class RangeSetTest extends WPTTestHarness
             $this->wptAssertEquals($newRange->endOffset, $range->endOffset, 'setStart() must not change the end offset if the new start is before the old end');
         }
     }
-    public function testSetEnd($range, $node, $offset)
+    public function helperTestSetEnd($range, $node, $offset)
     {
         if ($node->nodeType == Node::DOCUMENT_TYPE_NODE) {
             $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node, &$offset) {
@@ -63,7 +63,7 @@ class RangeSetTest extends WPTTestHarness
         $this->wptAssertEquals($newRange->endContainer, $node, 'setEnd() must change endContainer to the new node');
         $this->wptAssertEquals($newRange->endOffset, $offset, 'setEnd() must change endOffset to the new offset');
     }
-    public function testSetStartBefore($range, $node)
+    public function helperTestSetStartBefore($range, $node)
     {
         $parent = $node->parentNode;
         if ($parent === null) {
@@ -76,9 +76,9 @@ class RangeSetTest extends WPTTestHarness
         while ($node->parentNode->childNodes[$idx] != $node) {
             $idx++;
         }
-        $this->testSetStart($range, $node->parentNode, $idx);
+        $this->helperTestSetStart($range, $node->parentNode, $idx);
     }
-    public function testSetStartAfter($range, $node)
+    public function helperTestSetStartAfter($range, $node)
     {
         $parent = $node->parentNode;
         if ($parent === null) {
@@ -91,9 +91,9 @@ class RangeSetTest extends WPTTestHarness
         while ($node->parentNode->childNodes[$idx] != $node) {
             $idx++;
         }
-        $this->testSetStart($range, $node->parentNode, $idx + 1);
+        $this->helperTestSetStart($range, $node->parentNode, $idx + 1);
     }
-    public function testSetEndBefore($range, $node)
+    public function helperTestSetEndBefore($range, $node)
     {
         $parent = $node->parentNode;
         if ($parent === null) {
@@ -106,9 +106,9 @@ class RangeSetTest extends WPTTestHarness
         while ($node->parentNode->childNodes[$idx] != $node) {
             $idx++;
         }
-        $this->testSetEnd($range, $node->parentNode, $idx);
+        $this->helperTestSetEnd($range, $node->parentNode, $idx);
     }
-    public function testSetEndAfter($range, $node)
+    public function helperTestSetEndAfter($range, $node)
     {
         $parent = $node->parentNode;
         if ($parent === null) {
@@ -121,7 +121,7 @@ class RangeSetTest extends WPTTestHarness
         while ($node->parentNode->childNodes[$idx] != $node) {
             $idx++;
         }
-        $this->testSetEnd($range, $node->parentNode, $idx + 1);
+        $this->helperTestSetEnd($range, $node->parentNode, $idx + 1);
     }
     public function testRangeSet()
     {
@@ -154,12 +154,12 @@ class RangeSetTest extends WPTTestHarness
                 $endAfterTests[] = ['setEndAfter() with range ' . $i . ' ' . $this->getCommon()->testRangesShort[$i] . ', node ' . $j . ' ' . $this->getCommon()->testNodesShort[$j], $range, $this->getCommon()->testNodesCached[$j]];
             }
         }
-        $this->generateTests($testSetStart, $startTests);
-        $this->generateTests($testSetEnd, $endTests);
-        $this->generateTests($testSetStartBefore, $startBeforeTests);
-        $this->generateTests($testSetStartAfter, $startAfterTests);
-        $this->generateTests($testSetEndBefore, $endBeforeTests);
-        $this->generateTests($testSetEndAfter, $endAfterTests);
+        $this->generateTests([$this, 'helperTestSetStart'], $startTests);
+        $this->generateTests([$this, 'helperTestSetEnd'], $endTests);
+        $this->generateTests([$this, 'helperTestSetStartBefore'], $startBeforeTests);
+        $this->generateTests([$this, 'helperTestSetStartAfter'], $startAfterTests);
+        $this->generateTests([$this, 'helperTestSetEndBefore'], $endBeforeTests);
+        $this->generateTests([$this, 'helperTestSetEndAfter'], $endAfterTests);
         $this->getCommon()->testDiv->style->display = 'none';
     }
 }

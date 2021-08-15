@@ -86,7 +86,7 @@ class RangeSurroundContentsTest extends WPTTestHarness
         $iframe->contentWindow->testNodeInput = $this->getCommon()->testNodesShort[$j];
         $iframe->contentWindow->run();
     }
-    public function testSurroundContents($i, $j)
+    public function helperTestSurroundContents($i, $j)
     {
         $actualRange = null;
         $expectedRange = null;
@@ -255,7 +255,7 @@ class RangeSurroundContentsTest extends WPTTestHarness
             $expectedIframe->onload = function () use(&$iStart, &$iStop, &$jStart, &$jStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
                     for ($j = $jStart; $j < $jStop; $j++) {
-                        $this->testSurroundContents($i, $j);
+                        $this->helperTestSurroundContents($i, $j);
                     }
                 }
             };

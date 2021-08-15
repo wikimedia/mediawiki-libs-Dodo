@@ -22,7 +22,7 @@ class NodeIteratorTest extends WPTTestHarness
         $this->wptAssertReadonly($iter, 'referenceNode');
         $this->wptAssertReadonly($iter, 'pointerBeforeReferenceNode');
     }
-    public function testIterator($root, $whatToShow, $filter)
+    public function helperTestIterator($root, $whatToShow, $filter)
     {
         $iter = $this->doc->createNodeIterator($root, $whatToShow, $filter);
         $this->wptAssertEquals($iter->root, $root, '.root');
@@ -173,7 +173,7 @@ class NodeIteratorTest extends WPTTestHarness
             for ($j = 0; $j < count($whatToShows); $j++) {
                 for ($k = 0; $k < count($callbacks); $k++) {
                     $this->assertTest(function () use(&$i, &$whatToShows, &$j, &$callbacks, &$k) {
-                        $this->testIterator($this->wptEvalNode($this->getCommon()->testNodes[$i]), eval($whatToShows[$j]), eval($callbacks[$k]));
+                        $this->helperTestIterator($this->wptEvalNode($this->getCommon()->testNodes[$i]), eval($whatToShows[$j]), eval($callbacks[$k]));
                     }, 'document.createNodeIterator(' . $this->getCommon()->testNodes[$i] . ', ' . $whatToShows[$j] . ', ' . $callbacks[$k] . ')');
                 }
             }

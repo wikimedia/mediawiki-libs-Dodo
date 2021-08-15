@@ -22,7 +22,7 @@ class CharacterDataAppendChildTest extends WPTTestHarness
                 break;
         }
     }
-    public function testNode($type1, $type2)
+    public function helperTestNode($type1, $type2)
     {
         $this->assertTest(function () use(&$type1, &$type2) {
             $node1 = $this->create($type1);
@@ -38,7 +38,7 @@ class CharacterDataAppendChildTest extends WPTTestHarness
         $types = ['Text', 'Comment', 'ProcessingInstruction'];
         foreach ($types as $type1) {
             foreach ($types as $type2) {
-                $this->testNode($type1, $type2);
+                $this->helperTestNode($type1, $type2);
             }
         }
     }

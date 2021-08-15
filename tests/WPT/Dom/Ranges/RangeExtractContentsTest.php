@@ -35,7 +35,7 @@ class RangeExtractContentsTest extends WPTTestHarness
         $iframe->contentWindow->testRangeInput = $this->getCommon()->testRanges[$i];
         $iframe->contentWindow->run();
     }
-    public function testExtractContents($i)
+    public function helperTestExtractContents($i)
     {
         global $actualIframe;
         global $expectedIframe;
@@ -190,7 +190,7 @@ class RangeExtractContentsTest extends WPTTestHarness
         $actualIframe->onload = function () use(&$expectedIframe, &$iStart, &$iStop, &$referenceDoc, &$actualIframe) {
             $expectedIframe->onload = function () use(&$iStart, &$iStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
-                    $this->testExtractContents($i);
+                    $this->helperTestExtractContents($i);
                 }
             };
             $expectedIframe->src = 'Range-test-iframe.html';

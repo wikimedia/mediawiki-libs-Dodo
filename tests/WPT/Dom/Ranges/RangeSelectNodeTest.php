@@ -10,7 +10,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-selectNode.html.
 class RangeSelectNodeTest extends WPTTestHarness
 {
-    public function testSelectNode($range, $node)
+    public function helperTestSelectNode($range, $node)
     {
         try {
             $range->collapsed;
@@ -52,7 +52,7 @@ class RangeSelectNodeTest extends WPTTestHarness
             $this->wptAssertEquals($range->endOffset, $len, 'After selectNodeContents(), endOffset must equal node length (' . $len . ')');
         }
     }
-    public function testTree($root, $marker)
+    public function helperTestTree($root, $marker)
     {
         global $tests;
         if ($root->nodeType == Node::ELEMENT_NODE && $root->id == 'log') {
@@ -64,7 +64,7 @@ class RangeSelectNodeTest extends WPTTestHarness
         $tests[] = [$marker . ': ' . strtolower($root->nodeName) . " node, XML doc's range, type " . $root->nodeType, $xmlRange, $root];
         $tests[] = [$marker . ': ' . strtolower($root->nodeName) . ' node, detached range, type ' . $root->nodeType, $detachedRange, $root];
         for ($i = 0; $i < count($root->childNodes); $i++) {
-            $this->testTree($root->childNodes[$i], $marker . '[' . $i . ']');
+            $this->helperTestTree($root->childNodes[$i], $marker . '[' . $i . ']');
         }
     }
     public function testRangeSelectNode()
@@ -76,14 +76,14 @@ class RangeSelectNodeTest extends WPTTestHarness
         $detachedRange = $this->doc->createRange();
         $detachedRange->detach();
         $tests = [];
-        $this->testTree($this->doc, 'current doc');
-        $this->testTree($foreignDoc, 'foreign doc');
-        $this->testTree($detachedDiv, 'detached div in current doc');
+        $this->helperTestTree($this->doc, 'current doc');
+        $this->helperTestTree($foreignDoc, 'foreign doc');
+        $this->helperTestTree($detachedDiv, 'detached div in current doc');
         $otherTests = ['xmlDoc', 'xmlElement', 'detachedTextNode', 'foreignTextNode', 'xmlTextNode', 'processingInstruction', 'comment', 'foreignComment', 'xmlComment', 'docfrag', 'foreignDocfrag', 'xmlDocfrag'];
         for ($i = 0; $i < count($otherTests); $i++) {
-            $this->testTree($this->window[$otherTests[$i]], $otherTests[$i]);
+            $this->helperTestTree($this->window[$otherTests[$i]], $otherTests[$i]);
         }
-        $this->generateTests($testSelectNode, $tests);
+        $this->generateTests([$this, 'helperTestSelectNode'], $tests);
         $this->getCommon()->testDiv->style->display = 'none';
     }
 }

@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/CharacterData-deleteData.html.
 class CharacterDataDeleteDataTest extends WPTTestHarness
 {
-    public function testNode($create, $type)
+    public function helperTestNode($create, $type)
     {
         $this->assertTest(function () use(&$create) {
             $node = $create();
@@ -83,10 +83,10 @@ class CharacterDataDeleteDataTest extends WPTTestHarness
     public function testCharacterDataDeleteData()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/CharacterData-deleteData.html');
-        $this->testNode(function () {
+        $this->helperTestNode(function () {
             return $this->doc->createTextNode('test');
         }, 'Text');
-        $this->testNode(function () {
+        $this->helperTestNode(function () {
             return $this->doc->createComment('test');
         }, 'Comment');
     }

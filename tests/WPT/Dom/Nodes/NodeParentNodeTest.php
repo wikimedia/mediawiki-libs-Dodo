@@ -6,7 +6,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-parentNode.html.
 class NodeParentNodeTest extends WPTTestHarness
 {
-    public function testIframe($iframe)
+    public function helperTestIframe($iframe)
     {
         global $t;
         $t->step(function () use(&$iframe) {

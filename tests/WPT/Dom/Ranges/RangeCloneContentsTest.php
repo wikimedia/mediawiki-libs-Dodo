@@ -210,7 +210,7 @@ class RangeCloneContentsTest extends WPTTestHarness
         $iframe->contentWindow->testRangeInput = $this->getCommon()->testRanges[$i];
         $iframe->contentWindow->run();
     }
-    public function testCloneContents($i)
+    public function helperTestCloneContents($i)
     {
         global $actualIframe;
         global $expectedIframe;
@@ -367,7 +367,7 @@ class RangeCloneContentsTest extends WPTTestHarness
         $actualIframe->onload = function () use(&$expectedIframe, &$iStart, &$iStop, &$referenceDoc, &$actualIframe) {
             $expectedIframe->onload = function () use(&$iStart, &$iStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
-                    $this->testCloneContents($i);
+                    $this->helperTestCloneContents($i);
                 }
             };
             $expectedIframe->src = 'Range-test-iframe.html';

@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-createTextNode.html.
 class DocumentCreateTextNodeTest extends WPTTestHarness
 {
-    public function assertTestCreate($method, $iface, $nodeType, $nodeName)
+    public function helperTestCreate($method, $iface, $nodeType, $nodeName)
     {
         foreach (["\\u000b", 'a -- b', 'a-', '-b', null, null] as $value) {
             $this->assertTest(function () use(&$method, &$value, &$iface, &$nodeType, &$nodeName) {
@@ -33,6 +33,6 @@ class DocumentCreateTextNodeTest extends WPTTestHarness
     public function testDocumentCreateTextNode()
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createTextNode.html');
-        $this->assertTestCreate('createTextNode', Text, 3, '#text');
+        $this->helperTestCreate('createTextNode', Text, 3, '#text');
     }
 }

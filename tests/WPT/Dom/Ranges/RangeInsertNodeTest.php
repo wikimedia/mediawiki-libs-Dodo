@@ -36,7 +36,7 @@ class RangeInsertNodeTest extends WPTTestHarness
         $iframe->contentWindow->testNodeInput = $this->getCommon()->testNodesShort[$j];
         $iframe->contentWindow->run();
     }
-    public function testInsertNode($i, $j)
+    public function helperTestInsertNode($i, $j)
     {
         $actualRange = null;
         $expectedRange = null;
@@ -221,7 +221,7 @@ class RangeInsertNodeTest extends WPTTestHarness
             $expectedIframe->onload = function () use(&$iStart, &$iStop, &$jStart, &$jStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
                     for ($j = $jStart; $j < $jStop; $j++) {
-                        testInsertNode($i, $j);
+                        $this->helperTestInsertNode($i, $j);
                     }
                 }
             };

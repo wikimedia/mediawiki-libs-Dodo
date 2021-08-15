@@ -6,7 +6,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Node-isConnected-shadow-dom.html.
 class NodeIsConnectedShadowDomTest extends WPTTestHarness
 {
-    public function testIsConnected($mode)
+    public function helperTestIsConnected($mode)
     {
         $this->assertTest(function () use(&$mode) {
             $host = $this->doc->createElement('div');
@@ -21,7 +21,7 @@ class NodeIsConnectedShadowDomTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-isConnected-shadow-dom.html');
         foreach (['closed', 'open'] as $mode) {
-            $this->testIsConnected($mode);
+            $this->helperTestIsConnected($mode);
         }
     }
 }

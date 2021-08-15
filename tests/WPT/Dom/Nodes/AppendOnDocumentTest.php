@@ -6,9 +6,8 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/append-on-Document.html.
 class AppendOnDocumentTest extends WPTTestHarness
 {
-    public function testAppendOnDocument()
+    public function helperTestAppendOnDocument()
     {
-        $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/append-on-Document.html');
         $node = $this->doc->implementation->createDocument(null, null);
         $this->assertTest(function () use(&$node) {
             $parent = $node->cloneNode();
@@ -47,5 +46,10 @@ class AppendOnDocumentTest extends WPTTestHarness
             });
             $this->wptAssertArrayEquals($parent->childNodes, []);
         }, 'Document.append() with two elements as the argument, on a Document having no child.');
+    }
+    public function testAppendOnDocument()
+    {
+        $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/append-on-Document.html');
+        $this->helperTestAppendOnDocument();
     }
 }

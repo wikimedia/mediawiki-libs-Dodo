@@ -6,7 +6,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-escapes.html.
 class ParentNodeQuerySelectorEscapesTest extends WPTTestHarness
 {
-    public function testMatched($id, $selector)
+    public function helperTestMatched($id, $selector)
     {
         $this->assertTest(function () use(&$id, &$selector) {
             $container = $this->doc->createElement('div');
@@ -16,7 +16,7 @@ class ParentNodeQuerySelectorEscapesTest extends WPTTestHarness
             $this->wptAssertEquals($container->querySelector($selector), $child);
         }, "{json_encode( {$id} )} should match with {json_encode( {$selector} )}");
     }
-    public function testNeverMatched($id, $selector)
+    public function helperTestNeverMatched($id, $selector)
     {
         $this->assertTest(function () use(&$id, &$selector) {
             $container = $this->doc->createElement('div');
@@ -30,82 +30,82 @@ class ParentNodeQuerySelectorEscapesTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/ParentNode-querySelector-escapes.html');
         // 4.3.7 from https://drafts.csswg.org/css-syntax/#consume-escaped-code-point
-        $this->testMatched('nonescaped', '#nonescaped');
+        $this->helperTestMatched('nonescaped', '#nonescaped');
         // - escape hex digit
-        $this->testMatched('0nextIsWhiteSpace', '#\\30 nextIsWhiteSpace');
-        $this->testMatched('0nextIsNotHexLetters', '#\\30nextIsNotHexLetters');
-        $this->testMatched('0connectHexMoreThan6Hex', '#\\000030connectHexMoreThan6Hex');
-        $this->testMatched('0spaceMoreThan6Hex', '#\\000030 spaceMoreThan6Hex');
+        $this->helperTestMatched('0nextIsWhiteSpace', '#\\30 nextIsWhiteSpace');
+        $this->helperTestMatched('0nextIsNotHexLetters', '#\\30nextIsNotHexLetters');
+        $this->helperTestMatched('0connectHexMoreThan6Hex', '#\\000030connectHexMoreThan6Hex');
+        $this->helperTestMatched('0spaceMoreThan6Hex', '#\\000030 spaceMoreThan6Hex');
         // - hex digit special replacement
         // 1. zero points
-        $this->testMatched("zero�", '#zero\\0');
-        $this->testNeverMatched("zero\\u0000", '#zero\\0');
-        $this->testMatched("zero�", '#zero\\000000');
-        $this->testNeverMatched("zero\\u0000", '#zero\\000000');
+        $this->helperTestMatched("zero�", '#zero\\0');
+        $this->helperTestNeverMatched("zero\\u0000", '#zero\\0');
+        $this->helperTestMatched("zero�", '#zero\\000000');
+        $this->helperTestNeverMatched("zero\\u0000", '#zero\\000000');
         // 2. surrogate points
-        $this->testMatched("�surrogateFirst", '#\\d83d surrogateFirst');
-        $this->testNeverMatched("�surrogateFirst", '#\\d83d surrogateFirst');
-        $this->testMatched("surrogateSecond�", '#surrogateSecond\\dd11');
-        $this->testNeverMatched("surrogateSecond�", '#surrogateSecond\\dd11');
-        $this->testMatched("surrogatePair��", '#surrogatePair\\d83d\\dd11');
-        $this->testNeverMatched("surrogatePair🔑", '#surrogatePair\\d83d\\dd11');
+        $this->helperTestMatched("�surrogateFirst", '#\\d83d surrogateFirst');
+        $this->helperTestNeverMatched("�surrogateFirst", '#\\d83d surrogateFirst');
+        $this->helperTestMatched("surrogateSecond�", '#surrogateSecond\\dd11');
+        $this->helperTestNeverMatched("surrogateSecond�", '#surrogateSecond\\dd11');
+        $this->helperTestMatched("surrogatePair��", '#surrogatePair\\d83d\\dd11');
+        $this->helperTestNeverMatched("surrogatePair🔑", '#surrogatePair\\d83d\\dd11');
         // 3. out of range points
-        $this->testMatched("outOfRange�", '#outOfRange\\110000');
-        $this->testMatched("outOfRange�", '#outOfRange\\110030');
-        $this->testNeverMatched('outOfRange0', '#outOfRange\\110030');
-        $this->testMatched("outOfRange�", '#outOfRange\\555555');
-        $this->testMatched("outOfRange�", '#outOfRange\\ffffff');
+        $this->helperTestMatched("outOfRange�", '#outOfRange\\110000');
+        $this->helperTestMatched("outOfRange�", '#outOfRange\\110030');
+        $this->helperTestNeverMatched('outOfRange0', '#outOfRange\\110030');
+        $this->helperTestMatched("outOfRange�", '#outOfRange\\555555');
+        $this->helperTestMatched("outOfRange�", '#outOfRange\\ffffff');
         // - escape EOF
-        $this->testNeverMatched('eof\\', '#eof\\');
+        $this->helperTestNeverMatched('eof\\', '#eof\\');
         // - escape anythong else
-        $this->testMatched('.comma', '#\\.comma');
-        $this->testMatched('-minus', '#\\-minus');
-        $this->testMatched('g', '#\\g');
+        $this->helperTestMatched('.comma', '#\\.comma');
+        $this->helperTestMatched('-minus', '#\\-minus');
+        $this->helperTestMatched('g', '#\\g');
         // non edge cases
-        $this->testMatched('aBMPRegular', '#\\61 BMPRegular');
-        $this->testMatched("🔑nonBMP", '#\\1f511 nonBMP');
-        $this->testMatched('00continueEscapes', '#\\30\\30 continueEscapes');
-        $this->testMatched('00continueEscapes', '#\\30 \\30 continueEscapes');
-        $this->testMatched('continueEscapes00', '#continueEscapes\\30 \\30 ');
-        $this->testMatched('continueEscapes00', '#continueEscapes\\30 \\30');
-        $this->testMatched('continueEscapes00', '#continueEscapes\\30\\30 ');
-        $this->testMatched('continueEscapes00', '#continueEscapes\\30\\30');
+        $this->helperTestMatched('aBMPRegular', '#\\61 BMPRegular');
+        $this->helperTestMatched("🔑nonBMP", '#\\1f511 nonBMP');
+        $this->helperTestMatched('00continueEscapes', '#\\30\\30 continueEscapes');
+        $this->helperTestMatched('00continueEscapes', '#\\30 \\30 continueEscapes');
+        $this->helperTestMatched('continueEscapes00', '#continueEscapes\\30 \\30 ');
+        $this->helperTestMatched('continueEscapes00', '#continueEscapes\\30 \\30');
+        $this->helperTestMatched('continueEscapes00', '#continueEscapes\\30\\30 ');
+        $this->helperTestMatched('continueEscapes00', '#continueEscapes\\30\\30');
         // ident tests case from CSS tests of chromium source: https://goo.gl/3Cxdov
-        $this->testMatched('hello', '#hel\\6Co');
-        $this->testMatched('&B', '#\\26 B');
-        $this->testMatched('hello', '#hel\\6C o');
-        $this->testMatched('spaces', "#spac\\65\r\ns");
-        $this->testMatched('spaces', "#sp\\61\tc\\65\fs");
-        $this->testMatched("test힙", '#test\\D799');
-        $this->testMatched("", '#\\E000');
-        $this->testMatched('test', '#te\\s\\t');
-        $this->testMatched("spaces in\tident", "#spaces\\ in\\\tident");
-        $this->testMatched('.,:!', '#\\.\\,\\:\\!');
-        $this->testMatched("null�", '#null\\0');
-        $this->testMatched("null�", '#null\\0000');
-        $this->testMatched("large�", '#large\\110000');
-        $this->testMatched("large�", '#large\\23456a');
-        $this->testMatched("surrogate�", '#surrogate\\D800');
-        $this->testMatched("surrogate�", '#surrogate\\0DBAC');
-        $this->testMatched("�surrogate", '#\\00DFFFsurrogate');
-        $this->testMatched("􏿿", '#\\10fFfF');
-        $this->testMatched("􏿿0", '#\\10fFfF0');
-        $this->testMatched("􀀀00", '#\\10000000');
-        $this->testMatched("eof�", '#eof\\');
-        $this->testMatched('simple-ident', '#simple-ident');
-        $this->testMatched('testing123', '#testing123');
-        $this->testMatched('_underscore', '#_underscore');
-        $this->testMatched('-text', '#-text');
-        $this->testMatched('-m', '#-\\6d');
-        $this->testMatched('--abc', '#--abc');
-        $this->testMatched('--', '#--');
-        $this->testMatched('--11', '#--11');
-        $this->testMatched('---', '#---');
-        $this->testMatched(" ", "# ");
-        $this->testMatched(" ", "# ");
-        $this->testMatched("ሴ", "#ሴ");
-        $this->testMatched("𒍅", "#𒍅");
-        $this->testMatched("�", "#\\u0000");
-        $this->testMatched("ab�c", "#ab\\u0000c");
+        $this->helperTestMatched('hello', '#hel\\6Co');
+        $this->helperTestMatched('&B', '#\\26 B');
+        $this->helperTestMatched('hello', '#hel\\6C o');
+        $this->helperTestMatched('spaces', "#spac\\65\r\ns");
+        $this->helperTestMatched('spaces', "#sp\\61\tc\\65\fs");
+        $this->helperTestMatched("test힙", '#test\\D799');
+        $this->helperTestMatched("", '#\\E000');
+        $this->helperTestMatched('test', '#te\\s\\t');
+        $this->helperTestMatched("spaces in\tident", "#spaces\\ in\\\tident");
+        $this->helperTestMatched('.,:!', '#\\.\\,\\:\\!');
+        $this->helperTestMatched("null�", '#null\\0');
+        $this->helperTestMatched("null�", '#null\\0000');
+        $this->helperTestMatched("large�", '#large\\110000');
+        $this->helperTestMatched("large�", '#large\\23456a');
+        $this->helperTestMatched("surrogate�", '#surrogate\\D800');
+        $this->helperTestMatched("surrogate�", '#surrogate\\0DBAC');
+        $this->helperTestMatched("�surrogate", '#\\00DFFFsurrogate');
+        $this->helperTestMatched("􏿿", '#\\10fFfF');
+        $this->helperTestMatched("􏿿0", '#\\10fFfF0');
+        $this->helperTestMatched("􀀀00", '#\\10000000');
+        $this->helperTestMatched("eof�", '#eof\\');
+        $this->helperTestMatched('simple-ident', '#simple-ident');
+        $this->helperTestMatched('testing123', '#testing123');
+        $this->helperTestMatched('_underscore', '#_underscore');
+        $this->helperTestMatched('-text', '#-text');
+        $this->helperTestMatched('-m', '#-\\6d');
+        $this->helperTestMatched('--abc', '#--abc');
+        $this->helperTestMatched('--', '#--');
+        $this->helperTestMatched('--11', '#--11');
+        $this->helperTestMatched('---', '#---');
+        $this->helperTestMatched(" ", "# ");
+        $this->helperTestMatched(" ", "# ");
+        $this->helperTestMatched("ሴ", "#ሴ");
+        $this->helperTestMatched("𒍅", "#𒍅");
+        $this->helperTestMatched("�", "#\\u0000");
+        $this->helperTestMatched("ab�c", "#ab\\u0000c");
     }
 }

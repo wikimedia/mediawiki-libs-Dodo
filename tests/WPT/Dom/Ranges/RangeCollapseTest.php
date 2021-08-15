@@ -6,7 +6,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/ranges/Range-collapse.html.
 class RangeCollapseTest extends WPTTestHarness
 {
-    public function testCollapse($rangeEndpoints, $toStart)
+    public function helperTestCollapse($rangeEndpoints, $toStart)
     {
         $range = null;
         if ($rangeEndpoints == 'detached') {
@@ -44,7 +44,7 @@ class RangeCollapseTest extends WPTTestHarness
             $tests[] = ['Range ' . $i . ' ' . $this->getCommon()->testRanges[$i] . ', toStart false', eval($this->getCommon()->testRanges[$i]), false];
             $tests[] = ['Range ' . $i . ' ' . $this->getCommon()->testRanges[$i] . ', toStart omitted', eval($this->getCommon()->testRanges[$i]), null];
         }
-        $this->generateTests($testCollapse, $tests);
+        $this->generateTests([$this, 'helperTestCollapse'], $tests);
         $this->getCommon()->testDiv->style->display = 'none';
     }
 }

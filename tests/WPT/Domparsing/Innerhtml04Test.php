@@ -7,7 +7,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/domparsing/innerhtml-04.html.
 class Innerhtml04Test extends WPTTestHarness
 {
-    public function testIsChild($p, $c)
+    public function helperTestIsChild($p, $c)
     {
         $this->wptAssertEquals($p->firstChild, $c);
         $this->wptAssertEquals($c->parentNode, $p);
@@ -19,11 +19,11 @@ class Innerhtml04Test extends WPTTestHarness
             $p = $this->doc->createElement('p');
             $b = $p->appendChild($this->doc->createElement('b'));
             $t = $b->appendChild($this->doc->createTextNode('foo'));
-            testIsChild($p, $b);
-            testIsChild($b, $t);
+            $this->helperTestIsChild($p, $b);
+            $this->helperTestIsChild($b, $t);
             $this->wptAssertEquals($t->data, 'foo');
             $p->innerHTML = '';
-            testIsChild($b, $t);
+            $this->helperTestIsChild($b, $t);
             $this->wptAssertEquals($t->data, 'foo');
         }, 'innerHTML should leave the removed children alone.');
     }

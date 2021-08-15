@@ -5,7 +5,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-createEvent.https.html.
 class DocumentCreateEventHttpsTest extends WPTTestHarness
 {
-    public function testAlias($arg, $iface)
+    public function helperTestAlias($arg, $iface)
     {
         $ev = null;
         $this->assertTest(function () use(&$arg, &$iface) {
@@ -28,9 +28,9 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createEvent.https.html');
         foreach ($aliases as $alias) {
             $iface = $aliases[$alias];
-            $this->testAlias($alias, $iface);
-            $this->testAlias(strtolower($alias), $iface);
-            $this->testAlias(strtoupper($alias), $iface);
+            $this->helperTestAlias($alias, $iface);
+            $this->helperTestAlias(strtolower($alias), $iface);
+            $this->helperTestAlias(strtoupper($alias), $iface);
             if ($alias[count($alias) - 1] != 's') {
                 $plural = $alias . 's';
                 if (!isset($aliases[$plural])) {

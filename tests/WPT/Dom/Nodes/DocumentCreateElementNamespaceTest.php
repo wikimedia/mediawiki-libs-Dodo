@@ -6,7 +6,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/Document-createElement-namespace.html.
 class DocumentCreateElementNamespaceTest extends WPTTestHarness
 {
-    public function testDoc($doc, $contentType)
+    public function helperTestDoc($doc, $contentType)
     {
         if ($doc->contentType !== null) {
             // Sanity check
@@ -20,38 +20,38 @@ class DocumentCreateElementNamespaceTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Document-createElement-namespace.html');
         // First test various objects we create in JS
         $this->assertTest(function () {
-            $this->testDoc($this->doc, 'text/html');
+            $this->helperTestDoc($this->doc, 'text/html');
         }, "Created element's namespace in current document");
         $this->assertTest(function () {
-            $this->testDoc($this->doc->implementation->createHTMLDocument(''), 'text/html');
+            $this->helperTestDoc($this->doc->implementation->createHTMLDocument(''), 'text/html');
         }, "Created element's namespace in created HTML document");
         $this->assertTest(function () {
-            $this->testDoc($this->doc->implementation->createDocument(null, '', null), 'application/xml');
+            $this->helperTestDoc($this->doc->implementation->createDocument(null, '', null), 'application/xml');
         }, "Created element's namespace in created XML document");
         $this->assertTest(function () {
-            $this->testDoc($this->doc->implementation->createDocument('http://www.w3.org/1999/xhtml', 'html', null), 'application/xhtml+xml');
+            $this->helperTestDoc($this->doc->implementation->createDocument('http://www.w3.org/1999/xhtml', 'html', null), 'application/xhtml+xml');
         }, "Created element's namespace in created XHTML document");
         $this->assertTest(function () {
-            $this->testDoc($this->doc->implementation->createDocument('http://www.w3.org/2000/svg', 'svg', null), 'image/svg+xml');
+            $this->helperTestDoc($this->doc->implementation->createDocument('http://www.w3.org/2000/svg', 'svg', null), 'image/svg+xml');
         }, "Created element's namespace in created SVG document");
         $this->assertTest(function () {
-            $this->testDoc($this->doc->implementation->createDocument('http://www.w3.org/1998/Math/MathML', 'math', null), 'application/xml');
+            $this->helperTestDoc($this->doc->implementation->createDocument('http://www.w3.org/1998/Math/MathML', 'math', null), 'application/xml');
         }, "Created element's namespace in created MathML document");
         // Second also test document created by DOMParser
         $this->assertTest(function () {
-            $this->testDoc((new DOMParser())->parseFromString('', 'text/html'), 'text/html');
+            $this->helperTestDoc((new DOMParser())->parseFromString('', 'text/html'), 'text/html');
         }, "Created element's namespace in created HTML document by DOMParser ('text/html')");
         $this->assertTest(function () {
-            $this->testDoc((new DOMParser())->parseFromString('<root/>', 'text/xml'), 'text/xml');
+            $this->helperTestDoc((new DOMParser())->parseFromString('<root/>', 'text/xml'), 'text/xml');
         }, "Created element's namespace in created XML document by DOMParser ('text/xml')");
         $this->assertTest(function () {
-            $this->testDoc((new DOMParser())->parseFromString('<root/>', 'application/xml'), 'application/xml');
+            $this->helperTestDoc((new DOMParser())->parseFromString('<root/>', 'application/xml'), 'application/xml');
         }, "Created element's namespace in created XML document by DOMParser ('application/xml')");
         $this->assertTest(function () {
-            $this->testDoc((new DOMParser())->parseFromString('<html/>', 'application/xhtml+xml'), 'application/xhtml+xml');
+            $this->helperTestDoc((new DOMParser())->parseFromString('<html/>', 'application/xhtml+xml'), 'application/xhtml+xml');
         }, "Created element's namespace in created XHTML document by DOMParser ('application/xhtml+xml')");
         $this->assertTest(function () {
-            $this->testDoc((new DOMParser())->parseFromString('<math/>', 'image/svg+xml'), 'image/svg+xml');
+            $this->helperTestDoc((new DOMParser())->parseFromString('<math/>', 'image/svg+xml'), 'image/svg+xml');
         }, "Created element's namespace in created SVG document by DOMParser ('image/svg+xml')");
         // Now for various externally-loaded files.  Note: these lists must be kept
         // synced with the lists in generate.py in the subdirectory, and that script
@@ -67,7 +67,7 @@ class DocumentCreateElementNamespaceTest extends WPTTestHarness
                     $iframe = $this->doc->createElement('iframe');
                     $iframe->src = 'Document-createElement-namespace-tests/' . $testName . '.' . $ext;
                     $iframe->onload = $t->step_func_done(function () use(&$iframe, &$testExtensions, &$ext) {
-                        $this->testDoc($iframe->getOwnerDocument(), $testExtensions[$ext]);
+                        $this->helperTestDoc($iframe->getOwnerDocument(), $testExtensions[$ext]);
                         $this->doc->body->removeChild($iframe);
                     });
                     $this->doc->body->appendChild($iframe);

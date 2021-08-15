@@ -8,7 +8,7 @@ use Wikimedia\Dodo\Tests\Harness\WPTTestHarness;
 // @see vendor/web-platform-tests/wpt/dom/nodes/CharacterData-remove.html.
 class CharacterDataRemoveTest extends WPTTestHarness
 {
-    public function assertTestRemove($node, $parent, $type)
+    public function helperTestRemove($node, $parent, $type)
     {
         $this->assertTest(function () use(&$node) {
             $this->wptAssertTrue(isset($node['remove']));
@@ -55,8 +55,8 @@ class CharacterDataRemoveTest extends WPTTestHarness
         $comment_parent = $this->doc->createElement('div');
         $pi = $this->doc->createProcessingInstruction('foo', 'bar');
         $pi_parent = $this->doc->createElement('div');
-        $this->assertTestRemove($text, $text_parent, 'text');
-        $this->assertTestRemove($comment, $comment_parent, 'comment');
-        $this->assertTestRemove($pi, $pi_parent, 'PI');
+        $this->helperTestRemove($text, $text_parent, 'text');
+        $this->helperTestRemove($comment, $comment_parent, 'comment');
+        $this->helperTestRemove($pi, $pi_parent, 'PI');
     }
 }
