@@ -1,6 +1,9 @@
 # Change Log
 
 ## Dodo x.x.x (not yet released)
+* Use 'code point' units for CharacterData methods, not 'UTF-16 code units'
+  * This is compatible with modern PHP, which has use 'code point' units
+    since PHP5.
 
 ## Dodo 0.3.0 (2021-08-08)
 * Update to wikimedia/zest-css 2.0.1.
