@@ -410,6 +410,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		 * DOMException "NotFoundError".
 		 */
 		WhatWG::ensure_insert_valid( $node, $this, $refNode );
+		'@phan-var Document|DocumentFragment|Element $this';
 
 		/*
 		 * [2]
@@ -456,6 +457,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * @return Node
 	 */
 	public function _unsafeAppendChild( Node $node ): Node {
+		'@phan-var ContainerNode $this';
 		WhatWG::insert_before_or_replace( $node, $this, null, false );
 		return $node;
 	}
@@ -472,6 +474,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		 * DOMException "NotFoundError".
 		 */
 		WhatWG::ensure_replace_valid( $new, $this, $old );
+		'@phan-var Document|DocumentFragment|Element $this';
 
 		/*
 		 * [2]
@@ -678,7 +681,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			}
 		}
 
-		/* If we got through all of the children (why wouldn't we?) */
+		/* Verify that both lists of children were the same size */
 		return $a === null && $b === null;
 	}
 
@@ -924,6 +927,11 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 	 * Node::removeChild(), since it calls Node::_modify() once.
 	 */
 	public function _removeChildren() {
+		if ( !$this->hasChildNodes() ) {
+			return;
+		}
+		// XXX: consider moving this code to ContainerNode?
+		'@phan-var ContainerNode $this'; /** @var ContainerNode $this */
 		if ( $this->getIsConnected() ) {
 			$root = $this->_nodeDocument;
 		} else {
@@ -940,13 +948,8 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		}
 
 		/* Remove the child node memory or references on this node */
-		if ( $this->_childNodes !== null ) {
-			/* BRANCH: NodeList (array-like) */
-			$this->_childNodes = new NodeList();
-		} else {
-			/* BRANCH: circular linked list */
-			$this->_firstChild = null;
-		}
+		$this->_childNodes = null;
+		$this->_firstChild = null;
 		$this->_modify(); // Update last modified time once only
 	}
 

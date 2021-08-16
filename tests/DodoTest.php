@@ -188,12 +188,15 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 			}
 		);
 		$node = $ni->nextNode();
+		'@phan-var Element $node';
 		$this->assertEqualsIgnoringCase( 'BODY', $node->tagName );
 		$node = $ni->nextNode();
+		'@phan-var Element $node';
 		$this->assertEqualsIgnoringCase( 'A', $node->tagName );
 		$node = $ni->nextNode();
 		$this->assertEquals( '#text', $node->nodeName );
 		$node = $ni->nextNode();
+		'@phan-var Element $node';
 		$this->assertEqualsIgnoringCase( 'B', $node->tagName );
 		// insertAdjacentHTML is not yet implemented, so the rest is
 		// commented out for now.

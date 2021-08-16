@@ -51,6 +51,7 @@ class Text extends CharacterData implements \Wikimedia\IDLeDOM\Text {
 	 * @return bool
 	 */
 	protected function _subclassIsEqualNode( Node $node ): bool {
+		'@phan-var Text $node'; /** @var Text $node */
 		return ( $this->_data === $node->_data );
 	}
 

@@ -8,6 +8,7 @@ namespace Wikimedia\Dodo\Internal;
 
 use Wikimedia\Dodo\Attr;
 use Wikimedia\Dodo\Comment;
+use Wikimedia\Dodo\ContainerNode;
 use Wikimedia\Dodo\Document;
 use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\DocumentType;
@@ -281,11 +282,11 @@ class WhatWG {
 
 	/**
 	 * @param Node $child
-	 * @param Node $parent
+	 * @param ContainerNode $parent
 	 * @param ?Node $before
 	 * @param bool $replace
 	 */
-	public static function insert_before_or_replace( Node $child, Node $parent, ?Node $before, bool $replace ): void {
+	public static function insert_before_or_replace( Node $child, ContainerNode $parent, ?Node $before, bool $replace ): void {
 		/*
 		 * TODO: FACTOR: $before is intended to always be non-NULL
 		 * if $replace is true, but I think that could fail unless
@@ -309,6 +310,9 @@ class WhatWG {
 				// save this index
 				$ref_index = $before->_getSiblingIndex();
 			} else {
+				// phan can't tell that we've already tested $parent->_childNodes
+				// and know that it is non-null:
+				// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
 				$ref_index = count( $parent->_childNodes );
 			}
 			// If we are already a child of the specified parent, then the
@@ -360,6 +364,9 @@ class WhatWG {
 			}
 			if ( $parent->_childNodes !== null ) {
 				$firstIndex = ( $before === null ) ?
+					// phan can't tell that we've already tested
+					// $parent->_childNodes and know that it is non-null:
+					// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
 					count( $parent->_childNodes ) :
 					$before->_cachedSiblingIndex;
 				$parent->_childNodes->_splice(
