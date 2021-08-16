@@ -6,6 +6,8 @@
 
 // Run with: 'php ./dodo.test.php'
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 // Call this at each point of interest, passing a descriptive string
 function prof_flag( $str ) {
 	global $prof_timing, $prof_names;
@@ -32,12 +34,12 @@ function prof_print() {
  * This is just a demo to show basic invocation.
  * It is not intended to provide test coverage of any kind.
  */
-require_once '../vendor/autoload.php';
 
-$dom = new Wikimedia\Dodo\Document();
+$dom = new Wikimedia\Dodo\Document( '1.0', 'UTF-8' );
 
 $html = $dom->createElement( "html" );
 $body = $dom->createElement( "body" );
+$comment = $dom->createComment( 'Hello, world!' );
 
 $p = [];
 
@@ -76,7 +78,4 @@ prof_flag( "done" );
 echo prof_print();
 
 /* Print the tree */
-//echo $dom->getOuterHTML();
-//$result = [];
-//$dom->_serialize( $result );
-//echo implode( '', $result );
+echo $dom->saveHTML();
