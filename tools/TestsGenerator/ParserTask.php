@@ -76,11 +76,6 @@ class ParserTask extends BaseTask {
 	/**
 	 * @var bool
 	 */
-	private $wrap_only;
-
-	/**
-	 * @var bool
-	 */
 	private $compact;
 
 	/**
@@ -97,11 +92,10 @@ class ParserTask extends BaseTask {
 	 * @param string $test_name
 	 * @param string $test_type
 	 * @param bool $compact
-	 * @param bool $wrap_only
 	 * @param string|null $test_path
 	 */
 	public function __construct( string $test, string $test_name, string $test_type,
-		bool $compact = false, bool $wrap_only = false, ?string $test_path = null ) {
+		bool $compact = false, ?string $test_path = null ) {
 		$this->test = $test;
 		$this->finder = new NodeFinder;
 		$this->parser = ( new ParserFactory )->create( ParserFactory::ONLY_PHP7 );
@@ -111,7 +105,6 @@ class ParserTask extends BaseTask {
 		$this->test_name = $test_name;
 		$this->test_path = $this->getRealpath( $test_path ) ?: $test_name;
 		$this->compact = $compact;
-		$this->wrap_only = $wrap_only;
 	}
 
 	/**
@@ -140,12 +133,6 @@ class ParserTask extends BaseTask {
 	public function run(): Result {
 		try {
 			$this->preprocessTest();
-
-			if ( $this->wrap_only ) {
-				// TestWrapper is need only for proper parsing.
-				$ast = $this->parser->parse( '<?php class TestWrapper {' . $this->test . '}' );
-				$this->wrapInClass( $ast );
-			}
 
 			if ( $this->test_type === TestsGenerator::W3C ) {
 				$this->preProcessW3CTest();
@@ -177,31 +164,6 @@ class ParserTask extends BaseTask {
 	protected function preprocessTest() {
 		$find_replace = [ 'new Array()' => '[]' ];
 		$this->test = strtr( $this->test, $find_replace );
-	}
-
-	/**
-	 * @param array $stmts
-	 */
-	protected function wrapInClass( array $stmts ) {
-		$stmts = $stmts[0]->stmts;
-
-		if ( $this->test_type === TestsGenerator::W3C ) {
-			$class = $this->factory->class( $this->snakeToCamel( $this->test_name ) . 'Test' )->extend( 'DomTestCase' )
-				->addStmts( $stmts )->getNode();
-			$stmts = $this->factory->namespace( 'Wikimedia\Dodo\Tests' )
-				->addStmts( [ $this->factory->use( 'Exception' ),
-					$class ] )->getNode();
-		} else {
-			// create test class
-			$class = $this->factory->class( $this->test_name . 'Test' )->extend( 'DodoBaseTest' )->addStmts( $stmts )
-				->getNode();
-			$use_stmts = $this->factory->use( 'Wikimedia\Dodo\Document' );
-			$stmts = $this->factory->namespace( 'Wikimedia\Dodo\Tests' )->addStmts( [ $use_stmts,
-				$class ] )->getNode();
-		}
-
-		$prettyPrinter = new PrettyPrinter\Standard();
-		$this->test = "<?php \n" . $prettyPrinter->prettyPrint( [ $stmts ] );
 	}
 
 	/**
