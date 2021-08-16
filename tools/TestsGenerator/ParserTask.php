@@ -74,11 +74,6 @@ class ParserTask extends BaseTask {
 	private $file;
 
 	/**
-	 * @var bool
-	 */
-	private $compact;
-
-	/**
 	 * @var string
 	 */
 	private $test_path;
@@ -91,11 +86,10 @@ class ParserTask extends BaseTask {
 	 * @param string $test
 	 * @param string $test_name
 	 * @param string $test_type
-	 * @param bool $compact
 	 * @param string|null $test_path
 	 */
 	public function __construct( string $test, string $test_name, string $test_type,
-		bool $compact = false, ?string $test_path = null ) {
+		?string $test_path = null ) {
 		$this->test = $test;
 		$this->finder = new NodeFinder;
 		$this->parser = ( new ParserFactory )->create( ParserFactory::ONLY_PHP7 );
@@ -104,7 +98,6 @@ class ParserTask extends BaseTask {
 		$this->test_type = $test_type;
 		$this->test_name = $test_name;
 		$this->test_path = $this->getRealpath( $test_path ) ?: $test_name;
-		$this->compact = $compact;
 	}
 
 	/**
@@ -338,15 +331,19 @@ class ParserTask extends BaseTask {
 
 		$stmts = $traverser->traverse( $ast );
 
-		if ( !$this->compact ) {
-			$class = $this->factory->class( $this->snakeToPascal( $this->test_name ) . 'Test' )
-				->extend( 'W3CTestHarness' )->addStmts( $stmts )->setDocComment( '// @see ' . $this->test_path . '.' )
-				->getNode();
-			$use_stmts = $this->getUseStmts( $visitor->uses );
+		$class = $this->factory
+			   ->class( $this->snakeToPascal( $this->test_name ) . 'Test' )
+			   ->extend( 'W3CTestHarness' )
+			   ->addStmts( $stmts )
+			   ->setDocComment( '// @see ' . $this->test_path . '.' )
+			   ->getNode();
+		$use_stmts = $this->getUseStmts( $visitor->uses );
 
-			$stmts = $this->factory->namespace( 'Wikimedia\Dodo\Tests\W3C' )->addStmts( $use_stmts )->addStmts( [
-				$class ] )->getNode();
-		}
+		$stmts = $this->factory
+			   ->namespace( 'Wikimedia\Dodo\Tests\W3C' )
+			   ->addStmts( $use_stmts )
+			   ->addStmts( [ $class ] )
+			   ->getNode();
 
 		$this->prettyPrint( $stmts );
 	}
@@ -362,11 +359,7 @@ class ParserTask extends BaseTask {
 		if ( !is_array( $stmts ) ) {
 			$stmts = [ $stmts ];
 		}
-		if ( $this->compact && $this->test_type === TestsGenerator::W3C ) {
-			$this->test = $prettyPrinter->prettyPrint( $stmts );
-		} else {
-			$this->test = "<?php \n" . $prettyPrinter->prettyPrint( $stmts ) . "\n";
-		}
+		$this->test = "<?php \n" . $prettyPrinter->prettyPrint( $stmts ) . "\n";
 	}
 
 	/**
@@ -746,43 +739,41 @@ class ParserTask extends BaseTask {
 		$traverser->addVisitor( $visitor );
 		$stmts = $traverser->traverse( $stmts );
 
-		if ( !$this->compact ) {
-			// create test class
-			if ( strpos( $this->test_name, 'Test' ) === false ) {
-				$this->test_name .= 'Test';
-			}
-
-			// Extract the package name
-			$pkg = implode(
-				'\\',
-				array_map(
-					function ( $s ) {
-						return $this->snakeToPascal( $s );
-					},
-					array_slice(
-						explode( '/', $this->test_path ),
-						3, -1
-					)
-				)
-			);
-			$class = $this->factory->class(
-				$this->snakeToPascal( $this->test_name )
-			)->extend(
-				'WPTTestHarness'
-			)->addStmts(
-				$stmts
-			)->setDocComment(
-				'// @see ' . $this->test_path . '.'
-			)->getNode();
-			$use_stmts = $this->getUseStmts( $visitor->uses );
-			$stmts = $this->factory->namespace(
-				'Wikimedia\Dodo\Tests\WPT\\' . $pkg
-			)->addStmts(
-				$use_stmts
-			)->addStmts( [
-				$class
-			] )->getNode();
+		// create test class
+		if ( strpos( $this->test_name, 'Test' ) === false ) {
+			$this->test_name .= 'Test';
 		}
+
+		// Extract the package name
+		$pkg = implode(
+			'\\',
+			array_map(
+				function ( $s ) {
+					return $this->snakeToPascal( $s );
+				},
+				array_slice(
+					explode( '/', $this->test_path ),
+					3, -1
+				)
+			)
+		);
+		$class = $this->factory->class(
+			$this->snakeToPascal( $this->test_name )
+		)->extend(
+			'WPTTestHarness'
+		)->addStmts(
+			$stmts
+		)->setDocComment(
+			'// @see ' . $this->test_path . '.'
+		)->getNode();
+		$use_stmts = $this->getUseStmts( $visitor->uses );
+		$stmts = $this->factory->namespace(
+			'Wikimedia\Dodo\Tests\WPT\\' . $pkg
+		)->addStmts(
+			$use_stmts
+		)->addStmts( [
+			$class
+		] )->getNode();
 
 		$this->prettyPrint( $stmts );
 	}
