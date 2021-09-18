@@ -1030,7 +1030,7 @@ class ParserTask extends BaseTask {
 		}
 
 		// Replace constructs like String($span->classList).
-		preg_replace( '/String\((.*)\)/', '$this->toString($1)', $this->test );
+		$this->test = preg_replace( '/String\((.*)\)/', '$this->toString($1)', $this->test );
 	}
 
 	/**

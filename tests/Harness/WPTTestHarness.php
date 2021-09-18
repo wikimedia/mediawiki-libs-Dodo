@@ -560,6 +560,7 @@ abstract class WPTTestHarness extends TestCase {
 
 	/**
 	 * @param string $description
+	 * @return never
 	 */
 	protected function wptAssertUnreached( string $description = '' ): void {
 		// @phan-suppress-next-line PhanAccessMethodInternal

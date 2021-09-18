@@ -60,7 +60,6 @@ class LocatorTask extends BaseTask {
 		'DocumentCreateElementNSTest' => 'Window and addEventListener, could be transformed',
 		'attributes' => 'uses asyncTest.',
 		'comment-constructor.html' => 'Object::getPrototypeOf(Object::getPrototypeOf($object)',
-		'Document-characterSet-normalization' => 'asyncTest',
 		'Document-createElementNS' => 'addEventListener',
 		'Document-createElement' => 'asyncTest and addEventListener',
 		'Document-getElementsByTagName' => 'HTMLCollection::prototype::namedItem',

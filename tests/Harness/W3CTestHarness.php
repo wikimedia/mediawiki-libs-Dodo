@@ -397,6 +397,7 @@ abstract class W3CTestHarness extends TestCase {
 		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/W3C' )
 			->files()->sortByName() );
 
+		// @phan-suppress-next-line PhanTypeMismatchReturn
 		return $this->parseHtmlToDom( array_key_first( $file_path ) );
 	}
 }

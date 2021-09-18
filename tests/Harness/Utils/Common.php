@@ -573,6 +573,7 @@ class Common {
 	 * @return \Wikimedia\IDLeDOM\Document
 	 */
 	public static function ownerDocument( $node ) {
+		// @phan-suppress-next-line PhanTypeMismatchReturnSuperType
 		return ( $node->nodeType == Node::DOCUMENT_NODE ) ? $node : $node->ownerDocument;
 	}
 
@@ -833,7 +834,6 @@ class Common {
 		$firstPartiallyContainedChild = null;
 		if ( self::isAncestorContainer( $originalStartNode,
 			$originalEndNode ) ) {
-			$firstPartiallyContainedChild = null;
 			// "Otherwise, let first partially contained child be the first child of
 			// common ancestor that is partially contained in the context object."
 		} else {
@@ -854,7 +854,6 @@ class Common {
 		$lastPartiallyContainedChild = null;
 		if ( self::isAncestorContainer( $originalEndNode,
 			$originalStartNode ) ) {
-			$lastPartiallyContainedChild = null;
 			// "Otherwise, let last partially contained child be the last child of
 			// common ancestor that is partially contained in the context object."
 		} else {
@@ -1109,8 +1108,6 @@ class Common {
 		} else {
 			if ( $range->startOffset < count( $range->startContainer->childNodes ) ) {
 				$referenceNode = $range->startContainer->childNodes[$range->startOffset];
-			} else {
-				$referenceNode = null;
 			}
 		}
 

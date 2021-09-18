@@ -264,6 +264,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			return null;
 		}
 		if ( $this->_parentNode->getNodeType() === self::ELEMENT_NODE ) {
+			// @phan-suppress-next-line PhanTypeMismatchReturn
 			return $this->_parentNode;
 		}
 		return null;
@@ -526,6 +527,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		 * the return value always
 		 * be equal to $node.
 		 */
+		// @phan-suppress-next-line PhanTypeMismatchReturn
 		return $node;
 	}
 
@@ -707,7 +709,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		$clone = $this->_subclassCloneNodeShallow();
 
 		/* If the shallow clone is all we wanted, we're done. */
-		if ( $deep === false ) {
+		if ( !$deep ) {
 			return $clone;
 		}
 
@@ -866,6 +868,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 			 * previousSibling
 			 */
 			foreach ( $childNodes as $i => $child ) {
+				// @phan-suppress-next-line PhanUndeclaredProperty
 				$child->_cachedSiblingIndex = $i;
 			}
 

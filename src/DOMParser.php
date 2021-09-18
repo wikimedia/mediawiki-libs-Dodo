@@ -267,6 +267,7 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 		}
 
 		$result = $domBuilder->getFragment();
+		// @phan-suppress-next-line PhanTypeMismatchReturnSuperType
 		return $result;
 	}
 

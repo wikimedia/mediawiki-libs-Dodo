@@ -1158,6 +1158,7 @@ class WhatWG {
 						if (
 							$ignoreNamespaceDefinitionAttribute &&
 							// https://github.com/w3c/DOM-Parsing/issues/47
+							// @phan-suppress-next-line PhanCoalescingNeverNullInLoop Phan says getValue never returns null
 							( $attr->getValue() ?? '' ) !== ( $attr->getOwnerElement()->getNamespaceURI() ?? '' )
 						) {
 							continue;
@@ -1286,12 +1287,14 @@ class WhatWG {
 			$result[] = '<' . $tagname;
 
 			foreach ( $child->getAttributes() as $a ) {
+				// @phan-suppress-next-line PhanTypeMismatchArgumentSuperType
 				$result[] = ' ' . self::_helper_attrname( $a );
 
 				/*
 				 * PORT: TODO: Need to ensure this value is NULL
 				 * rather than undefined?
 				 */
+				// @phan-suppress-next-line PhanImpossibleTypeComparisonInLoop Phan says getValue never returns null
 				if ( $a->getValue() !== null ) {
 					$result[] = '="' . self::_helper_escapeAttr( $a->getValue() ) . '"';
 				}
