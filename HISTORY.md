@@ -1,8 +1,9 @@
 # Change Log
 
-## Dodo x.x.x (not yet released)
+## Dodo 0.4.0 (2021-10-25)
+* Allow use of wikimedia/remex-html 3.0.0.
 * Use 'code point' units for CharacterData methods, not 'UTF-16 code units'
-  * This is compatible with modern PHP, which has use 'code point' units
+  * This is compatible with modern PHP, which has used 'code point' units
     since PHP5.
 * Window now implements the proper IDLeDOM interfaces.
 * Dodo classes now use @phan-forbid-undeclared-magic-properties.
