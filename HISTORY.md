@@ -1,5 +1,7 @@
 # Change Log
 
+## Dodo x.x.x (not yet released)
+
 ## Dodo 0.4.0 (2021-10-25)
 * Allow use of wikimedia/remex-html 3.0.0.
 * Use 'code point' units for CharacterData methods, not 'UTF-16 code units'
