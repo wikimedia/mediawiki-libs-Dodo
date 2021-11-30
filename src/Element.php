@@ -30,6 +30,9 @@ use Wikimedia\IDLeDOM\Attr as IAttr;
  * CSS-OM    CSS Object Model                http://drafts.csswg.org/cssom-view/
  * HTML-LS   HTML Living Standard            https://html.spec.whatwg.org/
  *
+ * @property DOMTokenList $_classList A dynamic property to store the
+ *  persistent value of Element::getClassList().
+ *
  */
 class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	// DOM mixins
@@ -111,7 +114,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 					}
 				},
 				"class" => static function ( $elem, $old, $new ) {
-					if ( $elem->_classList !== null ) {
+					if ( isset( $elem->_classList ) ) {
 						$elem->_classList->_getList( $new );
 					}
 				},
@@ -119,11 +122,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		}
 		return self::$_attributeChangeHandlers[$localName] ?? null;
 	}
-
-	/**
-	 * @var ?DOMTokenList
-	 */
-	private $_classList = null;
 
 	/**
 	 * Element constructor
@@ -154,6 +152,22 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 		 * empty."
 		 */
 		$this->_attributes = null; // save space if no attributes
+	}
+
+	/**
+	 * Implement _setMissingProp to allow $_classList to be a dynamic
+	 * property.  Very few instances of Element will need to allocate
+	 * this property.
+	 * @param string $prop the name of the property requested
+	 * @param mixed $value the value to set
+	 */
+	protected function _setMissingProp( string $prop, $value ): void {
+		// The _charLength property is dynamic to save memory.
+		if ( $prop === '_classList' ) {
+			$this->_classList = $value;
+		} else {
+			parent::_setMissingProp( $prop, $value );
+		}
 	}
 
 	/**********************************************************************
@@ -688,7 +702,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return mixed|null
 	 */
 	public function getClassList() {
-		if ( $this->_classList === null ) {
+		if ( !isset( $this->_classList ) ) {
 			$this->_classList = new DOMTokenList( $this, 'class' );
 		}
 		return $this->_classList;

@@ -10,4 +10,15 @@ trait HTMLHyperlinkElementUtils /* implements \Wikimedia\IDLeDOM\HTMLHyperlinkEl
 
 	// Helper functions from IDLeDOM
 	use \Wikimedia\IDLeDOM\Helper\HTMLHyperlinkElementUtils;
+
+	/*
+	 * Don't inherit _getMissingProp from Helper/HTMLHyperlinkElementUtils,
+	 * instead use the version from our parent class.
+	 */
+
+	/** @inheritDoc */
+	abstract protected function _getMissingProp( string $prop );
+
+	/** @inheritDoc */
+	abstract protected function _setMissingProp( string $prop, $value ): void;
 }
