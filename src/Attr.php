@@ -179,12 +179,6 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	public $_ownerElement = null;
 
 	/**
-	 * @var bool
-	 * Should be considered readonly, always true - TODO make a constant
-	 */
-	protected $_specified = true; /* readonly const true */
-
-	/**
 	 * @param Document $nodeDocument
 	 * @param ?Element $ownerElement
 	 * @param string $localName
@@ -272,7 +266,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 
 	/** @inheritDoc */
 	public function getSpecified(): bool {
-		return $this->_specified;
+		return true;
 	}
 
 	/** @inheritDoc */
