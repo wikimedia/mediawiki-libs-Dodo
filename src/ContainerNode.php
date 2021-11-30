@@ -18,46 +18,48 @@ use Wikimedia\Dodo\Internal\WhatWG;
  */
 abstract class ContainerNode extends Node {
 	/**
-	 * @var ?Node The first child, if we're using the linked list representation
+	 * @var Node|NodeList|null The first child (if we're using the linked
+	 *  list representation), or a NodeList (if we're using the array of
+	 *  children), or null (if there are no children).
 	 */
-	public $_firstChild;
-
-	/**
-	 * @var ?NodeList An array of children, or null to indicate we're using
-	 *   the linked list representation.
-	 */
-	public $_childNodes;
+	public $_firstChildOrChildren;
 
 	/**
 	 * @param Document $nodeDocument
 	 */
 	public function __construct( Document $nodeDocument ) {
 		parent::__construct( $nodeDocument );
-		/* Our children */
-		$this->_firstChild = null;
-		$this->_childNodes = null;
+		$this->_firstChildOrChildren = null; // No children
 	}
 
 	/**
 	 * Return true iff there are children of this node.
 	 *
-	 * Note that we must test `_childNodes` to determine which representation
-	 * to consult.
-	 *
 	 * @inheritDoc
 	 */
 	public function hasChildNodes(): bool {
-		if ( $this->_childNodes === null ) {
-			// We're using the linked list representation.
-			return $this->_firstChild !== null;
-		} else {
-			// We're using the NodeList representation
-			return $this->_childNodes->getLength() > 0;
+		$kids = $this->_firstChildOrChildren;
+		// Common case is "no child nodes and linked list representation",
+		// so test that first.
+		if ( $kids === null ) {
+			return false;
 		}
+		// Check to see if we're using the array representation.
+		if ( $kids instanceof NodeList ) {
+			return ( $kids->getLength() > 0 );
+		}
+		// We're using the linked list representation and the list isn't empty.
+		return true;
 	}
 
 	/** @inheritDoc */
 	public function _length(): int {
+		if ( $this->_firstChildOrChildren === null ) {
+			// Don't force conversion to array form for this common case.
+			return 0;
+		}
+		// Convert to array form because we're probably going to iterate
+		// over the nodes by index after this returns.
 		return $this->getChildNodes()->getLength();
 	}
 
@@ -69,7 +71,7 @@ abstract class ContainerNode extends Node {
 	/**
 	 * Keeping child nodes as an array makes insertion/removal of nodes
 	 * quite expensive.  So we try *never* to create this array, if
-	 * possible, keeping `$this->childNodes` set to null.  If someone
+	 * possible.  If someone
 	 * actually fetches the childNodes list we lazily create it.
 	 * It then has to be live, and so we must update it whenever
 	 * nodes are appended or removed.
@@ -77,12 +79,11 @@ abstract class ContainerNode extends Node {
 	 * @inheritDoc
 	 */
 	public function getChildNodes(): NodeList {
-		if ( $this->_childNodes === null ) {
-			// If childNodes has never been created, we've now created it.
-			$this->_childNodes = new NodeList();
+		if ( !( $this->_firstChildOrChildren instanceof NodeList ) ) {
+			// If childNodes has never been created, we now create it.
+			$first = $this->_firstChildOrChildren;
+			$this->_firstChildOrChildren = $childNodes = new NodeList();
 			// optimized circular linked list traversal
-			$childNodes = new NodeList();
-			$first = $this->_firstChild;
 			$kid = $first;
 			if ( $kid !== null ) {
 				do {
@@ -90,29 +91,24 @@ abstract class ContainerNode extends Node {
 					$kid = $kid->_nextSibling;
 				} while ( $kid !== $first ); // circular linked list
 			}
-			$this->_childNodes = $childNodes;
-			// The first child could later be removed, but we'd still be
-			// holding on to a reference.  So set _firstChild to null to
-			// allow freeing up that memory.
-			$this->_firstChild = null;
 		}
-		return $this->_childNodes;
+		return $this->_firstChildOrChildren;
 	}
 
 	/**
 	 * Be careful to use this method in most cases rather than directly
-	 * access `_firstChild`.
+	 * accessing `_firstChildOrChildren`.
 	 *
 	 * @inheritDoc
 	 */
 	public function getFirstChild(): ?Node {
-		$kids = $this->_childNodes;
-		if ( $kids === null ) {
+		$kids = $this->_firstChildOrChildren;
+		if ( !( $kids instanceof NodeList ) ) {
 			/*
 			 * If we are using the Linked List representation, then just return
 			 * the backing property (may still be null).
 			 */
-			return $this->_firstChild;
+			return $kids;
 		}
 		$len = $kids->getLength();
 		return $len === 0 ? null : $kids->item( 0 );
@@ -122,19 +118,19 @@ abstract class ContainerNode extends Node {
 	 * @inheritDoc
 	 */
 	public function getLastChild(): ?Node {
-		$kids = $this->_childNodes;
-		if ( $kids !== null ) {
+		$kids = $this->_firstChildOrChildren;
+		if ( $kids instanceof NodeList ) {
 			// We are using the NodeList representation.
 			$len = $kids->getLength();
 			return $len === 0 ? null : $kids->item( $len - 1 );
 		}
 		// We are using the Linked List representation.
-		if ( $this->_firstChild === null ) {
+		if ( $kids === null ) {
 			return null;
 		}
 		// If we have a firstChild, its _previousSibling is the last child,
 		// because this is a circularly linked list.
-		return $this->_firstChild->_previousSibling;
+		return $kids->_previousSibling;
 	}
 
 	// These next methods are defined on Element and DocumentFragment with

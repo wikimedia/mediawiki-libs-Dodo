@@ -17,6 +17,7 @@ use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\HTMLTemplateElement;
 use Wikimedia\Dodo\NamedNodeMap;
 use Wikimedia\Dodo\Node;
+use Wikimedia\Dodo\NodeList;
 use Wikimedia\Dodo\ProcessingInstruction;
 use Wikimedia\Dodo\Text;
 use Wikimedia\IDLeDOM\ChildNode as IChildNode;
@@ -305,15 +306,13 @@ class WhatWG {
 		// phan can't tell that $ref_index is non-null iff childNodes is
 		// non-null, so we'll set it here regardless.
 		$ref_index = -1;
-		if ( $parent->_childNodes !== null ) {
+		$parentFirstChildOrChildren = $parent->_firstChildOrChildren;
+		if ( $parentFirstChildOrChildren instanceof NodeList ) {
 			if ( $before !== null ) {
 				// save this index
 				$ref_index = $before->_getSiblingIndex();
 			} else {
-				// phan can't tell that we've already tested $parent->_childNodes
-				// and know that it is non-null:
-				// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
-				$ref_index = count( $parent->_childNodes );
+				$ref_index = $parentFirstChildOrChildren->getLength();
 			}
 			// If we are already a child of the specified parent, then the
 			// index may have to be adjusted
@@ -362,14 +361,14 @@ class WhatWG {
 					$insert[0], $ref_node
 				);
 			}
-			if ( $parent->_childNodes !== null ) {
+			// This is a bit of an abstraction violation, we're reaching into
+			// the guts of ContainerNode here.
+			$parentFirstChildOrChildren = $parent->_firstChildOrChildren;
+			if ( $parentFirstChildOrChildren instanceof NodeList ) {
 				$firstIndex = ( $before === null ) ?
-					// phan can't tell that we've already tested
-					// $parent->_childNodes and know that it is non-null:
-					// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
-					count( $parent->_childNodes ) :
+					$parentFirstChildOrChildren->getLength() :
 					$before->_cachedSiblingIndex;
-				$parent->_childNodes->_splice(
+				$parentFirstChildOrChildren->_splice(
 					$firstIndex,
 					$replace ? 1 : 0,
 					$insert
@@ -377,20 +376,21 @@ class WhatWG {
 				foreach ( $insert as $i => $ni ) {
 					$ni->_cachedSiblingIndex = $firstIndex + $i;
 				}
-			} elseif ( $parent->_firstChild === $before ) {
+			} elseif ( $parentFirstChildOrChildren === $before ) {
 				if ( count( $insert ) > 0 ) {
-					$parent->_firstChild = $insert[0];
+					$parent->_firstChildOrChildren = $insert[0];
 				} elseif ( $replace ) {
-					$parent->_firstChild = null;
+					$parent->_firstChildOrChildren = null;
 				}
 			}
 			// Remove all nodes from the document fragment
-			if ( $child->_childNodes !== null ) {
-				$child->_childNodes->_splice(
-					0, $child->_childNodes->getLength()
+			$childFirstChildOrChildren = $child->_firstChildOrChildren;
+			if ( $childFirstChildOrChildren instanceof NodeList ) {
+				$childFirstChildOrChildren->_splice(
+					0, $childFirstChildOrChildren->getLength()
 				);
 			} else {
-				$child->_firstChild = null;
+				$child->_firstChildOrChildren = null;
 			}
 			// Call the mutation handlers
 			// Use $insert since the original array has been destroyed. The
@@ -423,21 +423,23 @@ class WhatWG {
 			$child->_parentNode = $parent;
 			if ( $replace ) {
 				LinkedList::ll_replace( $ref_node, $child );
-				if ( $parent->_childNodes !== null ) {
+				$parentFirstChildOrChildren = $parent->_firstChildOrChildren;
+				if ( $parentFirstChildOrChildren instanceof NodeList ) {
 					$child->_cachedSiblingIndex = $ref_index;
-					$parent->_childNodes->_set( $ref_index, $child );
-				} elseif ( $parent->_firstChild === $before ) {
-					$parent->_firstChild = $child;
+					$parentFirstChildOrChildren->_set( $ref_index, $child );
+				} elseif ( $parentFirstChildOrChildren === $before ) {
+					$parent->_firstChildOrChildren = $child;
 				}
 			} else {
 				if ( $ref_node !== null ) {
 					LinkedList::ll_insert_before( $child, $ref_node );
 				}
-				if ( $parent->_childNodes !== null ) {
+				$parentFirstChildOrChildren = $parent->_firstChildOrChildren;
+				if ( $parentFirstChildOrChildren instanceof NodeList ) {
 					$child->_cachedSiblingIndex = $ref_index;
-					$parent->_childNodes->_splice( $ref_index, 0, [ $child ] );
-				} elseif ( $parent->_firstChild === $before ) {
-					$parent->_firstChild = $child;
+					$parentFirstChildOrChildren->_splice( $ref_index, 0, [ $child ] );
+				} elseif ( $parentFirstChildOrChildren === $before ) {
+					$parent->_firstChildOrChildren = $child;
 				}
 			}
 			if ( $bothWereRooted ) {

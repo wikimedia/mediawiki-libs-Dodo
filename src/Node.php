@@ -949,8 +949,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 		}
 
 		/* Remove the child node memory or references on this node */
-		$this->_childNodes = null;
-		$this->_firstChild = null;
+		$this->_firstChildOrChildren = null;
 		$this->_modify(); // Update last modified time once only
 	}
 
