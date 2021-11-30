@@ -11,6 +11,9 @@ use Wikimedia\Dodo\Internal\Util;
  *
  * This uses <u>unicode code points</u> to measure offsets and lengths,
  * not <u>UTF-16 code units</u> (used by the DOM spec and PHP prior to PHP5).
+ *
+ * @property int $_charLength Dynamic property used to cache the length in
+ *  *codepoints* (see discussion in ::substringData about units).
  */
 abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\CharacterData, \Countable {
 	// DOM mixins
@@ -27,13 +30,6 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	protected $_data;
 
 	/**
-	 * Cache the length in *codepoints*.
-	 * (See discussion at ::substringData about units here.)
-	 * @var ?int
-	 */
-	protected $_charLength;
-
-	/**
 	 * HACK! For compatibilty with W3C test suite, which assumes that an
 	 * access to 'attributes' will return null.
 	 * @param string $name
@@ -47,6 +43,22 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	}
 
 	/**
+	 * Implement _setMissingProp to allow $_charLength to be a dynamic
+	 * property.  Very few instances of CharacterData will need to allocate
+	 * this property.
+	 * @param string $prop the name of the property requested
+	 * @param mixed $value the value to set
+	 */
+	protected function _setMissingProp( string $prop, $value ): void {
+		// The _charLength property is dynamic to save memory.
+		if ( $prop === '_charLength' ) {
+			$this->_charLength = $value;
+		} else {
+			parent::_setMissingProp( $prop, $value );
+		}
+	}
+
+	/**
 	 * Create a CharacterData with data (in UTF-8 encoding).
 	 * @param Document $nodeDocument the owner document
 	 * @param string $data contents, in UTF-8 encoding
@@ -54,7 +66,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	protected function __construct( Document $nodeDocument, string $data ) {
 		parent::__construct( $nodeDocument );
 		$this->_data = $data;
-		$this->_charLength = null;
+		// $this->_charLength is not set
 	}
 
 	/**
@@ -150,7 +162,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 */
 	public function appendData( string $data ): void {
 		$this->_data .= $data;
-		$this->_charLength = null;
+		unset( $this->_charLength );
 		if ( $this->getIsConnected() ) {
 			$this->_nodeDocument->_mutateValue( $this );
 		}
@@ -247,7 +259,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 
 			$this->_data = $prefix . $data . $suffix;
 		}
-		$this->_charLength = null;
+		unset( $this->_charLength );
 		if ( $this->getIsConnected() ) {
 			$this->_nodeDocument->_mutateValue( $this );
 		}
@@ -259,7 +271,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	 * @inheritDoc
 	 */
 	public function getLength(): int {
-		if ( $this->_charLength === null ) {
+		if ( !isset( $this->_charLength ) ) {
 			$this->_charLength = mb_strlen( $this->_data, "utf8" );
 		}
 		return $this->_charLength;
@@ -273,7 +285,7 @@ abstract class CharacterData extends Leaf implements \Wikimedia\IDLeDOM\Characte
 	/** @inheritDoc */
 	public function setData( ?string $value ): void {
 		$this->_data = $value ?? '';
-		$this->_charLength = null;
+		unset( $this->_charLength );
 		if ( $this->getIsConnected() ) {
 			$this->_nodeDocument->_mutateValue( $this );
 		}
