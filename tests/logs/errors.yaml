@@ -68,16 +68,7 @@
     _comment: ''
     testcases: testInnerhtmlMxssSub
     files: /tests/WPT/Domparsing/InnerhtmlMxssSubTest.php
-'ParseError: syntax error, unexpected end of file':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testRangeCloneRange
-        testRangeCollapse
-    files: |-
-        /tests/WPT/Dom/Ranges/RangeCloneRangeTest.php
-        /tests/WPT/Dom/Ranges/RangeCollapseTest.php
-'Risky Test':
+'This test did not perform any assertions':
     _total: 18
     _comment: ''
     testcases: |-
