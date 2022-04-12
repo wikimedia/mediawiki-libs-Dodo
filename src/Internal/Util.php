@@ -1,7 +1,6 @@
 <?php
 
 declare( strict_types = 1 );
-// phpcs:disable PSR12.Properties.ConstantVisibility.NotFound
 
 namespace Wikimedia\Dodo\Internal;
 
@@ -27,12 +26,12 @@ class Util {
 	 * Strings defining the various document namespaces
 	 * [DODO] These are used by this library and aren't part of a spec.
 	 */
-	const NAMESPACE_HTML = "http://www.w3.org/1999/xhtml";
-	const NAMESPACE_XML = "http://www.w3.org/XML/1998/namespace";
-	const NAMESPACE_XMLNS = "http://www.w3.org/2000/xmlns/";
-	const NAMESPACE_MATHML = "http://www.w3.org/1998/Math/MathML";
-	const NAMESPACE_SVG = "http://www.w3.org/2000/svg";
-	const NAMESPACE_XLINK = "http://www.w3.org/1999/xlink";
+	public const NAMESPACE_HTML = "http://www.w3.org/1999/xhtml";
+	public const NAMESPACE_XML = "http://www.w3.org/XML/1998/namespace";
+	public const NAMESPACE_XMLNS = "http://www.w3.org/2000/xmlns/";
+	public const NAMESPACE_MATHML = "http://www.w3.org/1998/Math/MathML";
+	public const NAMESPACE_SVG = "http://www.w3.org/2000/svg";
+	public const NAMESPACE_XLINK = "http://www.w3.org/1999/xlink";
 
 	/**
 	 * Original:
