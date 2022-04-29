@@ -234,7 +234,7 @@ class TestsGenerator extends Tasks {
 	}
 
 	/**
-	 * Checks for if everything neccesary for test generation was installed.
+	 * Checks for if everything necessary for test generation was installed.
 	 * If not - run npm install, composer install or throw an exception
 	 *
 	 * @param bool $rewrite
