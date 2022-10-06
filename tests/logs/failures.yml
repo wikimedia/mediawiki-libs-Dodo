@@ -39,11 +39,6 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\SvgTemplateQuerySelectorTest
     files: /tests/WPT/Dom/Nodes/SvgTemplateQuerySelectorTest.php
-'Failed asserting that true matches expected ''It must exist on the prototype''.':
-    _total: 1
-    _comment: ''
-    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentFragmentGetElementByIdTest
-    files: /tests/WPT/Dom/Nodes/DocumentFragmentGetElementByIdTest.php
 'Failed asserting that two strings are equal.':
     _total: 9
     _comment: ''
