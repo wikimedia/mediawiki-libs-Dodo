@@ -313,6 +313,7 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 				}
 				break;
 			case XMLReader::ELEMENT:
+				// @phan-suppress-next-line PhanCoalescingNeverNullInLoop
 				$qname = $reader->prefix ?? '';
 				if ( $qname !== '' ) {
 					$qname .= ':';
@@ -332,6 +333,7 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 				}
 				break;
 			case XMLReader::ATTRIBUTE:
+				// @phan-suppress-next-line PhanCoalescingNeverNullInLoop
 				$qname = $reader->prefix ?? '';
 				if ( $qname !== '' ) {
 					$qname .= ':';

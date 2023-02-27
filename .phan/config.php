@@ -29,4 +29,9 @@ if ( getenv( "DODO_CHECK_MAGIC_PROPERTIES" ) ) {
 	$cfg['exclude_analysis_directory_list'][] = 'tests/';
 }
 
+// Don't whine about PHP 8.1+ issue suppressions.
+if ( PHP_VERSION_ID < 81000 ) {
+	$cfg['suppress_issue_types'][] = 'UnusedPluginSuppression';
+}
+
 return $cfg;
