@@ -80,17 +80,14 @@ class TestsGenerator extends Tasks {
 	 * - rewrite
 	 * - phpcbf
 	 * - run
-	 * - compact = generates all tests in one file
 	 */
 	public function build( array $opts = [
 			'rewrite' => true,
 			'limit' => -1,
 			'phpcbf' => true,
 			'run' => false,
-			'compact' => false,
 	] ): void {
 		try {
-			$compact_tests = '';
 			// Init and check for dependencies.
 			$this->initDependencies( $opts['rewrite'] );
 
@@ -112,10 +109,6 @@ class TestsGenerator extends Tasks {
 			foreach ( $result->getData() as $test_type => $tests ) {
 				if ( $test_type === 'time' ) {
 					continue;
-				}
-
-				if ( $test_type === self::WPT ) {
-					$opts['compact'] = false;
 				}
 
 				$tests_per_type = $opts['limit'];
@@ -159,39 +152,14 @@ class TestsGenerator extends Tasks {
 					$actual_test = $this->taskParseTest( $actual_test,
 						$test_name,
 						$test_type,
-						$opts['compact'],
-						false,
 						$file->getRealPath() )->run();
 
 					if ( !$actual_test->wasSuccessful() ) {
 						throw new TaskException( $this, $actual_test->getMessage() );
 					}
 
-					if ( $opts['compact'] ) {
-						$compact_tests .= $actual_test->getData()[0];
-					} else {
-						$phpUnitTest = $actual_test->getData()[0];
-						$this->writeTest( $test_path,
-							$phpUnitTest );
-					}
-				}
-
-				// If compact mode is on.
-				if ( $opts['compact'] && !empty( $compact_tests ) ) {
-					$actual_test = $this->taskParseTest( $compact_tests,
-						$test_type,
-						$test_type,
-						true,
-						true )->run();
-
-					if ( !$actual_test->wasSuccessful() ) {
-						throw new TaskException( $this, $actual_test->getMessage() );
-					}
 					$phpUnitTest = $actual_test->getData()[0];
-					$test_path = "{$this->root_folder}/tests/{$this->snakeToPascal($test_type)}Test.php";
-					$this->writeTest( $test_path,
-						$phpUnitTest );
-					$compact_tests = '';
+					$this->writeTest( $test_path, $phpUnitTest );
 				}
 			}
 

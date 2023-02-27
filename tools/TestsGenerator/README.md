@@ -13,7 +13,6 @@ Takes arguments:
 * phpcbf => false
 * run => true
 * cleanup => false
-* compact => false
 
 ## Status
 

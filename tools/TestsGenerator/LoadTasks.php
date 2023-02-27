@@ -27,20 +27,16 @@ trait LoadTasks {
 	 * @param string $test
 	 * @param string $test_name
 	 * @param string $test_type
-	 * @param bool $compact
-	 * @param bool $wrap_only
 	 * @param string|null $test_path
 	 *
 	 * @return CollectionBuilder
 	 */
 	public function taskParseTest( string $test, string $test_name, string $test_type,
-		bool $compact = false, bool $wrap_only = false, ?string $test_path = null ): CollectionBuilder {
+		?string $test_path = null ): CollectionBuilder {
 		return $this->task( ParserTask::class,
 			$test,
 			$test_name,
 			$test_type,
-			$compact,
-			$wrap_only,
 			$test_path );
 	}
 
