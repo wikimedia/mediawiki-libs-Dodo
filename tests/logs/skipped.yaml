@@ -42,7 +42,7 @@ MutationObserver.:
     _total: 1
     _comment: ''
     suites: DOMImplementation-createDocument-with-null-browsing-context-crash
-"Syntax error, unexpected T_USE, expecting '{' on line 57.":
+'Syntax error, unexpected T_USE, expecting ''{'' on line 57.':
     _total: 1
     _comment: ''
     suites: case
