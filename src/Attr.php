@@ -302,7 +302,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 
 	/** @inheritDoc */
 	public function setValue( string $value = null ): void {
-		$value = $value ?? '';
+		$value ??= '';
 
 		if ( $this->_value === $value ) {
 			return;

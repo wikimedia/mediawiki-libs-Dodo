@@ -160,7 +160,7 @@ abstract class ContainerNode extends Node {
 	 * @param ?string $value
 	 */
 	public function setTextContent( ?string $value ): void {
-		$value = $value ?? '';
+		$value ??= '';
 		$this->_removeChildren();
 		if ( $value !== "" ) {
 			/* Equivalent to Node:: appendChild without checks! */
