@@ -215,7 +215,7 @@ class ParserTask extends BaseTask {
 				}
 
 				if ( $node instanceof FuncCall ) {
-					$expr_name = $node->name->parts[0] ?? '';
+					$expr_name = $node->name->getFirst();
 					if ( empty( $expr_name ) ) {
 						return $node;
 					}
@@ -578,7 +578,7 @@ class ParserTask extends BaseTask {
 				}
 
 				if ( $node instanceof FuncCall ) {
-					$expr_name = $node->name->parts[0] ?? '';
+					$expr_name = $node->name->getFirst();
 					if ( empty( $expr_name ) ) {
 						return $node;
 					}
@@ -1148,7 +1148,7 @@ class ParserTask extends BaseTask {
 				}
 				// Call to the function; replace it with a method call
 				if ( $node instanceof FuncCall ) {
-					$expr_name = $node->name->parts[0] ?? '';
+					$expr_name = $node->name->getFirst();
 					if ( empty( $expr_name ) ) {
 						return $node;
 					}
