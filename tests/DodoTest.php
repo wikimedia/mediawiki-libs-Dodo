@@ -258,6 +258,18 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 				'<html><body><i>Italics!',
 				'<html><head></head><body><i>Italics!</i></body></html>'
 			],
+			[
+				'<html><head><template><!--foo-->a<b>c',
+				'<html><head><template><!--foo-->a<b>c</b></template></head><body></body></html>'
+			],
+			[
+				'<html><head><template>foo<!--bar--><b>c',
+				'<html><head><template>foo<!--bar--><b>c</b></template></head><body></body></html>'
+			],
+			[
+				'<html><head><template><b>foo</b><!--c-->d',
+				'<html><head><template><b>foo</b><!--c-->d</template></head><body></body></html>'
+			]
 		];
 	}
 

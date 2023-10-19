@@ -7,7 +7,9 @@ namespace Wikimedia\Dodo;
 use Wikimedia\Dodo\Internal\BadXMLException;
 use Wikimedia\IDLeDOM\DOMParserSupportedType;
 use Wikimedia\RemexHtml\DOM\DOMBuilder;
+use Wikimedia\RemexHtml\HTMLData;
 use Wikimedia\RemexHtml\Tokenizer\NullTokenHandler;
+use Wikimedia\RemexHtml\Tokenizer\PlainAttributes;
 use Wikimedia\RemexHtml\Tokenizer\Tokenizer;
 use Wikimedia\RemexHtml\TreeBuilder\Dispatcher;
 use Wikimedia\RemexHtml\TreeBuilder\Element as TreeElement;
@@ -156,6 +158,7 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 					if ( $element->name === 'body' && $sourceLength > 0 ) {
 						$this->sawRealBody = true;
 					}
+					$refElement = self::adjustForTemplate( $preposition, $refElement );
 					parent::insertElement(
 						$preposition, $refElement, $element, $void,
 						$sourceStart, $sourceLength
@@ -195,7 +198,18 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 				}
 
 				/**
-				 * This is a reimplementation for efficiency only; the
+				 * This copies the parent method but handles <template> nodes
+				 * in ::insertNode().
+				 * @inheritDoc
+				 */
+				public function comment( $preposition, $refElement, $text, $sourceStart, $sourceLength ) {
+					$refElement = self::adjustForTemplate( $preposition, $refElement );
+					parent::comment( $preposition, $refElement, $text, $sourceStart, $sourceLength );
+				}
+
+				/**
+				 * This is a reimplementation for efficiency only; *apart
+				 * from the template contents handling*, the
 				 * code should be identical to (and kept in sync with)
 				 * Remex.  We just use method access instead of getters,
 				 * since this is a hot path through the HTML parser.
@@ -205,12 +219,13 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 					$preposition, $refElement, $text, $start, $length,
 					$sourceStart, $sourceLength
 				) {
+					$refElement = self::adjustForTemplate( $preposition, $refElement );
 					// Parse $preposition and $refElement as in self::insertNode()
 					if ( $preposition === TreeBuilder::ROOT ) {
 						$parent = $this->doc;
 						$refNode = null;
 					} elseif ( $preposition === TreeBuilder::BEFORE ) {
-						$parent = $refElement->userData->parentNode;
+						$parent = $refElement->userData->getParentNode();
 						$refNode = $refElement->userData;
 					} else {
 						$parent = $refElement->userData;
@@ -238,6 +253,34 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 						$node = $this->doc->createTextNode( $data );
 						$parent->insertBefore( $node, $refNode );
 					}
+				}
+
+				/**
+				 * Handle HTML5 semantics of <template> element by ensuring that
+				 * any node inserted "under" the template actually goes into the
+				 * template's "content" DocumentFragment.
+				 * @param int $preposition Enumeration specifying insertion
+				 *    point relationship to the reference element
+				 * @param ?TreeElement $refElement The reference element
+				 * @return ?TreeElement The adjusted reference element
+				 */
+				private function adjustForTemplate( $preposition, ?TreeElement $refElement ): ?TreeElement {
+					if (
+						$refElement &&
+						$refElement->htmlName === 'template' &&
+						$preposition === TreeBuilder::UNDER
+					) {
+						$template = $refElement->userData;
+						'@phan-var HTMLTemplateElement $template';
+						// Create a fake element, with the template's
+						// 'content' DocumentFragment as the 'userData'
+						$refElement = new TreeElement(
+							// Fake element!
+							HTMLData::NS_HTML, 'template', new PlainAttributes()
+						);
+						$refElement->userData = $template->getContent();
+					}
+					return $refElement;
 				}
 		};
 		$treeBuilder = new TreeBuilder( $domBuilder, [

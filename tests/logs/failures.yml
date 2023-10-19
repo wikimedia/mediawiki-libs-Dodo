@@ -34,11 +34,6 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ParentNodeQuerySelectorEscapesTest
     files: /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorEscapesTest.php
-'Failed asserting that null is not equal to null.':
-    _total: 1
-    _comment: ''
-    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\SvgTemplateQuerySelectorTest
-    files: /tests/WPT/Dom/Nodes/SvgTemplateQuerySelectorTest.php
 'Failed asserting that two strings are equal.':
     _total: 9
     _comment: ''
