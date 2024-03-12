@@ -410,6 +410,6 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 		?string $namespace, NamespacePrefixMap $prefixMap, int &$prefixIndex,
 		array $options, array &$markup
 	): void {
-		return; // Serialization is the empty string
+		// Serialization is the empty string
 	}
 }

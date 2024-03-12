@@ -624,36 +624,36 @@ abstract class WPTTestHarness extends TestCase {
 			return $s;
 		};
 		switch ( $val->nodeType ) {
-		case Node::ELEMENT_NODE:
-			'@phan-var Element $val';
-			$ret = '<' . $val->localName;
-			for ( $i = 0;  $i < count( $val->attributes );  $i++ ) {
-				$ret .= ' ' . $val->attributes[ $i ]->name . '="' . $val->attributes[ $i ]->value . '"';
-			}
-			$ret .= '>' . $val->innerHTML . '</' . $val->localName . '>';
-			return 'Element node ' . $truncate( $ret, 60 );
-		case Node::TEXT_NODE:
-			'@phan-var Text $val';
-			return 'Text node "' . $truncate( $val->data, 60 ) . '"';
-		case Node::PROCESSING_INSTRUCTION_NODE:
-			'@phan-var ProcessingInstruction $val';
-			return 'ProcessingInstruction node with target ' .
-				$this->formatValue( $truncate( $val->target, 60 ) ) .
-				' and data ' .
-				$this->formatValue( $truncate( $val->data, 60 ) );
-		case Node::COMMENT_NODE:
-			'@phan-var Comment $val';
-			return 'Comment node <!--' . $truncate( $val->data, 60 ) . '-->';
-		case Node::DOCUMENT_NODE:
-			return 'Document node with ' . count( $val->childNodes ) .
-				( ( count( $val->childNodes ) == 1 ) ? ' child' : ' children' );
-		case Node::DOCUMENT_TYPE_NODE:
-			return 'DocumentType node';
-		case Node::DOCUMENT_FRAGMENT_NODE:
-			return 'DocumentFragment node with ' . count( $val->childNodes ) .
-				( ( count( $val->childNodes ) == 1 ) ? ' child' : ' children' );
-		default:
-			return 'Node object of unknown type';
+			case Node::ELEMENT_NODE:
+				'@phan-var Element $val';
+				$ret = '<' . $val->localName;
+				for ( $i = 0;  $i < count( $val->attributes );  $i++ ) {
+					$ret .= ' ' . $val->attributes[ $i ]->name . '="' . $val->attributes[ $i ]->value . '"';
+				}
+				$ret .= '>' . $val->innerHTML . '</' . $val->localName . '>';
+				return 'Element node ' . $truncate( $ret, 60 );
+			case Node::TEXT_NODE:
+				'@phan-var Text $val';
+				return 'Text node "' . $truncate( $val->data, 60 ) . '"';
+			case Node::PROCESSING_INSTRUCTION_NODE:
+				'@phan-var ProcessingInstruction $val';
+				return 'ProcessingInstruction node with target ' .
+					$this->formatValue( $truncate( $val->target, 60 ) ) .
+					' and data ' .
+					$this->formatValue( $truncate( $val->data, 60 ) );
+			case Node::COMMENT_NODE:
+				'@phan-var Comment $val';
+				return 'Comment node <!--' . $truncate( $val->data, 60 ) . '-->';
+			case Node::DOCUMENT_NODE:
+				return 'Document node with ' . count( $val->childNodes ) .
+					( ( count( $val->childNodes ) == 1 ) ? ' child' : ' children' );
+			case Node::DOCUMENT_TYPE_NODE:
+				return 'DocumentType node';
+			case Node::DOCUMENT_FRAGMENT_NODE:
+				return 'DocumentFragment node with ' . count( $val->childNodes ) .
+					( ( count( $val->childNodes ) == 1 ) ? ' child' : ' children' );
+			default:
+				return 'Node object of unknown type';
 		}
 	}
 

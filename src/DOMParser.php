@@ -32,18 +32,18 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 		$type = DOMParserSupportedType::cast( $type );
 		$doc = new Document();
 		switch ( $type ) {
-		case DOMParserSupportedType::text_html:
-			$doc->_setContentType( 'text/html', true );
-			self::_parseHtml( $doc, $string, [] );
-			return $doc;
-		default:
-			# According to spec, this is a Document not an XMLDocument
-			$doc->_setContentType( $type, false );
-			// XXX if we throw an XML well-formedness error here, we're
-			/// supposed to make a document describing it, instead of
-			// throwing an exception.
-			self::_parseXml( $doc, $string, [] );
-			return $doc;
+			case DOMParserSupportedType::text_html:
+				$doc->_setContentType( 'text/html', true );
+				self::_parseHtml( $doc, $string, [] );
+				return $doc;
+			default:
+				# According to spec, this is a Document not an XMLDocument
+				$doc->_setContentType( $type, false );
+				// XXX if we throw an XML well-formedness error here, we're
+				/// supposed to make a document describing it, instead of
+				// throwing an exception.
+				self::_parseXml( $doc, $string, [] );
+				return $doc;
 		}
 	}
 
@@ -57,83 +57,83 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 	 */
 	public static function _parseHtml( Document $doc, string $string, array $options ) {
 		$domBuilder = new class( $doc, $options ) extends DOMBuilder {
-				/** @var Document */
-				public $doc;
-				/** @var array */
-				private $options;
-				/** @var bool */
-				public $sawRealHead = false;
-				/** @var bool */
-				public $sawRealBody = false;
+			/** @var Document */
+			public $doc;
+			/** @var array */
+			private $options;
+			/** @var bool */
+			public $sawRealHead = false;
+			/** @var bool */
+			public $sawRealBody = false;
 
-				/**
-				 * Create a new DOMBuilder and store the document and
-				 * options array.
-				 * @param Document $doc
-				 * @param array $options
-				 */
-				public function __construct( Document $doc, array $options ) {
-					parent::__construct( [
-						'suppressHtmlNamespace' => false,
-						'suppressIdAttribute' => true,
-						'domExceptionClass' => DOMException::class,
-					] );
-					$this->doc = $doc;
-					$this->options = $options;
+			/**
+			 * Create a new DOMBuilder and store the document and
+			 * options array.
+			 * @param Document $doc
+			 * @param array $options
+			 */
+			public function __construct( Document $doc, array $options ) {
+				parent::__construct( [
+					'suppressHtmlNamespace' => false,
+					'suppressIdAttribute' => true,
+					'domExceptionClass' => DOMException::class,
+				] );
+				$this->doc = $doc;
+				$this->options = $options;
+			}
+
+			/** @inheritDoc */
+			protected function createDocument(
+				string $doctypeName = null,
+				string $public = null,
+				string $system = null
+			) {
+				// Force this to be an HTML document (not an XML document)
+				$this->doc->_setContentType( 'text/html', true );
+				$this->maybeRemoveDoctype();
+				if ( $this->options['phpCompat'] ?? false ) {
+					$this->setDoctype(
+						'html',
+						'-//W3C//DTD HTML 4.0 Transitional//EN',
+						'http://www.w3.org/TR/REC-html40/loose.dtd'
+					);
 				}
+				return $this->doc;
+			}
 
-				/** @inheritDoc */
-				protected function createDocument(
-					string $doctypeName = null,
-					string $public = null,
-					string $system = null
-				) {
-					// Force this to be an HTML document (not an XML document)
-					$this->doc->_setContentType( 'text/html', true );
-					$this->maybeRemoveDoctype();
-					if ( $this->options['phpCompat'] ?? false ) {
-						$this->setDoctype(
-							'html',
-							'-//W3C//DTD HTML 4.0 Transitional//EN',
-							'http://www.w3.org/TR/REC-html40/loose.dtd'
-						);
-					}
-					return $this->doc;
+			/**
+			 * Remove a DocumentType from the given document if one
+			 * is present.
+			 */
+			private function maybeRemoveDoctype() {
+				$doctype = $this->doc->getDoctype();
+				if ( $doctype !== null ) {
+					$doctype->remove();
 				}
+			}
 
-				/**
-				 * Remove a DocumentType from the given document if one
-				 * is present.
-				 */
-				private function maybeRemoveDoctype() {
-					$doctype = $this->doc->getDoctype();
-					if ( $doctype !== null ) {
-						$doctype->remove();
-					}
+			/**
+			 * Replace any existing doctype for this document with
+			 * new one.
+			 * @param ?string $name
+			 * @param ?string $public
+			 * @param ?string $system
+			 */
+			private function setDoctype( $name, $public, $system ): void {
+				$this->maybeRemoveDoctype();
+				if ( $name !== '' && $name !== null ) {
+					$doctype = new DocumentType(
+						$this->doc, $name, $public ?? '', $system ?? ''
+					);
+					$this->doc->appendChild( $doctype );
 				}
+			}
 
-				/**
-				 * Replace any existing doctype for this document with
-				 * new one.
-				 * @param ?string $name
-				 * @param ?string $public
-				 * @param ?string $system
-				 */
-				private function setDoctype( $name, $public, $system ): void {
-					$this->maybeRemoveDoctype();
-					if ( $name !== '' && $name !== null ) {
-						$doctype = new DocumentType(
-							$this->doc, $name, $public ?? '', $system ?? ''
-						);
-						$this->doc->appendChild( $doctype );
-					}
-				}
-
-				/** @inheritDoc */
-				public function doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength ) {
-					$this->setDoctype( $name, $public, $system );
-					// Set quirks mode on our document.
-					switch ( $quirks ) {
+			/** @inheritDoc */
+			public function doctype( $name, $public, $system, $quirks, $sourceStart, $sourceLength ) {
+				$this->setDoctype( $name, $public, $system );
+				// Set quirks mode on our document.
+				switch ( $quirks ) {
 					case TreeBuilder::NO_QUIRKS:
 						$this->doc->_setQuirksMode( 'no-quirks' );
 						break;
@@ -143,145 +143,145 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 					case TreeBuilder::QUIRKS:
 						$this->doc->_setQuirksMode( 'quirks' );
 						break;
-					}
 				}
+			}
 
-				/** @inheritDoc */
-				public function insertElement(
-					$preposition, $refElement,
-					TreeElement $element,
-					$void, $sourceStart, $sourceLength
-				) {
-					if ( $element->name === 'head' && $sourceLength > 0 ) {
-						$this->sawRealHead = true;
-					}
-					if ( $element->name === 'body' && $sourceLength > 0 ) {
-						$this->sawRealBody = true;
-					}
-					$refElement = self::adjustForTemplate( $preposition, $refElement );
-					parent::insertElement(
-						$preposition, $refElement, $element, $void,
-						$sourceStart, $sourceLength
-					);
+			/** @inheritDoc */
+			public function insertElement(
+				$preposition, $refElement,
+				TreeElement $element,
+				$void, $sourceStart, $sourceLength
+			) {
+				if ( $element->name === 'head' && $sourceLength > 0 ) {
+					$this->sawRealHead = true;
 				}
-
-				/** @inheritDoc */
-				protected function createNode( TreeElement $element ) {
-					// Simplified version of this method which eliminates
-					// the various workarounds necessary when using the
-					// PHP dom extension
-
-					// It also deliberately bypasses some character validity
-					// checking done in Document::createElementNS(), which
-					// is per-spec. (We need to prevent createElementNS from
-					// trying to parse `name` as a `qname`.)
-					$node = $this->doc->_createElementNS(
-							$element->name,
-							$element->namespace,
-							null /* prefix */
-					);
-					foreach ( $element->attrs->getObjects() as $attr ) {
-						// This also bypasses checks & prefix parsing
-						if ( $attr->namespaceURI === null ) {
-							$node->_setAttribute(
-								$attr->qualifiedName, $attr->value
-							);
-						} else {
-							$node->_setAttributeNS(
-								$attr->namespaceURI, $attr->prefix,
-								$attr->localName, $attr->value
-							);
-						}
-					}
-					$element->userData = $node;
-					return $node;
+				if ( $element->name === 'body' && $sourceLength > 0 ) {
+					$this->sawRealBody = true;
 				}
-
-				/**
-				 * This copies the parent method but handles <template> nodes
-				 * in ::insertNode().
-				 * @inheritDoc
-				 */
-				public function comment( $preposition, $refElement, $text, $sourceStart, $sourceLength ) {
-					$refElement = self::adjustForTemplate( $preposition, $refElement );
-					parent::comment( $preposition, $refElement, $text, $sourceStart, $sourceLength );
-				}
-
-				/**
-				 * This is a reimplementation for efficiency only; *apart
-				 * from the template contents handling*, the
-				 * code should be identical to (and kept in sync with)
-				 * Remex.  We just use method access instead of getters,
-				 * since this is a hot path through the HTML parser.
-				 * @inheritDoc
-				 */
-				public function characters(
-					$preposition, $refElement, $text, $start, $length,
+				$refElement = self::adjustForTemplate( $preposition, $refElement );
+				parent::insertElement(
+					$preposition, $refElement, $element, $void,
 					$sourceStart, $sourceLength
-				) {
-					$refElement = self::adjustForTemplate( $preposition, $refElement );
-					// Parse $preposition and $refElement as in self::insertNode()
-					if ( $preposition === TreeBuilder::ROOT ) {
-						$parent = $this->doc;
-						$refNode = null;
-					} elseif ( $preposition === TreeBuilder::BEFORE ) {
-						$parent = $refElement->userData->getParentNode();
-						$refNode = $refElement->userData;
-					} else {
-						$parent = $refElement->userData;
-						$refNode = null;
-					}
-					// https://html.spec.whatwg.org/#insert-a-character
-					// If the adjusted insertion location is in a Document node, then
-					// return.
-					if ( $parent === $this->doc ) {
-						return;
-					}
-					$data = substr( $text, $start, $length );
-					// If there is a Text node immediately before the adjusted insertion
-					// location, then append data to that Text node's data.
-					if ( $refNode === null ) {
-						$prev = $parent->getLastChild();
-					} else {
-						/** @var Node $refNode */
-						$prev = $refNode->getPreviousSibling();
-					}
-					if ( $prev !== null && $prev->getNodeType() === XML_TEXT_NODE ) {
-						'@phan-var CharacterData $prev'; /** @var CharacterData $prev */
-						$prev->appendData( $data );
-					} else {
-						$node = $this->doc->createTextNode( $data );
-						$parent->insertBefore( $node, $refNode );
-					}
-				}
+				);
+			}
 
-				/**
-				 * Handle HTML5 semantics of <template> element by ensuring that
-				 * any node inserted "under" the template actually goes into the
-				 * template's "content" DocumentFragment.
-				 * @param int $preposition Enumeration specifying insertion
-				 *    point relationship to the reference element
-				 * @param ?TreeElement $refElement The reference element
-				 * @return ?TreeElement The adjusted reference element
-				 */
-				private function adjustForTemplate( $preposition, ?TreeElement $refElement ): ?TreeElement {
-					if (
-						$refElement &&
-						$refElement->htmlName === 'template' &&
-						$preposition === TreeBuilder::UNDER
-					) {
-						$template = $refElement->userData;
-						'@phan-var HTMLTemplateElement $template';
-						// Create a fake element, with the template's
-						// 'content' DocumentFragment as the 'userData'
-						$refElement = new TreeElement(
-							// Fake element!
-							HTMLData::NS_HTML, 'template', new PlainAttributes()
+			/** @inheritDoc */
+			protected function createNode( TreeElement $element ) {
+				// Simplified version of this method which eliminates
+				// the various workarounds necessary when using the
+				// PHP dom extension
+
+				// It also deliberately bypasses some character validity
+				// checking done in Document::createElementNS(), which
+				// is per-spec. (We need to prevent createElementNS from
+				// trying to parse `name` as a `qname`.)
+				$node = $this->doc->_createElementNS(
+					$element->name,
+					$element->namespace,
+					null /* prefix */
+				);
+				foreach ( $element->attrs->getObjects() as $attr ) {
+					// This also bypasses checks & prefix parsing
+					if ( $attr->namespaceURI === null ) {
+						$node->_setAttribute(
+							$attr->qualifiedName, $attr->value
 						);
-						$refElement->userData = $template->getContent();
+					} else {
+						$node->_setAttributeNS(
+							$attr->namespaceURI, $attr->prefix,
+							$attr->localName, $attr->value
+						);
 					}
-					return $refElement;
 				}
+				$element->userData = $node;
+				return $node;
+			}
+
+			/**
+			 * This copies the parent method but handles <template> nodes
+			 * in ::insertNode().
+			 * @inheritDoc
+			 */
+			public function comment( $preposition, $refElement, $text, $sourceStart, $sourceLength ) {
+				$refElement = self::adjustForTemplate( $preposition, $refElement );
+				parent::comment( $preposition, $refElement, $text, $sourceStart, $sourceLength );
+			}
+
+			/**
+			 * This is a reimplementation for efficiency only; *apart
+			 * from the template contents handling*, the
+			 * code should be identical to (and kept in sync with)
+			 * Remex.  We just use method access instead of getters,
+			 * since this is a hot path through the HTML parser.
+			 * @inheritDoc
+			 */
+			public function characters(
+				$preposition, $refElement, $text, $start, $length,
+				$sourceStart, $sourceLength
+			) {
+				$refElement = self::adjustForTemplate( $preposition, $refElement );
+				// Parse $preposition and $refElement as in self::insertNode()
+				if ( $preposition === TreeBuilder::ROOT ) {
+					$parent = $this->doc;
+					$refNode = null;
+				} elseif ( $preposition === TreeBuilder::BEFORE ) {
+					$parent = $refElement->userData->getParentNode();
+					$refNode = $refElement->userData;
+				} else {
+					$parent = $refElement->userData;
+					$refNode = null;
+				}
+				// https://html.spec.whatwg.org/#insert-a-character
+				// If the adjusted insertion location is in a Document node, then
+				// return.
+				if ( $parent === $this->doc ) {
+					return;
+				}
+				$data = substr( $text, $start, $length );
+				// If there is a Text node immediately before the adjusted insertion
+				// location, then append data to that Text node's data.
+				if ( $refNode === null ) {
+					$prev = $parent->getLastChild();
+				} else {
+					/** @var Node $refNode */
+					$prev = $refNode->getPreviousSibling();
+				}
+				if ( $prev !== null && $prev->getNodeType() === XML_TEXT_NODE ) {
+					'@phan-var CharacterData $prev'; /** @var CharacterData $prev */
+					$prev->appendData( $data );
+				} else {
+					$node = $this->doc->createTextNode( $data );
+					$parent->insertBefore( $node, $refNode );
+				}
+			}
+
+			/**
+			 * Handle HTML5 semantics of <template> element by ensuring that
+			 * any node inserted "under" the template actually goes into the
+			 * template's "content" DocumentFragment.
+			 * @param int $preposition Enumeration specifying insertion
+			 *    point relationship to the reference element
+			 * @param ?TreeElement $refElement The reference element
+			 * @return ?TreeElement The adjusted reference element
+			 */
+			private function adjustForTemplate( $preposition, ?TreeElement $refElement ): ?TreeElement {
+				if (
+					$refElement &&
+					$refElement->htmlName === 'template' &&
+					$preposition === TreeBuilder::UNDER
+				) {
+					$template = $refElement->userData;
+					'@phan-var HTMLTemplateElement $template';
+					// Create a fake element, with the template's
+					// 'content' DocumentFragment as the 'userData'
+					$refElement = new TreeElement(
+						// Fake element!
+						HTMLData::NS_HTML, 'template', new PlainAttributes()
+					);
+					$refElement->userData = $template->getContent();
+				}
+				return $refElement;
+			}
 		};
 		$treeBuilder = new TreeBuilder( $domBuilder, [
 			'ignoreErrors' => true
@@ -348,92 +348,92 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 		$attrNode = null;
 		while ( $reader->moveToNextAttribute() || $reader->read() ) {
 			switch ( $reader->nodeType ) {
-			case XMLReader::END_ELEMENT:
-				$node = $node->getParentNode();
-				// Workaround to prevent us from visiting the attributes again
-				while ( $reader->moveToNextAttribute() ) {
-					/* skip */
-				}
-				break;
-			case XMLReader::ELEMENT:
-				// @phan-suppress-next-line PhanCoalescingNeverNullInLoop
-				$qname = $reader->prefix ?? '';
-				if ( $qname !== '' ) {
-					$qname .= ':';
-				}
-				$qname .= $reader->localName;
-				// This will be the node we'll attach attributes to!
-				$attrNode = $doc->createElementNS( $reader->namespaceURI, $qname );
-				if ( $options['skipRoot'] ?? false ) {
-					$options['skipRoot'] = false;
-					break;
-				}
-				$node->appendChild( $attrNode );
-				// We don't get an END_ELEMENT from the reader if this is
-				// an empty element (sigh)
-				if ( !$reader->isEmptyElement ) {
-					$node = $attrNode;
-				}
-				break;
-			case XMLReader::ATTRIBUTE:
-				// @phan-suppress-next-line PhanCoalescingNeverNullInLoop
-				$qname = $reader->prefix ?? '';
-				if ( $qname !== '' ) {
-					$qname .= ':';
-				}
-				$qname .= $reader->localName;
-				'@phan-var Element $attrNode';
-				$attrNode->setAttributeNS(
-					$reader->namespaceURI, $qname, $reader->value
-				);
-				break;
-			case XMLReader::SIGNIFICANT_WHITESPACE:
-			case XMLReader::TEXT:
-				$nn = $doc->createTextNode( $reader->value );
-				$node->appendChild( $nn );
-				break;
-			case XMLReader::CDATA:
-				$nn = $doc->createCDATASection( $reader->value );
-				$node->appendChild( $nn );
-				break;
-			case XMLReader::COMMENT:
-				$nn = $doc->createComment( $reader->value );
-				$node->appendChild( $nn );
-				break;
-			case XMLReader::DOC_TYPE:
-				# This is a hack: the PHP XMLReader interface provides no
-				# way to extract the contents of a DOC_TYPE node!  So we're
-				# going to give it to the HTML tokenizer to interpret.
-				$tokenHandler = new class extends NullTokenHandler {
-					/** @var string */
-					public $name;
-					/** @var string */
-					public $publicId;
-					/** @var string */
-					public $systemId;
-
-					/** @inheritDoc */
-					public function doctype(
-						$name, $publicId, $systemId,
-						$quirks, $sourceStart, $sourceLength
-					) {
-						$this->name = $name;
-						$this->publicId = $publicId;
-						$this->systemId = $systemId;
+				case XMLReader::END_ELEMENT:
+					$node = $node->getParentNode();
+					// Workaround to prevent us from visiting the attributes again
+					while ( $reader->moveToNextAttribute() ) {
+						/* skip */
 					}
-				};
-				( new Tokenizer(
-					$tokenHandler, $reader->readOuterXml(), []
-				) )->execute( [] );
-				$nn = $doc->getImplementation()->createDocumentType(
-					$tokenHandler->name ?? '',
-					$tokenHandler->publicId ?? '',
-					$tokenHandler->systemId ?? ''
-				);
-				$node->appendChild( $nn );
-				break;
-			default:
-				throw new BadXMLException( "Unknown node type: " . $reader->nodeType );
+					break;
+				case XMLReader::ELEMENT:
+					// @phan-suppress-next-line PhanCoalescingNeverNullInLoop
+					$qname = $reader->prefix ?? '';
+					if ( $qname !== '' ) {
+						$qname .= ':';
+					}
+					$qname .= $reader->localName;
+					// This will be the node we'll attach attributes to!
+					$attrNode = $doc->createElementNS( $reader->namespaceURI, $qname );
+					if ( $options['skipRoot'] ?? false ) {
+						$options['skipRoot'] = false;
+						break;
+					}
+					$node->appendChild( $attrNode );
+					// We don't get an END_ELEMENT from the reader if this is
+					// an empty element (sigh)
+					if ( !$reader->isEmptyElement ) {
+						$node = $attrNode;
+					}
+					break;
+				case XMLReader::ATTRIBUTE:
+					// @phan-suppress-next-line PhanCoalescingNeverNullInLoop
+					$qname = $reader->prefix ?? '';
+					if ( $qname !== '' ) {
+						$qname .= ':';
+					}
+					$qname .= $reader->localName;
+					'@phan-var Element $attrNode';
+					$attrNode->setAttributeNS(
+						$reader->namespaceURI, $qname, $reader->value
+					);
+					break;
+				case XMLReader::SIGNIFICANT_WHITESPACE:
+				case XMLReader::TEXT:
+					$nn = $doc->createTextNode( $reader->value );
+					$node->appendChild( $nn );
+					break;
+				case XMLReader::CDATA:
+					$nn = $doc->createCDATASection( $reader->value );
+					$node->appendChild( $nn );
+					break;
+				case XMLReader::COMMENT:
+					$nn = $doc->createComment( $reader->value );
+					$node->appendChild( $nn );
+					break;
+				case XMLReader::DOC_TYPE:
+					# This is a hack: the PHP XMLReader interface provides no
+					# way to extract the contents of a DOC_TYPE node!  So we're
+					# going to give it to the HTML tokenizer to interpret.
+					$tokenHandler = new class extends NullTokenHandler {
+						/** @var string */
+						public $name;
+						/** @var string */
+						public $publicId;
+						/** @var string */
+						public $systemId;
+
+						/** @inheritDoc */
+						public function doctype(
+							$name, $publicId, $systemId,
+							$quirks, $sourceStart, $sourceLength
+						) {
+							$this->name = $name;
+							$this->publicId = $publicId;
+							$this->systemId = $systemId;
+						}
+					};
+					( new Tokenizer(
+						$tokenHandler, $reader->readOuterXml(), []
+					) )->execute( [] );
+					$nn = $doc->getImplementation()->createDocumentType(
+						$tokenHandler->name ?? '',
+						$tokenHandler->publicId ?? '',
+						$tokenHandler->systemId ?? ''
+					);
+					$node->appendChild( $nn );
+					break;
+				default:
+					throw new BadXMLException( "Unknown node type: " . $reader->nodeType );
 			}
 		}
 	}

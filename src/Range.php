@@ -216,31 +216,31 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 		$thisPoint = null;
 		$otherPoint = null;
 		switch ( $how ) {
-		case self::START_TO_START:
-		case self::END_TO_START:
-			$thisPoint = $this->_start;
-			break;
-		case self::START_TO_END:
-		case self::END_TO_END:
-			$thisPoint = $this->_end;
-			break;
-		default:
-			Util::error( 'NotSupportedError' );
+			case self::START_TO_START:
+			case self::END_TO_START:
+				$thisPoint = $this->_start;
+				break;
+			case self::START_TO_END:
+			case self::END_TO_END:
+				$thisPoint = $this->_end;
+				break;
+			default:
+				Util::error( 'NotSupportedError' );
 		}
 		if ( $this->_root() !== $sourceRange->_root() ) {
 			Util::error( 'WrongDocumentError' );
 		}
 		switch ( $how ) {
-		case self::START_TO_START:
-		case self::START_TO_END:
-			$otherPoint = $sourceRange->_start;
-			break;
-		case self::END_TO_END:
-		case self::END_TO_START:
-			$otherPoint = $sourceRange->_end;
-			break;
-		default:
-			Util::error( 'NotSupportedError' );
+			case self::START_TO_START:
+			case self::START_TO_END:
+				$otherPoint = $sourceRange->_start;
+				break;
+			case self::END_TO_END:
+			case self::END_TO_START:
+				$otherPoint = $sourceRange->_end;
+				break;
+			default:
+				Util::error( 'NotSupportedError' );
 		}
 		return $thisPoint->compare( $otherPoint );
 	}

@@ -3,7 +3,7 @@
 namespace Wikimedia\Dodo\Tools\TestsGenerator;
 
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\MethodCall as MethodCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;

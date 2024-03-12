@@ -74,7 +74,7 @@
 	"require-dev": {
 		"consolidation/robo": "^3@alpha",
 		"fgnass/domino": "^2.1",
-		"mediawiki/mediawiki-codesniffer": "41.0.0",
+		"mediawiki/mediawiki-codesniffer": "43.0.0",
 		"mediawiki/mediawiki-phan-config": "0.12.1",
 		"mediawiki/minus-x": "1.1.1",
 		"nikic/php-parser": "^4.10",
@@ -116,6 +116,9 @@
 		"robo": "robo --ansi"
 	},
 	"config": {
-		"process-timeout": 0
+		"process-timeout": 0,
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }

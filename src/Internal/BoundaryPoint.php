@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Wikimedia\Dodo\Internal;
 
-use Wikimedia\Dodo\Node as Node;
+use Wikimedia\Dodo\Node;
 
 /**
  * A boundary point is a concept defined in the DOM spec but never given

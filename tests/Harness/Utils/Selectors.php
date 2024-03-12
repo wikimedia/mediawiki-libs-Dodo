@@ -116,7 +116,7 @@ trait Selectors {
 		[
 			'name' => 'Type selector, matching html element',
 			'selector' => 'html',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document' ],
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA,
@@ -132,7 +132,7 @@ trait Selectors {
 		[
 			'name' => 'Type selector, matching body element',
 			'selector' => 'body',
-			'expect' => []/*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document' ],
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA,
@@ -184,8 +184,7 @@ trait Selectors {
 		[
 			'name' => 'Universal selector, matching all children of empty element with specified ID',
 			'selector' => '#empty>*',
-			'expect' => []
-			/*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -254,7 +253,7 @@ trait Selectors {
 		[
 			'name' => 'Attribute presence selector, not matching attribute with similar name',
 			'selector' => '.attr-presence-div3[align], .attr-presence-div4[align]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -268,7 +267,7 @@ trait Selectors {
 		[
 			'name' => 'Attribute presence selector, not matching default option without selected attribute',
 			'selector' => '#attr-presence-select1 option[selected]',
-			'expect' => [] /* no matches */,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -315,16 +314,14 @@ trait Selectors {
 		[
 			'name' => 'Attribute value selector, not matching align attribute with partial value',
 			'selector' => '#attr-value [align="c"]',
-			'expect' => []
-			/*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
 		[
 			'name' => 'Attribute value selector, not matching align attribute with incorrect value',
 			'selector' => '#attr-value [align="centera"]',
-			'expect' => []
-			/*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -400,14 +397,14 @@ trait Selectors {
 		[
 			'name' => 'Attribute whitespace-separated list selector, not matching class attribute with empty value',
 			'selector' => '#attr-whitespace [class~=""]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
 		[
 			'name' => 'Attribute whitespace-separated list selector, not matching class attribute with partial value',
 			'selector' => '[data-attr-whitespace~="div"]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -467,7 +464,7 @@ trait Selectors {
 		[
 			'name' => 'Attribute whitespace-separated list selector with double-quoted value, not matching value with space',
 			'selector' => '#attr-whitespace a[rel~="book mark"]',
-			'expect' => [] /* no matches */,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -483,7 +480,7 @@ trait Selectors {
 		[
 			'name' => 'Attribute hyphen-separated list selector, not matching unspecified lang attribute',
 			'selector' => '#attr-hyphen-div1[lang|="en"]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -504,7 +501,7 @@ trait Selectors {
 		[
 			'name' => 'Attribute hyphen-separated list selector, not matching incorrect value',
 			'selector' => '#attr-hyphen-div4[lang|="es-AR"]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -529,14 +526,14 @@ trait Selectors {
 		[
 			'name' => 'Attribute begins with selector, not matching class attribute with empty value',
 			'selector' => '#attr-begins [class^=""]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
 		[
 			'name' => 'Attribute begins with selector, not matching class attribute not beginning with specified substring',
 			'selector' => '#attr-begins [class^=apple]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -557,7 +554,7 @@ trait Selectors {
 		[
 			'name' => 'Attribute begins with selector with unquoted value, not matching class attribute not beginning with specified substring',
 			'selector' => '#attr-begins [class^= apple]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -582,14 +579,14 @@ trait Selectors {
 		[
 			'name' => 'Attribute ends with selector, not matching class attribute with empty value',
 			'selector' => '#attr-ends [class$=""]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
 		[
 			'name' => 'Attribute ends with selector, not matching class attribute not ending with specified substring',
 			'selector' => '#attr-ends [class$=apple]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -610,7 +607,7 @@ trait Selectors {
 		[
 			'name' => 'Attribute ends with selector with unquoted value, not matching class attribute not ending with specified substring',
 			'selector' => '#attr-ends [class$=apple ]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -659,7 +656,7 @@ trait Selectors {
 		[
 			'name' => 'Attribute contains selector, not matching class attribute with empty value',
 			'selector' => '#attr-contains [class*=""]',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA,
 		],
@@ -742,7 +739,7 @@ trait Selectors {
 		[
 			'name' => ':root pseudo-class selector, not matching document root element',
 			'selector' => ':root',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document' ],
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
@@ -951,7 +948,7 @@ trait Selectors {
 		[
 			'name' => ":first-child pseudo-class selector, doesn't match non-first-child elements",
 			'selector' => '.pseudo-first-child-div2:first-child, .pseudo-first-child-div3:first-child',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -975,7 +972,7 @@ trait Selectors {
 		[
 			'name' => ":last-child pseudo-class selector, doesn't match non-last-child elements",
 			'selector' => '.pseudo-last-child-div1:last-child, .pseudo-last-child-div2:first-child',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -999,7 +996,7 @@ trait Selectors {
 		[
 			'name' => ':pseudo-only-child pseudo-class selector, matching only-child em elements',
 			'selector' => '#pseudo-only em:only-child',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -1054,7 +1051,7 @@ trait Selectors {
 		[
 			'name' => ':link and :visited pseudo-class selectors, matching no elements',
 			'selector' => '#head :link, #head :visited',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'element',
 						  'fragment',
 						  'detached' ],
@@ -1064,14 +1061,14 @@ trait Selectors {
 		[
 			'name' => ':link and :visited pseudo-class selectors, not matching link elements with href attributes',
 			'selector' => '#head :link, #head :visited',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document' ],
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => ':link and :visited pseudo-class selectors, chained, mutually exclusive pseudo-classes match nothing',
 			'selector' => ':link:visited',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document' ],
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
@@ -1080,7 +1077,7 @@ trait Selectors {
 		[
 			'name' => ':target pseudo-class selector, matching the element referenced by the URL fragment identifier',
 			'selector' => ':target',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document',
 						  'element' ],
 			'level' => 3,
@@ -1108,7 +1105,7 @@ trait Selectors {
 		[
 			'name' => ':lang pseudo-class selector, not matching element with no inherited language',
 			'selector' => '#pseudo-lang-div1:lang(en)',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document',
 						  'element' ],
 			'level' => 2,
@@ -1130,7 +1127,7 @@ trait Selectors {
 		[
 			'name' => ':lang pseudo-class selector, not matching incorrect language',
 			'selector' => '#pseudo-lang-div4:lang(es-AR)',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -1155,7 +1152,7 @@ trait Selectors {
 		[
 			'name' => ':enabled pseudo-class selector, not matching link elements',
 			'selector' => '#pseudo-link :enabled',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'unexpected' => [ 'pseudo-link-a1',
 							 'pseudo-link-a2',
 							 'pseudo-link-a3',
@@ -1187,7 +1184,7 @@ trait Selectors {
 		[
 			'name' => ':disabled pseudo-class selector, not matching link elements',
 			'selector' => '#pseudo-link :disabled',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'unexpected' => [ 'pseudo-link-a1',
 							 'pseudo-link-a2',
 							 'pseudo-link-a3',
@@ -1232,13 +1229,13 @@ trait Selectors {
 		[
 			'name' => ':not pseudo-class selector, matching nothing',
 			'selector' => ':not(*)',
-			'expect' => [] /* no matches */,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => ':not pseudo-class selector, matching nothing',
 			'selector' => ':not(*|*)',
-			'expect' => [] /* no matches */,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -1256,13 +1253,13 @@ trait Selectors {
 		[
 			'name' => ':first-line pseudo-element (one-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element:first-line',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => '::first-line pseudo-element (two-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element::first-line',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -1270,13 +1267,13 @@ trait Selectors {
 		[
 			'name' => ':first-letter pseudo-element (one-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element:first-letter',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => '::first-letter pseudo-element (two-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element::first-letter',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -1284,13 +1281,13 @@ trait Selectors {
 		[
 			'name' => ':before pseudo-element (one-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element:before',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => '::before pseudo-element (two-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element::before',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -1298,13 +1295,13 @@ trait Selectors {
 		[
 			'name' => ':after pseudo-element (one-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element:after',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => '::after pseudo-element (two-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element::after',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -1411,13 +1408,13 @@ trait Selectors {
 		[
 			'name' => 'ID selector, not matching non-existent descendant',
 			'selector' => '#id #none',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'ID selector, not matching non-existent ancestor',
 			'selector' => '#none #id-div1',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -1544,7 +1541,7 @@ trait Selectors {
 		[
 			'name' => 'Descendant combinator, not matching element with id that is not a descendant of an element with id',
 			'selector' => '#descendant-div1 #descendant-div4',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -1610,19 +1607,19 @@ trait Selectors {
 		[
 			'name' => 'Child combinator, not matching element with id that is not a child of an element with id',
 			'selector' => '#child>#child-div3',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'Child combinator, not matching element with id that is not a child of an element with class',
 			'selector' => '#child-div1>.child-div3',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'Child combinator, not matching element with class that is not a child of an element with class',
 			'selector' => '.child-div1>.child-div3',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -1700,7 +1697,7 @@ trait Selectors {
 		[
 			'name' => 'Adjacent sibling combinator, not matching element with id that is not an adjacent sibling of an element with id',
 			'selector' => '#adjacent-div2+#adjacent-p2, #adjacent-div2+#adjacent-div1',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -1774,13 +1771,13 @@ trait Selectors {
 		[
 			'name' => 'General sibling combinator, not matching element with id that is not a sibling after a p element',
 			'selector' => '#sibling>p~div',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'General sibling combinator, not matching element with id that is not a sibling after an element with id',
 			'selector' => '#sibling-div2~#sibling-div3, #sibling-div2~#sibling-div1',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -1984,7 +1981,7 @@ trait Selectors {
 			'name' => 'Attribute presence selector, not matching attribute with similar name',
 			'selector' => '.attr-presence-div3[align], .attr-presence-div4[align]',
 			'ctx' => '#attr-presence',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -1999,7 +1996,7 @@ trait Selectors {
 			'name' => 'Attribute presence selector, not matching default option without selected attribute',
 			'selector' => '#attr-presence-select1 option[selected]',
 			'ctx' => '#attr-presence',
-			'expect' => [] /* no matches */,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2041,14 +2038,14 @@ trait Selectors {
 			'name' => 'Attribute value selector, not matching align attribute with partial value',
 			'selector' => '[align="c"]',
 			'ctx' => '#attr-value',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'Attribute value selector, not matching align attribute with incorrect value',
 			'selector' => '[align="centera"]',
 			'ctx' => '#attr-value',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2125,14 +2122,14 @@ trait Selectors {
 			'name' => 'Attribute whitespace-separated list selector, not matching class attribute with empty value',
 			'selector' => '[class~=""]',
 			'ctx' => '#attr-whitespace',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'Attribute whitespace-separated list selector, not matching class attribute with partial value',
 			'selector' => '[data-attr-whitespace~="div"]',
 			'ctx' => '#attr-whitespace',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2191,7 +2188,7 @@ trait Selectors {
 			'name' => 'Attribute whitespace-separated list selector with double-quoted value, not matching value with space',
 			'selector' => 'a[rel~="book mark"]',
 			'ctx' => '#attr-whitespace',
-			'expect' => [] /* no matches */,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2208,7 +2205,7 @@ trait Selectors {
 			'name' => 'Attribute hyphen-separated list selector, not matching unspecified lang attribute',
 			'selector' => '#attr-hyphen-div1[lang|="en"]',
 			'ctx' => '#attr-hyphen',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2231,7 +2228,7 @@ trait Selectors {
 			'name' => 'Attribute hyphen-separated list selector, not matching incorrect value',
 			'selector' => '#attr-hyphen-div4[lang|="es-AR"]',
 			'ctx' => '#attr-hyphen',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -2258,14 +2255,14 @@ trait Selectors {
 			'name' => 'Attribute begins with selector, not matching class attribute with empty value',
 			'selector' => '[class^=""]',
 			'ctx' => '#attr-begins',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'Attribute begins with selector, not matching class attribute not beginning with specified substring',
 			'selector' => '[class^=apple]',
 			'ctx' => '#attr-begins',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2288,7 +2285,7 @@ trait Selectors {
 			'name' => 'Attribute begins with selector with unquoted value, not matching class attribute not beginning with specified substring',
 			'selector' => '[class^= apple]',
 			'ctx' => '#attr-begins',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -2315,14 +2312,14 @@ trait Selectors {
 			'name' => 'Attribute ends with selector, not matching class attribute with empty value',
 			'selector' => '[class$=""]',
 			'ctx' => '#attr-ends',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'Attribute ends with selector, not matching class attribute not ending with specified substring',
 			'selector' => '[class$=apple]',
 			'ctx' => '#attr-ends',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2345,7 +2342,7 @@ trait Selectors {
 			'name' => 'Attribute ends with selector with unquoted value, not matching class attribute not ending with specified substring',
 			'selector' => '[class$=apple ]',
 			'ctx' => '#attr-ends',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -2399,7 +2396,7 @@ trait Selectors {
 			'name' => 'Attribute contains selector, not matching class attribute with empty value',
 			'selector' => '[class*=""]',
 			'ctx' => '#attr-contains',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2489,7 +2486,7 @@ trait Selectors {
 		[
 			'name' => ':root pseudo-class selector, not matching document root element',
 			'selector' => ':root',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document' ],
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
@@ -2497,7 +2494,7 @@ trait Selectors {
 			'name' => ':root pseudo-class selector, not matching document root element',
 			'selector' => ':root',
 			'ctx' => '#html',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'fragment',
 						  'detached' ],
 			'level' => 3,
@@ -2758,7 +2755,7 @@ trait Selectors {
 			'name' => ":first-child pseudo-class selector, doesn't match non-first-child elements",
 			'selector' => '.pseudo-first-child-div2:first-child, .pseudo-first-child-div3:first-child',
 			'ctx' => '#pseudo-first-child',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2785,7 +2782,7 @@ trait Selectors {
 			'name' => ":last-child pseudo-class selector, doesn't match non-last-child elements",
 			'selector' => '.pseudo-last-child-div1:last-child, .pseudo-last-child-div2:first-child',
 			'ctx' => '#pseudo-last-child',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -2812,7 +2809,7 @@ trait Selectors {
 			'name' => ':pseudo-only-child pseudo-class selector, matching only-child em elements',
 			'selector' => 'em:only-child',
 			'ctx' => '#pseudo-only',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -2873,7 +2870,7 @@ trait Selectors {
 			'name' => ':link and :visited pseudo-class selectors, matching no elements',
 			'selector' => ' :link, #head :visited',
 			'ctx' => '#head',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'element',
 						  'fragment',
 						  'detached' ],
@@ -2884,7 +2881,7 @@ trait Selectors {
 			'name' => ':link and :visited pseudo-class selectors, not matching link elements with href attributes',
 			'selector' => ' :link, #head :visited',
 			'ctx' => '#head',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document' ],
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
@@ -2892,7 +2889,7 @@ trait Selectors {
 			'name' => ':link and :visited pseudo-class selectors, chained, mutually exclusive pseudo-classes match nothing',
 			'selector' => ':link:visited',
 			'ctx' => '#html',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document' ],
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
@@ -2903,7 +2900,7 @@ trait Selectors {
 			'name' => ':target pseudo-class selector, matching the element referenced by the URL fragment identifier',
 			'selector' => ':target',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document',
 						  'element' ],
 			'level' => 3,
@@ -2935,7 +2932,7 @@ trait Selectors {
 			'name' => ':lang pseudo-class selector, not matching element with no inherited language',
 			'selector' => '#pseudo-lang-div1:lang(en)',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'exclude' => [ 'document',
 						  'element' ],
 			'level' => 2,
@@ -2960,7 +2957,7 @@ trait Selectors {
 			'name' => ':lang pseudo-class selector, not matching incorrect language',
 			'selector' => '#pseudo-lang-div4:lang(es-AR)',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -2987,7 +2984,7 @@ trait Selectors {
 			'name' => ':enabled pseudo-class selector, not matching link elements (1)',
 			'selector' => '#pseudo-link :enabled',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'unexpected' => [ 'pseudo-link-a1',
 							 'pseudo-link-a2',
 							 'pseudo-link-a3',
@@ -3021,7 +3018,7 @@ trait Selectors {
 			'name' => ':disabled pseudo-class selector, not matching link elements (1)',
 			'selector' => '#pseudo-link :disabled',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'unexpected' => [ 'pseudo-link-a1',
 							 'pseudo-link-a2',
 							 'pseudo-link-a3',
@@ -3070,14 +3067,14 @@ trait Selectors {
 			'name' => ':not pseudo-class selector, matching nothing',
 			'selector' => ':not(*)',
 			'ctx' => '',
-			'expect' => [] /* no matches */,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => ':not pseudo-class selector, matching nothing',
 			'selector' => ':not(*|*)',
 			'ctx' => '',
-			'expect' => [] /* no matches */,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -3087,14 +3084,14 @@ trait Selectors {
 			'name' => ':first-line pseudo-element (one-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element:first-line',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => '::first-line pseudo-element (two-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element::first-line',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -3103,14 +3100,14 @@ trait Selectors {
 			'name' => ':first-letter pseudo-element (one-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element:first-letter',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => '::first-letter pseudo-element (two-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element::first-letter',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -3119,14 +3116,14 @@ trait Selectors {
 			'name' => ':before pseudo-element (one-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element:before',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => '::before pseudo-element (two-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element::before',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -3135,14 +3132,14 @@ trait Selectors {
 			'name' => ':after pseudo-element (one-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element:after',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => '::after pseudo-element (two-colon syntax) selector, not matching any elements',
 			'selector' => '#pseudo-element::after',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 
@@ -3262,14 +3259,14 @@ trait Selectors {
 			'name' => 'ID selector, not matching non-existent descendant',
 			'selector' => '#id #none',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'ID selector, not matching non-existent ancestor',
 			'selector' => '#none #id-div1',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -3412,7 +3409,7 @@ trait Selectors {
 			'name' => 'Descendant combinator, not matching element with id that is not a descendant of an element with id',
 			'selector' => '#descendant-div1 #descendant-div4',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 1,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -3479,21 +3476,21 @@ trait Selectors {
 			'name' => 'Child combinator, not matching element with id that is not a child of an element with id',
 			'selector' => '#child>#child-div3',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'Child combinator, not matching element with id that is not a child of an element with class',
 			'selector' => '#child-div1>.child-div3',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'Child combinator, not matching element with class that is not a child of an element with class',
 			'selector' => '.child-div1>.child-div3',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -3582,7 +3579,7 @@ trait Selectors {
 			'name' => 'Adjacent sibling combinator, not matching element with id that is not an adjacent sibling of an element with id',
 			'selector' => '#adjacent-div2+#adjacent-p2, #adjacent-div2+#adjacent-div1',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 2,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
@@ -3666,14 +3663,14 @@ trait Selectors {
 			'name' => 'General sibling combinator, not matching element with id that is not a sibling after a p element (1)',
 			'selector' => '#sibling>p~div',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[
 			'name' => 'General sibling combinator, not matching element with id that is not a sibling after an element with id',
 			'selector' => '#sibling-div2~#sibling-div3, #sibling-div2~#sibling-div1',
 			'ctx' => '',
-			'expect' => [] /*no matches*/,
+			'expect' => [], /*no matches*/
 			'level' => 3,
 			'testType' => WPTTestHarness::TEST_QSA ],
 		[

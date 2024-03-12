@@ -23,13 +23,13 @@ class CSSStyleDeclaration implements \Wikimedia\IDLeDOM\CSSStyleDeclaration {
 	 */
 	public function __set( string $name, $value ): void {
 		switch ( $name ) {
-		case 'cssText':
-		case 'cssFloat':
-			$this->_setHelper( $name, $value );
-			return;
-		default:
-			/* Cheerfully ignore this! */
-			return;
+			case 'cssText':
+			case 'cssFloat':
+				$this->_setHelper( $name, $value );
+				return;
+			default:
+				/* Cheerfully ignore this! */
+				return;
 		}
 	}
 }

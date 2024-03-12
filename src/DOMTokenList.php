@@ -109,12 +109,12 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	 * @param string $token
 	 */
 	private function _validate( string $token ): void {
-			if ( $token === '' ) {
-				Util::error( "SyntaxError" );
-			}
-			if ( strlen( $token ) !== strcspn( $token, "\t\r\n\f " ) ) {
-				Util::error( "InvalidCharacterError" );
-			}
+		if ( $token === '' ) {
+			Util::error( "SyntaxError" );
+		}
+		if ( strlen( $token ) !== strcspn( $token, "\t\r\n\f " ) ) {
+			Util::error( "InvalidCharacterError" );
+		}
 	}
 
 	/**

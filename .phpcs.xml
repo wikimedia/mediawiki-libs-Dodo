@@ -17,12 +17,6 @@
 	<exclude-pattern type="relative">^.phan/stubs/*</exclude-pattern>
 	<exclude-pattern type="relative">^tests/(W3C|WPT)/*</exclude-pattern>
 
-	<rule ref="MediaWiki.Commenting.FunctionAnnotations">
-		<properties>
-			<property name="extraTags[]" value="@copydoc" />
-		</properties>
-	</rule>
-
 	<!-- No globals allowed! -->
 	<rule ref="MediaWiki.NamingConventions.ValidGlobalName">
 		<properties>
