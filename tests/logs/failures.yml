@@ -73,11 +73,6 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Collections\HTMLCollectionAsPrototypeTest
     files: /tests/WPT/Dom/Collections/HTMLCollectionAsPrototypeTest.php
-'[default]-Failed asserting that two strings are equal.':
-    _total: 1
-    _comment: ''
-    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ElementClosestTest
-    files: /tests/WPT/Dom/Nodes/ElementClosestTest.php
 'bodyContainsChildren-Failed asserting that ''[object Wikimedia\Dodo\Text]'' is null.':
     _total: 1
     _comment: ''

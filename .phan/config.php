@@ -34,4 +34,8 @@ if ( PHP_VERSION_ID < 81000 ) {
 	$cfg['suppress_issue_types'][] = 'UnusedPluginSuppression';
 }
 
+// Ignored to allow upgrading Phan, to be fixed later.
+$cfg['suppress_issue_types'][] = 'MediaWikiNoBaseException';
+$cfg['suppress_issue_types'][] = 'MediaWikiNoEmptyIfDefined';
+
 return $cfg;
