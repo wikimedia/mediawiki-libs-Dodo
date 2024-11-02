@@ -63,7 +63,7 @@ class FilteredElementList extends HTMLCollection {
 	 *
 	 * @param int|null $n
 	 */
-	public function _traverse( int $n = null ) {
+	public function _traverse( ?int $n = null ) {
 		if ( $n !== null ) {
 			$n++;
 		}

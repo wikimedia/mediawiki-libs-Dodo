@@ -1010,7 +1010,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	 * @param Node|null $other to compare
 	 * @return bool True (two Documents are always equal)
 	 */
-	protected function _subclassIsEqualNode( Node $other = null ): bool {
+	protected function _subclassIsEqualNode( ?Node $other = null ): bool {
 		return true;
 	}
 

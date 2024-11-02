@@ -84,9 +84,9 @@ class DOMParser implements \Wikimedia\IDLeDOM\DOMParser {
 
 			/** @inheritDoc */
 			protected function createDocument(
-				string $doctypeName = null,
-				string $public = null,
-				string $system = null
+				?string $doctypeName = null,
+				?string $public = null,
+				?string $system = null
 			) {
 				// Force this to be an HTML document (not an XML document)
 				$this->doc->_setContentType( 'text/html', true );

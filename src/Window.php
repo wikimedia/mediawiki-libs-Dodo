@@ -40,7 +40,7 @@ class Window extends EventTarget implements \Wikimedia\IDLeDOM\Window {
 	/**
 	 * @param Document|null $doc
 	 */
-	public function __construct( Document $doc = null ) {
+	public function __construct( ?Document $doc = null ) {
 		if ( $doc == null ) {
 			$doc = new Document();
 			$doc->_setContentType( 'text/html', true );
