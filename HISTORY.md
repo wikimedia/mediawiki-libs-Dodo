@@ -4,6 +4,7 @@
 * Drop PHP 7.2 and PHP 7.3 support.
 * Move to PHPUnit 9.
 * Update dependencies.
+  * Require IdleDOM 1.x, Remex 3.x, and Zest 2.x.
 
 ## Dodo 0.4.0 (2021-10-25)
 * Allow use of wikimedia/remex-html 3.0.0.
