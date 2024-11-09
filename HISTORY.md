@@ -1,5 +1,7 @@
 # Change Log
 
+## Dodo x.x.x (not yet released)
+
 ## Dodo 0.5.0 (2024-11-09)
 * Drop PHP 7.2 and PHP 7.3 support.
 * Move to PHPUnit 9.
