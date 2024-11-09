@@ -266,7 +266,7 @@ The initial version of this code was written by Jason Linehan.
 Further improvements were made by C. Scott Ananian (IDLeDOM, bug fixes,
 missing features) and Tim Abdullin (test suite).
 
-This code is (c) Copyright 2019-2021 Wikimedia Foundation.
+This code is (c) Copyright 2019-2024 Wikimedia Foundation.
 It is distributed under the MIT license; see LICENSE for more
 info.
 
