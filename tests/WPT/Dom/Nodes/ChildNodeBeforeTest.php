@@ -10,40 +10,40 @@ class ChildNodeBeforeTest extends WPTTestHarness
 {
     public function helperTestBefore($child, $nodeName, $innerHTML)
     {
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->before();
             $this->wptAssertEquals($parent->innerHTML, $innerHTML);
         }, $nodeName . '.before() without any argument.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->before(null);
             $expected = 'null' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with null as an argument.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->before(null);
             $expected = NULL . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with undefined as an argument.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->before('');
             $this->wptAssertEquals($parent->firstChild->data, '');
         }, $nodeName . '.before() with the empty string as an argument.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->before('text');
             $expected = 'text' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with only text as an argument.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $parent->appendChild($child);
@@ -51,7 +51,7 @@ class ChildNodeBeforeTest extends WPTTestHarness
             $expected = '<x></x>' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with only one element as an argument.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $parent->appendChild($child);
@@ -59,14 +59,14 @@ class ChildNodeBeforeTest extends WPTTestHarness
             $expected = '<x></x>text' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with one element and text as arguments.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->before('text', $child);
             $expected = 'text' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with context object itself as the argument.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $parent->appendChild($child);
@@ -75,7 +75,7 @@ class ChildNodeBeforeTest extends WPTTestHarness
             $expected = '<x></x>' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with context object itself and node as the arguments, switching positions.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $y = $this->doc->createElement('y');
@@ -87,7 +87,7 @@ class ChildNodeBeforeTest extends WPTTestHarness
             $expected = '<x></x><y></y><z></z>' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with all siblings of child as arguments.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $y = $this->doc->createElement('y');
@@ -100,7 +100,7 @@ class ChildNodeBeforeTest extends WPTTestHarness
             $expected = '<x></x><y></y><z></z>' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with some siblings of child as arguments; no changes in tree; viable sibling is first child.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $v = $this->doc->createElement('v');
             $x = $this->doc->createElement('x');
@@ -115,7 +115,7 @@ class ChildNodeBeforeTest extends WPTTestHarness
             $expected = '<v></v><x></x><y></y><z></z>' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() with some siblings of child as arguments; no changes in tree.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $y = $this->doc->createElement('y');
@@ -126,7 +126,7 @@ class ChildNodeBeforeTest extends WPTTestHarness
             $expected = '<y></y><x></x>' . $innerHTML;
             $this->wptAssertEquals($parent->innerHTML, $expected);
         }, $nodeName . '.before() when pre-insert behaves like prepend.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $parent->appendChild($x);

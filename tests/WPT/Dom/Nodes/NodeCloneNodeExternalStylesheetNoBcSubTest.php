@@ -12,7 +12,7 @@ class NodeCloneNodeExternalStylesheetNoBcSubTest extends WPTTestHarness
         $doc = $this->doc->implementation->createHTMLDocument();
         // Bug was only triggered by absolute URLs, for some reason...
         $absoluteURL = new URL('/common/canvas-frame.css', $this->getLocation()->href);
-        $doc->head->innerHTML = "<link rel=\"stylesheet\" href=\"{$absoluteURL}\">";
+        $doc->head->innerHTML = "<link rel=\"stylesheet\" href=\"\">{$absoluteURL}";
         // Test passes if this does not throw/crash
         $doc->cloneNode(true);
         $this->done();

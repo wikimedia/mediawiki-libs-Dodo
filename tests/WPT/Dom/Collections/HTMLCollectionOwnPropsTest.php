@@ -12,7 +12,7 @@ class HTMLCollectionOwnPropsTest extends WPTTestHarness
             $element->id = $name;
         }
         $this->doc->body->appendChild($element);
-        $t->add_cleanup(function () use(&$element) {
+        $t->add_cleanup(function () use (&$element) {
             $element->remove();
         });
         return $element;
@@ -35,7 +35,7 @@ class HTMLCollectionOwnPropsTest extends WPTTestHarness
             $c = $this->doc->getElementsByTagName($tag);
             $element = $this->append($this, $tag, $name);
             $this->wptAssertEquals($c[$name], $element);
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$c, &$name) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$c, &$name) {
                 $c[$name] = 'foo';
             });
             $this->wptAssertEquals($c[$name], $element);
@@ -75,7 +75,7 @@ class HTMLCollectionOwnPropsTest extends WPTTestHarness
             $c = $this->doc->getElementsByTagName($tag);
             $element = $this->append($this, $tag);
             $this->wptAssertEquals($c[0], $element);
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$c) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$c) {
                 $c[0] = 'foo';
             });
             $this->wptAssertEquals($c[0], $element);
@@ -93,7 +93,7 @@ class HTMLCollectionOwnPropsTest extends WPTTestHarness
             $tag = 'u';
             $c = $this->doc->getElementsByTagName($tag);
             $this->wptAssertEquals($c[0], null);
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$c) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$c) {
                 $c[0] = 'foo';
             });
             $this->wptAssertEquals($c[0], null);

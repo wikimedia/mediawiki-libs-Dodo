@@ -47,7 +47,7 @@ class RangeExtractContentsTest extends WPTTestHarness
         $expectedFrag = null;
         $actualRoots = null;
         $expectedRoots = null;
-        $domTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange) {
+        $domTests[$i]->step(function () use (&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange) {
             $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual extractContents()');
             $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated extractContents()');
             $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
@@ -75,7 +75,7 @@ class RangeExtractContentsTest extends WPTTestHarness
             } while ($node = Common::nextNode($node));
             $expectedFrag = Common::myExtractContents($expectedRange);
             if (gettype($expectedFrag) == 'string') {
-                $this->wptAssertThrowsDom($expectedFrag, $actualIframe->contentWindow->DOMException, function () use(&$actualRange) {
+                $this->wptAssertThrowsDom($expectedFrag, $actualIframe->contentWindow->DOMException, function () use (&$actualRange) {
                     $actualRange->extractContents();
                 });
             } else {
@@ -105,7 +105,7 @@ class RangeExtractContentsTest extends WPTTestHarness
             }
         });
         $domTests[$i]->done();
-        $positionTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$actualRoots, &$expectedRoots, &$expectedFrag) {
+        $positionTests[$i]->step(function () use (&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$actualRoots, &$expectedRoots, &$expectedFrag) {
             $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual extractContents()');
             $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated extractContents()');
             $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
@@ -141,7 +141,7 @@ class RangeExtractContentsTest extends WPTTestHarness
             $this->wptAssertEquals($actual, $expected, "startContainer superficially looks right but is actually the wrong node if you trace back its index in all its ancestors (I'm surprised this actually happened");
         });
         $positionTests[$i]->done();
-        $fragTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$expectedFrag, &$actualFrag) {
+        $fragTests[$i]->step(function () use (&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$expectedFrag, &$actualFrag) {
             $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual extractContents()');
             $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated extractContents()');
             $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
@@ -187,8 +187,8 @@ class RangeExtractContentsTest extends WPTTestHarness
         }
         $referenceDoc = $this->doc->implementation->createHTMLDocument('');
         $referenceDoc->removeChild($referenceDoc->documentElement);
-        $actualIframe->onload = function () use(&$expectedIframe, &$iStart, &$iStop, &$referenceDoc, &$actualIframe) {
-            $expectedIframe->onload = function () use(&$iStart, &$iStop) {
+        $actualIframe->onload = function () use (&$expectedIframe, &$iStart, &$iStop, &$referenceDoc, &$actualIframe) {
+            $expectedIframe->onload = function () use (&$iStart, &$iStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
                     $this->helperTestExtractContents($i);
                 }

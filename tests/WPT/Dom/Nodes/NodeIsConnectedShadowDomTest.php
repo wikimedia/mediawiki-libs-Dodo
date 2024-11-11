@@ -8,14 +8,14 @@ class NodeIsConnectedShadowDomTest extends WPTTestHarness
 {
     public function helperTestIsConnected($mode)
     {
-        $this->assertTest(function () use(&$mode) {
+        $this->assertTest(function () use (&$mode) {
             $host = $this->doc->createElement('div');
             $this->doc->body->appendChild($host);
             $root = $host->attachShadow(['mode' => $mode]);
             $node = $this->doc->createElement('div');
             $root->appendChild($node);
             $this->wptAssertTrue($node->isConnected);
-        }, "Node.isConnected in a {$mode} shadow tree");
+        }, "Node.isConnected in a  shadow tree{$mode}");
     }
     public function testNodeIsConnectedShadowDom()
     {

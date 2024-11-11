@@ -15,7 +15,7 @@ class RangeIntersectsNodeTest extends WPTTestHarness
         for ($i = 0; $i < count($this->getCommon()->testNodes); $i++) {
             $node = $this->wptEvalNode($this->getCommon()->testNodes[$i]);
             for ($j = 0; $j < count($this->getCommon()->testRanges); $j++) {
-                $this->assertTest(function () use(&$testRangesCached, &$j, &$i, &$node) {
+                $this->assertTest(function () use (&$testRangesCached, &$j, &$i, &$node) {
                     if ($testRangesCached[$j] === null) {
                         try {
                             $testRangesCached[$j] = Common::rangeFromEndpoints($this->wptEvalNode($this->getCommon()->testRanges[$i]));

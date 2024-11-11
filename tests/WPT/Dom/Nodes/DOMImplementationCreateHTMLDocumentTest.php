@@ -19,14 +19,14 @@ class DOMImplementationCreateHTMLDocumentTest extends WPTTestHarness
             $title = $t[0];
             $expectedtitle = $t[1];
             $normalizedtitle = $t[2];
-            $this->assertTest(function () use(&$title, &$checkDoc, &$expectedtitle, &$normalizedtitle) {
+            $this->assertTest(function () use (&$title, &$checkDoc, &$expectedtitle, &$normalizedtitle) {
                 $doc = $this->doc->implementation->createHTMLDocument($title);
                 $checkDoc($doc, $expectedtitle, $normalizedtitle);
             }, 'createHTMLDocument test ' . $i . ': ' . $this->arrayMap($t, function ($el) {
                 return $this->formatValue($el);
             }));
         }
-        $this->assertTest(function () use(&$checkDoc) {
+        $this->assertTest(function () use (&$checkDoc) {
             $doc = $this->doc->implementation->createHTMLDocument();
             $checkDoc($doc, null, '');
         }, 'Missing title argument');

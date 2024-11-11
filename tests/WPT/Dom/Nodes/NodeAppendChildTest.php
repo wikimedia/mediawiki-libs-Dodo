@@ -11,14 +11,14 @@ class NodeAppendChildTest extends WPTTestHarness
     public function helperTestLeaf($node, $desc)
     {
         // WebIDL.
-        $this->assertTest(function () use(&$node) {
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$node) {
+        $this->assertTest(function () use (&$node) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$node) {
                 $node->appendChild(null);
             });
         }, 'Appending null to a ' . $desc);
         // Pre-insert step 1.
-        $this->assertTest(function () use(&$node) {
-            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use(&$node) {
+        $this->assertTest(function () use (&$node) {
+            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use (&$node) {
                 $node->appendChild($this->doc->createTextNode('fail'));
             });
         }, 'Appending to a ' . $desc);
@@ -44,7 +44,7 @@ class NodeAppendChildTest extends WPTTestHarness
         // Pre-insert step 5.
         $this->assertTest(function () {
             $frameDoc = $frames[0]->document;
-            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use(&$frameDoc) {
+            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use (&$frameDoc) {
                 $this->doc->body->appendChild($frameDoc);
             });
         }, 'Appending a document');

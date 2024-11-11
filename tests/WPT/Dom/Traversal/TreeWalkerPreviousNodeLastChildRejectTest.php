@@ -79,7 +79,7 @@ class TreeWalkerPreviousNodeLastChildRejectTest extends WPTTestHarness
         $b2->appendChild($c4);
         $c2->appendChild($d1);
         $c2->appendChild($d2);
-        $this->assertTest(function () use(&$testElement) {
+        $this->assertTest(function () use (&$testElement) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
             $this->wptAssertNode($walker->currentNode, ['type' => Element, 'id' => 'root']);
             $this->wptAssertNode($walker->firstChild(), ['type' => Element, 'id' => 'A1']);

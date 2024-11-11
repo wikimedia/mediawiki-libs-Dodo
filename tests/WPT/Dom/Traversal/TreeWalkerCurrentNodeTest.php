@@ -27,13 +27,13 @@ class TreeWalkerCurrentNodeTest extends WPTTestHarness
         $all = function ($node) {
             return true;
         };
-        $this->assertTest(function () use(&$subTree, &$all) {
+        $this->assertTest(function () use (&$subTree, &$all) {
             $w = $this->doc->createTreeWalker($subTree, NodeFilter::SHOW_ELEMENT, $all);
             $this->wptAssertNode($w->currentNode, ['type' => Element, 'id' => 'subTree']);
             $this->wptAssertEquals($w->parentNode(), null);
             $this->wptAssertNode($w->currentNode, ['type' => Element, 'id' => 'subTree']);
         }, "Test that TreeWalker.parent() doesn't set the currentNode to a node not under the root.");
-        $this->assertTest(function () use(&$subTree, &$all) {
+        $this->assertTest(function () use (&$subTree, &$all) {
             $w = $this->doc->createTreeWalker($subTree, NodeFilter::SHOW_ELEMENT | NodeFilter::SHOW_COMMENT, $all);
             $w->currentNode = $this->doc->documentElement;
             $this->wptAssertEquals($w->parentNode(), null);
@@ -57,7 +57,7 @@ class TreeWalkerCurrentNodeTest extends WPTTestHarness
             $this->wptAssertEquals($w->getPreviousSibling()(), null);
             $this->wptAssertEquals($w->currentNode, $this->doc->documentElement);
         }, 'Test that we handle setting the currentNode to arbitrary nodes not under the root element.');
-        $this->assertTest(function () use(&$subTree, &$all) {
+        $this->assertTest(function () use (&$subTree, &$all) {
             $w = $this->doc->createTreeWalker($subTree, NodeFilter::SHOW_ELEMENT, $all);
             $w->currentNode = $subTree->getPreviousSibling();
             $this->wptAssertEquals($w->nextNode(), $subTree);

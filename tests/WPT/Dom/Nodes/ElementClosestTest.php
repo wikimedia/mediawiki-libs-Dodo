@@ -7,7 +7,7 @@ class ElementClosestTest extends WPTTestHarness
 {
     public function doTestHelper($aSelector, $aElementId, $aTargetId)
     {
-        $this->assertTest(function () use(&$aElementId, &$aSelector, &$aTargetId) {
+        $this->assertTest(function () use (&$aElementId, &$aSelector, &$aTargetId) {
             $el = $this->doc->getElementById($aElementId)->closest($aSelector);
             if ($el === null) {
                 $this->wptAssertEquals('', $aTargetId, $aSelector);

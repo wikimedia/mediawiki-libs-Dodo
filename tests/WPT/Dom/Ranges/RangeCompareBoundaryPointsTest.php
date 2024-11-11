@@ -70,7 +70,7 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
                 }
                 for ($k = 0; $k < count($hows); $k++) {
                     $how = $hows[$k];
-                    $this->assertTest(function () use(&$range1, &$range2, &$how) {
+                    $this->assertTest(function () use (&$range1, &$range2, &$how) {
                         $this->wptAssertNotEquals($range1, null, 'Creating context range threw an exception');
                         $this->wptAssertNotEquals($range2, null, 'Creating argument range threw an exception');
                         // Convert how per WebIDL.  TODO: Make some type of reusable
@@ -105,7 +105,7 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
                         // throw a "NotSupportedError" exception and terminate these
                         // steps."
                         if ($convertedHow != Range\START_TO_START && $convertedHow != Range\START_TO_END && $convertedHow != Range\END_TO_END && $convertedHow != Range\END_TO_START) {
-                            $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use(&$range1, &$how, &$range2) {
+                            $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use (&$range1, &$how, &$range2) {
                                 $range1->compareBoundaryPoints($how, $range2);
                             }, "NotSupportedError required if first parameter doesn't convert to 0-3 per WebIDL");
                             return;
@@ -114,7 +114,7 @@ class RangeCompareBoundaryPointsTest extends WPTTestHarness
                         // root, throw a "WrongDocumentError" exception and terminate
                         // these steps."
                         if (Common::furthestAncestor($range1->startContainer) != Common::furthestAncestor($range2->startContainer)) {
-                            $this->wptAssertThrowsDom('WRONG_DOCUMENT_ERR', function () use(&$range1, &$how, &$range2) {
+                            $this->wptAssertThrowsDom('WRONG_DOCUMENT_ERR', function () use (&$range1, &$how, &$range2) {
                                 $range1->compareBoundaryPoints($how, $range2);
                             }, "WrongDocumentError required if the ranges don't share a root");
                             return;

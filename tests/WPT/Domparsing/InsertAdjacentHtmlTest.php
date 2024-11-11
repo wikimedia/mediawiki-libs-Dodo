@@ -7,28 +7,28 @@ class InsertAdjacentHtmlTest extends WPTTestHarness
 {
     public function helperTestPositions($node, $testDesc)
     {
-        $this->assertTest(function () use(&$node) {
+        $this->assertTest(function () use (&$node) {
             $script_ran = false;
             $node->insertAdjacentHTML('beforeBegin', '<script>script_ran = true;</script><i></i>');
             $this->wptAssertEquals($node->getPreviousSibling()->localName, 'i', 'Should have had <i> as previous sibling');
             $this->wptAssertEquals($node->getPreviousSibling()->getPreviousSibling()->localName, 'script', 'Should have had <script> as second previous child');
             $this->wptAssertFalse($script_ran, 'script should not have run');
         }, 'beforeBegin ' . $node->id . ' ' . $testDesc);
-        $this->assertTest(function () use(&$node) {
+        $this->assertTest(function () use (&$node) {
             $script_ran = false;
             $node->insertAdjacentHTML('Afterbegin', '<b></b><script>script_ran = true;</script>');
             $this->wptAssertEquals($node->firstChild->localName, 'b', 'Should have had <b> as first child');
             $this->wptAssertEquals($node->firstChild->nextSibling->localName, 'script', 'Should have had <script> as second child');
             $this->wptAssertFalse($script_ran, 'script should not have run');
         }, 'Afterbegin ' . $node->id . ' ' . $testDesc);
-        $this->assertTest(function () use(&$node) {
+        $this->assertTest(function () use (&$node) {
             $script_ran = false;
             $node->insertAdjacentHTML('BeforeEnd', '<script>script_ran = true;</script><u></u>');
             $this->wptAssertEquals($node->lastChild->localName, 'u', 'Should have had <u> as last child');
             $this->wptAssertEquals($node->lastChild->getPreviousSibling()->localName, 'script', 'Should have had <script> as penultimate child');
             $this->wptAssertFalse($script_ran, 'script should not have run');
         }, 'BeforeEnd ' . $node->id . ' ' . $testDesc);
-        $this->assertTest(function () use(&$node) {
+        $this->assertTest(function () use (&$node) {
             $script_ran = false;
             $node->insertAdjacentHTML('afterend', '<a></a><script>script_ran = true;</script>');
             $this->wptAssertEquals($node->nextSibling->localName, 'a', 'Should have had <a> as next sibling');
@@ -38,33 +38,33 @@ class InsertAdjacentHtmlTest extends WPTTestHarness
     }
     public function helperTestThrowingNoParent($element, $desc)
     {
-        $this->assertTest(function () use(&$element) {
-            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use(&$element) {
+        $this->assertTest(function () use (&$element) {
+            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use (&$element) {
                 $element->insertAdjacentHTML('afterend', '');
             });
-            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use(&$element) {
+            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use (&$element) {
                 $element->insertAdjacentHTML('beforebegin', '');
             });
-            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use(&$element) {
+            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use (&$element) {
                 $element->insertAdjacentHTML('afterend', 'foo');
             });
-            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use(&$element) {
+            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use (&$element) {
                 $element->insertAdjacentHTML('beforebegin', 'foo');
             });
         }, 'When the parent node is ' . $desc . ', insertAdjacentHTML should throw for beforebegin and afterend (text)');
-        $this->assertTest(function () use(&$element) {
-            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use(&$element) {
+        $this->assertTest(function () use (&$element) {
+            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use (&$element) {
                 $element->insertAdjacentHTML('afterend', '<!-- fail -->');
             });
-            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use(&$element) {
+            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use (&$element) {
                 $element->insertAdjacentHTML('beforebegin', '<!-- fail -->');
             });
         }, 'When the parent node is ' . $desc . ', insertAdjacentHTML should throw for beforebegin and afterend (comments)');
-        $this->assertTest(function () use(&$element) {
-            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use(&$element) {
+        $this->assertTest(function () use (&$element) {
+            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use (&$element) {
                 $element->insertAdjacentHTML('afterend', '<div></div>');
             });
-            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use(&$element) {
+            $this->wptAssertThrowsDom('NO_MODIFICATION_ALLOWED_ERR', function () use (&$element) {
                 $element->insertAdjacentHTML('beforebegin', '<div></div>');
             });
         }, 'When the parent node is ' . $desc . ', insertAdjacentHTML should throw for beforebegin and afterend (elements)');
@@ -76,14 +76,14 @@ class InsertAdjacentHtmlTest extends WPTTestHarness
         $content = $this->doc->getElementById('content');
         $this->helperTestPositions($content, 'without next sibling');
         $this->helperTestPositions($content, 'again, with next sibling');
-        $this->assertTest(function () use(&$content) {
-            $this->wptAssertThrowsDom('SYNTAX_ERR', function () use(&$content) {
+        $this->assertTest(function () use (&$content) {
+            $this->wptAssertThrowsDom('SYNTAX_ERR', function () use (&$content) {
                 $content->insertAdjacentHTML('bar', 'foo');
             });
-            $this->wptAssertThrowsDom('SYNTAX_ERR', function () use(&$content) {
+            $this->wptAssertThrowsDom('SYNTAX_ERR', function () use (&$content) {
                 $content->insertAdjacentHTML("beforebegİn", 'foo');
             });
-            $this->wptAssertThrowsDom('SYNTAX_ERR', function () use(&$content) {
+            $this->wptAssertThrowsDom('SYNTAX_ERR', function () use (&$content) {
                 $content->insertAdjacentHTML("beforebegın", 'foo');
             });
         }, 'Should throw when inserting with invalid position string');
@@ -92,14 +92,14 @@ class InsertAdjacentHtmlTest extends WPTTestHarness
         $child->id = 'child';
         $this->helperTestThrowingNoParent($child, 'null');
         $this->helperTestThrowingNoParent($this->doc->documentElement, 'a document');
-        $this->assertTest(function () use(&$child, &$parentElement) {
+        $this->assertTest(function () use (&$child, &$parentElement) {
             $child->insertAdjacentHTML('afterBegin', 'foo');
             $child->insertAdjacentHTML('beforeend', 'bar');
             $this->wptAssertEquals($child->textContent, 'foobar');
             $parentElement->appendChild($child);
         }, 'Inserting after being and before end should order things correctly');
         $this->helperTestPositions($child, 'node not in tree but has parent');
-        $this->assertTest(function () use(&$content, &$parentElement) {
+        $this->assertTest(function () use (&$content, &$parentElement) {
             $script_ran = false;
             $content->appendChild($parentElement);
             // must not run scripts

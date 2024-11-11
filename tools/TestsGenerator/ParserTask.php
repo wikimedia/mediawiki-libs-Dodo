@@ -13,14 +13,18 @@ use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeDumper;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use PhpParser\PhpVersion;
 use PhpParser\PrettyPrinter;
 use Robo\Result;
 use Robo\Task\BaseTask;
@@ -92,7 +96,7 @@ class ParserTask extends BaseTask {
 		?string $test_path = null ) {
 		$this->test = $test;
 		$this->finder = new NodeFinder;
-		$this->parser = ( new ParserFactory )->create( ParserFactory::ONLY_PHP7 );
+		$this->parser = ( new ParserFactory )->createForVersion( PhpVersion::fromComponents( 7, 0 ) );
 		$this->dumper = new NodeDumper;
 		$this->factory = new BuilderFactory;
 		$this->test_type = $test_type;
@@ -130,6 +134,9 @@ class ParserTask extends BaseTask {
 			if ( $this->test_type === TestsGenerator::W3C ) {
 				$this->preProcessW3CTest();
 				$ast = $this->parser->parse( '<?php ' . $this->test );
+				if ( $ast === null ) {
+					throw new \Error( "Parse failure" );
+				}
 				$this->parseW3CTest( $ast );
 				$this->removeW3CDisparity();
 			}
@@ -137,6 +144,9 @@ class ParserTask extends BaseTask {
 			if ( $this->test_type === TestsGenerator::WPT ) {
 				$this->preProcessWPTTest();
 				$ast = $this->parser->parse( '<?php ' . $this->test );
+				if ( $ast === null ) {
+					throw new \Error( "Parse failure" );
+				}
 				$this->parseWPTTest( $ast );
 				$this->postProcessWPTTest();
 			}
@@ -215,6 +225,9 @@ class ParserTask extends BaseTask {
 				}
 
 				if ( $node instanceof FuncCall ) {
+					if ( !( $node->name instanceof Name ) ) {
+						return $node;
+					}
 					$expr_name = $node->name->getFirst();
 					if ( empty( $expr_name ) ) {
 						return $node;
@@ -273,14 +286,14 @@ class ParserTask extends BaseTask {
 
 				// remove all other functions
 				if ( $node instanceof Comment || $node instanceof Doc ) {
-					return NodeTraverser::REMOVE_NODE;
+					return NodeVisitor::REMOVE_NODE;
 				}
 
 				if ( $node instanceof Function_ ) {
 					$remove = [ 'toASCIIUppercase', 'toASCIILowercase' ];
 					$func_name = $node->name->name;
 					if ( preg_match( '(' . implode( '|', $remove ) . ')', $func_name ) === 1 ) {
-						return NodeTraverser::REMOVE_NODE;
+						return NodeVisitor::REMOVE_NODE;
 					}
 
 					$node = $this->factory->method( $this->snakeToCamel( $func_name ) )->makePublic()
@@ -330,6 +343,7 @@ class ParserTask extends BaseTask {
 		*/
 
 		$stmts = $traverser->traverse( $ast );
+		'@phan-var Stmt[] $stmts';
 
 		$class = $this->factory
 			   ->class( $this->snakeToPascal( $this->test_name ) . 'Test' )
@@ -541,9 +555,13 @@ class ParserTask extends BaseTask {
 			 * @return int|Node|Function_
 			 */
 			public function leaveNode( $node ) {
-				if ( $node instanceof Expression && $node->expr instanceof Node\Expr\FuncCall ) {
-					$name = $node->expr->name->parts[0] ?? null;
-					if ( $name && $name === 'setup' ) {
+				if (
+					$node instanceof Expression &&
+					$node->expr instanceof Node\Expr\FuncCall &&
+					$node->expr->name instanceof Name
+				) {
+					$name = $node->expr->name->name;
+					if ( $name === 'setup' ) {
 						$stmts = $node->expr->args[0]->value;
 						if ( property_exists( $stmts,
 							'stmts' ) ) {
@@ -578,6 +596,9 @@ class ParserTask extends BaseTask {
 				}
 
 				if ( $node instanceof FuncCall ) {
+					if ( !( $node->name instanceof Name ) ) {
+						return $node;
+					}
 					$expr_name = $node->name->getFirst();
 					if ( empty( $expr_name ) ) {
 						return $node;
@@ -714,7 +735,7 @@ class ParserTask extends BaseTask {
 						'toASCIILowercase' => 'mb_strtolower' ];
 
 					if ( preg_match( '(' . implode( '|', $replace_list ) . ')', $expr_name ) === 1 ) {
-						$node->name->parts[0] = $replace_list[$expr_name];
+						$node->name->name = $replace_list[$expr_name];
 					}
 
 					return $node;
@@ -725,7 +746,7 @@ class ParserTask extends BaseTask {
 					$func_name = $node->name->name;
 
 					if ( preg_match( '(' . implode( '|', $remove ) . ')', $func_name ) === 1 ) {
-						return NodeTraverser::REMOVE_NODE;
+						return NodeVisitor::REMOVE_NODE;
 					}
 
 					$node = $this->factory->method( $this->snakeToCamel( $func_name ) )->makePublic()
@@ -738,6 +759,7 @@ class ParserTask extends BaseTask {
 
 		$traverser->addVisitor( $visitor );
 		$stmts = $traverser->traverse( $stmts );
+		'@phan-var Stmt[] $stmts';
 
 		// create test class
 		if ( strpos( $this->test_name, 'Test' ) === false ) {
@@ -917,12 +939,12 @@ class ParserTask extends BaseTask {
 		// Now fix up some unnecessary use statements
 		do {
 			$this->test = preg_replace_callback(
-				'/(use[(][^)]*)' .
+				'/(use\s*[(][^)]*)' .
 				preg_quote( '&$this->getCommon()->', '/' ) .
 				'[A-Za-z]+(, |\))/D',
 				static function ( $matches ) {
 					if ( $matches[2] === ')' ) {
-						if ( $matches[1] === 'use(' ) {
+						if ( str_replace( ' ', '', $matches[1] ) === 'use(' ) {
 							return ''; // No more use variables!
 						}
 						// trim the ", " off the end of $matches[1]
@@ -946,7 +968,7 @@ class ParserTask extends BaseTask {
 		}
 
 		// Replace constructs like String($span->classList).
-		$this->test = preg_replace( '/String\((.*)\)/', '$this->toString($1)', $this->test );
+		$this->test = preg_replace( '/\bString\((.*)\)/', '$this->toString($1)', $this->test );
 	}
 
 	/**
@@ -1098,7 +1120,7 @@ class ParserTask extends BaseTask {
 			 */
 			public function leaveNode( $node ) {
 				if ( $node instanceof Function_ ) {
-					return NodeTraverser::REMOVE_NODE;
+					return NodeVisitor::REMOVE_NODE;
 				}
 			}
 		} );
@@ -1148,6 +1170,9 @@ class ParserTask extends BaseTask {
 				}
 				// Call to the function; replace it with a method call
 				if ( $node instanceof FuncCall ) {
+					if ( !( $node->name instanceof Name ) ) {
+						return $node;
+					}
 					$expr_name = $node->name->getFirst();
 					if ( empty( $expr_name ) ) {
 						return $node;
@@ -1172,15 +1197,16 @@ class ParserTask extends BaseTask {
 		// Add back the functions at the top level
 		if ( $this->test_type === TestsGenerator::W3C ) {
 			// W3C test
-			$stmts = array_filter( $functions, function ( &$node ) use ( $ast ) {
+			$stmts = array_filter( $functions, function ( $node ) use ( $ast ) {
 				if ( $node->name->name === $this->test_name ) {
 					$node->stmts = array_merge( $ast, $node->stmts );
-					return $node;
+					return true;
 				}
 
 				return false;
 			} );
 		} else {
+			'@phan-var Stmt[] $ast';
 			$node = $this->factory->method( $main_method )
 				->makePublic()
 				->addStmts( $additional_stmts )

@@ -11,13 +11,13 @@ class NodeLookupNamespaceURITest extends WPTTestHarness
 {
     public function lookupNamespaceURI($node, $prefix, $expected, $name)
     {
-        $this->assertTest(function () use(&$node, &$prefix, &$expected) {
+        $this->assertTest(function () use (&$node, &$prefix, &$expected) {
             $this->wptAssertEquals($node->lookupNamespaceURI($prefix), $expected);
         }, $name);
     }
     public function isDefaultNamespace($node, $namespace, $expected, $name)
     {
-        $this->assertTest(function () use(&$node, &$namespace, &$expected) {
+        $this->assertTest(function () use (&$node, &$namespace, &$expected) {
             $this->wptAssertEquals($node->isDefaultNamespace($namespace), $expected);
         }, $name);
     }

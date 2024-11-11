@@ -17,7 +17,7 @@ class InsertAdjacentTest extends WPTTestHarness
         $el = $this->doc->querySelector('#element');
         foreach ($get_object_vars as $position) {
             $html = wrap($position);
-            $this->assertTest(function () use(&$el, &$position, &$html, &$possiblePositions) {
+            $this->assertTest(function () use (&$el, &$position, &$html, &$possiblePositions) {
                 $el->insertAdjacentHTML($position, $html);
                 $heading = $this->doc->createElement('h3');
                 $heading->innerHTML = $position;

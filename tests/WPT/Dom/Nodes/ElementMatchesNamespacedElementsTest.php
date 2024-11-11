@@ -9,13 +9,13 @@ class ElementMatchesNamespacedElementsTest extends WPTTestHarness
     {
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Element-matches-namespaced-elements.html');
         foreach (['matches', 'webkitMatchesSelector'] as $method) {
-            $this->assertTest(function () use(&$method) {
+            $this->assertTest(function () use (&$method) {
                 $this->wptAssertTrue($this->doc->createElementNS('', 'element')->{$method}('element'));
             }, "empty string namespace, {$method}");
-            $this->assertTest(function () use(&$method) {
+            $this->assertTest(function () use (&$method) {
                 $this->wptAssertTrue($this->doc->createElementNS('urn:ns', 'h')->{$method}('h'));
             }, "has a namespace, {$method}");
-            $this->assertTest(function () use(&$method) {
+            $this->assertTest(function () use (&$method) {
                 $this->wptAssertTrue($this->doc->createElementNS('urn:ns', 'h')->{$method}('*|h'));
             }, "has a namespace, *|, {$method}");
         }

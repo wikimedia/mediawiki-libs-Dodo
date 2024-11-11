@@ -43,7 +43,7 @@ class CreateContextualFragmentTest extends WPTTestHarness
         }, 'Must not throw INVALID_STATE_ERR for a detached node.');
         $this->assertTest(function () {
             $range = $this->doc->createRange();
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$range) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$range) {
                 $range->createContextualFragment();
             });
         }, 'Must throw TypeError when calling without arguments');
@@ -87,7 +87,7 @@ class CreateContextualFragmentTest extends WPTTestHarness
         // Scripts should be run if inserted (that's what the "Unmark all scripts
         // . . ." line means, I'm told)
         $passed = false;
-        $this->assertTest(function () use(&$passed) {
+        $this->assertTest(function () use (&$passed) {
             $this->wptAssertFalse($passed, 'Sanity check');
             $range = $this->doc->createRange();
             $range->selectNodeContents($this->doc->documentElement);
@@ -120,14 +120,14 @@ class CreateContextualFragmentTest extends WPTTestHarness
             'menuitem',
             'image',
         ] as $name) {
-            $this->assertTest(function () use(&$name) {
+            $this->assertTest(function () use (&$name) {
                 $range = $this->doc->createRange();
                 $contextNode = $this->doc->createElement($name);
                 $selectedNode = $this->doc->createElement('div');
                 $contextNode->appendChild($selectedNode);
                 $range->selectNode($selectedNode);
                 $range->createContextualFragment('some text');
-            }, "createContextualFragment should work even when the context is <{$name}>");
+            }, "createContextualFragment should work even when the context is <>{$name}");
         }
         $doc_fragment = $this->doc->createDocumentFragment();
         $comment = $this->doc->createComment('~o~');

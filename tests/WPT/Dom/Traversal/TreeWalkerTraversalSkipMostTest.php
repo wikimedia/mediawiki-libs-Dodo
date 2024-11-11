@@ -52,12 +52,12 @@ class TreeWalkerTraversalSkipMostTest extends WPTTestHarness
             }
             return NodeFilter::FILTER_SKIP;
         }];
-        $this->assertTest(function () use(&$testElement, &$filter) {
+        $this->assertTest(function () use (&$testElement, &$filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
             $this->wptAssertNode($walker->firstChild(), ['type' => Element, 'id' => 'B1']);
             $this->wptAssertNode($walker->nextSibling(), ['type' => Element, 'id' => 'B3']);
         }, 'Testing nextSibling');
-        $this->assertTest(function () use(&$testElement, &$filter) {
+        $this->assertTest(function () use (&$testElement, &$filter) {
             $walker = $this->doc->createTreeWalker($testElement, NodeFilter::SHOW_ELEMENT, $filter);
             $walker->currentNode = $testElement->querySelectorAll('#B3')[0];
             $this->wptAssertNode($walker->getPreviousSibling()(), ['type' => Element, 'id' => 'B1']);

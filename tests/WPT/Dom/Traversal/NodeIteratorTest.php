@@ -141,16 +141,16 @@ class NodeIteratorTest extends WPTTestHarness
         }, 'createNodeIterator() with undefined as arguments');
         $this->assertTest(function () {
             $err = ['name' => 'failed'];
-            $iter = $this->doc->createNodeIterator($this->doc, NodeFilter::SHOW_ALL, function () use(&$err) {
+            $iter = $this->doc->createNodeIterator($this->doc, NodeFilter::SHOW_ALL, function () use (&$err) {
                 throw $err;
             });
-            $this->wptAssertThrowsExactly($err, function () use(&$iter) {
+            $this->wptAssertThrowsExactly($err, function () use (&$iter) {
                 $iter->nextNode();
             });
         }, 'Propagate exception from filter function');
         $this->assertTest(function () {
             $depth = 0;
-            $iter = $this->doc->createNodeIterator($this->doc, NodeFilter::SHOW_ALL, function () use(&$iter, &$depth) {
+            $iter = $this->doc->createNodeIterator($this->doc, NodeFilter::SHOW_ALL, function () use (&$iter, &$depth) {
                 if ($iter->referenceNode != $this->doc && $depth == 0) {
                     $depth++;
                     $iter->nextNode();
@@ -159,11 +159,11 @@ class NodeIteratorTest extends WPTTestHarness
             });
             $iter->nextNode();
             $iter->nextNode();
-            $this->wptAssertThrowsDom('InvalidStateError', function () use(&$iter) {
+            $this->wptAssertThrowsDom('InvalidStateError', function () use (&$iter) {
                 $iter->nextNode();
             });
             $depth--;
-            $this->wptAssertThrowsDom('InvalidStateError', function () use(&$iter) {
+            $this->wptAssertThrowsDom('InvalidStateError', function () use (&$iter) {
                 $iter->previousNode();
             });
         }, 'Recursive filters need to throw');
@@ -172,7 +172,7 @@ class NodeIteratorTest extends WPTTestHarness
         for ($i = 0; $i < count($this->getCommon()->testNodes); $i++) {
             for ($j = 0; $j < count($whatToShows); $j++) {
                 for ($k = 0; $k < count($callbacks); $k++) {
-                    $this->assertTest(function () use(&$i, &$whatToShows, &$j, &$callbacks, &$k) {
+                    $this->assertTest(function () use (&$i, &$whatToShows, &$j, &$callbacks, &$k) {
                         $this->helperTestIterator($this->wptEvalNode($this->getCommon()->testNodes[$i]), eval($whatToShows[$j]), eval($callbacks[$k]));
                     }, 'document.createNodeIterator(' . $this->getCommon()->testNodes[$i] . ', ' . $whatToShows[$j] . ', ' . $callbacks[$k] . ')');
                 }

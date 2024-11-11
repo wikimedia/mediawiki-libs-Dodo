@@ -11,12 +11,12 @@ class GetElementsByClassNameWhitespaceClassNamesTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/getElementsByClassName-whitespace-class-names.html');
         $spans = $this->doc->querySelectorAll('span');
         foreach ($spans as $span) {
-            $this->assertTest(function () use(&$span) {
+            $this->assertTest(function () use (&$span) {
                 $className = $span->getAttribute('class');
                 $this->wptAssertEquals(mb_strlen($className), 1, 'Sanity check: the class name was retrieved and is a single character');
                 $shouldBeSpan = $this->doc->getElementsByClassName($className);
                 $this->wptAssertArrayEquals($shouldBeSpan, [$span]);
-            }, "Passing a {$span->textContent} to getElementsByClassName still finds the span");
+            }, "Passing a  to getElementsByClassName still finds the span{$span->textContent}");
         }
     }
 }

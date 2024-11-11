@@ -9,7 +9,7 @@ class NodeParentNodeTest extends WPTTestHarness
     public function helperTestIframe($iframe)
     {
         global $t;
-        $t->step(function () use(&$iframe) {
+        $t->step(function () use (&$iframe) {
             $doc = $iframe->getOwnerDocument();
             $iframe->parentNode->removeChild($iframe);
             $this->wptAssertEquals($doc->firstChild->parentNode, $doc);

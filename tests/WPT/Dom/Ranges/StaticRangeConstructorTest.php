@@ -30,7 +30,7 @@ class StaticRangeConstructorTest extends WPTTestHarness
             $this->wptAssertEquals($staticRange->endOffset, 2, 'valid endOffset');
             $this->wptAssertFalse($staticRange->collapsed, 'not collapsed');
         }, 'Construct static range with Element container');
-        $this->assertTest(function () use(&$testTextNode) {
+        $this->assertTest(function () use (&$testTextNode) {
             $staticRange = new StaticRange(['startContainer' => $testTextNode, 'startOffset' => 1, 'endContainer' => $testTextNode, 'endOffset' => 2]);
             $this->wptAssertEquals($staticRange->startContainer, $testTextNode, 'valid startContainer');
             $this->wptAssertEquals($staticRange->startOffset, 1, 'valid startOffset');
@@ -38,7 +38,7 @@ class StaticRangeConstructorTest extends WPTTestHarness
             $this->wptAssertEquals($staticRange->endOffset, 2, 'valid endOffset');
             $this->wptAssertFalse($staticRange->collapsed, 'not collapsed');
         }, 'Construct static range with Text container');
-        $this->assertTest(function () use(&$testTextNode) {
+        $this->assertTest(function () use (&$testTextNode) {
             $staticRange = new StaticRange(['startContainer' => $this->getCommon()->testDiv, 'startOffset' => 0, 'endContainer' => $testTextNode, 'endOffset' => 1]);
             $this->wptAssertEquals($staticRange->startContainer, $this->getCommon()->testDiv, 'valid startContainer');
             $this->wptAssertEquals($staticRange->startOffset, 0, 'valid startOffset');
@@ -46,7 +46,7 @@ class StaticRangeConstructorTest extends WPTTestHarness
             $this->wptAssertEquals($staticRange->endOffset, 1, 'valid endOffset');
             $this->wptAssertFalse($staticRange->collapsed, 'not collapsed');
         }, 'Construct static range with Element startContainer and Text endContainer');
-        $this->assertTest(function () use(&$testTextNode) {
+        $this->assertTest(function () use (&$testTextNode) {
             $staticRange = new StaticRange(['startContainer' => $testTextNode, 'startOffset' => 0, 'endContainer' => $this->getCommon()->testDiv, 'endOffset' => 3]);
             $this->wptAssertEquals($staticRange->startContainer, $testTextNode, 'valid startContainer');
             $this->wptAssertEquals($staticRange->startOffset, 0, 'valid startOffset');
@@ -54,7 +54,7 @@ class StaticRangeConstructorTest extends WPTTestHarness
             $this->wptAssertEquals($staticRange->endOffset, 3, 'valid endOffset');
             $this->wptAssertFalse($staticRange->collapsed, 'not collapsed');
         }, 'Construct static range with Text startContainer and Element endContainer');
-        $this->assertTest(function () use(&$testPINode) {
+        $this->assertTest(function () use (&$testPINode) {
             $staticRange = new StaticRange(['startContainer' => $testPINode, 'startOffset' => 1, 'endContainer' => $testPINode, 'endOffset' => 2]);
             $this->wptAssertEquals($staticRange->startContainer, $testPINode, 'valid startContainer');
             $this->wptAssertEquals($staticRange->startOffset, 1, 'valid startOffset');
@@ -62,7 +62,7 @@ class StaticRangeConstructorTest extends WPTTestHarness
             $this->wptAssertEquals($staticRange->endOffset, 2, 'valid endOffset');
             $this->wptAssertFalse($staticRange->collapsed, 'not collapsed');
         }, 'Construct static range with ProcessingInstruction container');
-        $this->assertTest(function () use(&$testCommentNode) {
+        $this->assertTest(function () use (&$testCommentNode) {
             $staticRange = new StaticRange(['startContainer' => $testCommentNode, 'startOffset' => 1, 'endContainer' => $testCommentNode, 'endOffset' => 2]);
             $this->wptAssertEquals($staticRange->startContainer, $testCommentNode, 'valid startContainer');
             $this->wptAssertEquals($staticRange->startOffset, 1, 'valid startOffset');

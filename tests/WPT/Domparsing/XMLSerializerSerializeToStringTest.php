@@ -54,7 +54,7 @@ class XMLSerializerSerializeToStringTest extends WPTTestHarness
             $this->wptAssertEquals($this->serialize($this->parse('<root xmlns=""><child xmlns=""/></root>')), '<root><child/></root>');
             $this->wptAssertEquals($this->serialize($this->parse('<root xmlns="u1"><child xmlns="u1"/></root>')), '<root xmlns="u1"><child/></root>');
         }, 'Check if redundant xmlns="..." is dropped.');
-        $this->assertTest(function () use(&$XMLNS_URI) {
+        $this->assertTest(function () use (&$XMLNS_URI) {
             $root = $this->parse('<root xmlns="uri1"/>');
             $child = $root->ownerDocument->createElement('child');
             $child->setAttributeNS($XMLNS_URI, 'xmlns', 'FAIL1');
@@ -121,7 +121,7 @@ class XMLSerializerSerializeToStringTest extends WPTTestHarness
             $root->setAttribute('attr', "\r");
             $this->wptAssertInArray($this->serialize($root), ['<root attr="&#xD;"/>', '<root attr="&#13;"/>']);
         }, 'check XMLSerializer.serializeToString escapes attribute values for roundtripping');
-        $this->assertTest(function () use(&$XMLNS_URI) {
+        $this->assertTest(function () use (&$XMLNS_URI) {
             $root = (new Document())->createElement('root');
             $root->setAttributeNS('uri1', 'p:foobar', 'value1');
             $root->setAttributeNS($XMLNS_URI, 'xmlns:p', 'uri2');
@@ -142,12 +142,12 @@ class XMLSerializerSerializeToStringTest extends WPTTestHarness
             $root->firstChild->appendChild($child2);
             $this->wptAssertEquals($this->serialize($root), '<root xmlns:p1="u1"><child xmlns:p2="u1"><p2:child2/></child></root>');
         }, 'Check if start tag serialization finds an appropriate prefix.');
-        $this->assertTest(function () use(&$XMLNS_URI) {
+        $this->assertTest(function () use (&$XMLNS_URI) {
             $root = (new Document())->createElementNS('uri1', 'p:root');
             $root->setAttributeNS($XMLNS_URI, 'xmlns:p', 'uri2');
             $this->wptAssertEquals($this->serialize($root), '<ns1:root xmlns:ns1="uri1" xmlns:p="uri2"/>');
         }, 'Check if start tag serialization takes into account of its xmlns:* attributes');
-        $this->assertTest(function () use(&$XMLNS_URI) {
+        $this->assertTest(function () use (&$XMLNS_URI) {
             $root = (new Document())->createElement('root');
             $root->setAttributeNS($XMLNS_URI, 'xmlns:p', 'uri2');
             $child = $root->ownerDocument->createElementNS('uri1', 'p:child');

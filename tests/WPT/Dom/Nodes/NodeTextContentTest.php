@@ -85,14 +85,14 @@ class NodeTextContentTest extends WPTTestHarness
         foreach ($docs as $argument) {
             $doc = $argument[0];
             $creator = $argument[1];
-            $this->assertTest(function () use(&$doc) {
+            $this->assertTest(function () use (&$doc) {
                 $this->wptAssertEquals($doc->textContent, null);
             }, 'For Documents created by ' . $creator . ', textContent should be null');
         }
         foreach ($doctypes as $argument) {
             $doctype = $argument[0];
             $creator = $argument[1];
-            $this->assertTest(function () use(&$doctype) {
+            $this->assertTest(function () use (&$doctype) {
                 $this->wptAssertEquals($doctype->textContent, null);
             }, 'For DocumentType created by ' . $creator . ', textContent should be null');
         }
@@ -102,7 +102,7 @@ class NodeTextContentTest extends WPTTestHarness
         foreach ($testArgs as $aValue) {
             $argument = $aValue[0];
             $expectation = $aValue[1];
-            $check = function ($aElementOrDocumentFragment) use(&$expectation) {
+            $check = function ($aElementOrDocumentFragment) use (&$expectation) {
                 if ($expectation === null) {
                     $this->wptAssertEquals($aElementOrDocumentFragment->textContent, '');
                     $this->wptAssertEquals($aElementOrDocumentFragment->firstChild, null);
@@ -114,19 +114,19 @@ class NodeTextContentTest extends WPTTestHarness
                     $this->wptAssertEquals($firstChild->data, $expectation);
                 }
             };
-            $this->assertTest(function () use(&$argument, &$check) {
+            $this->assertTest(function () use (&$argument, &$check) {
                 $el = $this->doc->createElement('div');
                 $el->textContent = $argument;
                 $check($el);
             }, 'Element without children set to ' . $this->formatValue($argument));
-            $this->assertTest(function () use(&$argument, &$check) {
+            $this->assertTest(function () use (&$argument, &$check) {
                 $el = $this->doc->createElement('div');
                 $text = $el->appendChild($this->doc->createTextNode(''));
                 $el->textContent = $argument;
                 $check($el);
                 $this->wptAssertEquals($text->parentNode, null, 'Preexisting Text should have been removed');
             }, 'Element with empty text node as child set to ' . $this->formatValue($argument));
-            $this->assertTest(function () use(&$argument, &$check) {
+            $this->assertTest(function () use (&$argument, &$check) {
                 $el = $this->doc->createElement('div');
                 $el->appendChild($this->doc->createComment(' abc '));
                 $el->appendChild($this->doc->createTextNode("\tDEF\t"));
@@ -134,7 +134,7 @@ class NodeTextContentTest extends WPTTestHarness
                 $el->textContent = $argument;
                 $check($el);
             }, 'Element with children set to ' . $this->formatValue($argument));
-            $this->assertTest(function () use(&$argument, &$check) {
+            $this->assertTest(function () use (&$argument, &$check) {
                 $el = $this->doc->createElement('div');
                 $child = $this->doc->createElement('div');
                 $el->appendChild($child);
@@ -145,19 +145,19 @@ class NodeTextContentTest extends WPTTestHarness
                 $check($el);
                 $this->wptAssertEquals(count($child->childNodes), 3, 'Should not have changed the internal structure of the removed nodes.');
             }, 'Element with descendants set to ' . $this->formatValue($argument));
-            $this->assertTest(function () use(&$argument, &$check) {
+            $this->assertTest(function () use (&$argument, &$check) {
                 $df = $this->doc->createDocumentFragment();
                 $df->textContent = $argument;
                 $check($df);
             }, 'DocumentFragment without children set to ' . $this->formatValue($argument));
-            $this->assertTest(function () use(&$argument, &$check) {
+            $this->assertTest(function () use (&$argument, &$check) {
                 $df = $this->doc->createDocumentFragment();
                 $text = $df->appendChild($this->doc->createTextNode(''));
                 $df->textContent = $argument;
                 $check($df);
                 $this->wptAssertEquals($text->parentNode, null, 'Preexisting Text should have been removed');
             }, 'DocumentFragment with empty text node as child set to ' . $this->formatValue($argument));
-            $this->assertTest(function () use(&$argument, &$check) {
+            $this->assertTest(function () use (&$argument, &$check) {
                 $df = $this->doc->createDocumentFragment();
                 $df->appendChild($this->doc->createComment(' abc '));
                 $df->appendChild($this->doc->createTextNode("\tDEF\t"));
@@ -165,7 +165,7 @@ class NodeTextContentTest extends WPTTestHarness
                 $df->textContent = $argument;
                 $check($df);
             }, 'DocumentFragment with children set to ' . $this->formatValue($argument));
-            $this->assertTest(function () use(&$argument, &$check) {
+            $this->assertTest(function () use (&$argument, &$check) {
                 $df = $this->doc->createDocumentFragment();
                 $child = $this->doc->createElement('div');
                 $df->appendChild($child);
@@ -201,7 +201,7 @@ class NodeTextContentTest extends WPTTestHarness
         foreach ($docs as $argument) {
             $doc = $argument[0];
             $creator = $argument[1];
-            $this->assertTest(function () use(&$doc) {
+            $this->assertTest(function () use (&$doc) {
                 $root = $doc->documentElement;
                 $doc->textContent = 'a';
                 $this->wptAssertEquals($doc->textContent, null);
@@ -211,7 +211,7 @@ class NodeTextContentTest extends WPTTestHarness
         foreach ($doctypes as $argument) {
             $doctype = $argument[0];
             $creator = $argument[1];
-            $this->assertTest(function () use(&$doctype) {
+            $this->assertTest(function () use (&$doctype) {
                 $props = ['name' => $doctype->name, 'publicId' => $doctype->publicId, 'systemId' => $doctype->systemId];
                 $doctype->textContent = 'b';
                 $this->wptAssertEquals($doctype->textContent, null);

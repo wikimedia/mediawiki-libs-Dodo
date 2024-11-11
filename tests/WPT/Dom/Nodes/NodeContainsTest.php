@@ -10,12 +10,12 @@ class NodeContainsTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Node-contains.html');
         foreach ($this->getCommon()->testNodes as $referenceName) {
             $reference = $this->wptEvalNode($referenceName);
-            $this->assertTest(function () use(&$reference) {
+            $this->assertTest(function () use (&$reference) {
                 $this->wptAssertFalse($reference->contains(null));
             }, $referenceName . '.contains(null)');
             foreach ($this->getCommon()->testNodes as $otherName) {
                 $other = $this->wptEvalNode($otherName);
-                $this->assertTest(function () use(&$other, &$reference) {
+                $this->assertTest(function () use (&$other, &$reference) {
                     $ancestor = $other;
                     while ($ancestor && $ancestor !== $reference) {
                         $ancestor = $ancestor->parentNode;

@@ -15,7 +15,7 @@ class NodeIteratorRemovalTest extends WPTTestHarness
                 // Nothing to test
                 continue;
             }
-            $this->assertTest(function () use(&$node) {
+            $this->assertTest(function () use (&$node) {
                 $iters = [];
                 $descs = [];
                 $expectedReferenceNodes = [];

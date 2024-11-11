@@ -31,7 +31,7 @@ class RangeCommonAncestorContainer2Test extends WPTTestHarness
                 [$foo->firstChild, 0, $bar, 0, $df],
                 [$foo->firstChild, 3, $bar->firstChild, 2, $df],
             ] as $t) {
-                $this->assertTest(function () use(&$t) {
+                $this->assertTest(function () use (&$t) {
                     $range = $this->doc->createRange();
                     $range->setStart($t[0], $t[1]);
                     $range->setEnd($t[2], $t[3]);

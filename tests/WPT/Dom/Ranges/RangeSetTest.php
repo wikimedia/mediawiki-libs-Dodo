@@ -10,13 +10,13 @@ class RangeSetTest extends WPTTestHarness
     public function helperTestSetStart($range, $node, $offset)
     {
         if ($node->nodeType == Node::DOCUMENT_TYPE_NODE) {
-            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node, &$offset) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use (&$range, &$node, &$offset) {
                 $range->setStart($node, $offset);
             }, 'setStart() to a doctype must throw INVALID_NODE_TYPE_ERR');
             return;
         }
         if ($offset < 0 || $offset > Common::nodeLength($node)) {
-            $this->wptAssertThrowsDom('INDEX_SIZE_ERR', function () use(&$range, &$node, &$offset) {
+            $this->wptAssertThrowsDom('INDEX_SIZE_ERR', function () use (&$range, &$node, &$offset) {
                 $range->setStart($node, $offset);
             }, 'setStart() to a too-large offset must throw INDEX_SIZE_ERR');
             return;
@@ -38,13 +38,13 @@ class RangeSetTest extends WPTTestHarness
     public function helperTestSetEnd($range, $node, $offset)
     {
         if ($node->nodeType == Node::DOCUMENT_TYPE_NODE) {
-            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node, &$offset) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use (&$range, &$node, &$offset) {
                 $range->setEnd($node, $offset);
             }, 'setEnd() to a doctype must throw INVALID_NODE_TYPE_ERR');
             return;
         }
         if ($offset < 0 || $offset > Common::nodeLength($node)) {
-            $this->wptAssertThrowsDom('INDEX_SIZE_ERR', function () use(&$range, &$node, &$offset) {
+            $this->wptAssertThrowsDom('INDEX_SIZE_ERR', function () use (&$range, &$node, &$offset) {
                 $range->setEnd($node, $offset);
             }, 'setEnd() to a too-large offset must throw INDEX_SIZE_ERR');
             return;
@@ -67,7 +67,7 @@ class RangeSetTest extends WPTTestHarness
     {
         $parent = $node->parentNode;
         if ($parent === null) {
-            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use (&$range, &$node) {
                 $range->setStartBefore($node);
             }, 'setStartBefore() to a node with null parent must throw INVALID_NODE_TYPE_ERR');
             return;
@@ -82,7 +82,7 @@ class RangeSetTest extends WPTTestHarness
     {
         $parent = $node->parentNode;
         if ($parent === null) {
-            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use (&$range, &$node) {
                 $range->setStartAfter($node);
             }, 'setStartAfter() to a node with null parent must throw INVALID_NODE_TYPE_ERR');
             return;
@@ -97,7 +97,7 @@ class RangeSetTest extends WPTTestHarness
     {
         $parent = $node->parentNode;
         if ($parent === null) {
-            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use (&$range, &$node) {
                 $range->setEndBefore($node);
             }, 'setEndBefore() to a node with null parent must throw INVALID_NODE_TYPE_ERR');
             return;
@@ -112,7 +112,7 @@ class RangeSetTest extends WPTTestHarness
     {
         $parent = $node->parentNode;
         if ($parent === null) {
-            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use (&$range, &$node) {
                 $range->setEndAfter($node);
             }, 'setEndAfter() to a node with null parent must throw INVALID_NODE_TYPE_ERR');
             return;
@@ -138,7 +138,7 @@ class RangeSetTest extends WPTTestHarness
         for ($i = 0; $i < count($this->getCommon()->testRangesShort); $i++) {
             $endpoints = $this->wptEvalNode($this->getCommon()->testRangesShort[$i]);
             $range = null;
-            $this->assertTest(function () use(&$endpoints) {
+            $this->assertTest(function () use (&$endpoints) {
                 $range = Common::ownerDocument($endpoints[0])->createRange();
                 $range->setStart($endpoints[0], $endpoints[1]);
                 $range->setEnd($endpoints[2], $endpoints[3]);

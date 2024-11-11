@@ -12,7 +12,7 @@ class DocumentGetElementsByClassNameTest extends WPTTestHarness
             $a = $this->doc->createElement('a');
             $b = $this->doc->createElement('b');
             $a->className = 'foo';
-            $this->add_cleanup(function () use(&$a) {
+            $this->add_cleanup(function () use (&$a) {
                 $this->doc->body->removeChild($a);
             });
             $this->doc->body->appendChild($a);

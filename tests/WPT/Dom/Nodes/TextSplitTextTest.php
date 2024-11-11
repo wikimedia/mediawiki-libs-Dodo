@@ -12,7 +12,7 @@ class TextSplitTextTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/nodes/Text-splitText.html');
         $this->assertTest(function () {
             $text = $this->doc->createTextNode('camembert');
-            $this->wptAssertThrowsDom('INDEX_SIZE_ERR', function () use(&$text) {
+            $this->wptAssertThrowsDom('INDEX_SIZE_ERR', function () use (&$text) {
                 $text->splitText(10);
             });
         }, 'Split text after end of data');

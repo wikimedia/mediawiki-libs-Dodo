@@ -14,26 +14,26 @@ class HTMLCollectionDeleteTest extends WPTTestHarness
         // setup()
         $c = $this->doc->getElementsByTagName('i');
         $expected = $this->doc->getElementById('foo');
-        $this->assertTest(function () use(&$c, &$expected) {
+        $this->assertTest(function () use (&$c, &$expected) {
             $this->wptAssertEquals($c[0], $expected, 'before');
             unset($c[0]);
             $this->wptAssertEquals($c[0], $expected, 'after');
         }, 'Loose id');
-        $this->assertTest(function () use(&$c, &$expected) {
+        $this->assertTest(function () use (&$c, &$expected) {
             $this->wptAssertEquals($c[0], $expected, 'before');
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$c) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$c) {
                 unset($c[0]);
             });
             $this->wptAssertEquals($c[0], $expected, 'after');
         }, 'Strict id');
-        $this->assertTest(function () use(&$c, &$expected) {
+        $this->assertTest(function () use (&$c, &$expected) {
             $this->wptAssertEquals($c->foo, $expected, 'before');
             unset($c->foo);
             $this->wptAssertEquals($c->foo, $expected, 'after');
         }, 'Loose name');
-        $this->assertTest(function () use(&$c, &$expected) {
+        $this->assertTest(function () use (&$c, &$expected) {
             $this->wptAssertEquals($c->foo, $expected, 'before');
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$c) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$c) {
                 unset($c->foo);
             });
             $this->wptAssertEquals($c->foo, $expected, 'after');

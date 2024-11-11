@@ -13,23 +13,23 @@ class NodeInsertBeforeTest extends WPTTestHarness
 {
     public function helperTestLeafNode($nodeName, $createNodeFunction)
     {
-        $this->assertTest(function () use(&$createNodeFunction) {
+        $this->assertTest(function () use (&$createNodeFunction) {
             $node = $createNodeFunction();
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$node) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$node) {
                 $node->insertBefore(null, null);
             });
         }, 'Calling insertBefore with a non-Node first argument on a leaf node ' . $nodeName . ' must throw TypeError.');
-        $this->assertTest(function () use(&$createNodeFunction) {
+        $this->assertTest(function () use (&$createNodeFunction) {
             $node = $createNodeFunction();
-            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use(&$node) {
+            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use (&$node) {
                 $node->insertBefore($this->doc->createTextNode('fail'), null);
             });
             // Would be step 2.
-            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use(&$node) {
+            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use (&$node) {
                 $node->insertBefore($node, null);
             });
             // Would be step 3.
-            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use(&$node) {
+            $this->wptAssertThrowsDom('HIERARCHY_REQUEST_ERR', function () use (&$node) {
                 $node->insertBefore($node, $this->doc->createTextNode('child'));
             });
         }, 'Calling insertBefore an a leaf node ' . $nodeName . ' must throw HIERARCHY_REQUEST_ERR.');
@@ -51,10 +51,10 @@ class NodeInsertBeforeTest extends WPTTestHarness
         // Step 2
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc) {
                 return $this->insert($doc->body, $doc->body);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc) {
                 return $this->insert($doc->body, $doc->documentElement);
             });
         }, 'If node is a host-including inclusive ancestor of parent, then throw a HierarchyRequestError DOMException.');
@@ -62,14 +62,14 @@ class NodeInsertBeforeTest extends WPTTestHarness
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $doc2 = $this->doc->implementation->createHTMLDocument('title2');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doc2) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doc2) {
                 return $this->insert($doc, $doc2);
             });
         }, 'If node is not a DocumentFragment, DocumentType, Element, Text, ProcessingInstruction, or Comment node, then throw a HierarchyRequestError DOMException.');
         // Step 5, in case of inserting a text node into a document
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc) {
                 return $this->insert($doc, $doc->createTextNode('text'));
             });
         }, 'If node is a Text node and parent is a document, then throw a HierarchyRequestError DOMException.');
@@ -77,7 +77,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $doctype = $doc->childNodes[0];
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doctype) {
                 return $this->insert($doc->createElement('a'), $doctype);
             });
         }, 'If node is a doctype and parent is not a document, then throw a HierarchyRequestError DOMException.');
@@ -88,7 +88,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createElement('a'));
             $df->appendChild($doc->createElement('b'));
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df) {
                 return $this->insert($doc, $df);
             });
         }, 'If node is a DocumentFragment with multiple elements and parent is a document, then throw a HierarchyRequestError DOMException.');
@@ -97,7 +97,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createElement('a'));
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df) {
                 return $this->insert($doc, $df);
             });
         }, 'If node is a DocumentFragment with an element and parent is a document with another element, then throw a HierarchyRequestError DOMException.');
@@ -105,7 +105,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $el = $doc->createElement('a');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$el) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$el) {
                 return $this->insert($doc, $el);
             });
         }, 'If node is an Element and parent is a document with another element, then throw a HierarchyRequestError DOMException.');
@@ -114,7 +114,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $doctype = $doc->childNodes[0]->cloneNode();
             $doc->documentElement->remove();
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doctype) {
                 return $this->insert($doc, $doctype);
             });
         }, 'If node is a doctype and parent is a document with another doctype, then throw a HierarchyRequestError DOMException.');
@@ -125,7 +125,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
                 $doc = $this->doc->implementation->createHTMLDocument('title');
                 $doctype = $doc->childNodes[0]->cloneNode();
                 $doc->childNodes[0]->remove();
-                $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
+                $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doctype) {
                     return $this->insert($doc, $doctype);
                 });
             }, 'If node is a doctype and parent is a document with an element, then throw a HierarchyRequestError DOMException.');
@@ -184,7 +184,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $a = $this->doc->createElement('div');
             $b = $this->doc->createElement('div');
             $c = $this->doc->createElement('div');
-            $this->wptAssertThrowsDom('NotFoundError', function () use(&$a, &$b, &$c) {
+            $this->wptAssertThrowsDom('NotFoundError', function () use (&$a, &$b, &$c) {
                 $a->insertBefore($b, $c);
             });
         }, 'Calling insertBefore with a reference child whose parent is not the context node must throw a NotFoundError.');
@@ -192,10 +192,10 @@ class NodeInsertBeforeTest extends WPTTestHarness
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createHTMLDocument('title');
             $doc2 = $this->doc->implementation->createHTMLDocument('title2');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doc2) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doc2) {
                 $doc->insertBefore($doc2, $doc->documentElement);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc) {
                 $doc->insertBefore($doc->createTextNode('text'), $doc->documentElement);
             });
         }, 'If the context node is a document, inserting a document or text node should throw a HierarchyRequestError.');
@@ -206,18 +206,18 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createElement('a'));
             $df->appendChild($doc->createElement('b'));
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df) {
                 $doc->insertBefore($df, $doc->firstChild);
             });
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createTextNode('text'));
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df) {
                 $doc->insertBefore($df, $doc->firstChild);
             });
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createComment('comment'));
             $df->appendChild($doc->createTextNode('text'));
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df) {
                 $doc->insertBefore($df, $doc->firstChild);
             });
         }, 'If the context node is a document, inserting a DocumentFragment that contains a text node or too many elements should throw a HierarchyRequestError.');
@@ -229,16 +229,16 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $this->wptAssertArrayEquals($doc->childNodes, [$doc->doctype, $doc->documentElement, $comment]);
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createElement('a'));
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df) {
                 $doc->insertBefore($df, $doc->doctype);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df) {
                 $doc->insertBefore($df, $doc->documentElement);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df, &$comment) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df, &$comment) {
                 $doc->insertBefore($df, $comment);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df) {
                 $doc->insertBefore($df, null);
             });
         }, 'If the context node is a document, inserting a DocumentFragment with an element if there already is an element child should throw a HierarchyRequestError.');
@@ -250,7 +250,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $this->wptAssertArrayEquals($doc->childNodes, [$comment, $doc->doctype]);
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createElement('a'));
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df) {
                 $doc->insertBefore($df, $doc->doctype);
             });
         }, 'If the context node is a document and a doctype is following the reference child, inserting a DocumentFragment with an element should throw a HierarchyRequestError.');
@@ -262,7 +262,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $this->wptAssertArrayEquals($doc->childNodes, [$comment, $doc->doctype]);
             $df = $doc->createDocumentFragment();
             $df->appendChild($doc->createElement('a'));
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$df, &$comment) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$df, &$comment) {
                 $doc->insertBefore($df, $comment);
             });
         }, 'If the context node is a document, inserting a DocumentFragment with an element before the doctype should throw a HierarchyRequestError.');
@@ -273,16 +273,16 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $comment = $doc->appendChild($doc->createComment('foo'));
             $this->wptAssertArrayEquals($doc->childNodes, [$doc->doctype, $doc->documentElement, $comment]);
             $a = $doc->createElement('a');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$a) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$a) {
                 $doc->insertBefore($a, $doc->doctype);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$a) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$a) {
                 $doc->insertBefore($a, $doc->documentElement);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$a, &$comment) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$a, &$comment) {
                 $doc->insertBefore($a, $comment);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$a) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$a) {
                 $doc->insertBefore($a, null);
             });
         }, 'If the context node is a document, inserting an element if there already is an element child should throw a HierarchyRequestError.');
@@ -293,7 +293,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $doc->removeChild($doc->documentElement);
             $this->wptAssertArrayEquals($doc->childNodes, [$comment, $doc->doctype]);
             $a = $doc->createElement('a');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$a) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$a) {
                 $doc->insertBefore($a, $doc->doctype);
             });
         }, 'If the context node is a document, inserting an element before the doctype should throw a HierarchyRequestError.');
@@ -304,7 +304,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $doc->removeChild($doc->documentElement);
             $this->wptAssertArrayEquals($doc->childNodes, [$comment, $doc->doctype]);
             $a = $doc->createElement('a');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$a, &$comment) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$a, &$comment) {
                 $doc->insertBefore($a, $comment);
             });
         }, 'If the context node is a document and a doctype is following the reference child, inserting an element should throw a HierarchyRequestError.');
@@ -314,16 +314,16 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $comment = $doc->insertBefore($doc->createComment('foo'), $doc->firstChild);
             $this->wptAssertArrayEquals($doc->childNodes, [$comment, $doc->doctype, $doc->documentElement]);
             $doctype = $this->doc->implementation->createDocumentType('html', '', '');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype, &$comment) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doctype, &$comment) {
                 $doc->insertBefore($doctype, $comment);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doctype) {
                 $doc->insertBefore($doctype, $doc->doctype);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doctype) {
                 $doc->insertBefore($doctype, $doc->documentElement);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doctype) {
                 $doc->insertBefore($doctype, null);
             });
         }, 'If the context node is a document, inserting a doctype if there already is a doctype child should throw a HierarchyRequestError.');
@@ -333,7 +333,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $doc->removeChild($doc->doctype);
             $this->wptAssertArrayEquals($doc->childNodes, [$doc->documentElement, $comment]);
             $doctype = $this->doc->implementation->createDocumentType('html', '', '');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype, &$comment) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doctype, &$comment) {
                 $doc->insertBefore($doctype, $comment);
             });
         }, 'If the context node is a document, inserting a doctype after the document element should throw a HierarchyRequestError.');
@@ -343,7 +343,7 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $doc->removeChild($doc->doctype);
             $this->wptAssertArrayEquals($doc->childNodes, [$doc->documentElement, $comment]);
             $doctype = $this->doc->implementation->createDocumentType('html', '', '');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$doc, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$doc, &$doctype) {
                 $doc->insertBefore($doctype, null);
             });
         }, 'If the context node is a document with and element child, appending a doctype should throw a HierarchyRequestError.');
@@ -352,17 +352,17 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $df = $this->doc->createDocumentFragment();
             $a = $df->appendChild($this->doc->createElement('a'));
             $doc = $this->doc->implementation->createHTMLDocument('title');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$df, &$doc, &$a) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$df, &$doc, &$a) {
                 $df->insertBefore($doc, $a);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$df, &$doc) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$df, &$doc) {
                 $df->insertBefore($doc, null);
             });
             $doctype = $this->doc->implementation->createDocumentType('html', '', '');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$df, &$doctype, &$a) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$df, &$doctype, &$a) {
                 $df->insertBefore($doctype, $a);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$df, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$df, &$doctype) {
                 $df->insertBefore($doctype, null);
             });
         }, 'If the context node is a DocumentFragment, inserting a document or a doctype should throw a HierarchyRequestError.');
@@ -370,17 +370,17 @@ class NodeInsertBeforeTest extends WPTTestHarness
             $el = $this->doc->createElement('div');
             $a = $el->appendChild($this->doc->createElement('a'));
             $doc = $this->doc->implementation->createHTMLDocument('title');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$el, &$doc, &$a) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$el, &$doc, &$a) {
                 $el->insertBefore($doc, $a);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$el, &$doc) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$el, &$doc) {
                 $el->insertBefore($doc, null);
             });
             $doctype = $this->doc->implementation->createDocumentType('html', '', '');
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$el, &$doctype, &$a) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$el, &$doctype, &$a) {
                 $el->insertBefore($doctype, $a);
             });
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$el, &$doctype) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$el, &$doctype) {
                 $el->insertBefore($doctype, null);
             });
         }, 'If the context node is an element, inserting a document or a doctype should throw a HierarchyRequestError.');

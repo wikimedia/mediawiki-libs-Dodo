@@ -117,27 +117,25 @@ class RangeCloneContentsTest extends WPTTestHarness
             // "Append clone as the last child of frag."
             $frag->appendChild($clone);
             // "Otherwise, if first partially contained child is not null:"
-        } else {
-            if ($firstPartiallyContainedChild) {
-                // "Let clone be the result of calling cloneNode(false) on first
-                // partially contained child."
-                $clone = $firstPartiallyContainedChild->cloneNode(false);
-                // "Append clone as the last child of frag."
-                $frag->appendChild($clone);
-                // "Let subrange be a new Range whose start is (original start node,
-                // original start offset) and whose end is (first partially contained
-                // child, length of first partially contained child)."
-                $subrange = $ownerDoc->createRange();
-                $subrange->setStart($originalStartNode, $originalStartOffset);
-                $subrange->setEnd($firstPartiallyContainedChild, Common::nodeLength($firstPartiallyContainedChild));
-                // "Let subfrag be the result of calling cloneContents() on
-                // subrange."
-                $subfrag = $this->myCloneContents($subrange);
-                // "For each child of subfrag, in order, append that child to clone as
-                // its last child."
-                for ($i = 0; $i < count($subfrag->childNodes); $i++) {
-                    $clone->appendChild($subfrag->childNodes[$i]);
-                }
+        } else if ($firstPartiallyContainedChild) {
+            // "Let clone be the result of calling cloneNode(false) on first
+            // partially contained child."
+            $clone = $firstPartiallyContainedChild->cloneNode(false);
+            // "Append clone as the last child of frag."
+            $frag->appendChild($clone);
+            // "Let subrange be a new Range whose start is (original start node,
+            // original start offset) and whose end is (first partially contained
+            // child, length of first partially contained child)."
+            $subrange = $ownerDoc->createRange();
+            $subrange->setStart($originalStartNode, $originalStartOffset);
+            $subrange->setEnd($firstPartiallyContainedChild, Common::nodeLength($firstPartiallyContainedChild));
+            // "Let subfrag be the result of calling cloneContents() on
+            // subrange."
+            $subfrag = $this->myCloneContents($subrange);
+            // "For each child of subfrag, in order, append that child to clone as
+            // its last child."
+            for ($i = 0; $i < count($subfrag->childNodes); $i++) {
+                $clone->appendChild($subfrag->childNodes[$i]);
             }
         }
         // "For each contained child in contained children:"
@@ -159,27 +157,25 @@ class RangeCloneContentsTest extends WPTTestHarness
             // "Append clone as the last child of frag."
             $frag->appendChild($clone);
             // "Otherwise, if last partially contained child is not null:"
-        } else {
-            if ($lastPartiallyContainedChild) {
-                // "Let clone be the result of calling cloneNode(false) on last
-                // partially contained child."
-                $clone = $lastPartiallyContainedChild->cloneNode(false);
-                // "Append clone as the last child of frag."
-                $frag->appendChild($clone);
-                // "Let subrange be a new Range whose start is (last partially
-                // contained child, 0) and whose end is (original end node, original
-                // end offset)."
-                $subrange = $ownerDoc->createRange();
-                $subrange->setStart($lastPartiallyContainedChild, 0);
-                $subrange->setEnd($originalEndNode, $originalEndOffset);
-                // "Let subfrag be the result of calling cloneContents() on
-                // subrange."
-                $subfrag = $this->myCloneContents($subrange);
-                // "For each child of subfrag, in order, append that child to clone as
-                // its last child."
-                for ($i = 0; $i < count($subfrag->childNodes); $i++) {
-                    $clone->appendChild($subfrag->childNodes[$i]);
-                }
+        } else if ($lastPartiallyContainedChild) {
+            // "Let clone be the result of calling cloneNode(false) on last
+            // partially contained child."
+            $clone = $lastPartiallyContainedChild->cloneNode(false);
+            // "Append clone as the last child of frag."
+            $frag->appendChild($clone);
+            // "Let subrange be a new Range whose start is (last partially
+            // contained child, 0) and whose end is (original end node, original
+            // end offset)."
+            $subrange = $ownerDoc->createRange();
+            $subrange->setStart($lastPartiallyContainedChild, 0);
+            $subrange->setEnd($originalEndNode, $originalEndOffset);
+            // "Let subfrag be the result of calling cloneContents() on
+            // subrange."
+            $subfrag = $this->myCloneContents($subrange);
+            // "For each child of subfrag, in order, append that child to clone as
+            // its last child."
+            for ($i = 0; $i < count($subfrag->childNodes); $i++) {
+                $clone->appendChild($subfrag->childNodes[$i]);
             }
         }
         // "Return frag."
@@ -222,7 +218,7 @@ class RangeCloneContentsTest extends WPTTestHarness
         $expectedFrag = null;
         $actualRoots = null;
         $expectedRoots = null;
-        $domTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange) {
+        $domTests[$i]->step(function () use (&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange) {
             $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual cloneContents()');
             $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated cloneContents()');
             $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
@@ -256,7 +252,7 @@ class RangeCloneContentsTest extends WPTTestHarness
             } while ($node = Common::nextNode($node));
             $expectedFrag = $this->myCloneContents($expectedRange);
             if (gettype($expectedFrag) == 'string') {
-                $this->wptAssertThrowsDom($expectedFrag, $actualIframe->contentWindow->DOMException, function () use(&$actualRange) {
+                $this->wptAssertThrowsDom($expectedFrag, $actualIframe->contentWindow->DOMException, function () use (&$actualRange) {
                     $actualRange->cloneContents();
                 });
             } else {
@@ -286,7 +282,7 @@ class RangeCloneContentsTest extends WPTTestHarness
             }
         });
         $domTests[$i]->done();
-        $positionTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$actualRoots, &$expectedRoots, &$expectedFrag) {
+        $positionTests[$i]->step(function () use (&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$actualRoots, &$expectedRoots, &$expectedFrag) {
             $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual cloneContents()');
             $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated cloneContents()');
             $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
@@ -318,7 +314,7 @@ class RangeCloneContentsTest extends WPTTestHarness
             $this->wptAssertEquals($actual, $expected, "startContainer superficially looks right but is actually the wrong node if you trace back its index in all its ancestors (I'm surprised this actually happened");
         });
         $positionTests[$i]->done();
-        $fragTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$expectedFrag, &$actualFrag) {
+        $fragTests[$i]->step(function () use (&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$expectedFrag, &$actualFrag) {
             $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual cloneContents()');
             $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated cloneContents()');
             $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
@@ -364,8 +360,8 @@ class RangeCloneContentsTest extends WPTTestHarness
         }
         $referenceDoc = $this->doc->implementation->createHTMLDocument('');
         $referenceDoc->removeChild($referenceDoc->documentElement);
-        $actualIframe->onload = function () use(&$expectedIframe, &$iStart, &$iStop, &$referenceDoc, &$actualIframe) {
-            $expectedIframe->onload = function () use(&$iStart, &$iStop) {
+        $actualIframe->onload = function () use (&$expectedIframe, &$iStart, &$iStop, &$referenceDoc, &$actualIframe) {
+            $expectedIframe->onload = function () use (&$iStart, &$iStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
                     $this->helperTestCloneContents($i);
                 }

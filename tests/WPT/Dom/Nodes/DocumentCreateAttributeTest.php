@@ -13,35 +13,35 @@ class DocumentCreateAttributeTest extends WPTTestHarness
         // setup()
         $xml_document = $this->doc->implementation->createDocument(null, null, null);
         foreach ($this->invalid_names as $name) {
-            $this->assertTest(function () use(&$name) {
-                $this->wptAssertThrowsDom('INVALID_CHARACTER_ERR', function () use(&$name) {
+            $this->assertTest(function () use (&$name) {
+                $this->wptAssertThrowsDom('INVALID_CHARACTER_ERR', function () use (&$name) {
                     $this->doc->createAttribute($name, 'test');
                 });
             }, 'HTML document.createAttribute(' . $this->formatValue($name) . ') should throw');
-            $this->assertTest(function () use(&$xml_document, &$name) {
-                $this->wptAssertThrowsDom('INVALID_CHARACTER_ERR', function () use(&$xml_document, &$name) {
+            $this->assertTest(function () use (&$xml_document, &$name) {
+                $this->wptAssertThrowsDom('INVALID_CHARACTER_ERR', function () use (&$xml_document, &$name) {
                     $xml_document->createAttribute($name, 'test');
                 });
             }, 'XML document.createAttribute(' . $this->formatValue($name) . ') should throw');
         }
         foreach ($this->valid_names as $name) {
-            $this->assertTest(function () use(&$name) {
+            $this->assertTest(function () use (&$name) {
                 $attr = $this->doc->createAttribute($name);
                 $this->attrIs($attr, '', strtolower($name), null, null, strtolower($name));
-            }, "HTML document.createAttribute({format_value( {$name} )})");
-            $this->assertTest(function () use(&$xml_document, &$name) {
+            }, "HTML document.createAttribute(){format_value( {$name} )}");
+            $this->assertTest(function () use (&$xml_document, &$name) {
                 $attr = $xml_document->createAttribute($name);
                 $this->attrIs($attr, '', $name, null, null, $name);
-            }, "XML document.createAttribute({format_value( {$name} )})");
+            }, "XML document.createAttribute(){format_value( {$name} )}");
         }
         $tests = ['title', 'TITLE', null, null];
         foreach ($tests as $name) {
-            $this->assertTest(function () use(&$name) {
+            $this->assertTest(function () use (&$name) {
                 $attribute = $this->doc->createAttribute($name);
                 $this->attrIs($attribute, '', strtolower(strval($name)), null, null, strtolower(strval($name)));
                 $this->wptAssertEquals($attribute->ownerElement, null);
             }, 'HTML document.createAttribute(' . $this->formatValue($name) . ')');
-            $this->assertTest(function () use(&$xml_document, &$name) {
+            $this->assertTest(function () use (&$xml_document, &$name) {
                 $attribute = $xml_document->createAttribute($name);
                 $this->attrIs($attribute, '', strval($name), null, null, strval($name));
                 $this->wptAssertEquals($attribute->ownerElement, null);

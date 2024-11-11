@@ -16,16 +16,16 @@ class RangeSelectNodeTest extends WPTTestHarness
             $range->collapsed;
         } catch (Exception $e) {
             // Range is detached
-            $this->wptAssertThrowsDom('INVALID_STATE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_STATE_ERR', function () use (&$range, &$node) {
                 $range->selectNode($node);
             }, 'selectNode() on a detached node must throw INVALID_STATE_ERR');
-            $this->wptAssertThrowsDom('INVALID_STATE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_STATE_ERR', function () use (&$range, &$node) {
                 $range->selectNodeContents($node);
             }, 'selectNodeContents() on a detached node must throw INVALID_STATE_ERR');
             return;
         }
         if (!$node->parentNode) {
-            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use (&$range, &$node) {
                 $range->selectNode($node);
             }, 'selectNode() on a node with no parent must throw INVALID_NODE_TYPE_ERR');
         } else {
@@ -40,7 +40,7 @@ class RangeSelectNodeTest extends WPTTestHarness
             $this->wptAssertEquals($range->endOffset, $index + 1, 'After selectNode(), endOffset must be one plus index of node in parent (' . ($index + 1) . ')');
         }
         if ($node->nodeType == Node::DOCUMENT_TYPE_NODE) {
-            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use(&$range, &$node) {
+            $this->wptAssertThrowsDom('INVALID_NODE_TYPE_ERR', function () use (&$range, &$node) {
                 $range->selectNodeContents($node);
             }, 'selectNodeContents() on a doctype must throw INVALID_NODE_TYPE_ERR');
         } else {

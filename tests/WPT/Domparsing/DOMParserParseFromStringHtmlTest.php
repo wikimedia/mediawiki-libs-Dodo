@@ -25,14 +25,14 @@ class DOMParserParseFromStringHtmlTest extends WPTTestHarness
         $parser = new DOMParser();
         $input = '<html id="root"><head></head><body></body></html>';
         $doc = $parser->parseFromString($input, 'text/html');
-        $this->assertTest(function () use(&$doc) {
+        $this->assertTest(function () use (&$doc) {
             $root = $doc->documentElement;
             $this->wptAssertNode($root, ['type' => HTMLHtmlElement::class, 'id' => 'root', 'idMessage' => 'documentElement id attribute should be root.']);
         }, 'Parsing of id attribute');
-        $this->assertTest(function () use(&$doc) {
+        $this->assertTest(function () use (&$doc) {
             $this->wptAssertEquals($doc->contentType, 'text/html');
         }, 'contentType');
-        $this->assertTest(function () use(&$doc) {
+        $this->assertTest(function () use (&$doc) {
             $this->wptAssertEquals($doc->compatMode, 'BackCompat');
         }, 'compatMode');
         $this->assertTest(function () {
@@ -42,7 +42,7 @@ class DOMParserParseFromStringHtmlTest extends WPTTestHarness
             $this->wptAssertEquals($doc->compatMode, 'CSS1Compat');
         }, 'compatMode for a proper DOCTYPE');
         // URL- and encoding-related stuff tested separately.
-        $this->assertTest(function () use(&$doc) {
+        $this->assertTest(function () use (&$doc) {
             $this->wptAssertEquals($doc->location, null, 'The document must have a location value of null.');
         }, 'Location value');
         $this->assertTest(function () {

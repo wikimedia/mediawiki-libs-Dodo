@@ -24,10 +24,10 @@ class CharacterDataAppendChildTest extends WPTTestHarness
     }
     public function helperTestNode($type1, $type2)
     {
-        $this->assertTest(function () use(&$type1, &$type2) {
+        $this->assertTest(function () use (&$type1, &$type2) {
             $node1 = $this->create($type1);
             $node2 = $this->create($type2);
-            $this->wptAssertThrowsDom('HierarchyRequestError', function () use(&$node1, &$node2) {
+            $this->wptAssertThrowsDom('HierarchyRequestError', function () use (&$node1, &$node2) {
                 $node1->appendChild($node2);
             }, 'CharacterData type ' . $type1 . ' must not have children');
         }, $type1 . '.appendChild(' . $type2 . ')');

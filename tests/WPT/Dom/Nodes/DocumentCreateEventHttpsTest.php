@@ -8,11 +8,11 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
     public function helperTestAlias($arg, $iface)
     {
         $ev = null;
-        $this->assertTest(function () use(&$arg, &$iface) {
+        $this->assertTest(function () use (&$arg, &$iface) {
             $ev = $this->doc->createEvent($arg);
             $this->wptAssertEquals(get_class($ev), $this->getWindow()[$iface]->prototype);
         }, $arg . ' should be an alias for ' . $iface . '.');
-        $this->assertTest(function () use(&$ev) {
+        $this->assertTest(function () use (&$ev) {
             $this->wptAssertEquals($ev->type, '', 'type should be initialized to the empty string');
             $this->wptAssertEquals($ev->target, null, 'target should be initialized to null');
             $this->wptAssertEquals($ev->currentTarget, null, 'currentTarget should be initialized to null');
@@ -34,8 +34,8 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
             if ($alias[count($alias) - 1] != 's') {
                 $plural = $alias . 's';
                 if (!isset($aliases[$plural])) {
-                    $this->assertTest(function () use(&$plural) {
-                        $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use(&$plural) {
+                    $this->assertTest(function () use (&$plural) {
+                        $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use (&$plural) {
                             $evt = $this->doc->createEvent($plural);
                         });
                     }, 'Should throw NOT_SUPPORTED_ERR for pluralized legacy event interface "' . $plural . '"');
@@ -136,15 +136,15 @@ class DocumentCreateEventHttpsTest extends WPTTestHarness
             'XULCommandEvent',
         ];
         foreach ($someNonCreateableEvents as $eventInterface) {
-            $this->assertTest(function () use(&$eventInterface) {
-                $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use(&$eventInterface) {
+            $this->assertTest(function () use (&$eventInterface) {
+                $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use (&$eventInterface) {
                     $evt = $this->doc->createEvent($eventInterface);
                 });
             }, 'Should throw NOT_SUPPORTED_ERR for non-legacy event interface "' . $eventInterface . '"');
             // SVGEvents is allowed, other plurals are not
             if ($eventInterface !== 'SVGEvent') {
-                $this->assertTest(function () use(&$eventInterface) {
-                    $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use(&$eventInterface) {
+                $this->assertTest(function () use (&$eventInterface) {
+                    $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use (&$eventInterface) {
                         $evt = $this->doc->createEvent($eventInterface . 's');
                     });
                 }, 'Should throw NOT_SUPPORTED_ERR for pluralized non-legacy event interface "' . $eventInterface . 's"');

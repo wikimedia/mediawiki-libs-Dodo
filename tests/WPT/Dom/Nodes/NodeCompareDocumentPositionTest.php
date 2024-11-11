@@ -13,7 +13,7 @@ class NodeCompareDocumentPositionTest extends WPTTestHarness
             $reference = $this->wptEvalNode($referenceName);
             foreach ($this->getCommon()->testNodes as $otherName) {
                 $other = $this->wptEvalNode($otherName);
-                $this->assertTest(function () use(&$reference, &$other) {
+                $this->assertTest(function () use (&$reference, &$other) {
                     $result = $reference->compareDocumentPosition($other);
                     // "If other and reference are the same object, return zero and
                     // terminate these steps."

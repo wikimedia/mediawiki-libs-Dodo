@@ -63,10 +63,10 @@ class DocumentCreateElementNamespaceTest extends WPTTestHarness
         $tests = ['empty', 'minimal_html', 'xhtml', 'svg', 'mathml', 'bare_xhtml', 'bare_svg', 'bare_mathml', 'xhtml_ns_removed', 'xhtml_ns_changed'];
         foreach ($tests as $testName) {
             foreach ($testExtensions as $ext) {
-                $this->asyncTest(function ($t) use(&$ext, &$testName, &$testExtensions) {
+                $this->asyncTest(function ($t) use (&$ext, &$testName, &$testExtensions) {
                     $iframe = $this->doc->createElement('iframe');
                     $iframe->src = 'Document-createElement-namespace-tests/' . $testName . '.' . $ext;
-                    $iframe->onload = $t->step_func_done(function () use(&$iframe, &$testExtensions, &$ext) {
+                    $iframe->onload = $t->step_func_done(function () use (&$iframe, &$testExtensions, &$ext) {
                         $this->helperTestDoc($iframe->getOwnerDocument(), $testExtensions[$ext]);
                         $this->doc->body->removeChild($iframe);
                     });

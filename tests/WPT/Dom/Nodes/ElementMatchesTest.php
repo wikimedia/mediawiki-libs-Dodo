@@ -12,18 +12,18 @@ class ElementMatchesTest extends WPTTestHarness
     public function interfaceCheckMatches($method, $type, $obj)
     {
         if ($obj->nodeType === $obj::ELEMENT_NODE) {
-            $this->assertTest(function () use(&$obj, &$method, &$type) {
+            $this->assertTest(function () use (&$obj, &$method, &$type) {
                 $this->wptAssertIdlAttribute($obj, $method, $type . ' supports ' . $method);
             }, $type . ' supports ' . $method);
         } else {
-            $this->assertTest(function () use(&$obj, &$method, &$type) {
+            $this->assertTest(function () use (&$obj, &$method, &$type) {
                 $this->wptAssertFalse(isset($obj->{$method}), $type . ' supports ' . $method);
             }, $type . ' should not support ' . $method);
         }
     }
     public function runSpecialMatchesTests($method, $type, $element)
     {
-        $this->assertTest(function () use(&$element, &$method) {
+        $this->assertTest(function () use (&$element, &$method) {
             // 1
             if (strtolower($element->tagName) === 'null') {
                 $this->wptAssertTrue($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should match.");
@@ -31,7 +31,7 @@ class ElementMatchesTest extends WPTTestHarness
                 $this->wptAssertFalse($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should not match.");
             }
         }, $type . '.' . $method . '(null)');
-        $this->assertTest(function () use(&$element, &$method) {
+        $this->assertTest(function () use (&$element, &$method) {
             // 2
             if (strtolower($element->tagName) === NULL) {
                 $this->wptAssertTrue($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should match.");
@@ -39,9 +39,9 @@ class ElementMatchesTest extends WPTTestHarness
                 $this->wptAssertFalse($element->{$method}(null), "An element with the tag name '" . strtolower($element->tagName) . "' should not match.");
             }
         }, $type . '.' . $method . '(undefined)');
-        $this->assertTest(function () use(&$element, &$method) {
+        $this->assertTest(function () use (&$element, &$method) {
             // 3
-            $this->wptAssertThrowsJs($element->ownerDocument->defaultView->TypeError, function () use(&$element, &$method) {
+            $this->wptAssertThrowsJs($element->ownerDocument->defaultView->TypeError, function () use (&$element, &$method) {
                 $element->{$method}();
             }, 'This should throw a TypeError.');
         }, $type . '.' . $method . ' no parameter');
@@ -53,8 +53,8 @@ class ElementMatchesTest extends WPTTestHarness
                 $s = $selectors[$i];
                 $n = $s['name'];
                 $q = $s['selector'];
-                $this->assertTest(function () use(&$root, &$method, &$q) {
-                    $this->wptAssertThrowsDom('SyntaxError', $root->ownerDocument->defaultView->DOMException, function () use(&$root, &$method, &$q) {
+                $this->assertTest(function () use (&$root, &$method, &$q) {
+                    $this->wptAssertThrowsDom('SyntaxError', $root->ownerDocument->defaultView->DOMException, function () use (&$root, &$method, &$q) {
                         $root->{$method}($q);
                     });
                 }, $type . '.' . $method . ': ' . $n . ': ' . $q);
@@ -74,7 +74,7 @@ class ElementMatchesTest extends WPTTestHarness
             $ref = $s['ref'];
             if ((!$s['exclude'] || array_search($nodeType, $s['exclude']) === -1 && array_search($docType, $s['exclude']) === -1) && $s['testType'] & $TEST_MATCH) {
                 if ($ctx && !$ref) {
-                    $this->assertTest(function () use(&$e, &$root, &$ctx, &$method, &$q, &$u) {
+                    $this->assertTest(function () use (&$e, &$root, &$ctx, &$method, &$q, &$u) {
                         $j = null;
                         $element = null;
                         $refNode = null;
@@ -93,7 +93,7 @@ class ElementMatchesTest extends WPTTestHarness
                     }, $type . ' Element.' . $method . ': ' . $n . ' (with refNode Element): ' . $q);
                 }
                 if ($ref) {
-                    $this->assertTest(function () use(&$e, &$root, &$ref, &$method, &$q, &$u) {
+                    $this->assertTest(function () use (&$e, &$root, &$ref, &$method, &$q, &$u) {
                         $j = null;
                         $element = null;
                         $refNodes = null;
@@ -112,7 +112,7 @@ class ElementMatchesTest extends WPTTestHarness
                     }, $type . ' Element.' . $method . ': ' . $n . ' (with refNodes NodeList): ' . $q);
                 }
                 if (!$ctx && !$ref) {
-                    $this->assertTest(function () use(&$e, &$root, &$method, &$q, &$u) {
+                    $this->assertTest(function () use (&$e, &$root, &$method, &$q, &$u) {
                         for ($j = 0; $j < count($e); $j++) {
                             $element = $root->querySelector('#' . $e[$j]);
                             $this->wptAssertTrue($element->{$method}($q), 'The element #' . $e[$j] . ' should match the selector.');

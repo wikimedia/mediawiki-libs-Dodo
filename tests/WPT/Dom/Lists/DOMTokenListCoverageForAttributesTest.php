@@ -30,11 +30,11 @@ class DOMTokenListCoverageForAttributesTest extends WPTTestHarness
                 foreach ($elements as $el) {
                     $new_el = $this->doc->createElementNS($ns, $el);
                     if ($this->helperTestAttr($pair, $new_el)) {
-                        $this->assertTest(function () use(&$new_el, &$pair) {
+                        $this->assertTest(function () use (&$new_el, &$pair) {
                             $this->wptAssertClassString($new_el->{$pair['attr']}, 'DOMTokenList');
                         }, $new_el->localName . '.' . $pair['attr'] . ' in ' . $new_el->namespaceURI . ' namespace should be DOMTokenList.');
                     } else {
-                        $this->assertTest(function () use(&$new_el, &$pair) {
+                        $this->assertTest(function () use (&$new_el, &$pair) {
                             $this->wptAssertEquals($new_el->{$pair['attr']}, null);
                         }, $new_el->localName . '.' . $pair['attr'] . ' in ' . $new_el->namespaceURI . ' namespace should be undefined.');
                     }

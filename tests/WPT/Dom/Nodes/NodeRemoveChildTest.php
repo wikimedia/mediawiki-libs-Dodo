@@ -24,31 +24,31 @@ class NodeRemoveChildTest extends WPTTestHarness
             $description = $d[1];
             foreach ($creators as $p) {
                 $creator = $creators[$p];
-                $this->assertTest(function () use(&$get, &$creator) {
+                $this->assertTest(function () use (&$get, &$creator) {
                     $doc = $get();
                     $s = $doc[$creator]('a');
                     $this->wptAssertEquals($s->ownerDocument, $doc);
-                    $this->wptAssertThrowsDom('NOT_FOUND_ERR', function () use(&$s) {
+                    $this->wptAssertThrowsDom('NOT_FOUND_ERR', function () use (&$s) {
                         $this->doc->body->removeChild($s);
                     });
                     $this->wptAssertEquals($s->ownerDocument, $doc);
                 }, 'Passing a detached ' . $p . ' from ' . $description . ' to removeChild should not affect it.');
-                $this->assertTest(function () use(&$get, &$creator) {
+                $this->assertTest(function () use (&$get, &$creator) {
                     $doc = $get();
                     $s = $doc[$creator]('b');
                     $doc->documentElement->appendChild($s);
                     $this->wptAssertEquals($s->ownerDocument, $doc);
-                    $this->wptAssertThrowsDom('NOT_FOUND_ERR', function () use(&$s) {
+                    $this->wptAssertThrowsDom('NOT_FOUND_ERR', function () use (&$s) {
                         $this->doc->body->removeChild($s);
                     });
                     $this->wptAssertEquals($s->ownerDocument, $doc);
                 }, 'Passing a non-detached ' . $p . ' from ' . $description . ' to removeChild should not affect it.');
-                $this->assertTest(function () use(&$get, &$creator) {
+                $this->assertTest(function () use (&$get, &$creator) {
                     $doc = $get();
                     $s = $doc[$creator]('test');
                     $doc->body->appendChild($s);
                     $this->wptAssertEquals($s->ownerDocument, $doc);
-                    $this->wptAssertThrowsDom('NOT_FOUND_ERR', ($doc->defaultView || $self)::DOMException, function () use(&$s, &$doc) {
+                    $this->wptAssertThrowsDom('NOT_FOUND_ERR', ($doc->defaultView || $self)::DOMException, function () use (&$s, &$doc) {
                         $s->removeChild($doc);
                     });
                 }, 'Calling removeChild on a ' . $p . ' from ' . $description . ' with no children should throw NOT_FOUND_ERR.');

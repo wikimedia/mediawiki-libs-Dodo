@@ -26,7 +26,7 @@ class DOMParserParseFromStringXmlTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/domparsing/DOMParser-parseFromString-xml.html');
         $allowedTypes = ['text/xml', 'application/xml', 'application/xhtml+xml', 'image/svg+xml'];
         foreach ($allowedTypes as $type) {
-            $this->assertTest(function () use(&$type) {
+            $this->assertTest(function () use (&$type) {
                 $p = new DOMParser();
                 $doc = $p->parseFromString('<foo/>', $type);
                 $this->wptAssertTrue($doc instanceof Document, 'Should be Document');
@@ -35,12 +35,12 @@ class DOMParserParseFromStringXmlTest extends WPTTestHarness
                 $this->wptAssertEquals($doc->documentElement->localName, 'foo');
                 $this->wptAssertEquals($doc->documentElement->tagName, 'foo');
             }, 'Should parse correctly in type ' . $type);
-            $this->assertTest(function () use(&$type) {
+            $this->assertTest(function () use (&$type) {
                 $p = new DOMParser();
                 $doc = $p->parseFromString('<foo/>', $type);
                 $this->wptAssertFalse($doc instanceof XMLDocument, 'Should not be XMLDocument');
             }, 'XMLDocument interface for correctly parsed document with type ' . $type);
-            $this->assertTest(function () use(&$type) {
+            $this->assertTest(function () use (&$type) {
                 $p = new DOMParser();
                 $doc = $p->parseFromString('<foo>', $type);
                 $this->checkMetadata($doc, $type);
@@ -48,12 +48,12 @@ class DOMParserParseFromStringXmlTest extends WPTTestHarness
                 $this->wptAssertEquals($doc->documentElement->localName, 'parsererror');
                 $this->wptAssertEquals($doc->documentElement->tagName, 'parsererror');
             }, 'Should return an error document for XML wellformedness errors in type ' . $type);
-            $this->assertTest(function () use(&$type) {
+            $this->assertTest(function () use (&$type) {
                 $p = new DOMParser();
                 $doc = $p->parseFromString('<foo>', $type);
                 $this->wptAssertFalse($doc instanceof XMLDocument, 'Should not be XMLDocument');
             }, 'XMLDocument interface for incorrectly parsed document with type ' . $type);
-            $this->assertTest(function () use(&$type) {
+            $this->assertTest(function () use (&$type) {
                 $p = new DOMParser();
                 $doc = $p->parseFromString("\n      <html>\n        <head></head>\n        <body>\n          <script>document.x = 5;</script>\n          <noscript><p>test1</p><p>test2</p></noscript>\n        </body>\n      </html>", $type);
                 $this->wptAssertEquals($doc->x, null, 'script must not be executed on the inner document');

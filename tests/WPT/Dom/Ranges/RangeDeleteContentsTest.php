@@ -125,7 +125,7 @@ class RangeDeleteContentsTest extends WPTTestHarness
         $expectedRange = $expectedIframe->contentWindow->testRange;
         $actualRoots = null;
         $expectedRoots = null;
-        $domTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange) {
+        $domTests[$i]->step(function () use (&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange) {
             $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual deleteContents()');
             $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated deleteContents()');
             $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
@@ -192,7 +192,7 @@ class RangeDeleteContentsTest extends WPTTestHarness
             }
         });
         $domTests[$i]->done();
-        $positionTests[$i]->step(function () use(&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$actualRoots, &$expectedRoots) {
+        $positionTests[$i]->step(function () use (&$actualIframe, &$expectedIframe, &$actualRange, &$expectedRange, &$actualRoots, &$expectedRoots) {
             $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual deleteContents()');
             $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated deleteContents()');
             $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
@@ -255,8 +255,8 @@ class RangeDeleteContentsTest extends WPTTestHarness
         }
         $referenceDoc = $this->doc->implementation->createHTMLDocument('');
         $referenceDoc->removeChild($referenceDoc->documentElement);
-        $actualIframe->onload = function () use(&$expectedIframe, &$iStart, &$iStop, &$referenceDoc, &$actualIframe) {
-            $expectedIframe->onload = function () use(&$iStart, &$iStop) {
+        $actualIframe->onload = function () use (&$expectedIframe, &$iStart, &$iStop, &$referenceDoc, &$actualIframe) {
+            $expectedIframe->onload = function () use (&$iStart, &$iStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
                     $this->helperTestDeleteContents($i);
                 }

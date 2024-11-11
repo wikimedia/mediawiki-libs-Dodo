@@ -10,44 +10,44 @@ class ChildNodeReplaceWithTest extends WPTTestHarness
 {
     public function helperTestReplaceWith($child, $nodeName, $innerHTML)
     {
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->replaceWith();
             $this->wptAssertEquals($parent->innerHTML, '');
         }, $nodeName . '.replaceWith() without any argument.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->replaceWith(null);
             $this->wptAssertEquals($parent->innerHTML, 'null');
         }, $nodeName . '.replaceWith() with null as an argument.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->replaceWith(null);
             $this->wptAssertEquals($parent->innerHTML, NULL);
         }, $nodeName . '.replaceWith() with undefined as an argument.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->replaceWith('');
             $this->wptAssertEquals($parent->innerHTML, '');
         }, $nodeName . '.replaceWith() with empty string as an argument.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $parent->appendChild($child);
             $child->replaceWith('text');
             $this->wptAssertEquals($parent->innerHTML, 'text');
         }, $nodeName . '.replaceWith() with only text as an argument.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $parent->appendChild($child);
             $child->replaceWith($x);
             $this->wptAssertEquals($parent->innerHTML, '<x></x>');
         }, $nodeName . '.replaceWith() with only one element as an argument.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $y = $this->doc->createElement('y');
@@ -58,7 +58,7 @@ class ChildNodeReplaceWithTest extends WPTTestHarness
             $child->replaceWith($x, $y, $z);
             $this->wptAssertEquals($parent->innerHTML, '<x></x><y></y><z></z>');
         }, $nodeName . '.replaceWith() with sibling of child as arguments.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $parent->appendChild($child);
@@ -67,7 +67,7 @@ class ChildNodeReplaceWithTest extends WPTTestHarness
             $child->replaceWith($x, '2');
             $this->wptAssertEquals($parent->innerHTML, '<x></x>21');
         }, $nodeName . '.replaceWith() with one sibling of child and text as arguments.');
-        $this->assertTest(function () use(&$child, &$innerHTML) {
+        $this->assertTest(function () use (&$child, &$innerHTML) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $parent->appendChild($child);
@@ -76,14 +76,14 @@ class ChildNodeReplaceWithTest extends WPTTestHarness
             $child->replaceWith($x, $child);
             $this->wptAssertEquals($parent->innerHTML, '<x></x>' . $innerHTML . 'text');
         }, $nodeName . '.replaceWith() with one sibling of child and child itself as arguments.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $parent->appendChild($child);
             $child->replaceWith($x, 'text');
             $this->wptAssertEquals($parent->innerHTML, '<x></x>text');
         }, $nodeName . '.replaceWith() with one element and text as arguments.');
-        $this->assertTest(function () use(&$child) {
+        $this->assertTest(function () use (&$child) {
             $parent = $this->doc->createElement('div');
             $x = $this->doc->createElement('x');
             $y = $this->doc->createElement('y');

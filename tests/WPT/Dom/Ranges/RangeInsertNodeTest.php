@@ -45,7 +45,7 @@ class RangeInsertNodeTest extends WPTTestHarness
         $actualRoots = [];
         $expectedRoots = [];
         $detached = false;
-        $domTests[$i][$j]->step(function () use(&$i, &$j, &$actualRoots, &$expectedRoots) {
+        $domTests[$i][$j]->step(function () use (&$i, &$j, &$actualRoots, &$expectedRoots) {
             $this->restoreIframe($actualIframe, $i, $j);
             $this->restoreIframe($expectedIframe, $i, $j);
             $actualRange = $actualIframe->contentWindow->testRange;
@@ -110,7 +110,7 @@ class RangeInsertNodeTest extends WPTTestHarness
                 throw $e;
             }
             if (gettype($result) == 'string') {
-                $this->wptAssertThrowsDom($result, $actualIframe->contentWindow->DOMException, function () use(&$actualRange, &$actualNode, &$expectedDoctype, &$actualDoctype) {
+                $this->wptAssertThrowsDom($result, $actualIframe->contentWindow->DOMException, function () use (&$actualRange, &$actualNode, &$expectedDoctype, &$actualDoctype) {
                     try {
                         $actualRange->insertNode($actualNode);
                     } catch (Exception $e) {
@@ -142,7 +142,7 @@ class RangeInsertNodeTest extends WPTTestHarness
             }
         });
         $domTests[$i][$j]->done();
-        $positionTests[$i][$j]->step(function () use(&$actualRange, &$expectedRange, &$actualNode, &$expectedNode, &$actualRoots, &$expectedRoots, &$detached) {
+        $positionTests[$i][$j]->step(function () use (&$actualRange, &$expectedRange, &$actualNode, &$expectedNode, &$actualRoots, &$expectedRoots, &$detached) {
             $this->wptAssertEquals($actualIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for actual insertNode()');
             $this->wptAssertEquals($expectedIframe->contentWindow->unexpectedException, null, 'Unexpected exception thrown when setting up Range for simulated insertNode()');
             $this->wptAssertEquals(gettype($actualRange), 'object', 'typeof Range produced in actual iframe');
@@ -217,8 +217,8 @@ class RangeInsertNodeTest extends WPTTestHarness
         $this->doc->body->appendChild($expectedIframe);
         $referenceDoc = $this->doc->implementation->createHTMLDocument('');
         $referenceDoc->removeChild($referenceDoc->documentElement);
-        $actualIframe->onload = function () use(&$expectedIframe, &$iStart, &$iStop, &$jStart, &$jStop, &$referenceDoc, &$actualIframe) {
-            $expectedIframe->onload = function () use(&$iStart, &$iStop, &$jStart, &$jStop) {
+        $actualIframe->onload = function () use (&$expectedIframe, &$iStart, &$iStop, &$jStart, &$jStop, &$referenceDoc, &$actualIframe) {
+            $expectedIframe->onload = function () use (&$iStart, &$iStop, &$jStart, &$jStop) {
                 for ($i = $iStart; $i < $iStop; $i++) {
                     for ($j = $jStart; $j < $jStop; $j++) {
                         $this->helperTestInsertNode($i, $j);

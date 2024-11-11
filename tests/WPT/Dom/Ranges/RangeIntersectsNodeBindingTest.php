@@ -11,41 +11,41 @@ class RangeIntersectsNodeBindingTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-intersectsNode-binding.html');
         $this->assertTest(function () {
             $r = $this->doc->createRange();
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode();
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode(null);
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode(null);
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode(42);
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode('foo');
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode([]);
             });
             $r->detach();
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode();
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode(null);
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode(null);
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode(42);
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode('foo');
             });
-            $this->wptAssertThrowsJs($this->type_error, function () use(&$r) {
+            $this->wptAssertThrowsJs($this->type_error, function () use (&$r) {
                 $r->intersectsNode([]);
             });
         }, 'Calling intersectsNode without an argument or with an invalid argument should throw a TypeError.');

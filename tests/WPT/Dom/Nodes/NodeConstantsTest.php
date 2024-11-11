@@ -13,7 +13,7 @@ class NodeConstantsTest extends WPTTestHarness
         foreach ($objects as $arr) {
             $o = $arr[0];
             $desc = $arr[1];
-            $this->assertTest(function () use(&$constants, &$o) {
+            $this->assertTest(function () use (&$constants, &$o) {
                 foreach ($constants as $d) {
                     $this->wptAssertTrue(isset($o[$d[0]]), 'Object ' . $o . " doesn't have " . $d[0]);
                     $this->wptAssertEquals($o[$d[0]], $d[1], 'Object ' . $o . ' value for ' . $d[0] . ' is wrong');

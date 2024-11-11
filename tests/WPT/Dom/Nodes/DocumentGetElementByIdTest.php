@@ -19,7 +19,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $element = $this->doc->createElement('div');
             $element->setAttribute('id', 'null');
             $this->doc->body->appendChild($element);
-            $this->add_cleanup(function () use(&$element) {
+            $this->add_cleanup(function () use (&$element) {
                 $this->doc->body->removeChild($element);
             });
             $this->wptAssertEquals($this->doc->getElementById("null"), $element);
@@ -28,7 +28,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $element = $this->doc->createElement('div');
             $element->setAttribute('id', "null");
             $this->doc->body->appendChild($element);
-            $this->add_cleanup(function () use(&$element) {
+            $this->add_cleanup(function () use (&$element) {
                 $this->doc->body->removeChild($element);
             });
             $this->wptAssertEquals($this->doc->getElementById("null"), $element);
@@ -39,7 +39,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $this->wptAssertEquals($bar->tagName, 'DIV', 'should have expected tag name.');
             $this->wptAssertTrue($bar instanceof HTMLDivElement, 'should be a valid Element instance');
         }, 'on static page');
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             $TEST_ID = 'test2';
             $test = $this->doc->createElement('div');
             $test->setAttribute('id', $TEST_ID);
@@ -56,7 +56,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             // https://dom.spec.whatwg.org/#dom-nonelementparentnode-getelementbyid
             $this->wptAssertEquals($removed, null, 'should not get removed element.');
         }, 'Document.getElementById with a script-inserted element');
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             // setup fixtures.
             $TEST_ID = 'test3';
             $test = $this->doc->createElement('div');
@@ -82,7 +82,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $this->doc->body->appendChild($e);
             $this->wptAssertEquals($this->doc->getElementById($TEST_ID), $e, 'should be the appended element');
         }, 'Ensure that the id attribute only affects elements present in a document');
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             // the method should return the 1st element.
             $TEST_ID = 'test5';
             $target = $this->doc->getElementById($TEST_ID);
@@ -110,7 +110,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $this->doc->createElement('div')->appendChild($s);
             $this->wptAssertEquals($this->doc->getElementById($TEST_ID), null, 'should be null');
         }, 'Modern browsers optimize this method with using internal id cache. ' . 'This test checks that their optimization should effect only append to `Document`, not append to `Node`.');
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             $TEST_ID = 'test7';
             $element = $this->doc->createElement('div');
             $element->setAttribute('id', $TEST_ID);
@@ -123,7 +123,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $target3 = $this->doc->getElementById($TEST_ID . '-updated');
             $this->wptAssertEquals($target3, $element, 'should be equal to the updated element.');
         }, "changing attribute's value via `Attr` gotten from `Element.attribute`.");
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             $TEST_ID = 'test8';
             // setup fixture
             $element = $this->doc->createElement('div');
@@ -136,7 +136,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $this->wptAssertEquals($test->tagName, 'DIV', 'should have expected tag name.');
             $this->wptAssertTrue($test instanceof HTMLDivElement, 'should be a valid Element instance');
         }, 'add id attribute via innerHTML');
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             $TEST_ID = 'test9';
             // add fixture
             $fixture = $this->doc->createElement('div');
@@ -152,7 +152,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $test = $this->doc->getElementById($TEST_ID);
             $this->wptAssertEquals($test, null, 'should be null.');
         }, 'remove id attribute via innerHTML');
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             $TEST_ID = 'test10';
             // setup fixture
             $element = $this->doc->createElement('div');
@@ -165,7 +165,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $this->wptAssertEquals($test->tagName, 'DIV', 'should have expected tag name.');
             $this->wptAssertTrue($test instanceof HTMLDivElement, 'should be a valid Element instance');
         }, 'add id attribute via outerHTML');
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             $TEST_ID = 'test11';
             $element = $this->doc->createElement('div');
             $element->setAttribute('id', $TEST_ID);
@@ -177,7 +177,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $test = $this->doc->getElementById($TEST_ID);
             $this->wptAssertEquals($test, null, 'should be null.');
         }, 'remove id attribute via outerHTML');
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             // setup fixtures.
             $TEST_ID = 'test12';
             $test = $this->doc->createElement('div');
@@ -195,9 +195,9 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $e2 = $this->doc->getElementById($UPDATED_ID);
             $this->wptAssertEquals($e2, null, 'should return null when the passed id is none in document.');
         }, 'update `id` attribute via element.id');
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             $TEST_ID = 'test13';
-            $create_same_id_element = function ($order) use(&$TEST_ID) {
+            $create_same_id_element = function ($order) use (&$TEST_ID) {
                 $element = $this->doc->createElement('div');
                 $element->setAttribute('id', $TEST_ID);
                 $element->setAttribute('data-order', $order);
@@ -230,7 +230,7 @@ class DocumentGetElementByIdTest extends WPTTestHarness
             $this->wptAssertEquals($test, $element4, 'should return 4th element');
             $container->removeChild($element4);
         }, "where insertion order and tree order don't match");
-        $this->assertTest(function () use(&$gBody) {
+        $this->assertTest(function () use (&$gBody) {
             $TEST_ID = 'test14';
             $a = $this->doc->createElement('a');
             $b = $this->doc->createElement('b');

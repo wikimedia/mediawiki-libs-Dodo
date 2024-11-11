@@ -45,7 +45,7 @@ class DocumentAdoptNodeTest extends WPTTestHarness
         }, 'Explicitly adopting a DocumentType should work.');
         $this->assertTest(function () {
             $doc = $this->doc->implementation->createDocument(null, null, null);
-            $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use(&$doc) {
+            $this->wptAssertThrowsDom('NOT_SUPPORTED_ERR', function () use (&$doc) {
                 $this->doc->adoptNode($doc);
             });
         }, 'Adopting a Document should throw.');

@@ -25,9 +25,9 @@ class DOMImplementationCreateDocumentTypeTest extends WPTTestHarness
                 $publicId = $t[1];
                 $systemId = $t[2];
                 $expected = $t[3];
-                $this->assertTest(function () use(&$expected, &$qualifiedName, &$publicId, &$systemId, &$doTest, &$doc) {
+                $this->assertTest(function () use (&$expected, &$qualifiedName, &$publicId, &$systemId, &$doTest, &$doc) {
                     if ($expected) {
-                        $this->wptAssertThrowsDom($expected, function () use(&$qualifiedName, &$publicId, &$systemId) {
+                        $this->wptAssertThrowsDom($expected, function () use (&$qualifiedName, &$publicId, &$systemId) {
                             $this->doc->implementation->createDocumentType($qualifiedName, $publicId, $systemId);
                         });
                     } else {

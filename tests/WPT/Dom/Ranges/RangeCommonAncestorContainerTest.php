@@ -12,7 +12,7 @@ class RangeCommonAncestorContainerTest extends WPTTestHarness
         $this->doc = $this->loadHtmlFile('vendor/web-platform-tests/wpt/dom/ranges/Range-commonAncestorContainer.html');
         array_unshift($this->getCommon()->testRanges, '[detached]');
         for ($i = 0; $i < count($this->getCommon()->testRanges); $i++) {
-            $this->assertTest(function () use(&$i) {
+            $this->assertTest(function () use (&$i) {
                 $range = null;
                 if ($i == 0) {
                     $range = $this->doc->createRange();
