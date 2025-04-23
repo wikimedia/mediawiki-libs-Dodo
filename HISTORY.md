@@ -1,12 +1,15 @@
 # Change Log
 
 ## Dodo x.x.x (not yet released)
+* Update dependencies.
+  * Require PHPUnit 9.6.21, mediawiki-phan-config 0.15.1,
+    mediawiki-codesniffer 46.0.0
 
 ## Dodo 0.5.0 (2024-11-09)
 * Drop PHP 7.2 and PHP 7.3 support.
 * Move to PHPUnit 9.
 * Update dependencies.
-  * Require IdleDOM 1.x, Remex 3.x, and Zest 2.x.
+  * Require IdleDOM 2.x, Remex 4.x, and Zest 3.x.
 
 ## Dodo 0.4.0 (2021-10-25)
 * Allow use of wikimedia/remex-html 3.0.0.
