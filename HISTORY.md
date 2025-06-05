@@ -1,6 +1,6 @@
 # Change Log
 
-## Dodo x.x.x (not yet released)
+## Dodo 0.6.0 (2025-06-05)
 * Update dependencies.
   * Require PHPUnit 9.6.21, mediawiki-phan-config 0.15.1,
     mediawiki-codesniffer 47.0.0
