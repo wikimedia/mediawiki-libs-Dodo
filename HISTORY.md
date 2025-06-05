@@ -4,7 +4,8 @@
 * Update dependencies.
   * Require PHPUnit 9.6.21, mediawiki-phan-config 0.15.1,
     mediawiki-codesniffer 47.0.0
-  * Require wikimedia/remex-html >= 4.1.2.
+  * Require wikimedia/remex-html >= 5.0.0.
+  * Require wikimedia/zest-css >= 4.0.0.
 
 ## Dodo 0.5.0 (2024-11-09)
 * Drop PHP 7.2 and PHP 7.3 support.

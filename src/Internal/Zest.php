@@ -5,6 +5,8 @@ declare( strict_types = 1 );
 namespace Wikimedia\Dodo\Internal;
 
 use Throwable;
+use Wikimedia\Dodo\Document;
+use Wikimedia\Dodo\DocumentFragment;
 use Wikimedia\Dodo\DOMException;
 use Wikimedia\Dodo\Element;
 use Wikimedia\IDLeDOM\ParentNode;
@@ -21,13 +23,14 @@ class Zest {
 		if ( !self::$singleton ) {
 			self::$singleton = new class extends ZestInst {
 				/** @inheritDoc */
-				protected function getElementById( $context, string $id, array $opts = [] ): array {
+				public function getElementsById( $context, string $id, array $opts = [] ): array {
 					// Dodo-internal method!
+					'@phan-var Document|DocumentFragment|Element $context';
 					return $context->_getElementsById( $id );
 				}
 
 				/** @inheritDoc */
-				protected function isStandardsMode( $context, array $opts ): bool {
+				protected function isStandardsMode( $context, array $opts, bool $php84IsStandard = true ): bool {
 					return true;
 				}
 
