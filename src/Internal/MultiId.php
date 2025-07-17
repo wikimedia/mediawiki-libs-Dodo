@@ -98,7 +98,7 @@ class MultiId {
 		}
 
 		// No item has been cached. Well, let's find it then.
-		foreach ( $this->table as $index => $node ) {
+		foreach ( $this->table as $node ) {
 			if ( $this->first === null ||
 				 $this->first->compareDocumentPosition( $node ) & Node::DOCUMENT_POSITION_PRECEDING
 			) {
@@ -115,7 +115,7 @@ class MultiId {
 	 */
 	public function downgrade() {
 		if ( $this->length === 1 ) {
-			foreach ( $this->table as $index => $node ) {
+			foreach ( $this->table as $node ) {
 				return $node;
 			}
 		}

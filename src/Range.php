@@ -213,8 +213,6 @@ class Range extends AbstractRange implements \Wikimedia\IDLeDOM\Range {
 	 */
 	public function compareBoundaryPoints( int $how, $sourceRange ): int {
 		'@phan-var Range $sourceRange'; // @var Range $sourceRange
-		$thisPoint = null;
-		$otherPoint = null;
 		switch ( $how ) {
 			case self::START_TO_START:
 			case self::END_TO_START:

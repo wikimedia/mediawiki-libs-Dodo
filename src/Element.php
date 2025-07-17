@@ -113,6 +113,7 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 						$elem->_nodeDocument->_addToIdTable( $new, $elem );
 					}
 				},
+				// @phan-suppress-next-line PhanUnusedClosureParameter
 				"class" => static function ( $elem, $old, $new ) {
 					if ( isset( $elem->_classList ) ) {
 						$elem->_classList->_getList( $new );
@@ -808,11 +809,11 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagName( string $lname ): HTMLCollection {
-		$filter = null;
 		if ( !$lname ) {
 			return new HTMLCollection();
 		}
 		if ( $lname === '*' ) {
+			// @phan-suppress-next-line PhanUnusedClosureParameter
 			$filter = static function ( $el ) {
 				return true;
 			};
@@ -900,7 +901,6 @@ class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	 * @return HTMLCollection
 	 */
 	public function getElementsByTagNameNS( ?string $ns, string $lname ): HTMLCollection {
-		$filter = null;
 		if ( $ns === '' ) {
 			$ns = null;
 		}

@@ -149,7 +149,7 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 			$data = "<$uniqueName$i>$data</$uniqueName$i>";
 			DOMParser::_parseXml( $this, $data, [ 'skipRoot' => true ] );
 			return true;
-		} catch ( BadXMLException $e ) {
+		} catch ( BadXMLException ) {
 			return false;
 		}
 	}

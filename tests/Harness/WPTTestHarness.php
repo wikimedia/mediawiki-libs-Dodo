@@ -365,7 +365,7 @@ abstract class WPTTestHarness extends TestCase {
 				// Note that this can have side effects in the case where
 				//the property has PutForwards
 				$object->$propertyName = $initialValue . 'a'; // XXX use some other value here?
-			} catch ( Throwable $e ) {
+			} catch ( Throwable ) {
 				// We use trigger_error when you try to write to a readonly
 				// property; but JavaScript just ignores the write.
 			}
@@ -378,7 +378,7 @@ abstract class WPTTestHarness extends TestCase {
 			// Try to reset the value, this may fail.
 			try {
 				$object->$propertyName = $initialValue;
-			} catch ( Throwable $e ) {
+			} catch ( Throwable ) {
 				/* ignore */
 			}
 		}
@@ -532,9 +532,6 @@ abstract class WPTTestHarness extends TestCase {
 					'TimeoutError' => 23,
 					'InvalidNodeTypeError' => 24,
 					'DataCloneError' => 25,
-				];
-				$code_name_map = array_flip( $name_code_map );
-				$name_code_map += [
 					'EncodingError' => 0,
 					'NotReadableError' => 0,
 					'UnknownError' => 0,
@@ -739,6 +736,7 @@ abstract class WPTTestHarness extends TestCase {
 	/**
 	 * @param callable|array $func_or_properties
 	 * @param ?array $maybe_properties
+	 * @suppress PhanUnusedVariable
 	 */
 	protected function setupData( $func_or_properties, ?array $maybe_properties = null ): void {
 		$func = null;

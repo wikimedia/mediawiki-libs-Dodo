@@ -29,13 +29,12 @@ if ( getenv( "DODO_CHECK_MAGIC_PROPERTIES" ) ) {
 	$cfg['exclude_analysis_directory_list'][] = 'tests/';
 }
 
-// Don't whine about PHP 8.1+ issue suppressions.
-if ( PHP_VERSION_ID < 81000 ) {
-	$cfg['suppress_issue_types'][] = 'UnusedPluginSuppression';
-}
-
 // Ignored to allow upgrading Phan, to be fixed later.
 $cfg['suppress_issue_types'][] = 'MediaWikiNoBaseException';
 $cfg['suppress_issue_types'][] = 'MediaWikiNoEmptyIfDefined';
+$cfg['suppress_issue_types'][] = 'PhanThrowTypeAbsent';
+$cfg['suppress_issue_types'][] = 'PhanUnusedPublicFinalMethodParameter';
+$cfg['suppress_issue_types'][] = 'PhanUnusedPublicNoOverrideMethodParameter';
+$cfg['suppress_issue_types'][] = 'PhanUnusedProtectedNoOverrideMethodParameter';
 
 return $cfg;

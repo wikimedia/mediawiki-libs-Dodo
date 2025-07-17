@@ -393,7 +393,6 @@ abstract class W3CTestHarness extends TestCase {
 	 */
 	protected function load( $docRef = null, ?string $name = null, ?string $href = null ): ?Node {
 		$this->contentType = 'text/html';
-		$realpath = realpath( '.' );
 		$file_path = iterator_to_array( ( new Finder() )->name( $href . '.html' )->in( realpath( '.' ) . '/tests/W3C' )
 			->files()->sortByName() );
 

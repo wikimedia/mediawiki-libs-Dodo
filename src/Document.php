@@ -585,6 +585,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 				return $el;
 			}
 			// This checks $options for validity and throws if bad
+			// @phan-suppress-next-line PhanUnusedVariable
 			$options = ElementCreationOptions::cast( $options );
 		}
 
@@ -619,6 +620,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 				return $el;
 			}
 			// This checks $options for validity and throws if bad
+			// @phan-suppress-next-line PhanUnusedVariable
 			$options = ElementCreationOptions::cast( $options );
 		}
 		WhatWG::validate_and_extract( $ns, $qname, $prefix, $lname );
@@ -1079,7 +1081,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 				'phpCompat' => true,
 			], $result );
 			return implode( '', $result );
-		} catch ( BadXMLException $e ) {
+		} catch ( BadXMLException ) {
 			return false;
 		}
 	}
@@ -1103,7 +1105,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 			// in the options array in the _parseXml call
 			DOMParser::_parseXml( $this, $source, [] );
 			return true;
-		} catch ( BadXMLException $e ) {
+		} catch ( BadXMLException ) {
 			return false;
 		}
 	}

@@ -399,7 +399,7 @@ class WhatWG {
 			// when the insertion handlers are called.
 			if ( $parent->getIsConnected() ) {
 				$parent->_modify();
-				foreach ( $insert as $i => $ni ) {
+				foreach ( $insert as $ni ) {
 					$parent->_nodeDocument->_mutateInsert( $ni );
 				}
 			}
@@ -961,7 +961,7 @@ class WhatWG {
 					$contextNamespace, $prefixMap, $prefixIndex,
 					$options, $markup
 				);
-		} catch ( \Throwable $t ) {
+		} catch ( \Throwable ) {
 			Util::error( 'InvalidStateError' );
 		}
 	}

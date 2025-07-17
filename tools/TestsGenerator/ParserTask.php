@@ -217,7 +217,6 @@ class ParserTask extends BaseTask {
 			 * @return int|Node|Function_
 			 */
 			public function leaveNode( $node ) {
-				$node_type = $node->getType();
 				if ( $node instanceof Function_ && $node->name->toString() === $this->test_name ) {
 					$test_method = $this->snakeToCamel( 'test ' . $node->name );
 					return $this->factory->method( $test_method )->makePublic()->addStmts( $node->getStmts() )
@@ -937,6 +936,7 @@ class ParserTask extends BaseTask {
 		$this->test = strtr( $this->test, $find_replace );
 
 		// Now fix up some unnecessary use statements
+		// @phan-suppress-next-line PhanPossiblyInfiniteLoop pass-by-ref in preg_replace_callback
 		do {
 			$this->test = preg_replace_callback(
 				'/(use\s*[(][^)]*)' .

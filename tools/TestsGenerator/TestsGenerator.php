@@ -342,7 +342,6 @@ class TestsGenerator extends Tasks {
 	public function logProcess(): void {
 		$log_folder = $this->root_folder . '/tests/logs/';
 		$log_file_original = $log_folder . 'log.xml';
-		$log_file_proc = $log_folder . 'log.yml';
 
 		/** Remove environment specific path from log entries. */
 		if ( !$this->filesystem->exists( [ $log_file_original ] ) ) {
@@ -445,13 +444,11 @@ class TestsGenerator extends Tasks {
 		$skips_causes = $this->filesystem->exists( $skips_list_file ) ? Yaml::parseFile( $skips_list_file ) : [];
 		$skipped = array_flip( LocatorTask::$skips );
 
-		foreach ( $skipped as $reason => $file ) {
-			$_ = array_keys( LocatorTask::$skips,
-				$reason );
-			$skipped[$reason] = [ '_total' => count( $_ ),
+		foreach ( $skipped as $reason => $_ ) {
+			$reasonSkipped = array_keys( LocatorTask::$skips, $reason );
+			$skipped[$reason] = [ '_total' => count( $reasonSkipped ),
 				'_comment' => $skips_causes[$reason]['_comment'] ?? '',
-				'suites' => implode( PHP_EOL,
-					$_ ), ];
+				'suites' => implode( PHP_EOL, $reasonSkipped ), ];
 		}
 		ksort( $skipped );
 		$skipped_file = $log_folder . 'skipped.yaml';

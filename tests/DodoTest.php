@@ -186,7 +186,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 		$ni = $doc->createNodeIterator(
 			$body,
 			NodeFilter::SHOW_ELEMENT | NodeFilter::SHOW_COMMENT | NodeFilter::SHOW_TEXT,
-			static function ( $n ) {
+			static function () {
 				return NodeFilter::FILTER_ACCEPT;
 			}
 		);

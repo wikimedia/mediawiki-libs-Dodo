@@ -888,8 +888,6 @@ class Common {
 		// "If original start node is an ancestor container of original end node,
 		// set new node to original start node and new offset to original start
 		// offset."
-		$newNode = null;
-		$newOffset = null;
 		if ( self::isAncestorContainer( $originalStartNode,
 			$originalEndNode ) ) {
 			$newNode = $originalStartNode;
