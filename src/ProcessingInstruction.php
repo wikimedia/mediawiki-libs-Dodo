@@ -79,10 +79,10 @@ class ProcessingInstruction extends CharacterData implements \Wikimedia\IDLeDOM\
 		$data = $this->getData();
 		if ( $options['requireWellFormed'] ?? false ) {
 			if (
-				strpos( $this->_target, ':' ) !== false ||
+				str_contains( $this->_target, ':' ) ||
 				Util::toAsciiLowercase( $this->_target ) === 'xml' ||
 				!WhatWG::is_valid_xml_chars( $data ) ||
-				strpos( $data, '?>' ) !== false
+				str_contains( $data, '?>' )
 			) {
 				throw new BadXMLException();
 			}

@@ -1011,7 +1011,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 	/** @inheritDoc */
 	protected function _setMissingProp( string $name, $value ): void {
-		if ( substr_compare( $name, self::EXTENSION_PREFIX, 0, strlen( self::EXTENSION_PREFIX ) ) == 0 ) {
+		if ( str_starts_with( $name, self::EXTENSION_PREFIX ) ) {
 			$this->{$name} = $value;
 			return;
 		}
@@ -1020,7 +1020,7 @@ abstract class Node extends EventTarget implements \Wikimedia\IDLeDOM\Node {
 
 	/** @inheritDoc */
 	protected function _getMissingProp( string $name ) {
-		if ( substr_compare( $name, self::EXTENSION_PREFIX, 0, strlen( self::EXTENSION_PREFIX ) ) == 0 ) {
+		if ( str_starts_with( $name, self::EXTENSION_PREFIX ) ) {
 			return $this->{$name};
 		}
 		return parent::_getMissingProp( $name );

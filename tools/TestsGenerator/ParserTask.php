@@ -262,7 +262,7 @@ class ParserTask extends BaseTask {
 						$args = $node->args;
 
 						if (
-							strpos( $expr_name, 'assert' ) === 0 ||
+							str_starts_with( $expr_name, 'assert' ) ||
 							$expr_name === 'fail'
 						) {
 							// TestCase already has methods named assert*
@@ -712,7 +712,7 @@ class ParserTask extends BaseTask {
 					} elseif ( array_key_exists( $expr_name, $harness_functions ) ) {
 						$args = $node->args;
 
-						if ( strpos( $expr_name, 'assert' ) === 0 ) {
+						if ( str_starts_with( $expr_name, 'assert' ) ) {
 							// TestCase already has methods named assert*
 							// so add a 'wpt' prefix to these harness functions.
 							$call = new Node\Expr\MethodCall(
@@ -762,7 +762,7 @@ class ParserTask extends BaseTask {
 		'@phan-var Stmt[] $stmts';
 
 		// create test class
-		if ( strpos( $this->test_name, 'Test' ) === false ) {
+		if ( !str_contains( $this->test_name, 'Test' ) ) {
 			$this->test_name .= 'Test';
 		}
 
@@ -848,7 +848,7 @@ class ParserTask extends BaseTask {
 		$notAdded = [];
 		foreach ( $list_ns as $use => $namespace ) {
 			if (
-				strpos( $this->test, $use ) !== false ||
+				str_contains( $this->test, $use ) ||
 				( $extraUses[$use] ?? false ) !== false
 			) {
 				if ( $notAdded[$namespace] ?? true ) {
@@ -1102,7 +1102,7 @@ class ParserTask extends BaseTask {
 			];
 
 			foreach ( $additional_elements as $el ) {
-				if ( strpos( $this->test, '$' . $el ) !== false ) {
+				if ( str_contains( $this->test, '$' . $el ) ) {
 					$_lb = $this->parser->parse(
 						sprintf( '<?php $this->%1$s = $this->doc->getElementById("%1$s");', $el ) );
 					$additional_stmts[] = reset( $_lb );

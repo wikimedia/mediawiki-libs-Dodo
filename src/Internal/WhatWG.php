@@ -984,7 +984,7 @@ class WhatWG {
 	) {
 		if ( $options['requireWellFormed'] ?? false ) {
 			if (
-				strpos( $el->getLocalName(), ':' ) !== false ||
+				str_contains( $el->getLocalName(), ':' ) ||
 				!self::is_valid_xml_name( $el->getLocalName() )
 			) {
 				throw new BadXMLException();
@@ -1222,7 +1222,7 @@ class WhatWG {
 			}
 			if ( $options['requireWellFormed'] ?? false ) {
 				if (
-					strpos( $attr->getLocalName(), ':' ) !== false ||
+					str_contains( $attr->getLocalName(), ':' ) ||
 					( !self::is_valid_xml_name( $attr->getLocalName() ) ) ||
 					( $attrNs === null && $attr->getLocalName() === 'xmlns' )
 				) {

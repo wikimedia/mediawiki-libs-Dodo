@@ -142,7 +142,7 @@ class DocumentFragment extends ContainerNode implements \Wikimedia\IDLeDOM\Docum
 			// unwrap it. (Ugh)
 			$uniqueName = "DodoUniqueRootName";
 			for ( $i = 0; ; $i++ ) {
-				if ( strpos( $data, "$uniqueName$i" ) === false ) {
+				if ( !str_contains( $data, "$uniqueName$i" ) ) {
 					break;
 				}
 			}

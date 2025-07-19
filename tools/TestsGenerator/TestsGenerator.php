@@ -393,7 +393,7 @@ class TestsGenerator extends Tasks {
 		foreach ( $failures as $failure ) {
 			$textContent = trim( $failure->textContent );
 
-			if ( strpos( $textContent, "---" ) !== false ) {
+			if ( str_contains( $textContent, "---" ) ) {
 				$textContent = substr_replace(
 					$textContent,
 					'',
@@ -407,7 +407,7 @@ class TestsGenerator extends Tasks {
 				$textContent
 			);
 
-			if ( strpos( $textContent, "\n\n" ) !== false ) {
+			if ( str_contains( $textContent, "\n\n" ) ) {
 				$textContent = substr_replace(
 					$textContent,
 					'',

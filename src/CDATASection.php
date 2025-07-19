@@ -38,7 +38,7 @@ class CDATASection extends Text implements \Wikimedia\IDLeDOM\CDATASection {
 		// See https://github.com/w3c/DOM-Parsing/issues/38
 		$data = $this->getData();
 		if ( $options['requireWellFormed'] ?? false ) {
-			if ( strpos( $data, ']]>' ) !== false ) {
+			if ( str_contains( $data, ']]>' ) ) {
 				throw new BadXMLException();
 			}
 		}

@@ -138,8 +138,8 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 				) !== 1 ||
 				!WhatWG::is_valid_xml_chars( $this->_systemId ) ||
 				(
-					strpos( $this->_systemId, '"' ) !== false &&
-					strpos( $this->_systemId, "'" ) !== false
+					str_contains( $this->_systemId, '"' ) &&
+					str_contains( $this->_systemId, "'" )
 				)
 			) {
 				throw new \Exception( "Invalid XML characters" );
@@ -155,7 +155,7 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 				$markup[] = " SYSTEM";
 			}
 			// https://github.com/w3c/DOM-Parsing/issues/71
-			$quote = strpos( $this->_systemId, '"' ) === false ? '"' : "'";
+			$quote = !str_contains( $this->_systemId, '"' ) ? '"' : "'";
 			$markup[] = ' ' . $quote . $this->_systemId . $quote;
 		}
 		$markup[] = '>';

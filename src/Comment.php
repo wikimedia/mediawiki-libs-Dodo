@@ -58,8 +58,8 @@ class Comment extends CharacterData implements \Wikimedia\IDLeDOM\Comment {
 		if ( $options['requireWellFormed'] ?? false ) {
 			if (
 				!WhatWG::is_valid_xml_chars( $data ) ||
-				strpos( $data, '--' ) !== false ||
-				substr( $data, -1 ) === '-'
+				str_contains( $data, '--' ) ||
+				str_ends_with( $data, '-' )
 			) {
 				throw new BadXMLException();
 			}

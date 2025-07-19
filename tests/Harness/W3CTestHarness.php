@@ -304,7 +304,7 @@ abstract class W3CTestHarness extends TestCase {
 
 		if ( $host !== null ) {
 			$actualHost = '';
-			if ( substr( $actualPath, 0, 2 ) === '//' ) {
+			if ( str_starts_with( $actualPath, '//' ) ) {
 				$termSlash = strpos( $actualPath, '/', 2 );
 				$actualHost = ( $termSlash === false ) ? $actualPath :
 					substr( $actualPath, 0, $termSlash );
@@ -334,7 +334,7 @@ abstract class W3CTestHarness extends TestCase {
 		if ( $isAbsolute !== null ) {
 			Assert::assertEquals(
 				$isAbsolute,
-				substr( $actualPath, 0, 1 ) === '/',
+				str_starts_with( $actualPath, '/' ),
 				$descr . ' ' . $actualPath
 			);
 		}

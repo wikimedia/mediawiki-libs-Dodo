@@ -526,7 +526,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		if ( $this->_isHTMLDocument() ) {
 			Util::error( 'NotSupportedError' );
 		}
-		if ( strpos( $data, ']]>' ) !== false ) {
+		if ( str_contains( $data, ']]>' ) ) {
 			Util::error( 'InvalidCharacterError' );
 		}
 		return new CDATASection( $this, $data );
@@ -544,7 +544,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 
 	/** @inheritDoc */
 	public function createProcessingInstruction( string $target, string $data ) {
-		if ( !WhatWG::is_valid_xml_name( $target ) || strpos( $data, '?' . '>' ) !== false ) {
+		if ( !WhatWG::is_valid_xml_name( $target ) || str_contains( $data, '?' . '>' ) ) {
 			Util::error( 'InvalidCharacterError' );
 		}
 		return new ProcessingInstruction( $this, $target, $data );

@@ -868,7 +868,7 @@ abstract class WPTTestHarness extends TestCase {
 	 */
 	protected function wptEvalNode( string $nodeExpr ) {
 		// Some of these are arrays
-		if ( substr( $nodeExpr, 0, 1 ) === '[' ) {
+		if ( str_starts_with( $nodeExpr, '[' ) ) {
 			$result = [];
 			foreach ( explode( ',', substr( $nodeExpr, 1, -1 ) ) as $item ) {
 				$result[] = $this->wptEvalNode( trim( $item ) );
@@ -880,7 +880,7 @@ abstract class WPTTestHarness extends TestCase {
 			return intval( $nodeExpr );
 		}
 		// Handle property accessors
-		if ( strpos( $nodeExpr, '.' ) !== false ) {
+		if ( str_contains( $nodeExpr, '.' ) ) {
 			$props = explode( '.', $nodeExpr );
 			$obj = $this->wptEvalNode( array_shift( $props ) );
 			foreach ( $props as $p ) {
@@ -889,7 +889,7 @@ abstract class WPTTestHarness extends TestCase {
 			return $obj;
 		}
 		// Handle array accessors
-		if ( substr( $nodeExpr, -1 ) === ']' ) {
+		if ( str_ends_with( $nodeExpr, ']' ) ) {
 			$pos = strrpos( $nodeExpr, '[' );
 			$lhs = $this->wptEvalNode( substr( $nodeExpr, 0, $pos ) );
 			$rhs = $this->wptEvalNode( substr( $nodeExpr, $pos + 1, -1 ) );
