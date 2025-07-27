@@ -7,7 +7,7 @@ namespace Wikimedia\Dodo\Internal;
 use Wikimedia\Dodo\Element;
 use Wikimedia\Dodo\Node;
 
-/*
+/**
  * DOM-LS specifies that in the
  * event that two Elements have
  * the same 'id' attribute value,

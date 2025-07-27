@@ -8,28 +8,6 @@ use Exception;
 use Wikimedia\Dodo\Internal\NamespacePrefixMap;
 use Wikimedia\Dodo\Internal\UnimplementedTrait;
 
-/**
- * The Attr class represents a single attribute node.
- *
- * NOTE
- * The definition of the Attr class has undergone some changes in recent
- * revisions of the DOM spec.
- *
- *      DOM-2: Introduced namespaces, and the properties 'namespaceURI',
- *             'localName', and 'prefix' were defined on the Node class.
- *             As a subclass of Node, Attr inherited these.
- *
- *      DOM-4: Attr was no longer classified as a Node. The properties
- *             'namespaceURI', 'localName', and 'prefix' were removed
- *             from the Node class. They were now defined on the Attr
- *             class itself, as well as on the Element class, which
- *             remained a subclass of Node.
- *
- *      DOM-LS: Attr was re-classified as a Node, but the properties
- *              'namespaceURI', 'localName', and 'prefix' remained on
- *              the Attr class (and Element class), and did not re-appear
- *              on the Node class..
- */
 /*
  * Qualified Names, Local Names, and Namespace Prefixes
  *
@@ -123,6 +101,29 @@ use Wikimedia\Dodo\Internal\UnimplementedTrait;
  * class in recent specs. As of the
  * most recent DOM-LS at the time of this
  * writing (2021-02-11), it extends Node.
+ */
+
+/**
+ * The Attr class represents a single attribute node.
+ *
+ * NOTE
+ * The definition of the Attr class has undergone some changes in recent
+ * revisions of the DOM spec.
+ *
+ *      DOM-2: Introduced namespaces, and the properties 'namespaceURI',
+ *             'localName', and 'prefix' were defined on the Node class.
+ *             As a subclass of Node, Attr inherited these.
+ *
+ *      DOM-4: Attr was no longer classified as a Node. The properties
+ *             'namespaceURI', 'localName', and 'prefix' were removed
+ *             from the Node class. They were now defined on the Attr
+ *             class itself, as well as on the Element class, which
+ *             remained a subclass of Node.
+ *
+ *      DOM-LS: Attr was re-classified as a Node, but the properties
+ *              'namespaceURI', 'localName', and 'prefix' remained on
+ *              the Attr class (and Element class), and did not re-appear
+ *              on the Node class..
  */
 class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	// Stub out methods not yet implemented.
