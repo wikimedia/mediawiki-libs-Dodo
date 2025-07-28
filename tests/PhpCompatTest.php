@@ -18,6 +18,8 @@ use Wikimedia\Dodo\Text;
  *
  * There is no standard for these methods other than "do what
  * PHP does", so that's what we'll try to check.
+ *
+ * @coversNothing
  */
 class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 
@@ -60,7 +62,7 @@ class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $expectedElement2, $actualElement2, "Serializing Element with NOEMPTYTAG" );
 	}
 
-	public function providePhpLoadSaveAppend() {
+	public static function providePhpLoadSaveAppend() {
 		return [
 			// Simple load/save tests
 			[ '<root><foo>text</foo><bar>text2</bar></root>' ],
@@ -116,7 +118,7 @@ class PhpCompatTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $expectedElement, $actualElement, "Serializing Element" );
 	}
 
-	public function providePhpLoadSaveHtml() {
+	public static function providePhpLoadSaveHtml() {
 		return [
 			// Simple load/save tests
 			[ '<html><hr/><br/></html>' ],

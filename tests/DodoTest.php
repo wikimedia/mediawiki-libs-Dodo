@@ -16,6 +16,9 @@ use Wikimedia\Dodo\NodeFilter;
 use Wikimedia\Dodo\XMLDocument;
 use Wikimedia\Dodo\XMLSerializer;
 
+/**
+ * @coversNothing
+ */
 class DodoTest extends \PHPUnit\Framework\TestCase {
 
 	/**
@@ -172,7 +175,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testNodeIterator2() {
-		$doc = $this->parse(
+		$doc = self::parse(
 			'<a>123<b>456<script>alert(1)</script></b></a>789'
 		);
 		$this->assertNotNull( $doc->getDocumentElement() );
@@ -218,7 +221,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testDocumentFragmentGetElementById() {
-		$doc = $this->parse( '<p id=x>test<span id=x>' );
+		$doc = self::parse( '<p id=x>test<span id=x>' );
 		$p1 = $doc->querySelector( 'p' );
 		$this->assertNotNull( $p1 );
 		'@phan-var Node $p1'; // @phan-var Node $p1
@@ -235,20 +238,20 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	 * @param string $html
 	 * @return Document
 	 */
-	private function parse( $html ) {
+	private static function parse( $html ) {
 		$parser = new DOMParser();
 		return $parser->parseFromString( $html, "text/html" );
 	}
 
 	/** @dataProvider provideHtml */
 	public function testDOMParser( $html, $expected ) {
-		$node = $this->parse( $html );
+		$node = self::parse( $html );
 		$result = [];
 		$node->_htmlSerialize( $result, [] );
 		$this->assertEquals( $expected, implode( '', $result ) );
 	}
 
-	public function provideHtml() {
+	public static function provideHtml() {
 		return [
 			[
 				'<p>hello</p>',
@@ -274,7 +277,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	/** @return Document */
-	public function provideFixture() {
+	public static function provideFixture() {
 		$html = <<<HTML
 <!DOCTYPE html>
 <html>
@@ -290,7 +293,7 @@ class DodoTest extends \PHPUnit\Framework\TestCase {
 </body>
 </html>
 HTML;
-		return $this->parse( $html );
+		return self::parse( $html );
 	}
 
 	public function testXmlSerialization() {
