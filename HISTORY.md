@@ -1,6 +1,6 @@
 # Change Log
 
-## Dodo x.x.x (not yet released)
+## Dodo 0.7.0 (2025-08-15)
 * Update dependencies.
   * Require mediawiki-phan-config 0.18.0
   * Require wikimedia/idle-dom >= 2.1.0.
