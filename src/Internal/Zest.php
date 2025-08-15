@@ -36,6 +36,7 @@ class Zest {
 
 				/** @inheritDoc */
 				protected function newBadSelectorException( string $msg ): Throwable {
+					// @phan-suppress-next-line PhanTypeMismatchReturnProbablyReal
 					return new DOMException( $msg, 'SyntaxError' );
 				}
 			};

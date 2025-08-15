@@ -1,6 +1,12 @@
 # Change Log
 
 ## Dodo x.x.x (not yet released)
+* Update dependencies.
+  * Require mediawiki-phan-config 0.18.0
+  * Require wikimedia/idle-dom >= 2.1.0.
+  * Require wikimedia/remex-html >= 5.1.0.
+  * Require wikimedia/zest-css >= 4.1.0.
+* Drop support for PHP < 8.1.
 
 ## Dodo 0.6.0 (2025-06-05)
 * Update dependencies.
