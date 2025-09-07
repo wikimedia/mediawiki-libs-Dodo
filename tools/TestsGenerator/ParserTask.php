@@ -161,9 +161,6 @@ class ParserTask extends BaseTask {
 			[ $this->test ] );
 	}
 
-	/**
-	 *
-	 */
 	protected function preprocessTest() {
 		$find_replace = [ 'new Array()' => '[]' ];
 		$this->test = strtr( $this->test, $find_replace );
@@ -981,7 +978,6 @@ class ParserTask extends BaseTask {
 	}
 
 	/**
-	 *
 	 * @param array $ast
 	 * @param string $name
 	 *

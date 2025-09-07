@@ -157,30 +157,30 @@ abstract class WPTTestHarness extends TestCase {
 		return get_object_vars( $elt );
 	}
 
-	/**
-	 *
-	 */
 	protected function setUp(): void {
-		$this->invalid_names = [ "",
+		$this->invalid_names = [
+			"",
 			"invalid^Name",
 			"\\",
 			"'",
 			'"',
 			"0",
-			"0:a" ];
-		$this->valid_names = [ "x",
+			"0:a"
+		];
+		$this->valid_names = [
+			"x",
 			"X",
 			":",
-			"a:0" ];
-		$this->invalid_qnames = [ ":a",
+			"a:0"
+		];
+		$this->invalid_qnames = [
+			":a",
 			"b:",
-			"x:y:z" ];
+			"x:y:z"
+		];
 		$this->contentType = 'text/html';
 	}
 
-	/**
-	 *
-	 */
 	protected function tearDown(): void {
 		$this->doc = null;
 	}
@@ -324,7 +324,6 @@ abstract class WPTTestHarness extends TestCase {
 	 * @param string $description
 	 *
 	 * @todo rewrite this
-	 *
 	 */
 	protected function wptAssertClassString( $object, string $class_string, string $description = '' ): void {
 		if ( $class_string === 'String' ) {
@@ -415,7 +414,6 @@ abstract class WPTTestHarness extends TestCase {
 	}
 
 	/**
-	 *
 	 * Assert a DOMException with the expected type is thrown.
 	 *
 	 * The first parameter is the expected exception name or code.  See the

@@ -145,7 +145,6 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	}
 
 	/**
-	 *
 	 * @param string ...$tokens
 	 */
 	public function remove( string ...$tokens ): void {
@@ -163,7 +162,6 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	}
 
 	/**
-	 *
 	 * @param string $token
 	 * @param string $newToken
 	 *
@@ -234,7 +232,6 @@ class DOMTokenList implements \Wikimedia\IDLeDOM\DOMTokenList {
 	}
 
 	/**
-	 *
 	 * @param string $token Name
 	 * @param bool|null $force
 	 *

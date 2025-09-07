@@ -32,7 +32,6 @@ use Wikimedia\IDLeDOM\Attr as IAttr;
  *
  * @property DOMTokenList $_classList A dynamic property to store the
  *  persistent value of Element::getClassList().
- *
  */
 class Element extends ContainerNode implements \Wikimedia\IDLeDOM\Element {
 	// DOM mixins

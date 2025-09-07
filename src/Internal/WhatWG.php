@@ -37,7 +37,6 @@ use Wikimedia\IDLeDOM\ChildNode as IChildNode;
  *
  * That said, it may be a problem having so much on this one page,
  * so perhaps we need to re-examine things.
- *
  */
 class WhatWG {
 

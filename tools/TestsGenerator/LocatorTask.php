@@ -13,7 +13,6 @@ use Symfony\Component\Finder\Finder;
  * Class TestsLocator
  *
  * @package DodoTestsGenerator\Robo\Task\Locator
- *
  */
 class LocatorTask extends BaseTask {
 

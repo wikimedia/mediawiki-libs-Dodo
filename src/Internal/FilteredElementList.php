@@ -113,9 +113,6 @@ class FilteredElementList extends HTMLCollection {
 		return count( $this->cache );
 	}
 
-	/**
-	 *
-	 */
 	private function checkcache() {
 		if ( $this->lastModTime !== $this->root->_lastModTime() ) {
 			$this->cache = [];

@@ -56,7 +56,6 @@ abstract class W3CTestHarness extends TestCase {
 	}
 
 	/**
-	 *
 	 * @param string $message
 	 * @param bool $actual
 	 */
@@ -77,7 +76,6 @@ abstract class W3CTestHarness extends TestCase {
 	}
 
 	/**
-	 *
 	 * @param string $message
 	 * @param mixed $actual
 	 */
