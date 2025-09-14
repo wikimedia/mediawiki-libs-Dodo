@@ -23,7 +23,7 @@ class DocumentType extends Leaf implements \Wikimedia\IDLeDOM\DocumentType {
 	use \Wikimedia\IDLeDOM\Helper\DocumentType;
 
 	/**
-	 * HACK! For compatibilty with W3C test suite, which assumes that an
+	 * HACK! For compatibility with W3C test suite, which assumes that an
 	 * access to 'attributes' will return null.
 	 * @param string $name
 	 * @return mixed

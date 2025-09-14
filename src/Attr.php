@@ -134,7 +134,7 @@ class Attr extends Leaf implements \Wikimedia\IDLeDOM\Attr {
 	use \Wikimedia\IDLeDOM\Helper\Attr;
 
 	/**
-	 * HACK! For compatibilty with W3C test suite, which assumes that an
+	 * HACK! For compatibility with W3C test suite, which assumes that an
 	 * access to 'attributes' will return null.
 	 * @param string $name
 	 * @return mixed

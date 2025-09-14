@@ -63,7 +63,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 	protected function _getMissingProp( string $name ) {
 		switch ( $name ) {
 			case 'attributes':
-				// HACK! For compatibilty with W3C test suite, which
+				// HACK! For compatibility with W3C test suite, which
 				// assumes that an access to 'attributes' will return
 				// null.
 				return null;
