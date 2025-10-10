@@ -573,7 +573,6 @@ abstract class WPTTestHarness extends TestCase {
 	 * @return never
 	 */
 	protected function wptAssertUnreached( string $description = '' ): void {
-		// @phan-suppress-next-line PhanAccessMethodInternal
 		throw new ExpectationFailedException(
 			"Reached unreachable code: $description"
 		);
