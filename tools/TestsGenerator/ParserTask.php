@@ -29,11 +29,6 @@ use PhpParser\PrettyPrinter;
 use Robo\Result;
 use Robo\Task\BaseTask;
 
-/**
- * Class ParserTask
- *
- * @package Wikimedia\Dodo\Tools\TestsGenerator
- */
 class ParserTask extends BaseTask {
 	use Helpers;
 
@@ -1152,10 +1147,10 @@ class ParserTask extends BaseTask {
 						// Direct reference to the function value
 						// We need to replace this with a closure
 						return new Node\Expr\Array_( [
-							new Node\Expr\ArrayItem(
+							new Node\ArrayItem(
 								new Variable( 'this' )
 							),
-							new Node\Expr\ArrayItem(
+							new Node\ArrayItem(
 								new Node\Scalar\String_(
 									$this->renamedFunctions[$var_name],
 									[ 'kind' => Node\Scalar\String_::KIND_SINGLE_QUOTED ]
