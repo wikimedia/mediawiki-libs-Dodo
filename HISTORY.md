@@ -1,6 +1,9 @@
 # Change Log
 
 ## Dodo x.x.x (not yet released)
+* Update dependencies.
+* Use non-deprecated ArrayItem class.
+* Use PHPUnit 10.
 
 ## Dodo 0.7.0 (2025-08-15)
 * Update dependencies.
