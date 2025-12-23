@@ -1,6 +1,7 @@
 # Change Log
 
 ## Dodo x.x.x (not yet released)
+* Add HTMLDocument as an alias of Document.
 * Update dependencies.
 * Use non-deprecated ArrayItem class.
 * Use PHPUnit 10.
