@@ -1,6 +1,6 @@
 # Change Log
 
-## Dodo x.x.x (not yet released)
+## Dodo 0.7.1 (2026-01-08)
 * Add HTMLDocument as an alias of Document.
 * Update dependencies.
 * Use non-deprecated ArrayItem class.
