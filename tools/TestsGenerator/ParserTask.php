@@ -928,7 +928,6 @@ class ParserTask extends BaseTask {
 		$this->test = strtr( $this->test, $find_replace );
 
 		// Now fix up some unnecessary use statements
-		// @phan-suppress-next-line PhanPossiblyInfiniteLoop pass-by-ref in preg_replace_callback
 		do {
 			$this->test = preg_replace_callback(
 				'/(use\s*[(][^)]*)' .

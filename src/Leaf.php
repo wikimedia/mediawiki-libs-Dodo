@@ -39,6 +39,7 @@ abstract class Leaf /* domino helper */ extends Node {
 	 * @inheritDoc
 	 */
 	final public function insertBefore( $node, $refChild = null ): Node {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		Util::error( "HierarchyRequestError" );
 	}
 
@@ -46,6 +47,7 @@ abstract class Leaf /* domino helper */ extends Node {
 	 * @inheritDoc
 	 */
 	final public function replaceChild( $node, $refChild ): Node {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		Util::error( "HierarchyRequestError" );
 	}
 
@@ -53,6 +55,7 @@ abstract class Leaf /* domino helper */ extends Node {
 	 * @inheritDoc
 	 */
 	final public function removeChild( $node ): Node {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		Util::error( "NotFoundError" );
 	}
 

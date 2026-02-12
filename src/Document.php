@@ -210,8 +210,10 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 
 		for ( $n = $this->getFirstChild(); $n !== null; $n = $n->getNextSibling() ) {
 			if ( $n->getNodeType() === Node::DOCUMENT_TYPE_NODE ) {
+				'@phan-var DocumentType $n';
 				$this->_doctype = $n;
 			} elseif ( $n->getNodeType() === Node::ELEMENT_NODE ) {
+				'@phan-var Element $n';
 				$this->_documentElement = $n;
 			}
 		}
@@ -537,7 +539,7 @@ class Document extends ContainerNode implements \Wikimedia\IDLeDOM\Document {
 		return new Comment( $this, $data );
 	}
 
-	/** @inheritDoc */
+	/** @return DocumentFragment */
 	public function createDocumentFragment() {
 		return new DocumentFragment( $this );
 	}

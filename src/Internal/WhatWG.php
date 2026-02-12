@@ -95,7 +95,9 @@ class WhatWG {
 			* "consistent" (but arbitrary) ordering, as the spec
 			* requests.
 			 */
+			// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
 			$a = spl_object_hash( $node1 === null ? $attr1 : $node1 );
+			// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
 			$b = spl_object_hash( $node2 === null ? $attr2 : $node2 );
 			$arbitrary = ( $a < $b ) ?
 				Node::DOCUMENT_POSITION_PRECEDING :

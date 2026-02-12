@@ -341,7 +341,7 @@ abstract class W3CTestHarness extends TestCase {
 	/**
 	 * @param string $error
 	 */
-	public function w3cFail( string $error ) {
+	public function w3cFail( string $error ): never {
 		Assert::fail( $error );
 	}
 
