@@ -33,25 +33,11 @@
     _comment: ''
     testcases: testNodeIterator
     files: /tests/WPT/Dom/Traversal/NodeIteratorTest.php
-'Attempt to read property "href" on null':
+'Error: Call to a member function createRange() on null':
     _total: 1
     _comment: ''
-    testcases: testNodeCloneNodeExternalStylesheetNoBcSub
-    files: /tests/WPT/Dom/Nodes/NodeCloneNodeExternalStylesheetNoBcSubTest.php
-'Attempt to read property "search" on null':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testRangeInsertNode
-        testRangeSurroundContents
-    files: |-
-        /tests/WPT/Dom/Ranges/RangeInsertNodeTest.php
-        /tests/WPT/Dom/Ranges/RangeSurroundContentsTest.php
-'Attempt to read property "sup" on array':
-    _total: 1
-    _comment: ''
-    testcases: testDOMTokenListCoverageForAttributes
-    files: /tests/WPT/Dom/Lists/DOMTokenListCoverageForAttributesTest.php
+    testcases: testRangeSelectNode
+    files: /tests/WPT/Dom/Ranges/RangeSelectNodeTest.php
 'Error: Call to a member function detach() on null':
     _total: 1
     _comment: ''
@@ -62,6 +48,24 @@
     _comment: ''
     testcases: testHasFeature01
     files: /tests/W3C/Level1/Html/HasFeature01Test.php
+'Error: Call to a member function getOwnerDocument() on null':
+    _total: 1
+    _comment: ''
+    testcases: testNodeCloneNodeOnInactiveDocumentCrash
+    files: /tests/WPT/Dom/Nodes/NodeCloneNodeOnInactiveDocumentCrashTest.php
+'Error: Call to a member function pushState() on null':
+    _total: 4
+    _comment: ''
+    testcases: |-
+        testDOMParserParseFromStringUrlBasePushstate
+        testDOMParserParseFromStringUrlPushstate
+        testDomparserIframeBasePushstate
+        testDomparserIframePushstate
+    files: |-
+        /tests/WPT/Domparsing/DOMParserParseFromStringUrlBasePushstateTest.php
+        /tests/WPT/Domparsing/DOMParserParseFromStringUrlPushstateTest.php
+        /tests/WPT/Domparsing/Resources/DomparserIframeBasePushstateTest.php
+        /tests/WPT/Domparsing/Resources/DomparserIframePushstateTest.php
 'Error: Call to protected method Wikimedia\Dodo\Element::_remove() from scope Wikimedia\Dodo\Internal\WhatWG':
     _total: 1
     _comment: ''
@@ -87,6 +91,11 @@
     _comment: ''
     testcases: testInnerhtmlMxssSub
     files: /tests/WPT/Domparsing/InnerhtmlMxssSubTest.php
+'Error: Object of class Wikimedia\Dodo\URL could not be converted to string':
+    _total: 1
+    _comment: ''
+    testcases: testNodeCloneNodeExternalStylesheetNoBcSub
+    files: /tests/WPT/Dom/Nodes/NodeCloneNodeExternalStylesheetNoBcSubTest.php
 'Error: Undefined constant "Wikimedia\Dodo\Tests\WPT\Dom\Nodes\Comment"':
     _total: 1
     _comment: ''
@@ -102,52 +111,21 @@
     _comment: ''
     testcases: testDocumentCreateTextNode
     files: /tests/WPT/Dom/Nodes/DocumentCreateTextNodeTest.php
+'Error: Undefined constant "Wikimedia\Dodo\Tests\WPT\Dom\Nodes\XMLDocument"':
+    _total: 1
+    _comment: ''
+    testcases: testNodeCloneNodeXMLDocument
+    files: /tests/WPT/Dom/Nodes/NodeCloneNodeXMLDocumentTest.php
 'Error: Undefined constant "Wikimedia\Dodo\Tests\WPT\Dom\Traversal\NodeFilter"':
     _total: 1
     _comment: ''
     testcases: testNodeFilterConstants
     files: /tests/WPT/Dom/Traversal/NodeFilterConstantsTest.php
-'This test did not perform any assertions':
-    _total: 18
+'Error: Value of type null is not callable':
+    _total: 1
     _comment: ''
-    testcases: |-
-        testElementGetElementsByTagNameChangeDocumentHTMLNess
-        testHTMLDocument18
-        testHTMLImageElement05
-        testHTMLImageElement06
-        testHTMLImageElement11
-        testHTMLImageElement12
-        testHTMLInputElement13
-        testHTMLObjectElement11
-        testHTMLObjectElement16
-        testHcEntitiesremovenameditem1
-        testHcEntitiessetnameditem1
-        testHcNodevalue07
-        testHcNodevalue08
-        testHcNotationsremovenameditem1
-        testHcNotationssetnameditem1
-        testObject08
-        testObject13
-        testRangeDetach
-    files: |-
-        /tests/W3C/Level1/Core/HcEntitiesremovenameditem1Test.php
-        /tests/W3C/Level1/Core/HcEntitiessetnameditem1Test.php
-        /tests/W3C/Level1/Core/HcNodevalue07Test.php
-        /tests/W3C/Level1/Core/HcNodevalue08Test.php
-        /tests/W3C/Level1/Core/HcNotationsremovenameditem1Test.php
-        /tests/W3C/Level1/Core/HcNotationssetnameditem1Test.php
-        /tests/W3C/Level1/Html/HTMLDocument18Test.php
-        /tests/W3C/Level1/Html/HTMLImageElement05Test.php
-        /tests/W3C/Level1/Html/HTMLImageElement06Test.php
-        /tests/W3C/Level1/Html/HTMLImageElement11Test.php
-        /tests/W3C/Level1/Html/HTMLImageElement12Test.php
-        /tests/W3C/Level1/Html/HTMLInputElement13Test.php
-        /tests/W3C/Level1/Html/HTMLObjectElement11Test.php
-        /tests/W3C/Level1/Html/HTMLObjectElement16Test.php
-        /tests/W3C/Level1/Html/Object08Test.php
-        /tests/W3C/Level1/Html/Object13Test.php
-        /tests/WPT/Dom/Nodes/ElementGetElementsByTagNameChangeDocumentHTMLNessTest.php
-        /tests/WPT/Dom/Ranges/RangeDetachTest.php
+    testcases: testElementClosest
+    files: /tests/WPT/Dom/Nodes/ElementClosestTest.php
 'TypeError: Wikimedia\Dodo\CharacterData::appendData(): Argument #1 ($data) must be of type string, null given, called in /tests/WPT/Dom/Nodes/CharacterDataAppendDataTest.php on line 34':
     _total: 1
     _comment: ''
@@ -168,155 +146,46 @@
     _comment: ''
     testcases: testDocumentImportNode
     files: /tests/WPT/Dom/Nodes/DocumentImportNodeTest.php
+'TypeError: Wikimedia\Dodo\Tests\Harness\W3CTestHarness::w3cAssertFalse(): Argument #2 ($actual) must be of type bool, null given, called in /tests/W3C/Level1/Html/HTMLLinkElement01Test.php on line 31':
+    _total: 1
+    _comment: ''
+    testcases: testHTMLLinkElement01
+    files: /tests/W3C/Level1/Html/HTMLLinkElement01Test.php
+'TypeError: Wikimedia\Dodo\Tests\Harness\W3CTestHarness::w3cAssertFalse(): Argument #2 ($actual) must be of type bool, null given, called in /tests/W3C/Level1/Html/HTMLStyleElement01Test.php on line 31':
+    _total: 1
+    _comment: ''
+    testcases: testHTMLStyleElement01
+    files: /tests/W3C/Level1/Html/HTMLStyleElement01Test.php
+'TypeError: Wikimedia\Dodo\Tests\Harness\WPTTestHarness::arrayMap(): Argument #2 ($callback) must be of type callable, null given, called in /tests/WPT/Dom/Nodes/DOMImplementationHasFeatureTest.php on line 15':
+    _total: 1
+    _comment: ''
+    testcases: testDOMImplementationHasFeature
+    files: /tests/WPT/Dom/Nodes/DOMImplementationHasFeatureTest.php
+'TypeError: Wikimedia\Dodo\Tests\Harness\WPTTestHarness::arrayMap(): Argument #2 ($callback) must be of type callable, null given, called in /tests/WPT/Dom/Ranges/RangeSetTest.php on line 136':
+    _total: 1
+    _comment: ''
+    testcases: testRangeSet
+    files: /tests/WPT/Dom/Ranges/RangeSetTest.php
 'TypeError: Wikimedia\Dodo\Tests\Harness\WPTTestHarness::asyncTest(): Argument #1 ($func) must be of type callable, string given, called in /tests/WPT/Dom/Nodes/NodeParentNodeTest.php on line 38':
     _total: 1
     _comment: ''
     testcases: testNodeParentNode
     files: /tests/WPT/Dom/Nodes/NodeParentNodeTest.php
-'Undefined array key ":valid"':
+'TypeError: Wikimedia\Dodo\Tests\Harness\WPTTestHarness::asyncTest(): Argument #1 ($func) must be of type callable, string given, called in /tests/WPT/Dom/Ranges/RangeInsertNodeTest.php on line 208':
     _total: 1
     _comment: ''
-    testcases: testElementClosest
-    files: /tests/WPT/Dom/Nodes/ElementClosestTest.php
-'Undefined array key 2':
+    testcases: testRangeInsertNode
+    files: /tests/WPT/Dom/Ranges/RangeInsertNodeTest.php
+'TypeError: Wikimedia\Dodo\Tests\Harness\WPTTestHarness::asyncTest(): Argument #1 ($func) must be of type callable, string given, called in /tests/WPT/Dom/Ranges/RangeSurroundContentsTest.php on line 240':
     _total: 1
     _comment: ''
-    testcases: testNamednodemapSupportedPropertyNames
-    files: /tests/WPT/Dom/Collections/NamednodemapSupportedPropertyNamesTest.php
-'Undefined property via __get(): constructor in /tests/WPT/Dom/Nodes/NodeCloneNodeXMLDocumentTest.php on line 14':
+    testcases: testRangeSurroundContents
+    files: /tests/WPT/Dom/Ranges/RangeSurroundContentsTest.php
+'TypeError: array_search(): Argument #2 ($haystack) must be of type array, null given':
     _total: 1
     _comment: ''
-    testcases: testNodeCloneNodeXMLDocument
-    files: /tests/WPT/Dom/Nodes/NodeCloneNodeXMLDocumentTest.php
-'Undefined property via __get(): disabled in /tests/W3C/Level1/Html/HTMLLinkElement01Test.php on line 30':
-    _total: 1
-    _comment: ''
-    testcases: testHTMLLinkElement01
-    files: /tests/W3C/Level1/Html/HTMLLinkElement01Test.php
-'Undefined property via __get(): disabled in /tests/W3C/Level1/Html/HTMLStyleElement01Test.php on line 30':
-    _total: 1
-    _comment: ''
-    testcases: testHTMLStyleElement01
-    files: /tests/W3C/Level1/Html/HTMLStyleElement01Test.php
-'Undefined property via __get(): getElementById in /tests/WPT/Dom/Nodes/DocumentFragmentGetElementByIdTest.php on line 16':
-    _total: 1
-    _comment: ''
-    testcases: testDocumentFragmentGetElementById
-    files: /tests/WPT/Dom/Nodes/DocumentFragmentGetElementByIdTest.php
-'Undefined property via __get(): readyState in /tests/WPT/Domparsing/XmldomparserTest.php on line 12':
-    _total: 1
-    _comment: ''
-    testcases: testXmldomparser
-    files: /tests/WPT/Domparsing/XmldomparserTest.php
-'Undefined property via __get(): role in /tests/WPT/Dom/Nodes/AriaAttributeReflectionTentativeTest.php on line 15':
-    _total: 1
-    _comment: ''
-    testcases: testAriaAttributeReflectionTentative
-    files: /tests/WPT/Dom/Nodes/AriaAttributeReflectionTentativeTest.php
-'Undefined property via offsetExists(): length in /tests/WPT/Dom/Lists/DOMTokenListIterableTest.php on line 14':
-    _total: 1
-    _comment: ''
-    testcases: testDOMTokenListIterable
-    files: /tests/WPT/Dom/Lists/DOMTokenListIterableTest.php
-'Undefined property via offsetExists(): length in /tests/WPT/Dom/Nodes/NodeListIterableTest.php on line 17':
-    _total: 1
-    _comment: ''
-    testcases: testNodeListIterable
-    files: /tests/WPT/Dom/Nodes/NodeListIterableTest.php
-'Undefined property via offsetUnset(): 0 in /tests/WPT/Dom/Collections/HTMLCollectionDeleteTest.php on line 19':
-    _total: 1
-    _comment: ''
-    testcases: testHTMLCollectionDelete
-    files: /tests/WPT/Dom/Collections/HTMLCollectionDeleteTest.php
-'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodeappendchildnewchilddiffdocumentTest::$doc1':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodeappendchildnewchilddiffdocument
-    files: /tests/W3C/Level1/Core/HcNodeappendchildnewchilddiffdocumentTest.php
-'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodeinsertbeforenewchilddiffdocumentTest::$doc1':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodeinsertbeforenewchilddiffdocument
-    files: /tests/W3C/Level1/Core/HcNodeinsertbeforenewchilddiffdocumentTest.php
-'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodereplacechildnewchilddiffdocumentTest::$doc1':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodereplacechildnewchilddiffdocument
-    files: /tests/W3C/Level1/Core/HcNodereplacechildnewchilddiffdocumentTest.php
-'Undefined property: Wikimedia\Dodo\Tests\W3C\HcNodevalue06Test::$newNode':
-    _total: 1
-    _comment: ''
-    testcases: testHcNodevalue06
-    files: /tests/W3C/Level1/Core/HcNodevalue06Test.php
-'Undefined variable $aliases':
-    _total: 1
-    _comment: ''
-    testcases: testDocumentCreateEventHttps
-    files: /tests/WPT/Dom/Nodes/DocumentCreateEventHttpsTest.php
-'Undefined variable $docs':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testNodeRemoveChild
-        testNodeTextContent
-    files: |-
-        /tests/WPT/Dom/Nodes/NodeRemoveChildTest.php
-        /tests/WPT/Dom/Nodes/NodeTextContentTest.php
-'Undefined variable $eval':
-    _total: 1
-    _comment: ''
-    testcases: testRangeSet
-    files: /tests/WPT/Dom/Ranges/RangeSetTest.php
-'Undefined variable $filter':
-    _total: 3
-    _comment: ''
-    testcases: |-
-        testTreeWalkerAcceptNodeFilter
-        testTreeWalkerPreviousNodeLastChildReject
-        testTreeWalkerPreviousSiblingLastChildSkip
-    files: |-
-        /tests/WPT/Dom/Traversal/TreeWalkerAcceptNodeFilterTest.php
-        /tests/WPT/Dom/Traversal/TreeWalkerPreviousNodeLastChildRejectTest.php
-        /tests/WPT/Dom/Traversal/TreeWalkerPreviousSiblingLastChildSkipTest.php
-'Undefined variable $foreignDoc':
-    _total: 1
-    _comment: ''
-    testcases: testRangeSelectNode
-    files: /tests/WPT/Dom/Ranges/RangeSelectNodeTest.php
-'Undefined variable $format_value':
-    _total: 1
-    _comment: ''
-    testcases: testDOMImplementationHasFeature
-    files: /tests/WPT/Dom/Nodes/DOMImplementationHasFeatureTest.php
-'Undefined variable $get_object_vars':
-    _total: 1
-    _comment: ''
-    testcases: testInsertAdjacent
-    files: |-
-        /tests/WPT/Dom/Nodes/InsertAdjacentTest.php
-        /tests/WPT/Domparsing/InsertAdjacentTest.php
-'Undefined variable $history':
-    _total: 4
-    _comment: ''
-    testcases: |-
-        testDOMParserParseFromStringUrlBasePushstate
-        testDOMParserParseFromStringUrlPushstate
-        testDomparserIframeBasePushstate
-        testDomparserIframePushstate
-    files: |-
-        /tests/WPT/Domparsing/DOMParserParseFromStringUrlBasePushstateTest.php
-        /tests/WPT/Domparsing/DOMParserParseFromStringUrlPushstateTest.php
-        /tests/WPT/Domparsing/Resources/DomparserIframeBasePushstateTest.php
-        /tests/WPT/Domparsing/Resources/DomparserIframePushstateTest.php
-'Undefined variable $i':
-    _total: 2
-    _comment: ''
-    testcases: |-
-        testDOMImplementationCreateHTMLDocument
-        testNodeCloneNodeOnInactiveDocumentCrash
-    files: |-
-        /tests/WPT/Dom/Nodes/DOMImplementationCreateHTMLDocumentTest.php
-        /tests/WPT/Dom/Nodes/NodeCloneNodeOnInactiveDocumentCrashTest.php
+    testcases: testDOMTokenListCoverageForAttributes
+    files: /tests/WPT/Dom/Lists/DOMTokenListCoverageForAttributesTest.php
 'Wikimedia\Dodo\DOMException: Invalid selector.':
     _total: 1
     _comment: ''
@@ -332,21 +201,32 @@
     _comment: ''
     testcases: testAppendOnDocument
     files: /tests/WPT/Dom/Nodes/AppendOnDocumentTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::createEvent':
+    _total: 1
+    _comment: ''
+    testcases: testDocumentCreateEventHttps
+    files: /tests/WPT/Dom/Nodes/DocumentCreateEventHttpsTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Document::createTreeWalker':
-    _total: 7
+    _total: 10
     _comment: ''
     testcases: |-
         testDocumentCreateTreeWalker
+        testTreeWalkerAcceptNodeFilter
         testTreeWalkerBasic
         testTreeWalkerCurrentNode
+        testTreeWalkerPreviousNodeLastChildReject
+        testTreeWalkerPreviousSiblingLastChildSkip
         testTreeWalkerTraversalReject
         testTreeWalkerTraversalSkip
         testTreeWalkerTraversalSkipMost
         testTreeWalkerWalkingOutsideATree
     files: |-
         /tests/WPT/Dom/Nodes/DocumentCreateTreeWalkerTest.php
+        /tests/WPT/Dom/Traversal/TreeWalkerAcceptNodeFilterTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerBasicTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerCurrentNodeTest.php
+        /tests/WPT/Dom/Traversal/TreeWalkerPreviousNodeLastChildRejectTest.php
+        /tests/WPT/Dom/Traversal/TreeWalkerPreviousSiblingLastChildSkipTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerTraversalRejectTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerTraversalSkipMostTest.php
         /tests/WPT/Dom/Traversal/TreeWalkerTraversalSkipTest.php
@@ -798,6 +678,11 @@
     _comment: ''
     testcases: testDOMParserParseFromStringXml
     files: /tests/WPT/Domparsing/DOMParserParseFromStringXmlTest.php
+'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\ProcessingInstruction::getTarget':
+    _total: 1
+    _comment: ''
+    testcases: testNodeTextContent
+    files: /tests/WPT/Dom/Nodes/NodeTextContentTest.php
 'Wikimedia\Dodo\Internal\UnimplementedException: Wikimedia\Dodo\Range::cloneContents':
     _total: 1
     _comment: ''

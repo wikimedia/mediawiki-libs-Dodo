@@ -13,27 +13,52 @@
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Ranges\RangeAdoptTestTest
     files: /tests/WPT/Dom/Ranges/RangeAdoptTestTest.php
-'Failed asserting that Wikimedia\Dodo\DOMException Object (...) is an instance of interface "Wikimedia\IDLeDOM\TypeError".':
-    _total: 1
-    _comment: ''
-    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\NodeAppendChildTest
-    files: /tests/WPT/Dom/Nodes/NodeAppendChildTest.php
-'Failed asserting that false is true.':
+'Failed asserting that an object is an instance of interface Wikimedia\IDLeDOM\TypeError.':
     _total: 3
     _comment: ''
     testcases: |-
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\InsertAdjacentTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\NodeAppendChildTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\NodeRemoveChildTest
+    files: |-
+        /tests/WPT/Dom/Nodes/InsertAdjacentTest.php
+        /tests/WPT/Dom/Nodes/NodeAppendChildTest.php
+        /tests/WPT/Dom/Nodes/NodeRemoveChildTest.php
+'Failed asserting that false is true.':
+    _total: 5
+    _comment: ''
+    testcases: |-
+        Wikimedia\Dodo\Tests\WPT\Dom\Lists\DOMTokenListIterableTest
         Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentGetElementsByClassNameTest
         Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentTypeRemoveTest
         Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ElementRemoveTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Nodes\NodeListIterableTest
     files: |-
+        /tests/WPT/Dom/Lists/DOMTokenListIterableTest.php
         /tests/WPT/Dom/Nodes/DocumentGetElementsByClassNameTest.php
         /tests/WPT/Dom/Nodes/DocumentTypeRemoveTest.php
         /tests/WPT/Dom/Nodes/ElementRemoveTest.php
+        /tests/WPT/Dom/Nodes/NodeListIterableTest.php
 'Failed asserting that null is identical to an object of class "Wikimedia\Dodo\HTMLSpanElement".':
     _total: 1
     _comment: ''
     testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\ParentNodeQuerySelectorEscapesTest
     files: /tests/WPT/Dom/Nodes/ParentNodeQuerySelectorEscapesTest.php
+"Failed asserting that null matches expected 'button'.":
+    _total: 1
+    _comment: ''
+    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\AriaAttributeReflectionTentativeTest
+    files: /tests/WPT/Dom/Nodes/AriaAttributeReflectionTentativeTest.php
+"Failed asserting that null matches expected 'complete'.":
+    _total: 1
+    _comment: ''
+    testcases: Wikimedia\Dodo\Tests\WPT\Domparsing\XmldomparserTest
+    files: /tests/WPT/Domparsing/XmldomparserTest.php
+"Failed asserting that null matches expected 'id'.":
+    _total: 1
+    _comment: ''
+    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Collections\NamednodemapSupportedPropertyNamesTest
+    files: /tests/WPT/Dom/Collections/NamednodemapSupportedPropertyNamesTest.php
 'Failed asserting that two strings are equal.':
     _total: 9
     _comment: ''
@@ -68,11 +93,25 @@
         /tests/WPT/Dom/Nodes/DocumentGetElementsByTagNameNSTest.php
         /tests/WPT/Dom/Nodes/ElementGetElementsByClassNameTest.php
         /tests/WPT/Dom/Nodes/ElementGetElementsByTagNameNSTest.php
-'Reached unreachable code: Function did not throw.':
+'It must exist on an instance-Failed asserting that two strings are equal.':
     _total: 1
     _comment: ''
-    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Collections\HTMLCollectionAsPrototypeTest
-    files: /tests/WPT/Dom/Collections/HTMLCollectionAsPrototypeTest.php
+    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DocumentFragmentGetElementByIdTest
+    files: /tests/WPT/Dom/Nodes/DocumentFragmentGetElementByIdTest.php
+'Reached unreachable code: Function did not throw.':
+    _total: 2
+    _comment: ''
+    testcases: |-
+        Wikimedia\Dodo\Tests\WPT\Dom\Collections\HTMLCollectionAsPrototypeTest
+        Wikimedia\Dodo\Tests\WPT\Dom\Collections\HTMLCollectionDeleteTest
+    files: |-
+        /tests/WPT/Dom/Collections/HTMLCollectionAsPrototypeTest.php
+        /tests/WPT/Dom/Collections/HTMLCollectionDeleteTest.php
+'Title should be a HTMLTitleElement-Failed asserting that false is true.':
+    _total: 1
+    _comment: ''
+    testcases: Wikimedia\Dodo\Tests\WPT\Dom\Nodes\DOMImplementationCreateHTMLDocumentTest
+    files: /tests/WPT/Dom/Nodes/DOMImplementationCreateHTMLDocumentTest.php
 'bodyContainsChildren-Failed asserting that ''[object Wikimedia\Dodo\Text]'' is null.':
     _total: 1
     _comment: ''
@@ -92,6 +131,17 @@
     files: |-
         /tests/W3C/Level1/Core/Documentinvalidcharacterexceptioncreatepi1Test.php
         /tests/W3C/Level1/Core/DocumentinvalidcharacterexceptioncreatepiTest.php
+'throw_WRONG_DOCUMENT_ERR-Failed asserting that false is true.':
+    _total: 3
+    _comment: ''
+    testcases: |-
+        Wikimedia\Dodo\Tests\W3C\HcNodeappendchildnewchilddiffdocumentTest
+        Wikimedia\Dodo\Tests\W3C\HcNodeinsertbeforenewchilddiffdocumentTest
+        Wikimedia\Dodo\Tests\W3C\HcNodereplacechildnewchilddiffdocumentTest
+    files: |-
+        /tests/W3C/Level1/Core/HcNodeappendchildnewchilddiffdocumentTest.php
+        /tests/W3C/Level1/Core/HcNodeinsertbeforenewchilddiffdocumentTest.php
+        /tests/W3C/Level1/Core/HcNodereplacechildnewchilddiffdocumentTest.php
 'throws_INDEX_SIZE_ERR-Failed asserting that false is true.':
     _total: 3
     _comment: ''
