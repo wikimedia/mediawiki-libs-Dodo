@@ -1,4 +1,5 @@
 <?php
+declare( strict_types = 1 );
 
 // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.NotCamelCaps
 // phpcs:disable MediaWiki.Commenting.FunctionComment.WrongStyle

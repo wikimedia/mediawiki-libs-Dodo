@@ -1,4 +1,6 @@
 <?php
+declare( strict_types = 1 );
+
 /**
  * This just allows the main robo task file to be properly namespaced!
  */
