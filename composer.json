@@ -44,12 +44,11 @@
 			"type": "package",
 			"package": {
 				"name": "web-platform-tests/wpt",
-				"version": "2.7.840",
+				"version": "v0.0.0-patch27840",
 				"type": "tests",
-				"source": {
-					"url": "https://github.com/w3c/web-platform-tests",
-					"type": "git",
-					"reference": "6310e92"
+				"dist": {
+					"type": "tar",
+					"url": "https://github.com/web-platform-tests/wpt/archive/refs/tags/merge_pr_27840.tar.gz"
 				}
 			}
 		}
@@ -82,7 +81,7 @@
 		"php-parallel-lint/php-console-highlighter": "1.0.0",
 		"php-parallel-lint/php-parallel-lint": "1.4.0",
 		"phpunit/phpunit": "10.5.63",
-		"web-platform-tests/wpt": "^2.7",
+		"web-platform-tests/wpt": "*",
 		"wikimedia/update-history": "^1.0.3"
 	},
 	"scripts": {
